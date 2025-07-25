@@ -1,0 +1,75 @@
+"use client";
+
+import React from "react";
+import { Input } from "@/components/ui/input";
+import { useCheckoutStore } from "@/store/checkout";
+
+export default function RecipientDetailsStep() {
+  const { formData, updateFormData } = useCheckoutStore();
+
+  const handleInputChange = (field: string, value: string) => {
+    updateFormData({ [field]: value });
+  };
+
+  return (
+    <div>
+      <p className="text-stone-700 mb-4 font-semibold text-xl">
+        Please enter your recipient's contact details
+      </p>
+
+      <form className="space-y-4">
+        <div>
+          <Input
+            id="recipient-name"
+            type="text"
+            value={formData.recipientName}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleInputChange("recipientName", e.target.value)
+            }
+            placeholder="Your Name*"
+            className="border-0 border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none"
+          />
+        </div>
+
+        <div>
+          <Input
+            id="address"
+            type="text"
+            value={formData.recipientAddress}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleInputChange("recipientAddress", e.target.value)
+            }
+            placeholder="Recipients name*"
+            className="border-0 border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none"
+          />
+        </div>
+
+        <div>
+          <Input
+            id="city"
+            type="text"
+            value={formData.recipientCity}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleInputChange("recipientCity", e.target.value)
+            }
+            placeholder="Recipient phone number (only used for delivery issues)*"
+            className="border-0 border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none"
+          />
+        </div>
+
+        <div>
+          <Input
+            id="email"
+            type="email"
+            value={formData.recipientEmail}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleInputChange("recipientEmail", e.target.value)
+            }
+            placeholder="Recipient e-mail(only used for delivery issues)*"
+            className="border-0 border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none"
+          />
+        </div>
+      </form>
+    </div>
+  );
+}
