@@ -7,6 +7,7 @@ import RecipientDetailsStep from "./RecipientDetailsStep";
 import PersonalizationStep from "./PersonalizationStep";
 import DeliveryDetailsStep from "./DeliveryDetailsStep";
 import SummaryStep from "./SummaryStep";
+import { useRouter } from "next/navigation";
 
 const steps = [
   { id: 1, label: "Step 1" },
@@ -19,11 +20,12 @@ const stepTitles = {
   1: "Recipient Details",
   2: "Personalize Your Gift",
   3: "Delivery Details",
-  4: "Summary"
+  4: "Summary",
 };
 
 export default function CheckoutForm() {
   const { currentStep, nextStep, prevStep, resetCheckout } = useCheckoutStore();
+  const router = useRouter();
 
   const handleNext = () => {
     if (currentStep < steps.length) {
@@ -43,6 +45,11 @@ export default function CheckoutForm() {
     window.history.back();
   };
 
+  const handleCheckout = () => {
+    // Handle final checkout logic here
+    console.log("Proceeding to checkout...");
+    router.push("/checkout/payment");
+  };
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
@@ -73,7 +80,7 @@ export default function CheckoutForm() {
             <h1 className="text-2xl mb-4 font-bold">
               {stepTitles[currentStep as keyof typeof stepTitles]}
             </h1>
-            <button 
+            <button
               onClick={handleBackToStore}
               className="text-xs font-medium tracking-wider mb-4 hover:text-stone-600 transition-colors"
             >
@@ -131,10 +138,7 @@ export default function CheckoutForm() {
               ADD TO CART
             </button>
             <button
-              onClick={() => {
-                // Handle final checkout
-                console.log("Proceeding to checkout...");
-              }}
+                onClick={handleCheckout}
               className="bg-[#FDCF5F] px-5 hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider text-sm py-2.5 rounded-none transition-colors"
             >
               CHECKOUT

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Input } from "@/components/ui/input";
 import { useCheckoutStore } from "@/store/checkout";
 
 export default function SummaryStep() {
