@@ -1,0 +1,27 @@
+/*
+Font: 		SchoolBook
+Style: 		Cond
+URL: 		https://www.youworkforthem.com/font/T3888/schoolbook
+Foundry: 	ParaType
+Foundry: 	https://www.youworkforthem.com/designer/318/paratype
+Copyright:	Copyright  2007 ParaType Inc., ParaType Ltd. All rights reserved.
+Version: 	17
+Created:	March 20, 2015
+License: 	https://www.youworkforthem.com/font-license 
+License: 	The WebFont(s) listed in this document must follow the YouWorkForThem
+			WebFont license rules. All other parties are strictly restricted 
+			from using the WebFonts(s) listed without a purchased license. 
+			All details above must always remain unaltered and visible in your CSS.
+*/
+
+@font-face {
+	font-family: 'SchoolBook-Cond';
+	src: url('schoolbook-cond.eot');
+	src: url('schoolbook-cond.eot?#iefix') format('embedded-opentype'),
+             url('schoolbook-cond.woff2') format('woff2'),
+	     url('schoolbook-cond.woff') format('woff'),
+	     url('schoolbook-cond.ttf') format('truetype'),
+	     url('schoolbook-cond.svg#youworkforthem') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}

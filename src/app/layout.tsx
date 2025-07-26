@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Infant, Geist, Geist_Mono } from "next/font/google";
+import { Cormorant_Infant, Geist, Geist_Mono, Cinzel } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import Header from "@/components/Header";
@@ -14,6 +14,11 @@ const cormorantInfant = Cormorant_Infant({
   subsets: ["latin"],
 });
 
+const cinzel = Cinzel({
+  variable: "--font-century",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -33,9 +38,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${cormorantInfant.className} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${cormorantInfant.variable} ${cinzel.variable} antialiased`}
       >
-        <Header/>
+        {/* <Header/> */}
         {children}
         <Toaster duration={1000} />
       </body>
