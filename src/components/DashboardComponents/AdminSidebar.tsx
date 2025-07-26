@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Sidebar,
@@ -12,20 +12,20 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarTrigger,
-} from "@/components/ui/sidebar"
-import { 
-  BarChart3, 
-  Package, 
-  ShoppingCart, 
-  Users, 
-  Settings, 
+} from "@/components/ui/sidebar";
+import {
+  BarChart3,
+  Package,
+  ShoppingCart,
+  Users,
+  Settings,
   Home,
   FileText,
   TrendingUp,
-  UserPlus
-} from "lucide-react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+  UserPlus,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const menuItems = [
   {
@@ -43,7 +43,7 @@ const menuItems = [
       },
       {
         title: "Products",
-        url: "/admin/products", 
+        url: "/admin/products",
         icon: Package,
       },
       {
@@ -73,41 +73,41 @@ const menuItems = [
       },
     ],
   },
-]
+];
 
 export function AdminSidebar() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
-    <Sidebar>
-      <SidebarHeader className="border-b border-border/50">
-        <div className="flex items-center gap-2 px-4 py-2">
-          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <TrendingUp className="size-4" />
-          </div>
-          <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold font-century">the LUXE BUREAU</span>
-            <span className="truncate text-xs text-muted-foreground">ADMIN</span>
-          </div>
+    <Sidebar className="bg-background">
+      <SidebarHeader className="border-b border-border bg-background">
+        <div className="flex flex-col items-center py-4 justify-center text-left text-lg leading-tight">
+          <span className="truncate font-[200] font-century lowercase tracking-widest">
+            the{" "}
+            <span className="uppercase">
+              <span className="italic">LUXE</span> BUREAU
+            </span>
+          </span>
+          <span className="truncate text-xs text-muted-foreground bg-muted py-1 px-4 rounded-full mt-4 font-century">ADMIN</span>
         </div>
       </SidebarHeader>
-      
-      <SidebarContent>
+
+      <SidebarContent className="bg-background font-century">
         {menuItems.map((group) => (
           <SidebarGroup key={group.title}>
-            <SidebarGroupLabel className="text-xs font-medium text-muted-foreground">
+            <SidebarGroupLabel className="text-xs my-6 font-[300] text-muted-foreground">
               {group.title}
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {group.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton 
-                      asChild 
+                    <SidebarMenuButton
+                      asChild
                       isActive={pathname === item.url}
                       className="w-full"
                     >
-                      <Link href={item.url} className="flex items-center gap-2">
+                      <Link href={item.url} className="flex items-center gap-6 text-sm">
                         <item.icon className="size-4" />
                         <span>{item.title}</span>
                       </Link>
@@ -119,8 +119,8 @@ export function AdminSidebar() {
           </SidebarGroup>
         ))}
       </SidebarContent>
-      
-      <SidebarFooter className="border-t border-border/50">
+
+      <SidebarFooter className="border-t border-border/50 bg-background">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
@@ -133,5 +133,5 @@ export function AdminSidebar() {
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

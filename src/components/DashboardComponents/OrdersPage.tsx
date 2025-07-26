@@ -1,10 +1,16 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { SidebarTrigger } from "@/components/ui/sidebar"
-import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -12,17 +18,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Filter, Eye, Calendar } from "lucide-react"
+} from "@/components/ui/select";
+import { Filter, Eye, Calendar } from "lucide-react";
+import Link from "next/link";
 
-// Dummy orders data
 const orders = [
   {
     id: "29a82dcb...",
@@ -72,41 +78,37 @@ const orders = [
     total: "€149.00",
     status: "New",
   },
-]
+];
 
 const getStatusColor = (status: string) => {
   switch (status.toLowerCase()) {
     case "new":
-      return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400"
+      return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400";
     case "processing":
-      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400"
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
     case "shipped":
-      return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400"
+      return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400";
     case "delivered":
-      return "bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400"
+      return "bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400";
     case "cancelled":
-      return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400"
+      return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400";
     default:
-      return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400"
+      return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
   }
-}
+};
 
 export function OrdersPage() {
   return (
-    <div className="flex flex-col">
-      {/* Header */}
+    <div className="flex flex-col font-century">
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <SidebarTrigger className="-ml-1" />
-        <Separator orientation="vertical" className="mr-2 h-4" />
-        <h1 className="text-lg font-semibold font-century">Orders</h1>
+        <h1 className="text-lg font-[200]">Orders</h1>
       </header>
 
-      {/* Main Content */}
       <div className="flex-1 space-y-4 p-8 pt-6">
-        {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight font-century">ORDERS</h2>
+            <h2 className="text-3xl font-semibold font-century ">ORDERS</h2>
             <p className="text-muted-foreground">
               Manage and track customer orders
             </p>
@@ -129,7 +131,6 @@ export function OrdersPage() {
           </div>
         </div>
 
-        {/* Orders Table */}
         <Card>
           <CardContent className="p-0">
             <Table>
@@ -158,7 +159,7 @@ export function OrdersPage() {
                     <TableCell>{order.deliveryDate}</TableCell>
                     <TableCell className="font-medium">{order.total}</TableCell>
                     <TableCell>
-                      <Badge 
+                      <Badge
                         className={getStatusColor(order.status)}
                         variant="secondary"
                       >
@@ -166,9 +167,11 @@ export function OrdersPage() {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="sm">
-                        <Eye className="h-4 w-4" />
-                      </Button>
+                      <Link href={`/admin/orders/${order.id}`}>
+                        <Button variant="ghost" size="sm">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -177,11 +180,12 @@ export function OrdersPage() {
           </CardContent>
         </Card>
 
-        {/* Summary Stats */}
         <div className="grid gap-4 md:grid-cols-3">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Total Orders
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{orders.length}</div>
@@ -193,13 +197,15 @@ export function OrdersPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {orders.filter(order => order.status === "New").length}
+                {orders.filter((order) => order.status === "New").length}
               </div>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Total Revenue
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">€149.00</div>
@@ -208,5 +214,5 @@ export function OrdersPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -94,11 +94,10 @@ const getInitials = (name: string) => {
 
 export function CustomersPage() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col font-century">
       {/* Header */}
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <SidebarTrigger className="-ml-1" />
-        <Separator orientation="vertical" className="mr-2 h-4" />
         <h1 className="text-lg font-semibold font-century">Customers</h1>
       </header>
 
@@ -107,7 +106,7 @@ export function CustomersPage() {
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight font-century">Customers</h2>
+            <h2 className="text-3xl font-semibold font-century">Customers</h2>
             <p className="text-muted-foreground">
               Manage your customer relationships and data
             </p>

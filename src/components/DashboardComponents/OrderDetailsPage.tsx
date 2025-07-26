@@ -1,15 +1,21 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { SidebarTrigger } from "@/components/ui/sidebar"
-import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { ArrowLeft, Calendar, User, MapPin } from "lucide-react"
-import Link from "next/link"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, Calendar, User, MapPin } from "lucide-react";
+import Link from "next/link";
 
 interface OrderDetailsPageProps {
-  orderId: string
+  orderId: string;
 }
 
 // Dummy order details data
@@ -28,33 +34,27 @@ const orderDetails = {
     total: "€0.00",
     status: "New",
   },
-}
+};
 
 export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
   return (
     <div className="flex flex-col">
-      {/* Header */}
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <SidebarTrigger className="-ml-1" />
-        <Separator orientation="vertical" className="mr-2 h-4" />
+        <h1 className="text-lg font-[200] font-century">Order Details</h1>
+        <Badge variant="outline" className="ml-2">
+          {orderDetails.orderInfo.status}
+        </Badge>
+      </header>
+
+      <div className="flex-1 space-y-6 p-8 pt-6">
         <Button variant="ghost" size="sm" asChild>
           <Link href="/admin/orders">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Orders
           </Link>
         </Button>
-        <Separator orientation="vertical" className="mx-2 h-4" />
-        <h1 className="text-lg font-semibold font-century">Order Details</h1>
-        <Badge variant="outline" className="ml-2">
-          {orderDetails.orderInfo.status}
-        </Badge>
-      </header>
-
-      {/* Main Content */}
-      <div className="flex-1 space-y-6 p-8 pt-6">
-        {/* Order Information Cards */}
         <div className="grid gap-6 md:grid-cols-2">
-          {/* Customer Information */}
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
@@ -64,17 +64,24 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-muted-foreground">Name:</label>
-                <p className="text-sm">{orderDetails.customerInfo.name || "Not provided"}</p>
+                <label className="text-sm font-medium text-muted-foreground">
+                  Name:
+                </label>
+                <p className="text-sm">
+                  {orderDetails.customerInfo.name || "Not provided"}
+                </p>
               </div>
               <div>
-                <label className="text-sm font-medium text-muted-foreground">Email:</label>
-                <p className="text-sm">{orderDetails.customerInfo.email || "Not provided"}</p>
+                <label className="text-sm font-medium text-muted-foreground">
+                  Email:
+                </label>
+                <p className="text-sm">
+                  {orderDetails.customerInfo.email || "Not provided"}
+                </p>
               </div>
             </CardContent>
           </Card>
 
-          {/* Recipient Information */}
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
@@ -84,18 +91,21 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-muted-foreground">Name:</label>
+                <label className="text-sm font-medium text-muted-foreground">
+                  Name:
+                </label>
                 <p className="text-sm">{orderDetails.recipientInfo.name}</p>
               </div>
               <div>
-                <label className="text-sm font-medium text-muted-foreground">Address:</label>
+                <label className="text-sm font-medium text-muted-foreground">
+                  Address:
+                </label>
                 <p className="text-sm">{orderDetails.recipientInfo.address}</p>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Order Information */}
         <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
@@ -106,16 +116,29 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
           <CardContent className="space-y-4">
             <div className="grid gap-4 md:grid-cols-3">
               <div>
-                <label className="text-sm font-medium text-muted-foreground">Delivery Date:</label>
-                <p className="text-sm font-medium">{orderDetails.orderInfo.deliveryDate}</p>
+                <label className="text-sm font-medium text-muted-foreground">
+                  Delivery Date:
+                </label>
+                <p className="text-sm font-medium">
+                  {orderDetails.orderInfo.deliveryDate}
+                </p>
               </div>
               <div>
-                <label className="text-sm font-medium text-muted-foreground">Total:</label>
-                <p className="text-sm font-medium">{orderDetails.orderInfo.total}</p>
+                <label className="text-sm font-medium text-muted-foreground">
+                  Total:
+                </label>
+                <p className="text-sm font-medium">
+                  {orderDetails.orderInfo.total}
+                </p>
               </div>
               <div>
-                <label className="text-sm font-medium text-muted-foreground">Status:</label>
-                <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                <label className="text-sm font-medium text-muted-foreground">
+                  Status:
+                </label>
+                <Badge
+                  variant="secondary"
+                  className="bg-blue-100 text-blue-800"
+                >
                   {orderDetails.orderInfo.status}
                 </Badge>
               </div>
@@ -123,7 +146,6 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
           </CardContent>
         </Card>
 
-        {/* Actions */}
         <div className="flex gap-4">
           <Button>Update Status</Button>
           <Button variant="outline">Send Notification</Button>
@@ -131,5 +153,5 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

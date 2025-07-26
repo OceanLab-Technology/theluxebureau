@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/table"
 import { FileText, Download, Eye, Calendar, Filter } from "lucide-react"
 
-// Dummy form submissions data
 const formSubmissions = [
   {
     id: "1",
@@ -90,12 +89,12 @@ const truncateMessage = (message: string, maxLength: number = 50) => {
 
 export function FormsPage() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col font-century">
       {/* Header */}
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mr-2 h-4" />
-        <h1 className="text-lg font-semibold font-century">Form Submissions</h1>
+        <h1 className="text-lg font-[200] font-century">Form Submissions</h1>
       </header>
 
       {/* Main Content */}
@@ -103,7 +102,7 @@ export function FormsPage() {
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight font-century">Form Submissions</h2>
+            <h2 className="text-3xl font-semibold">Form Submissions</h2>
             <p className="text-muted-foreground">
               Manage customer inquiries and form submissions
             </p>

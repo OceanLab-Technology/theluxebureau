@@ -1,18 +1,24 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { SidebarTrigger } from "@/components/ui/sidebar"
-import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
-import { 
-  Euro, 
-  ShoppingCart, 
-  Users, 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import {
+  Euro,
+  ShoppingCart,
+  Users,
   TrendingUp,
   Clock,
   Package,
-  Calendar
-} from "lucide-react"
+  Calendar,
+} from "lucide-react";
 
 // Dummy data
 const stats = [
@@ -44,7 +50,7 @@ const stats = [
     changeType: "increase" as const,
     icon: TrendingUp,
   },
-]
+];
 
 const recentActivities = [
   {
@@ -95,31 +101,28 @@ const recentActivities = [
     timestamp: "15.07.2025 14:21",
     status: "Updated",
   },
-]
+];
 
 export function AdminDashboard() {
   return (
-    <div className="flex flex-col">
-      {/* Header */}
-      <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+    <div className="flex flex-col font-century">
+      <header className="flex shrink-0 py-4 items-center gap-2 border-b px-4">
         <SidebarTrigger className="-ml-1" />
-        <Separator orientation="vertical" className="mr-2 h-4" />
-        <h1 className="text-lg font-semibold font-century">Admin Dashboard</h1>
+        <h1 className="text-base font-[400]">Admin Dashboard</h1>
       </header>
-
-      {/* Main Content */}
       <div className="flex-1 space-y-4 p-8 pt-6">
-        {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight font-century">Overview</h2>
+            <h2 className="text-3xl font-semibold font-century">
+              Overview
+            </h2>
             <p className="text-muted-foreground">
-              Welcome to your admin dashboard. Here's an overview of your business performance.
+              Welcome to your admin dashboard. Here's an overview of your
+              business performance.
             </p>
           </div>
         </div>
 
-        {/* Stats Cards */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (
             <Card key={stat.title}>
@@ -131,15 +134,12 @@ export function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-green-600">
-                  {stat.change}
-                </p>
+                <p className="text-xs text-green-600">{stat.change}</p>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        {/* Recent Activities */}
         <div className="grid gap-4 lg:grid-cols-1">
           <Card>
             <CardHeader>
@@ -152,17 +152,17 @@ export function AdminDashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="space-y-8">
                 {recentActivities.map((activity) => (
                   <div
                     key={activity.id}
-                    className="flex items-start justify-between border-b pb-4 last:border-b-0 last:pb-0"
+                    className="flex items-start justify-between pb-4 last:border-b-0 last:pb-0"
                   >
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-start gap-4 ">
                       <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900/20">
                         <Package className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                       </div>
-                      <div className="space-y-1">
+                      <div className="space-y-2">
                         <p className="text-sm font-medium leading-none">
                           {activity.title}
                         </p>
@@ -170,13 +170,14 @@ export function AdminDashboard() {
                           {activity.description}
                         </p>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <Calendar className="h-3 w-3" />
                           {activity.timestamp}
                         </div>
                       </div>
                     </div>
-                    <Badge 
-                      variant={activity.type === "created" ? "default" : "secondary"}
+                    <Badge
+                      variant={
+                        activity.type === "created" ? "default" : "secondary"
+                      }
                       className="ml-auto"
                     >
                       {activity.status}
@@ -189,5 +190,5 @@ export function AdminDashboard() {
         </div>
       </div>
     </div>
-  )
+  );
 }

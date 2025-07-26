@@ -14,7 +14,6 @@ import {
   Calendar
 } from "lucide-react"
 
-// Dummy analytics data
 const metrics = [
   {
     title: "Revenue",
@@ -68,12 +67,12 @@ const recentActivity = [
 
 export function AnalyticsPage() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col font-century">
       {/* Header */}
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mr-2 h-4" />
-        <h1 className="text-lg font-semibold font-century">Analytics</h1>
+        <h1 className="text-lg font-[200] font-century">Analytics</h1>
       </header>
 
       {/* Main Content */}
@@ -81,7 +80,7 @@ export function AnalyticsPage() {
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight font-century">Analytics</h2>
+            <h2 className="text-3xl font-semibold font-century">Analytics</h2>
             <p className="text-muted-foreground">
               Track your business performance and insights
             </p>

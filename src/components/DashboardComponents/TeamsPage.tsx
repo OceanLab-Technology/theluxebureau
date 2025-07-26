@@ -98,7 +98,7 @@ const getRoleIcon = (role: string) => {
 
 export function TeamsPage() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col ">
       {/* Header */}
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <SidebarTrigger className="-ml-1" />
@@ -111,7 +111,7 @@ export function TeamsPage() {
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight font-century">Teams</h2>
+            <h2 className="text-3xl font-semibold font-century">Teams</h2>
             <p className="text-muted-foreground">
               Manage your team members and their permissions
             </p>

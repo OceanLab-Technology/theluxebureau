@@ -11,7 +11,7 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-background">
       <SidebarProvider>
-        <AdminSidebar />
+        <AdminSidebar  />
         <SidebarInset>
           <div className="flex-1">
             {children}
