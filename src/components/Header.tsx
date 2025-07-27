@@ -2,11 +2,11 @@ import React from "react";
 
 export default function Header() {
   return (
-    <header className="border-b border-b-stone-400/40 font-heading">
+    <header className="border-b border-b-stone-400/40 font-century">
       <div className="mx-auto flex h-16 max-w-8xl items-center justify-between px-6">
         <div className="text-sm font-light tracking-wider text-stone-600 flex items-center gap-2">
           the{" "}
-          <span className="font-semibold text-xl">
+          <span className="font-[200] text-xl tracking-widest">
             <span className="italic">LUXE</span> BUREAU
           </span>
         </div>
