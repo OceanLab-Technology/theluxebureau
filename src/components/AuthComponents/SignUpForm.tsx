@@ -39,7 +39,6 @@ export function SignUpForm({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/protected`,
           data: {
             full_name: name,
             shipping_address: shippingAddress,
