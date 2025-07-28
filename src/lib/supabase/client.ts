@@ -6,9 +6,6 @@ const ENV_VARS = {
   NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
 };
 
-console.log("env vars", ENV_VARS);
-
-
 export function createClient() {
   return createBrowserClient(
     ENV_VARS.NEXT_PUBLIC_SUPABASE_URL!,
