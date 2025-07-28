@@ -4,33 +4,30 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  originalPrice?: number;
-  image: string;
-  category: string;
-  availability: "in-stock" | "limited-edition" | "sold-out";
-  tags?: string[];
-}
+import { Product } from "@/app/api/types";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const availability = product.inventory > 0 ? "in-stock" : "sold-out";
+  const fallbackImage = product.image_2 || product.image_1;
+
   return (
     <Link href={`/products/${product.id}`} className="block">
-      <div className="transition-all font-century duration-300 overflow-hidden w-120 hover:shadow-lg cursor-pointer">
+      <div className="transition-all font-century duration-300 overflow-hidden w-120 cursor-pointer">
         <div className="relative aspect-auto overflow-hidden h-130">
           <Image
-            src={product.image}
+            src={product.image_1 || fallbackImage!}
             alt={product.name}
             fill
             className="object-cover h-96 transition-transform duration-300 hover:scale-105"
+            onError={(e) => {
+              if (fallbackImage && e.currentTarget.src !== fallbackImage) {
+                e.currentTarget.src = fallbackImage;
+              }
+            }}
           />
         </div>
 
@@ -45,13 +42,14 @@ export function ProductCard({ product }: ProductCardProps) {
             ${product.price.toLocaleString()}
           </span>
 
-          <div onClick={(e) => e.preventDefault()}>
+          <div onClick={(e) => e.preventDefault()} className="">
             <Button
               size="sm"
-              disabled={product.availability === "sold-out"}
-              className="bg-yellow-500/70 uppercase text-xs hover:bg-yellow-500 text-stone-700 px-10 inline-block rounded-sm py-2"
+              disabled={availability === "sold-out"}
+              variant={"box_yellow"}
+              className="px-20"
             >
-              {product.availability === "sold-out" ? "Sold Out" : "Add to Cart"}
+              {availability === "sold-out" ? "Sold Out" : "Add to Cart"}
             </Button>
           </div>
         </div>
@@ -59,3 +57,4 @@ export function ProductCard({ product }: ProductCardProps) {
     </Link>
   );
 }
+

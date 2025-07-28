@@ -23,7 +23,7 @@ const stepTitles = {
   4: "Summary",
 };
 
-export default function CheckoutForm() {
+export default function PersonalizeForm() {
   const { currentStep, nextStep, prevStep, resetCheckout } = useCheckoutStore();
   const router = useRouter();
 

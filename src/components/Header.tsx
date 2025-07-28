@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import { CheckoutButton } from "./Tools/CheckoutButton";
 
 export default function Header() {
   const links = [
@@ -32,6 +33,7 @@ export default function Header() {
         <div className="text-xs tracking-wider text-stone-700 font-semibold">
           CART (0)
         </div>
+        <CheckoutButton description="Product description" price="200" priceId="price_1Hh1YZ2eZvKYlo2C5F5F5F5F5" />
       </div>
     </header>
   );

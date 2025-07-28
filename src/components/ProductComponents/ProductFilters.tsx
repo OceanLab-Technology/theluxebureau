@@ -3,10 +3,11 @@
 import React from "react";
 
 interface ProductFiltersProps {
-  onFilterChange?: (filters: any) => void;
+  onFilterChange?: (filters: { category?: string }) => void;
+  activeCategory?: string;
 }
 
-export function ProductFilters({ onFilterChange }: ProductFiltersProps) {
+export function ProductFilters({ onFilterChange, activeCategory = "Shop All" }: ProductFiltersProps) {
   const categories = [
     "Shop All",
     "Literature",
@@ -15,8 +16,10 @@ export function ProductFilters({ onFilterChange }: ProductFiltersProps) {
     "Home",
   ];
 
-  const [activeCategory, setActiveCategory] =
-    React.useState("Drinks & Spirits");
+  const handleCategoryClick = (category: string) => {
+    const categoryFilter = category === "Shop All" ? undefined : category;
+    onFilterChange?.({ category: categoryFilter });
+  };
 
   return (
     <div className="flex font-century items-center justify-end gap-30">
@@ -26,7 +29,7 @@ export function ProductFilters({ onFilterChange }: ProductFiltersProps) {
             className={`text-xl font-semibold cursor-pointer transition-colors duration-200 ${
               activeCategory === category ? "text-primary" : "text-stone-400"
             }`}
-            onClick={() => setActiveCategory(category)}
+            onClick={() => handleCategoryClick(category)}
           >
             {category}
           </span>

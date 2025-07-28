@@ -102,6 +102,11 @@ export interface Product {
   particulars?: string;
   created_at?: string;
   updated_at?: string;
+  // Computed fields for frontend compatibility
+  image?: string; // Will map to image_1
+  availability?: "in-stock" | "limited-edition" | "sold-out"; // Will compute from inventory
+  originalPrice?: number;
+  tags?: string[];
 }
 
 export interface Profile {
@@ -147,6 +152,12 @@ export interface ApiResponse<T = any> {
   data?: T;
   error?: string;
   message?: string;
+  pagination?: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
 }
 
 export interface PaginationParams {

@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     
     let query = supabase
       .from('products')
-      .select('*', { count: 'exact' })
+      .select('id, name, description, price, inventory, category, image_1, image_2', { count: 'exact' })
       .range(offset, offset + limit - 1)
       .order('created_at', { ascending: false });
     
