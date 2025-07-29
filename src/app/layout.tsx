@@ -32,9 +32,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${cormorantInfant.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${cormorantInfant.variable} antialiased font-century`}
       >
-        {/* <Header/> */}
+        <Header/>
         {children}
         <Toaster duration={1000} />
       </body>

@@ -107,6 +107,10 @@ export interface Product {
   availability?: "in-stock" | "limited-edition" | "sold-out"; // Will compute from inventory
   originalPrice?: number;
   tags?: string[];
+  // Cart/Checkout specific fields
+  quantity?: number;
+  cartItemId?: string;
+  customData?: Record<string, any>;
 }
 
 export interface Profile {

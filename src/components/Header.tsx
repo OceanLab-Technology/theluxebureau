@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
-import { CheckoutButton } from "./Tools/CheckoutButton";
+import { CartIcon } from "./CartComponents/CartIcon";
+import { CartDrawer } from "./CartComponents/CartDrawer";
 
 export default function Header() {
   const links = [
@@ -11,29 +12,35 @@ export default function Header() {
   return (
     <header className="border-b border-b-stone-400/40 font-century">
       <div className="mx-auto flex h-16 max-w-8xl items-center justify-between px-6">
-        <div className="text-sm font-light tracking-wider text-stone-600 flex items-center gap-2">
+        <Link href="/" className="text-sm font-light tracking-wider text-stone-600 flex items-center gap-2 cursor-pointer">
           the{" "}
           <span className="font-[200] text-xl tracking-widest">
             <span className="italic">LUXE</span> BUREAU
           </span>
-        </div>
+        </Link>
 
-        <nav className="hidden md:flex items-center space-x-40 font-semibold">
+        <nav className="hidden md:flex items-center space-x-40">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-stone-700 hover:text-stone-900 transition-colors"
+              className="text-stone-700 text-sm hover:text-stone-900 transition-colors"
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="text-xs tracking-wider text-stone-700 font-semibold">
-          CART (0)
+        <div className="flex items-center space-x-4">
+          {/* Desktop Cart Icon */}
+          <div className="hidden md:block">
+            <CartIcon />
+          </div>
+          {/* Mobile Cart Drawer */}
+          <div className="md:hidden">
+            <CartDrawer />
+          </div>
         </div>
-        <CheckoutButton description="Product description" price="200" priceId="price_1Hh1YZ2eZvKYlo2C5F5F5F5F5" />
       </div>
     </header>
   );

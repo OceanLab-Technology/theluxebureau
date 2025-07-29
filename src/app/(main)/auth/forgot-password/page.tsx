@@ -1,11 +1,15 @@
 import { ForgotPasswordForm } from "@/components/AuthComponents/ForgotPasswordForm";
+import { Footer } from "@/components/Footer";
+import Header from "@/components/Header";
 
 export default function Page() {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen flex flex-col bg-background font-century">
+      <main className="relative flex justify-between px-20 min-h-[calc(100vh-64px)]">
+        <div className="w-96 py-50 text-sm uppercase">Account</div>
         <ForgotPasswordForm />
-      </div>
+      </main>
+      <Footer />
     </div>
   );
 }

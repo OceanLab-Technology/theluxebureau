@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
-import AccountForm from "./AccountForm"
+import AccountPage from "./AccountPage"
 
 export default async function Account() {
   const supabase = await createClient()
@@ -8,5 +8,5 @@ export default async function Account() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  return <AccountForm user={user} />
+  return <AccountPage user={user} />
 }

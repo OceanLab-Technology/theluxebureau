@@ -28,7 +28,7 @@ export function ProductGrid({
   priceRange = [0, 5000],
   availability = "",
 }: ProductGridProps) {
-  const { products, loading, error, pagination, fetchProducts, clearError } =
+  const { products, loading, error, pagination, fetchProducts } =
     useMainStore();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -61,7 +61,6 @@ export function ProductGrid({
   };
 
   const handleRetry = () => {
-    clearError();
     fetchProducts({
       page: currentPage,
       limit: 4,
@@ -72,11 +71,8 @@ export function ProductGrid({
 
   if (loading && products.length === 0) {
     return (
-      <div className="flex justify-center items-center py-12">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading products...</p>
-        </div>
+      <div className="flex justify-center min-h-screen fixed inset-0 items-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
   }
@@ -107,7 +103,25 @@ export function ProductGrid({
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 font-century">
+      <div className="px-10">
+        <h2 className="text-xs font-medium uppercase text-muted-foreground">
+          {selectedCategory === "" ? "All Products" : selectedCategory}
+        </h2>
+        <p className="mt-2 text-[18px] w-170 font-[100] leading-5">
+          {selectedCategory === ""
+            ? "Explore our diverse range of products, each handpicked for its quality and uniqueness."
+            : selectedCategory === "Literature"
+            ? "The Luxe offers a curated selection of literature, from timeless classics to contemporary masterpieces, each chosen for its enduring impact and literary significance."
+            : selectedCategory === "Drinks & Spirits"
+            ? "Thoughtfully curated and artfully presented, our selection of wines and spirits transforms exceptional bottles into extraordinary gestures"
+            : selectedCategory === "Floral"
+            ? "Explore our exquisite floral arrangements, where each bloom is handpicked to create stunning displays that bring beauty and elegance to any occasion."
+            : selectedCategory === "Home"
+            ? "Discover our curated collection of home decor, where each piece is chosen for its unique design and ability to transform your living space into a haven of style and comfort."
+            : ""}
+        </p>
+      </div>
       <div className="grid grid-cols-2 gap-6 px-10">
         {filteredProducts.map((product) => (
           <ProductCard key={product.id} product={product} />

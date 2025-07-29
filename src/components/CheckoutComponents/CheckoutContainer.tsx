@@ -5,44 +5,20 @@ import { StripeProvider } from "./StripeProvider";
 import { StripeCheckoutForm } from "./StripeCheckoutForm";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
-
-interface CheckoutItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image?: string;
-}
+import { Product } from "@/app/api/types";
 
 interface CheckoutContainerProps {
-  items?: CheckoutItem[];
-  total?: number;
+  items: Product[];
   useStripeElements?: boolean;
 }
 
 export function CheckoutContainer({ 
   items = [], 
-  total = 0, 
   useStripeElements = true 
 }: CheckoutContainerProps) {
   const [clientSecret, setClientSecret] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const checkoutItems = items.length > 0 ? items : [
-    {
-      id: "1",
-      name: "Luxury Wine Collection",
-      price: 299.99,
-      quantity: 1,
-      image: "/product.jpg",
-    },
-  ];
-
-  const subtotal = items.length > 0 ? total : 299.99;
-  const shipping = 15.0;
-  const tax = subtotal * 0.08;
-  const finalTotal = subtotal + shipping + tax;
 
   useEffect(() => {
     if (useStripeElements) {
@@ -61,17 +37,7 @@ export function CheckoutContainer({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          items: checkoutItems,
-          customerInfo: {
-            firstName: "",
-            lastName: "",
-            email: "",
-            address: "",
-            city: "",
-            postalCode: "",
-            country: "United States",
-          },
-          total: finalTotal,
+          items,
         }),
       });
 
@@ -107,7 +73,6 @@ export function CheckoutContainer({
     );
   }
 
-  // Show error state
   if (useStripeElements && error) {
     return (
       <Card className="border-red-200">
@@ -124,13 +89,11 @@ export function CheckoutContainer({
     );
   }
 
-  // Render Stripe Elements checkout
   if (useStripeElements && clientSecret) {
     return (
       <StripeProvider clientSecret={clientSecret}>
         <StripeCheckoutForm
-          items={checkoutItems}
-          total={subtotal}
+          items={items}
           clientSecret={clientSecret}
         />
       </StripeProvider>

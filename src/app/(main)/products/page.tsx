@@ -14,16 +14,17 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
       <div className="container mx-auto px-4 py-25">
-        <ProductFilters 
+        <ProductFilters
           onFilterChange={handleFilterChange}
           activeCategory={selectedCategory}
         />
       </div>
       <div className="flex gap-8">
-        <ProductGrid 
-          selectedCategory={selectedCategory === "Shop All" ? "" : selectedCategory}
+        <ProductGrid
+          selectedCategory={
+            selectedCategory === "Shop All" ? "" : selectedCategory
+          }
         />
       </div>
     </div>

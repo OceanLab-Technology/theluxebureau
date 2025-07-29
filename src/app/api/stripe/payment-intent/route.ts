@@ -11,9 +11,6 @@ export async function POST(request: NextRequest) {
     error: authError,
   } = await supabase.auth.getUser();
 
-  console.log("Creating PaymentIntent for user:", user?.id);
-  
-  
   if (authError || !user) {
     return NextResponse.json(
       { success: false, error: "Unauthorized" },
@@ -23,13 +20,14 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { items, customerInfo, total } = body;
-    const subtotal = items.reduce((sum: number, item: any) => 
-      sum + (item.price * item.quantity), 0
+    const { items } = body;
+    const subtotal = items.reduce(
+      (sum: number, item: any) => sum + item.price * (item.quantity || 1),
+      0
     );
-    const shipping = 15.0;
-    const tax = subtotal * 0.08;
-    const finalTotal = Math.round((subtotal + shipping + tax) * 100); 
+
+    const finalTotal = Math.round(subtotal * 100);
+
     const paymentIntent = await stripe.paymentIntents.create({
       amount: finalTotal,
       currency: "usd",
@@ -37,26 +35,18 @@ export async function POST(request: NextRequest) {
         enabled: true,
       },
       metadata: {
-        customerFirstName: customerInfo?.firstName || '',
-        customerLastName: customerInfo?.lastName || '',
-        customerEmail: customerInfo?.email || '',
+        customerFirstName: user.email?.split("@")[0] || "",
+        customerEmail: user.email || "",
         userId: user.id,
-        orderItems: JSON.stringify(items.map((item: any) => ({
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity
-        }))),
+        orderItems: JSON.stringify(
+          items.map((item: any) => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity || 1,
+          }))
+        ),
       },
-      shipping: customerInfo ? {
-        name: `${customerInfo.firstName} ${customerInfo.lastName}`,
-        address: {
-          line1: customerInfo.address,
-          city: customerInfo.city,
-          postal_code: customerInfo.postalCode,
-          country: "US",
-        },
-      } : undefined,
     });
 
     return NextResponse.json({

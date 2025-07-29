@@ -3,13 +3,6 @@
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
@@ -33,8 +26,7 @@ export function UpdatePasswordForm({
     try {
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/protected");
+      router.push("/products");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
@@ -43,36 +35,47 @@ export function UpdatePasswordForm({
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Reset Your Password</CardTitle>
-          <CardDescription>
-            Please enter your new password below.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleForgotPassword}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="password">New password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="New password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Saving..." : "Save new password"}
+    <div className={cn("w-full px-10 font-century", className)} {...props}>
+      <h1 className="text-xs font-light mb-4 tracking-wide py-20">UPDATE PASSWORD</h1>
+      <div className="mb-8">
+        <form onSubmit={handleForgotPassword}>
+          <div className="flex flex-col w-120 gap-3 mb-8">
+            <div className="border border-stone-700 p-8">
+              <Label
+                htmlFor="password"
+                className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
+              >
+                NEW PASSWORD
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600  focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none"
+                placeholder="*************************"
+                required
+              />
+            </div>
+
+            <div className="mb-8 w-full">
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full rounded-none px-12 py-3 bg-yellow-400/70 hover:bg-yellow-500 text-stone-700 font-medium tracking-wider uppercase transition-colors"
+              >
+                {isLoading ? "Saving..." : "SAVE NEW PASSWORD"}
               </Button>
             </div>
-          </form>
-        </CardContent>
-      </Card>
+          </div>
+
+          {error && (
+            <div className="mb-6">
+              <p className="text-red-500">{error}</p>
+            </div>
+          )}
+        </form>
+      </div>
     </div>
   );
 }
