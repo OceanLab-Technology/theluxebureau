@@ -8,7 +8,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import {
   Euro,
@@ -19,8 +18,8 @@ import {
   Package,
 } from "lucide-react";
 import { useEffect } from "react";
-import { useActivityStore } from "@/store/adminStore";
-import { useStatsStore } from "@/store/adminStore";
+import { useActivityStore } from "@/store/admin/activityStore";
+import { useStatsStore } from "@/store/admin/statsStore";
 
 export function AdminDashboard() {
   const { recentActivities, fetchActivities, loading, error } = useActivityStore();
