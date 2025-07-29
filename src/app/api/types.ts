@@ -1,15 +1,20 @@
 // Database types for the API routes
-export interface Activity {
-  id?: string;
-  type: string;
+export type Activity = {
+  id: string;
+  title: string;
+  description: string;
+  created_at: string;
+  type: string; // e.g. "product_created"
   entity_type: string;
   entity_id: string;
-  title: string;
-  description?: string;
-  user_id?: string;
+  user_id: string | null;
   metadata?: Record<string, any>;
-  created_at?: string;
-}
+} & DerivedActivityFields;
+
+type DerivedActivityFields = {
+  timestamp?: string;
+  status?: string;
+};
 
 export interface CartItem {
   id?: string;

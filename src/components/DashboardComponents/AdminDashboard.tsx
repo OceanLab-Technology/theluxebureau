@@ -17,93 +17,53 @@ import {
   TrendingUp,
   Clock,
   Package,
-  Calendar,
 } from "lucide-react";
-
-// Dummy data
-const stats = [
-  {
-    title: "Total Revenue",
-    value: "€149.00",
-    change: "+13.5% from last month",
-    changeType: "increase" as const,
-    icon: Euro,
-  },
-  {
-    title: "Orders",
-    value: "6",
-    change: "+4.2% from last month",
-    changeType: "increase" as const,
-    icon: ShoppingCart,
-  },
-  {
-    title: "Customers",
-    value: "0",
-    change: "+15.3% from last month",
-    changeType: "increase" as const,
-    icon: Users,
-  },
-  {
-    title: "Growth Rate",
-    value: "0.0%",
-    change: "+2.4% from last month",
-    changeType: "increase" as const,
-    icon: TrendingUp,
-  },
-];
-
-const recentActivities = [
-  {
-    id: 1,
-    type: "created",
-    title: "New product created: TEST 1234567890",
-    description: "€100.000 • Stock: 0",
-    timestamp: "15.07.2025 14:31",
-    status: "Created",
-  },
-  {
-    id: 2,
-    type: "updated",
-    title: "Product updated: Test",
-    description: "€30.00 • Stock: 10",
-    timestamp: "15.07.2025 14:29",
-    status: "Updated",
-  },
-  {
-    id: 3,
-    type: "updated",
-    title: "Product updated: Test",
-    description: "€30 • Stock: 10",
-    timestamp: "15.07.2025 14:28",
-    status: "Updated",
-  },
-  {
-    id: 4,
-    type: "updated",
-    title: "Product updated: Test",
-    description: "€30 • Stock: 10",
-    timestamp: "15.07.2025 14:24",
-    status: "Updated",
-  },
-  {
-    id: 5,
-    type: "updated",
-    title: "Product updated: Test",
-    description: "€30 • Stock: 10",
-    timestamp: "15.07.2025 14:21",
-    status: "Updated",
-  },
-  {
-    id: 6,
-    type: "updated",
-    title: "Product updated: Test",
-    description: "€30 • Stock: 10",
-    timestamp: "15.07.2025 14:21",
-    status: "Updated",
-  },
-];
+import { useEffect } from "react";
+import { useActivityStore } from "@/store/adminStore";
+import { useStatsStore } from "@/store/adminStore";
 
 export function AdminDashboard() {
+  const { recentActivities, fetchActivities, loading, error } = useActivityStore();
+  const { stats, fetchStats, loading: statsLoading, error: statsError } = useStatsStore();
+
+  useEffect(() => {
+    fetchActivities();
+    fetchStats();
+  }, [fetchActivities, fetchStats]);
+
+  const statItems = stats
+    ? [
+        {
+          title: "Total Revenue",
+          value: `€${stats.revenue.value.toFixed(2)}`,
+          change: `${stats.revenue.change >= 0 ? "+" : ""}${stats.revenue.change.toFixed(1)}% from last month`,
+          changeType: stats.revenue.change >= 0 ? "increase" : "decrease",
+          icon: Euro,
+        },
+        {
+          title: "Orders",
+          value: stats.orders.value.toString(),
+          change: `${stats.orders.change >= 0 ? "+" : ""}${stats.orders.change.toFixed(1)}% from last month`,
+          changeType: stats.orders.change >= 0 ? "increase" : "decrease",
+          icon: ShoppingCart,
+        },
+        {
+          title: "Customers",
+          value: stats.customers.value.toString(),
+          change: `${stats.customers.change >= 0 ? "+" : ""}${stats.customers.change.toFixed(1)}% from last month`,
+          changeType: stats.customers.change >= 0 ? "increase" : "decrease",
+          icon: Users,
+        },
+        {
+          title: "Growth Rate",
+          value: `${stats.growthRate.value.toFixed(1)}%`,
+          change: `${stats.growthRate.change >= 0 ? "+" : ""}${stats.growthRate.change.toFixed(1)}% from last month`,
+          changeType: stats.growthRate.change >= 0 ? "increase" : "decrease",
+          icon: TrendingUp,
+        },
+      ]
+    : [];
+
   return (
     <div className="flex flex-col font-century">
       <header className="flex shrink-0 py-4 items-center gap-2 border-b px-4">
@@ -113,31 +73,47 @@ export function AdminDashboard() {
       <div className="flex-1 space-y-4 p-8 pt-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-semibold font-century">
-              Overview
-            </h2>
+            <h2 className="text-3xl font-semibold font-century">Overview</h2>
             <p className="text-muted-foreground">
-              Welcome to your admin dashboard. Here's an overview of your
-              business performance.
+              Welcome to your admin dashboard. Here's an overview of your business performance.
             </p>
           </div>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat) => (
-            <Card key={stat.title}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  {stat.title}
-                </CardTitle>
-                <stat.icon className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-green-600">{stat.change}</p>
-              </CardContent>
-            </Card>
-          ))}
+          {statsLoading ? (
+            Array.from({ length: 4 }).map((_, i) => (
+              <Card key={i} className="animate-pulse">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <div className="h-4 w-24 bg-muted rounded" />
+                  <div className="h-4 w-4 bg-muted rounded-full" />
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="h-6 w-24 bg-muted rounded" />
+                  <div className="h-3 w-32 bg-muted rounded" />
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            statItems.map((stat) => (
+              <Card key={stat.title}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+                  <stat.icon className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{stat.value}</div>
+                  <p
+                    className={`text-xs ${
+                      stat.changeType === "increase" ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {stat.change}
+                  </p>
+                </CardContent>
+              </Card>
+            ))
+          )}
         </div>
 
         <div className="grid gap-4 lg:grid-cols-1">
@@ -152,32 +128,30 @@ export function AdminDashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
+              {loading && <ActivitySkeleton />}
+              {error && <p className="text-red-500 text-sm">{error}</p>}
               <div className="space-y-8">
                 {recentActivities.map((activity) => (
                   <div
                     key={activity.id}
                     className="flex items-start justify-between pb-4 last:border-b-0 last:pb-0"
                   >
-                    <div className="flex items-start gap-4 ">
+                    <div className="flex items-start gap-4">
                       <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900/20">
                         <Package className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                       </div>
                       <div className="space-y-2">
-                        <p className="text-sm font-medium leading-none">
-                          {activity.title}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {activity.description}
-                        </p>
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          {activity.timestamp}
+                        <p className="text-sm font-medium leading-none">{activity.title}</p>
+                        <p className="text-sm text-muted-foreground">{activity.description}</p>
+                        <div className="text-xs text-muted-foreground">
+                          {activity.timestamp
+                            ? formatTimestamp(activity.timestamp)
+                            : "N/A"}
                         </div>
                       </div>
                     </div>
                     <Badge
-                      variant={
-                        activity.type === "created" ? "default" : "secondary"
-                      }
+                      variant={activity.type === "created" ? "default" : "secondary"}
                       className="ml-auto"
                     >
                       {activity.status}
@@ -189,6 +163,36 @@ export function AdminDashboard() {
           </Card>
         </div>
       </div>
+    </div>
+  );
+}
+
+function formatTimestamp(timestamp: string) {
+  const date = new Date(timestamp);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${day}.${month}.${year} ${hours}:${minutes}`;
+}
+
+function ActivitySkeleton() {
+  return (
+    <div className="space-y-8">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div key={i} className="flex items-start justify-between pb-4 animate-pulse">
+          <div className="flex items-start gap-4">
+            <div className="h-8 w-8 rounded-lg bg-muted" />
+            <div className="space-y-2">
+              <div className="h-4 w-48 rounded bg-muted" />
+              <div className="h-3 w-32 rounded bg-muted" />
+              <div className="h-3 w-24 rounded bg-muted" />
+            </div>
+          </div>
+          <div className="h-6 w-16 rounded bg-muted ml-auto" />
+        </div>
+      ))}
     </div>
   );
 }
