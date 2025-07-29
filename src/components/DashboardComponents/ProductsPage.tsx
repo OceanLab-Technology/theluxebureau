@@ -433,14 +433,14 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import {
-  Plus,
   Edit,
-  Trash2,
 } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useRef, useCallback } from "react"
 import { useProductAdminStore } from "@/store/admin/productStore"
 import { Skeleton } from "@/components/ui/skeleton"
+import { ProductFormDialog } from "./Forms/ProductFormDialog"
+import Link from "next/link"
 
 const getStatusColor = (inventory: number) => {
   if (inventory === 0) {
@@ -536,10 +536,7 @@ export function ProductsPage() {
             <h2 className="text-3xl font-bold tracking-tight font-century">Products</h2>
             <p className="text-muted-foreground">Manage your product catalog and inventory</p>
           </div>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Product
-          </Button>
+          <ProductFormDialog />
         </div>
 
         {/* Product Table */}
@@ -561,45 +558,44 @@ export function ProductsPage() {
                 {loading && (!products || products.length === 0)
                   ? renderSkeletonRow()
                   : products?.map((product) => (
-                      <TableRow key={product.id} className="hover:bg-muted/20 transition">
-                        <TableCell>
-                          <div className="relative h-12 w-12 overflow-hidden rounded-md border">
-                            <Image
-                              src={product.image_1 || "/product.jpg"}
-                              alt={product.name}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                        </TableCell>
-                        <TableCell className="font-medium">{product.name}</TableCell>
-                        <TableCell>{product.category}</TableCell>
-                        <TableCell className="font-medium">€{product.price}</TableCell>
-                        <TableCell>{product.inventory}</TableCell>
-                        <TableCell>
-                          <Badge
-                            className={getStatusColor(product.inventory)}
-                            variant="secondary"
-                          >
-                            {product.inventory === 0
-                              ? "Out of Stock"
-                              : product.inventory < 10
+                    <TableRow key={product.id} className="hover:bg-muted/20 transition">
+                      <TableCell>
+                        <div className="relative h-12 w-12 overflow-hidden rounded-md border">
+                          <Image
+                            src={product.image_1 || "/product.jpg"}
+                            alt={product.name}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      </TableCell>
+                      <TableCell className="font-medium">{product.name}</TableCell>
+                      <TableCell>{product.category}</TableCell>
+                      <TableCell className="font-medium">€{product.price}</TableCell>
+                      <TableCell>{product.inventory}</TableCell>
+                      <TableCell>
+                        <Badge
+                          className={getStatusColor(product.inventory)}
+                          variant="secondary"
+                        >
+                          {product.inventory === 0
+                            ? "Out of Stock"
+                            : product.inventory < 10
                               ? "Low Stock"
                               : "In Stock"}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex justify-end gap-2">
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-2">
+                          <Link href={`/admin/products/${product.id}`}>
                             <Button variant="ghost" size="sm">
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button variant="ghost" size="sm">
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                          </Link>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
 
