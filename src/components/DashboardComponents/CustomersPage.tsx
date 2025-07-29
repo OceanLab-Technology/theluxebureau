@@ -3,7 +3,6 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -20,7 +19,6 @@ import { Button } from "@/components/ui/button"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
-  UserPlus,
   Mail,
   Phone,
   Calendar,
@@ -28,6 +26,8 @@ import {
 } from "lucide-react"
 import { useCustomerAdminStore } from "@/store/admin/customerStore"
 import { useEffect, useRef, useCallback } from "react"
+import Link from "next/link";
+import { CustomerFormDialog } from "./Forms/CustomerFormDialog"
 
 const getStatusColor = (status: string) => {
   switch (status.toLowerCase()) {
@@ -40,10 +40,6 @@ const getStatusColor = (status: string) => {
     default:
       return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400"
   }
-}
-
-const getInitials = (name: string) => {
-  return name.split(" ").map((n) => n[0]).join("").toUpperCase()
 }
 
 const renderSkeletonRow = () =>
@@ -119,10 +115,7 @@ export function CustomersPage() {
               Manage your customer relationships and data
             </p>
           </div>
-          <Button>
-            <UserPlus className="mr-2 h-4 w-4" />
-            Add Customer
-          </Button>
+          <CustomerFormDialog />
         </div>
 
         {/* Stats Cards */}
@@ -157,42 +150,44 @@ export function CustomersPage() {
                 {loading && (!customers || customers.length === 0)
                   ? renderSkeletonRow()
                   : customers?.map((customer) => (
-                      <TableRow key={customer.id}>
-                        <TableCell>
-                          <div className="flex items-center gap-3">
-                            <div className="font-medium">{customer.name}</div>
+                    <TableRow key={customer.id}>
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <div className="font-medium">{customer.name}</div>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="space-y-1 text-sm">
+                          <div className="flex items-center gap-2">
+                            <Mail className="h-3 w-3" />
+                            {customer.email}
                           </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="space-y-1 text-sm">
-                            <div className="flex items-center gap-2">
-                              <Mail className="h-3 w-3" />
-                              {customer.email}
-                            </div>
-                            <div className="flex items-center gap-2 text-muted-foreground">
-                              <Phone className="h-3 w-3" />
-                              {customer.phone}
-                            </div>
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            <Phone className="h-3 w-3" />
+                            {customer.phone}
                           </div>
-                        </TableCell>
-                        <TableCell>{customer.totalOrders}</TableCell>
-                        <TableCell>€{customer.totalSpent.toFixed?.(2) ?? customer.totalSpent}</TableCell>
-                        <TableCell>{customer.joinDate}</TableCell>
-                        <TableCell>
-                          <Badge
-                            className={getStatusColor(customer.status)}
-                            variant="secondary"
-                          >
-                            {customer.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
+                        </div>
+                      </TableCell>
+                      <TableCell>{customer.totalOrders}</TableCell>
+                      <TableCell>€{customer.totalSpent.toFixed?.(2) ?? customer.totalSpent}</TableCell>
+                      <TableCell>{customer.joinDate}</TableCell>
+                      <TableCell>
+                        <Badge
+                          className={getStatusColor(customer.status)}
+                          variant="secondary"
+                        >
+                          {customer.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Link href={`/admin/customers/${customer.id}`}>
                           <Button variant="ghost" size="sm">
                             <Eye className="h-4 w-4" />
                           </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
 

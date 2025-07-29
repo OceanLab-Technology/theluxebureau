@@ -32,7 +32,6 @@ export const useOrdersStore = create<OrdersState>((set) => ({
         deliveryDate: order.delivery_date || "",
         total: order.total_amount.toFixed(2),
         status: order.status,
-        
       }));
 
       set({ orders: mappedOrders, loading: false });
@@ -45,8 +44,6 @@ export const useOrdersStore = create<OrdersState>((set) => ({
 
 
 
-
-// useOrderDetailsStore
 
 interface OrderDetails {
   id: string;
@@ -62,6 +59,12 @@ interface OrderDetails {
     deliveryDate: string;
     total: string;
     status: string;
+    notes: string;
+    placedAt: string;
+    paymentStatus: string;
+    // productDetails: any[];
+    // personalization: any[];
+    updatedAt: string;
   };
 }
 
@@ -70,9 +73,10 @@ interface OrderDetailsState {
   loading: boolean;
   error: string | null;
   fetchOrder: (orderId: string) => Promise<void>;
+  updateOrder: (orderId: string, updatedFields: Partial<OrderDetails>) => Promise<void>;
 }
 
-export const useOrderDetailsStore = create<OrderDetailsState>((set) => ({
+export const useOrderDetailsStore = create<OrderDetailsState>((set, get) => ({
   order: null,
   loading: false,
   error: null,
@@ -101,12 +105,68 @@ export const useOrderDetailsStore = create<OrderDetailsState>((set) => ({
           },
           orderInfo: {
             deliveryDate: order.delivery_date,
-            total: order.total_price,
+            total: order.total_amount,
             status: order.status,
+            notes: order.notes,
+            placedAt: order.created_at,
+            paymentStatus: order.paymentStatus,
+            // productDetails: order.product_details,
+            // personalization: order.personalization,
+            updatedAt: order.updated_at
           },
         },
         loading: false,
       });
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+    }
+  },
+
+  updateOrder: async (orderId, updatedFields) => {
+    set({ loading: true, error: null });
+
+    try {
+      const payload: any = {};
+
+      if (updatedFields.customerInfo) {
+        if (updatedFields.customerInfo.name !== undefined)
+          payload.customer_name = updatedFields.customerInfo.name;
+        if (updatedFields.customerInfo.email !== undefined)
+          payload.customer_email = updatedFields.customerInfo.email;
+      }
+
+      if (updatedFields.recipientInfo) {
+        if (updatedFields.recipientInfo.name !== undefined)
+          payload.recipient_name = updatedFields.recipientInfo.name;
+        if (updatedFields.recipientInfo.address !== undefined)
+          payload.recipient_address = updatedFields.recipientInfo.address;
+      }
+
+      if (updatedFields.orderInfo) {
+        if (updatedFields.orderInfo.deliveryDate !== undefined)
+          payload.delivery_date = updatedFields.orderInfo.deliveryDate;
+        if (updatedFields.orderInfo.status !== undefined)
+          payload.status = updatedFields.orderInfo.status;
+        if (updatedFields.orderInfo.notes !== undefined)
+          payload.notes = updatedFields.orderInfo.notes;
+        if (updatedFields.orderInfo.total !== undefined)
+          payload.total_amount = parseFloat(updatedFields.orderInfo.total);
+        if (updatedFields.orderInfo.updatedAt !== undefined)
+          payload.updated_at = updatedFields.orderInfo.updatedAt;
+      }
+
+      const res = await fetch(`/api/orders/${orderId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) throw new Error(result.error || "Failed to update order");
+
+      // Re-fetch updated order to sync state
+      await get().fetchOrder(orderId);
     } catch (err: any) {
       set({ error: err.message, loading: false });
     }
