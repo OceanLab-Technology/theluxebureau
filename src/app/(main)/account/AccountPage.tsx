@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Footer } from "@/components/Footer";
 import Image from "next/image";
 import { useMainStore } from "@/store/mainStore";
+import { LogoutButton } from "@/components/AuthComponents/LogoutButton";
 
 interface User {
   id: string;
@@ -80,7 +81,7 @@ export default function AccountPage({ user }: AccountPageProps) {
             </div>
             <div className="text-stone-800 font-medium">ORDER HISTORY</div>
             <div className="text-stone-800 font-medium">PROFILE SETTINGS</div>
-            <div className="text-stone-800 font-medium">LOGOUT</div>
+            <LogoutButton/>
           </div>
         </div>
 
