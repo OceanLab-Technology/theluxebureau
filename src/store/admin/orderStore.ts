@@ -74,6 +74,7 @@ interface OrderDetailsState {
   error: string | null;
   fetchOrder: (orderId: string) => Promise<void>;
   updateOrder: (orderId: string, updatedFields: Partial<OrderDetails>) => Promise<void>;
+  deleteOrder: (orderId: string) => Promise<void>;
 }
 
 export const useOrderDetailsStore = create<OrderDetailsState>((set, get) => ({
@@ -171,4 +172,20 @@ export const useOrderDetailsStore = create<OrderDetailsState>((set, get) => ({
       set({ error: err.message, loading: false });
     }
   },
+  deleteOrder: async (orderId) => {
+    set({ loading: true, error: null });
+    try {
+      const res = await fetch(`/api/orders/${orderId}`, {
+        method: "DELETE",
+      });
+
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || "Failed to delete order");
+
+      set({ order: null, loading: false });
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+    }
+  }
+
 }));

@@ -16,13 +16,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Calendar, User, MapPin } from "lucide-react";
 import { useOrderDetailsStore } from "@/store/admin/orderStore";
+import { useRouter } from "next/navigation";
 
 interface OrderDetailsPageProps {
   orderId: string;
 }
 
 export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
-  const { order, loading, error, fetchOrder, updateOrder } = useOrderDetailsStore();
+  // const { order, loading, error, fetchOrder, updateOrder } = useOrderDetailsStore();
+  const { order, loading, error, fetchOrder, updateOrder, deleteOrder } = useOrderDetailsStore();
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     deliveryDate: "",
@@ -91,6 +94,18 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
       <p className="text-sm text-muted-foreground">{value || "—"}</p>
     </div>
   );
+
+  const handleDelete = async () => {
+    if (!order) return;
+
+    const confirmed = window.confirm("Are you sure you want to delete this order?");
+    if (!confirmed) return;
+
+    await deleteOrder(order.id);
+
+    router.push("/admin/orders");
+  };
+
 
   if (loading || !order) {
     return (
@@ -199,9 +214,14 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
         </Card>
 
         <div className="flex justify-end">
-          <Button onClick={handleSave} disabled={!hasChanges}>
-            Save
-          </Button>
+          <div className="flex justify-end gap-2">
+            <Button onClick={handleSave} disabled={!hasChanges}>
+              Save
+            </Button>
+            <Button onClick={handleDelete} variant="destructive">
+              Delete
+            </Button>
+          </div>
         </div>
       </main>
     </div>
