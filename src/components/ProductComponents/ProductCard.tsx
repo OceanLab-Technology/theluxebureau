@@ -34,11 +34,6 @@ export function ProductCard({ product }: ProductCardProps) {
 
         <div className="flex flex-col md:my-3 my-2">
           <h2 className="md:text-[16px]">{product.name}</h2>
-
-          {/* <p className="text-sm md:block hidden text-muted-foreground">
-            {product.description}
-          </p> */}
-
           <span className="md:text-[16px] font-medium">
             ${product.price}
           </span>
@@ -59,6 +54,8 @@ export function ProductCard({ product }: ProductCardProps) {
           <AddToCartButton
             productId={product.id!}
             productName={product.name}
+            productImage={product.image_1}
+            productPrice={product.price}
             size="sm"
             variant="box_yellow"
             className="md:px-20"

@@ -134,6 +134,8 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                 <AddToCartButton
                   productId={currentProduct.id!}
                   productName={currentProduct.name}
+                  productImage={currentProduct.image_1}
+                  productPrice={currentProduct.price}
                   size="lg"
                   variant="box_yellow"
                   className="w-full"
