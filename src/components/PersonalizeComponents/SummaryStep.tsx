@@ -1,14 +1,11 @@
 "use client";
 
 import React from "react";
-import { useCheckoutStore } from "@/store/checkout";
+import { usePersonalizeStore } from "@/store/personalizeStore";
+import Image from "next/image";
 
 export default function SummaryStep() {
-  const { formData, updateFormData } = useCheckoutStore();
-
-  const handleInputChange = (field: string, value: string) => {
-    updateFormData({ [field]: value });
-  };
+  const { formData, selectedProduct, updateFormData } = usePersonalizeStore();
 
   const handleSMSChange = (value: 'send-to-me' | 'send-to-recipient') => {
     updateFormData({ smsUpdates: value });
@@ -20,19 +17,43 @@ export default function SummaryStep() {
         Please review or amend your gift details below.
       </p>
 
+      {selectedProduct && (
+        <div className="mb-6 p-4 bg-stone-50 rounded-lg">
+          <h3 className="text-stone-700 font-medium text-sm tracking-wider mb-2">
+            SELECTED PRODUCT
+          </h3>
+          <div className="flex items-center gap-4">
+            {selectedProduct.image_1 && (
+              <div className="relative w-16 h-16">
+                <Image
+                  src={selectedProduct.image_1}
+                  alt={selectedProduct.name}
+                  fill
+                  className="object-cover rounded"
+                />
+              </div>
+            )}
+            <div>
+              <p className="font-medium text-stone-800">{selectedProduct.name}</p>
+              <p className="text-stone-600">£{selectedProduct.price?.toLocaleString()}.00</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="space-y-6">
         <div className="flex items-center gap-2">
           <h3 className="text-stone-700 font-medium text-sm tracking-wider">
             Your Name
           </h3>
-          <p className="text-stone-600">{formData.recipientName || "Garrett Duncan"}</p>
+          <p className="text-stone-600">{formData.yourName || "Not provided"}</p>
         </div>
 
         <div className="flex items-center gap-2">
           <h3 className="text-stone-700 font-medium text-sm tracking-wider">
             Recipients Name
           </h3>
-          <p className="text-stone-600">{formData.recipientName || "Luke Fenech"}</p>
+          <p className="text-stone-600">{formData.recipientName || "Not provided"}</p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -40,7 +61,9 @@ export default function SummaryStep() {
             Recipients Address
           </h3>
           <p className="text-stone-600">
-            {formData.recipientAddress || "13 Great James Street, London WC1N 3DN"}
+            {formData.recipientAddress && formData.recipientCity 
+              ? `${formData.recipientAddress}, ${formData.recipientCity}`
+              : "Not provided"}
           </p>
         </div>
 
@@ -48,15 +71,33 @@ export default function SummaryStep() {
           <h3 className="text-stone-700 font-medium text-sm tracking-wider">
             Delivery Date
           </h3>
-          <p className="text-stone-600">{formData.deliveryDate || "01/08/25"}</p>
+          <p className="text-stone-600">{formData.deliveryDate || "Not selected"}</p>
         </div>
 
         <div className="flex items-center gap-2">
           <h3 className="text-stone-700 font-medium text-sm tracking-wider">
-            Recipients Address
+            Delivery Time
           </h3>
-          <p className="text-stone-600">{formData.preferredDeliveryTime || "8am - 1pm"}</p>
+          <p className="text-stone-600">{formData.preferredDeliveryTime || "Not selected"}</p>
         </div>
+
+        {formData.customMessage && (
+          <div className="flex items-start gap-2">
+            <h3 className="text-stone-700 font-medium text-sm tracking-wider">
+              Custom Message
+            </h3>
+            <p className="text-stone-600">"{formData.customMessage}"</p>
+          </div>
+        )}
+
+        {formData.selectedQuote && (
+          <div className="flex items-start gap-2">
+            <h3 className="text-stone-700 font-medium text-sm tracking-wider">
+              Selected Quote
+            </h3>
+            <p className="text-stone-600">{formData.selectedQuote}</p>
+          </div>
+        )}
 
         <div className="flex items-center gap-2 justify-between border-b border-stone-700">
           <p className="text-stone-700 text-sm">

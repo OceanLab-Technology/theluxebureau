@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
           .insert({
             user_id: metadata.userId,
             stripe_payment_intent_id: paymentIntent.id,
-            amount: paymentIntent.amount / 100, // Convert from cents
+            amount: paymentIntent.amount,
             currency: paymentIntent.currency,
             status: "completed",
             customer_email: metadata.customerEmail,

@@ -2,10 +2,10 @@
 
 import React from "react";
 import { Input } from "@/components/ui/input";
-import { useCheckoutStore } from "@/store/checkout";
+import { usePersonalizeStore } from "@/store/personalizeStore";
 
 export default function RecipientDetailsStep() {
-  const { formData, updateFormData } = useCheckoutStore();
+  const { formData, updateFormData } = usePersonalizeStore();
 
   const handleInputChange = (field: string, value: string) => {
     updateFormData({ [field]: value });
@@ -17,7 +17,20 @@ export default function RecipientDetailsStep() {
         Please enter your recipient's contact details
       </p>
 
-      <form className="space-y-4">
+            <form className="space-y-4">
+        <div>
+          <Input
+            id="your-name"
+            type="text"
+            value={formData.yourName}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleInputChange("yourName", e.target.value)
+            }
+            placeholder="Your Name*"
+            className="border-0 border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none"
+          />
+        </div>
+
         <div>
           <Input
             id="recipient-name"
@@ -26,7 +39,7 @@ export default function RecipientDetailsStep() {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleInputChange("recipientName", e.target.value)
             }
-            placeholder="Your Name*"
+            placeholder="Recipients name*"
             className="border-0 border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none"
           />
         </div>
@@ -39,7 +52,7 @@ export default function RecipientDetailsStep() {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleInputChange("recipientAddress", e.target.value)
             }
-            placeholder="Recipients name*"
+            placeholder="Recipient address*"
             className="border-0 border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none"
           />
         </div>

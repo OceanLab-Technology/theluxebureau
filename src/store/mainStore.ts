@@ -1,4 +1,5 @@
 import { Product, ApiResponse, CartItem } from "@/app/api/types";
+import { toast } from "sonner";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -168,6 +169,7 @@ export const useMainStore = create<MainStore>()(
           }
 
           // Refresh cart items
+          toast.success(`Added ${quantity} item(s) to cart`);
           await get().fetchCartItems();
         } catch (error) {
           set({
@@ -227,9 +229,9 @@ export const useMainStore = create<MainStore>()(
             throw new Error(apiResponse.error || "Failed to remove item from cart");
           }
 
-          // Remove item from local state
           const cartItems = get().cartItems.filter(item => item.id !== itemId);
           set({ cartItems, cartLoading: false });
+          toast.success(`Item removed from cart`);
           get().calculateCartTotal();
         } catch (error) {
           set({

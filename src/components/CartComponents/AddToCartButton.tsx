@@ -47,7 +47,7 @@ export function AddToCartButton({
       <Button
         variant="outline"
         size={size}
-        className={`${className} border-green-500 text-green-600`}
+        className={`${className} border-green-600 text-green-700 w-full`}
         disabled
       >
         <Check className="mr-2 h-4 w-4" />

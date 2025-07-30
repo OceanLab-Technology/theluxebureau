@@ -7,7 +7,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { useMainStore } from "@/store/mainStore";
+import { usePersonalizeStore } from "@/store/personalizeStore";
 import { AddToCartButton } from "@/components/CartComponents/AddToCartButton";
+import { useRouter } from "next/navigation";
 import {
   Accordion,
   AccordionContent,
@@ -23,11 +25,21 @@ interface ProductDetailViewProps {
 export function ProductDetailView({ productId }: ProductDetailViewProps) {
   const { fetchProductById, currentProduct, detailedProductLoading } =
     useMainStore();
+  const { setSelectedProduct, resetCheckout } = usePersonalizeStore();
+  const router = useRouter();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   useEffect(() => {
     fetchProductById(productId);
   }, [productId, fetchProductById]);
+
+  const handlePersonalize = () => {
+    if (currentProduct) {
+      resetCheckout();
+      setSelectedProduct(currentProduct);
+      router.push(`/personalize?productId=${currentProduct.id}`);
+    }
+  };
 
   if (detailedProductLoading) {
     return (
@@ -132,7 +144,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               {currentProduct.description}
             </p>
 
-            <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-2">
               {availability === "in-stock" ? (
                 <AddToCartButton
                   productId={currentProduct.id!}
@@ -146,6 +158,10 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                   Sold Out
                 </Button>
               )}
+
+              <Button variant="box_yellow" size={"lg"} className="w-full" onClick={handlePersonalize}>
+                Personalize
+              </Button>
             </div>
 
             {currentProduct.tags && currentProduct.tags.length > 0 && (

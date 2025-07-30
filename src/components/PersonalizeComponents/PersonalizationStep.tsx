@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useCheckoutStore } from "@/store/checkout";
+import { usePersonalizeStore } from "@/store/personalizeStore";
 import {
   Select,
   SelectContent,
@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 
 export default function PersonalizationStep() {
-  const { formData, updateFormData } = useCheckoutStore();
+  const { formData, updateFormData } = usePersonalizeStore();
 
   const quotes = [
     "Pablo Picasso",
@@ -27,14 +27,14 @@ export default function PersonalizationStep() {
 
   return (
     <div>
-      <p className="text-stone-700 font-semibold text-sm leading-relaxed">
+      <p className="text-stone-700 text-sm leading-relaxed">
         Our gifts are sent with custom stationery, letter-pressed by
         hand at the Luxe Bureau atelier. In the header field, please
         enter your own name, initials, or company to create your custom
         letterhead. You may choose between two type styles below.
       </p>
 
-      <p className="text-stone-700 mb-8 font-semibold text-sm leading-relaxed">
+      <p className="text-stone-700 mb-8 text-sm leading-relaxed">
         Your personal message will be typeset and printed in the Luxe
         Bureau's signature typewriter font. Please type your message
         directly onto the notecard. For added inspiration, select a

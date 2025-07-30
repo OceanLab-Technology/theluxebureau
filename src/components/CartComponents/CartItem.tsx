@@ -6,7 +6,7 @@ import { CartItem as CartItemType } from "@/app/api/types";
 import { Product } from "@/app/api/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Minus, Plus, Trash2, Loader2 } from "lucide-react";
+import { Minus, Plus, Loader2 } from "lucide-react";
 import Image from "next/image";
 import {
   AlertDialog,
@@ -98,13 +98,49 @@ export function CartItem({ item, loading }: CartItemProps) {
           </h3>
 
           {item.custom_data && Object.keys(item.custom_data).length > 0 && (
-            <div className="text-xs text-stone-500 mb-3">
-              <span className="font-medium">
-                for{" "}
-                {Object.entries(item.custom_data)
-                  .map(([key, value]) => String(value))
-                  .join(", ")}
-              </span>
+            <div className="text-xs text-stone-500 mb-3 space-y-1">
+              {item.custom_data.isPersonalized ? (
+                <div className="space-y-1">
+                  <div className="font-medium text-stone-600">
+                    for {item.custom_data.recipientName || "recipient"}
+                  </div>
+                  {item.custom_data.deliveryDate && (
+                    <div>
+                      <span className="font-medium">Delivery:</span>{" "}
+                      {new Date(
+                        item.custom_data.deliveryDate
+                      ).toLocaleDateString()}
+                    </div>
+                  )}
+                  {item.custom_data.customMessage && (
+                    <div>
+                      <span className="font-medium">Message:</span> "
+                      {item.custom_data.customMessage}"
+                    </div>
+                  )}
+                  {item.custom_data.selectedQuote && (
+                    <div>
+                      <span className="font-medium">Quote:</span>{" "}
+                      {item.custom_data.selectedQuote}
+                    </div>
+                  )}
+                  {item.custom_data.yourName && (
+                    <div>
+                      <span className="font-medium">From:</span>{" "}
+                      {item.custom_data.yourName}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div>
+                  <span className="font-medium">
+                    Custom details:{" "}
+                    {Object.entries(item.custom_data)
+                      .map(([key, value]) => String(value))
+                      .join(", ")}
+                  </span>
+                </div>
+              )}
             </div>
           )}
 
@@ -151,13 +187,13 @@ export function CartItem({ item, loading }: CartItemProps) {
       </div>
 
       <div className="flex flex-col justify-start items-end text-sm">
-        <button className="text-stone-600 hover:text-stone-800 uppercase tracking-wider">
+        <button className="text-stone-600 cursor-pointer hover:text-stone-800 uppercase tracking-wider">
           EDIT
         </button>
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <button
-              className="text-stone-600 hover:text-stone-800 uppercase tracking-wider"
+              className="text-stone-600 cursor-pointer hover:text-stone-800 uppercase tracking-wider"
               disabled={loading}
             >
               REMOVE
@@ -165,8 +201,8 @@ export function CartItem({ item, loading }: CartItemProps) {
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Remove Item</AlertDialogTitle>
-              <AlertDialogDescription>
+              <AlertDialogTitle className="text-2xl">Remove Item</AlertDialogTitle>
+              <AlertDialogDescription className="text-lg leading-6">
                 Are you sure you want to remove "{product.name}" from your cart?
               </AlertDialogDescription>
             </AlertDialogHeader>

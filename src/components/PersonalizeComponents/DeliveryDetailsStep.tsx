@@ -2,10 +2,10 @@
 
 import React from "react";
 import { Input } from "@/components/ui/input";
-import { useCheckoutStore } from "@/store/checkout";
+import { usePersonalizeStore } from "@/store/personalizeStore";
 
 export default function DeliveryDetailsStep() {
-  const { formData, updateFormData } = useCheckoutStore();
+  const { formData, updateFormData } = usePersonalizeStore();
 
   const handleInputChange = (field: string, value: string) => {
     updateFormData({ [field]: value });

@@ -60,7 +60,7 @@ export function ProductCard({ product }: ProductCardProps) {
             productId={product.id!}
             productName={product.name}
             size="sm"
-            variant="default"
+            variant="box_yellow"
             className="px-20"
           />
         )}

@@ -2,7 +2,8 @@
 
 import React from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { useCheckoutStore } from "@/store/checkout";
+import { usePersonalizeStore } from "@/store/personalizeStore";
+import { useMainStore } from "@/store/mainStore";
 import RecipientDetailsStep from "./RecipientDetailsStep";
 import PersonalizationStep from "./PersonalizationStep";
 import DeliveryDetailsStep from "./DeliveryDetailsStep";
@@ -24,7 +25,8 @@ const stepTitles = {
 };
 
 export default function PersonalizeForm() {
-  const { currentStep, nextStep, prevStep, resetCheckout } = useCheckoutStore();
+  const { currentStep, nextStep, prevStep, resetCheckout, formData, selectedProduct } = usePersonalizeStore();
+  const { addToCart } = useMainStore();
   const router = useRouter();
 
   const handleNext = () => {
@@ -41,14 +43,63 @@ export default function PersonalizeForm() {
 
   const handleBackToStore = () => {
     resetCheckout();
-    // Navigate back to store - you can implement this based on your routing
     window.history.back();
   };
 
-  const handleCheckout = () => {
-    // Handle final checkout logic here
-    console.log("Proceeding to checkout...");
-    router.push("/checkout/payment");
+  const handleAddToCart = async () => {
+    if (!selectedProduct) return;
+    
+    try {
+      // Create custom data from form data for personalization
+      const personalizationData = {
+        yourName: formData.yourName,
+        recipientName: formData.recipientName,
+        recipientAddress: formData.recipientAddress,
+        recipientCity: formData.recipientCity,
+        recipientEmail: formData.recipientEmail,
+        deliveryDate: formData.deliveryDate,
+        preferredDeliveryTime: formData.preferredDeliveryTime,
+        headerStyle: formData.headerStyle,
+        selectedQuote: formData.selectedQuote,
+        customMessage: formData.customMessage,
+        smsUpdates: formData.smsUpdates,
+        isPersonalized: true
+      };
+
+      await addToCart(selectedProduct.id!, 1, personalizationData);
+      resetCheckout();
+      router.push("/cart");
+    } catch (error) {
+      console.error("Failed to add personalized item to cart:", error);
+    }
+  };
+
+  const handleCheckout = async () => {
+    if (!selectedProduct) return;
+    
+    try {
+      // First add to cart with personalization data
+      const personalizationData = {
+        yourName: formData.yourName,
+        recipientName: formData.recipientName,
+        recipientAddress: formData.recipientAddress,
+        recipientCity: formData.recipientCity,
+        recipientEmail: formData.recipientEmail,
+        deliveryDate: formData.deliveryDate,
+        preferredDeliveryTime: formData.preferredDeliveryTime,
+        headerStyle: formData.headerStyle,
+        selectedQuote: formData.selectedQuote,
+        customMessage: formData.customMessage,
+        smsUpdates: formData.smsUpdates,
+        isPersonalized: true
+      };
+
+      await addToCart(selectedProduct.id!, 1, personalizationData);
+      resetCheckout();
+      router.push("/checkout");
+    } catch (error) {
+      console.error("Failed to add personalized item to cart:", error);
+    }
   };
   const renderStepContent = () => {
     switch (currentStep) {
@@ -73,16 +124,16 @@ export default function PersonalizeForm() {
   };
 
   return (
-    <section className="flex flex-col justify-between h-full font-heading">
+    <section className="flex flex-col justify-between h-[calc(100vh-7rem)] font-heading">
       <div>
         <div className="mb-10">
           <div className="mb-4 flex items-center justify-between">
-            <h1 className="text-2xl mb-4 font-bold">
+            <h1 className="text-2xl mb-4 font-medium">
               {stepTitles[currentStep as keyof typeof stepTitles]}
             </h1>
             <button
               onClick={handleBackToStore}
-              className="text-xs font-medium tracking-wider mb-4 hover:text-stone-600 transition-colors"
+              className="text-xs font-medium cursor-pointer tracking-wider mb-4 hover:text-stone-600 transition-colors"
             >
               BACK TO STORE
             </button>
@@ -91,7 +142,7 @@ export default function PersonalizeForm() {
             {steps.map((s) => (
               <div
                 key={s.id}
-                className={`text-xs font-semibold tracking-wider ${
+                className={`text-xs tracking-wider cursor-pointer ${
                   currentStep === s.id ? "text-stone-700" : "text-stone-500"
                 }`}
               >
@@ -127,19 +178,19 @@ export default function PersonalizeForm() {
           <>
             <button
               onClick={handleBack}
-              className="bg-[#3B3215] px-5 hover:bg-[#3B3215]/80 font-medium text-stone-400 tracking-wider text-sm py-2.5 rounded-none transition-colors"
+              className="bg-[#3B3215] px-5 hover:bg-[#3B3215]/80 font-medium text-stone-400 tracking-wider text-sm py-2.5 rounded-none transition-colors cursor-pointer"
             >
               BACK
             </button>
             <button
-              onClick={handleNext}
-              className="bg-[#FDCF5F] px-5 hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider text-sm py-2.5 rounded-none transition-colors"
+              onClick={handleAddToCart}
+              className="bg-[#FDCF5F] px-5 hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider text-sm py-2.5 rounded-none transition-colors cursor-pointer"
             >
               ADD TO CART
             </button>
             <button
                 onClick={handleCheckout}
-              className="bg-[#FDCF5F] px-5 hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider text-sm py-2.5 rounded-none transition-colors"
+              className="bg-[#FDCF5F] px-5 hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider text-sm py-2.5 rounded-none transition-colors cursor-pointer"
             >
               CHECKOUT
             </button>
@@ -149,13 +200,13 @@ export default function PersonalizeForm() {
             <button
               onClick={handleBack}
               disabled={currentStep === 1}
-              className="bg-[#3B3215] px-5 hover:bg-[#3B3215]/80 font-medium text-stone-400 tracking-wider text-sm py-2.5 rounded-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-[#3B3215] px-5 hover:bg-[#3B3215]/80 font-medium text-stone-400 tracking-wider text-sm py-2.5 rounded-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               BACK
             </button>
             <button
               onClick={handleNext}
-              className="bg-[#FDCF5F] px-5 hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider text-sm py-2.5 rounded-none transition-colors"
+              className="bg-[#FDCF5F] px-5 hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider text-sm py-2.5 rounded-none transition-colors cursor-pointer"
             >
               {getButtonText()}
             </button>

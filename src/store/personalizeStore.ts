@@ -1,7 +1,9 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { Product } from '@/app/api/types'
 
-export interface CheckoutFormData {
+export interface personalizeFormData {
+  yourName: string
   recipientName: string
   recipientAddress: string
   recipientCity: string
@@ -14,17 +16,20 @@ export interface CheckoutFormData {
   smsUpdates: 'send-to-me' | 'send-to-recipient' | 'none'
 }
 
-interface CheckoutState {
+interface PersonalizeState {
   currentStep: number
-  formData: CheckoutFormData
+  formData: personalizeFormData
+  selectedProduct: Product | null
   setStep: (step: number) => void
   nextStep: () => void
   prevStep: () => void
-  updateFormData: (data: Partial<CheckoutFormData>) => void
+  updateFormData: (data: Partial<personalizeFormData>) => void
+  setSelectedProduct: (product: Product) => void
   resetCheckout: () => void
 }
 
-const initialFormData: CheckoutFormData = {
+const initialFormData: personalizeFormData = {
+  yourName: '',
   recipientName: '',
   recipientAddress: '',
   recipientCity: '',
@@ -37,11 +42,12 @@ const initialFormData: CheckoutFormData = {
   smsUpdates: 'none'
 }
 
-export const useCheckoutStore = create<CheckoutState>()(
+export const usePersonalizeStore = create<PersonalizeState>()(
   persist(
     (set, get) => ({
       currentStep: 1,
       formData: initialFormData,
+      selectedProduct: null,
       setStep: (step: number) => 
         set({ currentStep: Math.max(1, Math.min(4, step)) }),
       nextStep: () => {
@@ -56,18 +62,21 @@ export const useCheckoutStore = create<CheckoutState>()(
           set({ currentStep: currentStep - 1 })
         }
       },
-      updateFormData: (data: Partial<CheckoutFormData>) =>
+      updateFormData: (data: Partial<personalizeFormData>) =>
         set((state) => ({
           formData: { ...state.formData, ...data }
         })),
+      setSelectedProduct: (product: Product) =>
+        set({ selectedProduct: product }),
       resetCheckout: () =>
-        set({ currentStep: 1, formData: initialFormData })
+        set({ currentStep: 1, formData: initialFormData, selectedProduct: null })
     }),
     {
       name: 'checkout-storage',
       partialize: (state) => ({ 
         currentStep: state.currentStep, 
-        formData: state.formData 
+        formData: state.formData,
+        selectedProduct: state.selectedProduct
       })
     }
   )
