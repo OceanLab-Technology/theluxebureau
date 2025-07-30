@@ -16,7 +16,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import Header from "../Header";
 
 interface ProductDetailViewProps {
   productId: string;
@@ -65,29 +64,15 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
     );
   }
 
-  const isOnSale =
-    currentProduct.originalPrice &&
-    currentProduct.originalPrice > currentProduct.price;
 
   const availability = currentProduct.inventory > 0 ? "in-stock" : "sold-out";
 
   return (
     <>
-      {/* <Header /> */}
       <div className="font-century">
-        {/* <div className="mb-8">
-          <Link
-            href="/products"
-            className="text-muted-foreground hover:text-foreground flex items-center text-sm"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Products
-          </Link>
-        </div> */}
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-12">
           <div className="space-y-4">
-            <div className="aspect-square bg-muted/20 overflow-hidden">
+            <div className="md:aspect-square w-full bg-muted/20 overflow-hidden">
               <Image
                 src={
                   (currentProduct as any)[`image_${selectedImageIndex + 1}`] ||
@@ -96,11 +81,11 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                 alt={currentProduct.name}
                 width={400}
                 height={400}
-                className="w-[950px] h-[1080px] object-cover"
+                className="lg:w-[950px] h-96 w-full lg:h-[1080px] md:object-cover"
               />
             </div>
 
-            <div className="grid grid-cols-4 gap-4 py-2 px-8">
+            <div className="grid grid-cols-4 gap-4 md:py-2 md:px-8 px-4">
               {Array.from({ length: 4 }, (_, index) => {
                 const imageUrl = (currentProduct as any)[`image_${index + 1}`];
                 if (!imageUrl) return null;
@@ -128,7 +113,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
             </div>
           </div>
 
-          <div className="space-y-6 p-25">
+          <div className="space-y-6 md:p-25 py-8 px-4">
             <div className="w-66">
               <div className="flex items-center gap-2 mb-2 text-stone-600">
                 <span>{currentProduct.category}</span>

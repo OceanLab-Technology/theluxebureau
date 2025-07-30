@@ -13,7 +13,7 @@ export default function SummaryStep() {
 
   return (
     <div>
-      <p className="text-stone-700 mb-6 font-semibold text-xl">
+      <p className="text-stone-700 mb-6 font-medium md:text-xl">
         Please review or amend your gift details below.
       </p>
 
@@ -41,7 +41,7 @@ export default function SummaryStep() {
         </div>
       )}
 
-      <div className="space-y-6">
+      <div className="md:space-y-6 space-y-3">
         <div className="flex items-center gap-2">
           <h3 className="text-stone-700 font-medium text-sm tracking-wider">
             Your Name

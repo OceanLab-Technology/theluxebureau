@@ -173,7 +173,7 @@ export default function PersonalizeForm() {
         </AnimatePresence>
       </div>
 
-      <div className="flex gap-3 justify-end mt-8">
+      <div className="flex gap-3 justify-end mt-8 md:mb-0 mb-8">
         {currentStep === 4 ? (
           <>
             <button
@@ -196,7 +196,7 @@ export default function PersonalizeForm() {
             </button>
           </>
         ) : (
-          <>
+          <div className="md:mb-0 mb-8 flex gap-3">
             <button
               onClick={handleBack}
               disabled={currentStep === 1}
@@ -210,7 +210,7 @@ export default function PersonalizeForm() {
             >
               {getButtonText()}
             </button>
-          </>
+          </div>
         )}
       </div>
     </section>

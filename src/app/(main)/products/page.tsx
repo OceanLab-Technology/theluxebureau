@@ -14,7 +14,7 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-25">
+      <div className="container mx-auto px-4 md:py-25 py-15">
         <ProductFilters
           onFilterChange={handleFilterChange}
           activeCategory={selectedCategory}

@@ -22,7 +22,7 @@ export function ProductFilters({ onFilterChange, activeCategory = "Shop All" }: 
   };
 
   return (
-    <div className="flex font-century items-center justify-end gap-30">
+    <div className="flex font-century md:flex-row flex-col md:items-center items-end justify-end md:gap-30">
       {categories.map((category) => (
         <div key={category} className="flex flex-col gap-2">
           <span

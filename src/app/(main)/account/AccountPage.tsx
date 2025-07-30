@@ -43,7 +43,6 @@ export default function AccountPage({ user }: AccountPageProps) {
     if (products.length === 0) {
       fetchProducts();
     }
-    // Mock orders for demo - replace with actual API call
     setOrders([
       {
         id: 1,
@@ -68,31 +67,43 @@ export default function AccountPage({ user }: AccountPageProps) {
 
   return (
     <div className="min-h-screen flex flex-col bg-background font-century">
-      <main className="relative flex px-20 min-h-[calc(100vh-64px)]">
-        <div className="w-64 py-20">
-          <div className="space-y-2 text-sm uppercase tracking-wider">
-            <div className="text-stone-500 mb-4">ACCOUNT</div>
+      <main className="relative flex md:flex-row flex-col md:px-20 px-4 min-h-[calc(100vh-64px)]">
+        <div className="md:w-64 w-full md:py-20 py-6">
+          <h1 className="block md:hidden text-2xl font-light mb-6">
+            Welcome back,
+            <br />
+            {userName}
+          </h1>
+          <div className="md:space-y-2 md:text-sm text-xs uppercase tracking-wider md:block flex md:flex-col flex-row space-x-4 md:space-x-0">
+            <div className="text-stone-500 md:mb-4 mb-0 md:block hidden">
+              ACCOUNT
+            </div>
             <div className="text-stone-800 font-medium">ORDER HISTORY</div>
             <div className="text-stone-800 font-medium">PROFILE SETTINGS</div>
+            <div className="text-stone-800 font-medium">LOGOUT</div>
           </div>
         </div>
 
-        <div className="flex-1 py-20 px-10">
-          <h1 className="text-2xl font-light mb-12">
+        <div className="flex-1 md:py-20 py-6 md:px-10 px-0">
+          <h1 className="md:block hidden text-2xl font-light mb-12">
             Welcome back, {userName}
           </h1>
 
           <div className="mb-16">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-lg font-medium">ORDER HISTORY</h2>
-              <div className="text-sm text-stone-600">
-                <div>ORDER NO: 001</div>
-                <div>PLACED ON: 25 OCT 2024</div>
-                <div>£500.00</div>
+            <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 md:mb-8">
+              <div className="mb-2 md:mb-0">
+                <div className="text-xs text-stone-500 uppercase tracking-wider">
+                  DELIVERED
+                </div>
+                <div className="text-sm font-medium">FRIDAY 01, APRIL</div>
+                <div className="text-lg font-medium">£286.27</div>
               </div>
+              <Button className="bg-yellow-400 hover:bg-yellow-500 text-stone-800 px-6 py-2 text-xs uppercase tracking-wider w-fit">
+                VIEW ORDER
+              </Button>
             </div>
 
-            <div className="grid grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-6 mb-8">
               {products.slice(0, 3).map((product, index) => (
                 <div key={product.id || index} className="bg-stone-100">
                   <div className="aspect-square relative">
@@ -107,21 +118,20 @@ export default function AccountPage({ user }: AccountPageProps) {
               ))}
             </div>
 
-            <div className="flex justify-end mb-12">
-              <Button className="bg-yellow-400 hover:bg-yellow-500 text-stone-800 px-8 py-2 uppercase tracking-wider">
+            <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 md:mb-8">
+              <div className="mb-2 md:mb-0">
+                <div className="text-xs text-stone-500 uppercase tracking-wider">
+                  DELIVERED
+                </div>
+                <div className="text-sm font-medium">WEDNESDAY 18, JANUARY</div>
+                <div className="text-lg font-medium">£64.73</div>
+              </div>
+              <Button className="bg-yellow-400 hover:bg-yellow-500 text-stone-800 px-6 py-2 text-xs uppercase tracking-wider w-fit">
                 VIEW ORDER
               </Button>
             </div>
 
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-lg font-medium">ORDER NO: 002</h2>
-              <div className="text-sm text-stone-600">
-                <div>PLACED ON: 15 OCT 2024</div>
-                <div>£450.00</div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-6 mb-8">
+            <div className="grid grid-cols-2 gap-2 md:gap-6 mb-8">
               {products.slice(1, 3).map((product, index) => (
                 <div key={product.id || index} className="bg-stone-100">
                   <div className="aspect-square relative">
@@ -135,20 +145,16 @@ export default function AccountPage({ user }: AccountPageProps) {
                 </div>
               ))}
             </div>
-
-            <div className="flex justify-end">
-              <Button className="bg-yellow-400 hover:bg-yellow-500 text-stone-800 px-8 py-2 uppercase tracking-wider">
-                VIEW ORDER
-              </Button>
-            </div>
           </div>
 
           <div>
-            <h2 className="text-lg font-medium mb-8">PROFILE SETTINGS</h2>
+            <h2 className="text-lg font-medium mb-8 hidden md:block">
+              PROFILE SETTINGS
+            </h2>
 
             <form onSubmit={handleProfileUpdate}>
-              <div className="grid grid-cols-2 gap-6">
-                <div className="border border-stone-300 p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <div className="border border-stone-300 p-4 md:p-6">
                   <Label className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500">
                     NAME
                   </Label>
@@ -162,7 +168,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                   />
                 </div>
 
-                <div className="border border-stone-300 p-6">
+                <div className="border border-stone-300 p-4 md:p-6">
                   <Label className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500">
                     EMAIL ADDRESS
                   </Label>
@@ -177,7 +183,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                   />
                 </div>
 
-                <div className="border border-stone-300 p-6">
+                <div className="border border-stone-300 p-4 md:p-6">
                   <Label className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500">
                     SHIPPING ADDRESS
                   </Label>
@@ -194,7 +200,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                   />
                 </div>
 
-                <div className="border border-stone-300 p-6">
+                <div className="border border-stone-300 p-4 md:p-6">
                   <Label className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500">
                     PHONE NUMBER
                   </Label>
@@ -208,7 +214,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                   />
                 </div>
 
-                <div className="border border-stone-300 p-6">
+                <div className="border border-stone-300 p-4 md:p-6 md:col-span-1">
                   <Label className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500">
                     PASSWORD
                   </Label>

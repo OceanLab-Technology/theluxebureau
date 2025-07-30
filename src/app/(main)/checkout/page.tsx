@@ -65,15 +65,15 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen">
-      <div className="max-w-6xl p-16 mx-auto">
+      <div className="max-w-6xl md:p-16 md:pb-4 md:px-0 px-4 mx-auto">
         <div className="flex items-center justify-between py-10">
           <h2 className="text-3xl font-medium">Check-out</h2>
-          <Button variant="outline" asChild>
-            <Link href="/cart">← Back to Cart</Link>
+          <Button variant="link" asChild>
+            <Link href="/cart">Back to Cart</Link>
           </Button>
         </div>
-        <div className="grid lg:grid-cols-2 gap-12">
-          <div className="flex flex-col space-y-6">
+        <div className="grid lg:grid-cols-2 md:gap-12 gap-4">
+          <div className="flex flex-col md:space-y-6">
             {checkoutItems.map((product, index) => (
               <div key={product.id}>
                 <h2 className="my-4 pb-2 border-b">

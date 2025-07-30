@@ -73,7 +73,7 @@ export function CartItem({ item, loading }: CartItemProps) {
   };
 
   return (
-    <div className="flex items-start space-x-6 py-6 border-y border-secondary-foreground">
+    <div className="flex items-start space-x-6 md:py-6 py-4 border-y border-secondary-foreground">
       <div className="flex-shrink-0">
         <div className="w-32 h-32 relative overflow-hidden bg-stone-100">
           {product.image_1 || product.image ? (
@@ -149,17 +149,52 @@ export function CartItem({ item, loading }: CartItemProps) {
           </div>
         </div>
 
-        <div className="flex items-center space-x-3">
-          <span className="text-sm text-stone-600 uppercase tracking-wider">
-            QUANTITY
-          </span>
+        <div className="flex md:items-center md:flex-row flex-col md:space-x-3">
+          <div className="flex items-center justify-between">
+            <span className="md:text-sm text-xs text-stone-600 uppercase tracking-wider">
+              QUANTITY
+            </span>
+            {/* Mobile actions */}
+            <div className="flex-col flex md:hidden  justify-start items-end text-sm">
+              <button className="text-stone-600 md:block hidden cursor-pointer hover:text-stone-800 uppercase tracking-wider">
+                EDIT
+              </button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <button
+                    className="text-stone-600 md:text-base text-sm cursor-pointer hover:text-stone-800 uppercase tracking-wider"
+                    disabled={loading}
+                  >
+                    REMOVE
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-2xl">
+                      Remove Item
+                    </AlertDialogTitle>
+                    <AlertDialogDescription className="text-lg leading-6">
+                      Are you sure you want to remove "{product.name}" from your
+                      cart?
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleRemoveItem}>
+                      Remove
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
+          </div>
           <div className="flex items-center">
             <Button
               variant="ghost"
               size="sm"
               onClick={decrementQuantity}
               disabled={quantity <= 1 || isUpdating || loading}
-              className="h-8 w-8 p-0 rounded-none"
+              className="md:h-8 h-6 w-6 md:w-8 p-0 rounded-none"
             >
               <Minus className="h-3 w-3" />
             </Button>
@@ -169,7 +204,7 @@ export function CartItem({ item, loading }: CartItemProps) {
               value={quantity}
               onChange={handleInputChange}
               disabled={isUpdating || loading}
-              className="w-12 h-8 text-center border-0 focus:ring-0 rounded-none"
+              className="md:w-12 w-8 h-8 text-center border-0 focus:ring-0 rounded-none"
               min="1"
             />
 
@@ -178,7 +213,7 @@ export function CartItem({ item, loading }: CartItemProps) {
               size="sm"
               onClick={incrementQuantity}
               disabled={isUpdating || loading}
-              className="h-8 w-8 p-0 rounded-none"
+              className="md:h-8 h-6 w-6 md:w-8 p-0 rounded-none"
             >
               <Plus className="h-3 w-3" />
             </Button>
@@ -186,8 +221,8 @@ export function CartItem({ item, loading }: CartItemProps) {
         </div>
       </div>
 
-      <div className="flex flex-col justify-start items-end text-sm">
-        <button className="text-stone-600 cursor-pointer hover:text-stone-800 uppercase tracking-wider">
+      <div className="hidden flex-col md:flex  justify-start items-end text-sm">
+        <button className="text-stone-600 md:block hidden cursor-pointer hover:text-stone-800 uppercase tracking-wider">
           EDIT
         </button>
         <AlertDialog>
@@ -201,7 +236,9 @@ export function CartItem({ item, loading }: CartItemProps) {
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle className="text-2xl">Remove Item</AlertDialogTitle>
+              <AlertDialogTitle className="text-2xl">
+                Remove Item
+              </AlertDialogTitle>
               <AlertDialogDescription className="text-lg leading-6">
                 Are you sure you want to remove "{product.name}" from your cart?
               </AlertDialogDescription>

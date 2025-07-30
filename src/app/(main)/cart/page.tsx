@@ -34,8 +34,8 @@ export default function CartPage() {
 
   return (
     <div className="h-screen overflow-hidden">
-      <div className="grid grid-cols-2">
-        <img src="/image.png" alt="" className="object-cover" />
+      <div className="grid md:grid-cols-2 grid-cols-1">
+        <img src="/image.png" alt="" className="object-cover md:block hidden" />
         <CartContainer />
       </div>
     </div>

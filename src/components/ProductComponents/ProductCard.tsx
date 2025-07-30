@@ -16,9 +16,9 @@ export function ProductCard({ product }: ProductCardProps) {
   const fallbackImage = product.image_2 || product.image_1;
 
   return (
-    <div className="transition-all font-century duration-300 overflow-hidden w-120">
+    <div className="transition-all font-century duration-300 overflow-hidden md:w-120">
       <Link href={`/products/${product.id}`} className="block">
-        <div className="relative aspect-auto overflow-hidden h-130 cursor-pointer">
+        <div className="relative aspect-auto overflow-hidden md:h-130 h-66 cursor-pointer">
           <Image
             src={product.image_1 || fallbackImage!}
             alt={product.name}
@@ -32,26 +32,26 @@ export function ProductCard({ product }: ProductCardProps) {
           />
         </div>
 
-        <div className="flex flex-col my-6">
-          <h2 className="text-lg leading-tight">{product.name}</h2>
+        <div className="flex flex-col md:my-6 my-2">
+          <h2 className="md:text-lg leading-tight">{product.name}</h2>
 
-          <p className="text-sm text-muted-foreground line-clamp-2">
+          <p className="text-sm md:block hidden text-muted-foreground line-clamp-2">
             {product.description}
           </p>
 
-          <span className="text-lg font-semibold">
+          <span className="md:text-lg font-semibold">
             ${product.price}
           </span>
         </div>
       </Link>
 
-      <div className="mt-4">
+      <div className="md:mt-4">
         {availability === "sold-out" ? (
           <Button
             size="sm"
             disabled
             variant="outline"
-            className="px-20"
+            className="md:px-20"
           >
             Sold Out
           </Button>
@@ -61,7 +61,7 @@ export function ProductCard({ product }: ProductCardProps) {
             productName={product.name}
             size="sm"
             variant="box_yellow"
-            className="px-20"
+            className="md:px-20"
           />
         )}
       </div>

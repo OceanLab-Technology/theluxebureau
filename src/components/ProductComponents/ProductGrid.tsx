@@ -104,11 +104,11 @@ export function ProductGrid({
 
   return (
     <div className="space-y-8 font-century">
-      <div className="px-10">
+      <div className="md:px-10 px-4">
         <h2 className="text-xs font-medium uppercase text-muted-foreground">
           {selectedCategory === "" ? "All Products" : selectedCategory}
         </h2>
-        <p className="mt-2 text-[18px] w-170 font-[100] leading-5">
+        <p className="mt-2 text-[18px] md:w-170 font-[100] leading-5">
           {selectedCategory === ""
             ? "Explore our diverse range of products, each handpicked for its quality and uniqueness."
             : selectedCategory === "Literature"
@@ -122,7 +122,7 @@ export function ProductGrid({
             : ""}
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-6 px-10">
+      <div className="grid grid-cols-2 md:gap-6 gap-3 md:px-10 px-4">
         {filteredProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

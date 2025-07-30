@@ -59,20 +59,17 @@ export function CartContainer() {
     );
   }
 
-  const handleClearCart = async () => {
-    await clearCart();
-  };
-
   return (
-    <div className="mx-12 my-14">
-      <div className="flex items-center justify-between mb-8 pb-4">
+    <div className="md:mx-12 md:my-14 py-10 px-6">
+      <div className="flex items-center justify-between md:mb-8 pb-4">
         <h1 className="text-2xl font-light">Shopping Cart</h1>
         <Link
           href="/products"
-          className="text-xs text-stone-600 hover:text-stone-800 uppercase tracking-wider"
+          className="md:block hidden text-xs text-stone-600 hover:text-stone-800 uppercase tracking-wider"
         >
           CONTINUE SHOPPING
         </Link>
+        
       </div>
 
       <div className="space-y-6 mb-12">

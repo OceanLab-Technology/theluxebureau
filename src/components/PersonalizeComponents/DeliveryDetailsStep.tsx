@@ -17,7 +17,7 @@ export default function DeliveryDetailsStep() {
 
   return (
     <div>
-      <p className="text-stone-700 mb-4 font-semibold text-xl">
+      <p className="text-stone-700 mb-4 font-medium md:text-xl">
         Our gifts are sent by zero-emission, nominated-day delivery. Please add
         your recipient's details, and your preferred delivery day and time,
         below.
