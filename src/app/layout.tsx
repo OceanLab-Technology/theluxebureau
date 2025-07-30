@@ -38,7 +38,7 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} ${cormorantInfant.variable} antialiased font-century`}
         >
           <Header />
-          {children}
+          <main className="pt-16">{children}</main>
           <Footer />
           <Toaster duration={1000} />
         </body>

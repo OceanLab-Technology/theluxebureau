@@ -1,5 +1,4 @@
 import { LoginForm } from "@/components/AuthComponents/LoginForm";
-import { Footer } from "@/components/Footer";
 
 export default function Page() {
   return (
@@ -8,7 +7,6 @@ export default function Page() {
         <div className="w-96 py-50 text-sm uppercase">Account</div>
         <LoginForm />
       </main>
-      <Footer />
     </div>
   );
 }
