@@ -21,11 +21,11 @@ export default function Header() {
       initial={false}
       animate={{
         height: extended ? "60vh" : "4rem",
-        backgroundColor: extended ? "#50462DF2" : "rgba(255,255,255,0)",
+        backgroundColor: extended ? "#50462DF2" : "#FBF7E5",
       }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className={`font-century fixed top-0 left-0 right-0 z-[999999] w-full overflow-hidden text-background backdrop-blur-sm border-b ${
-        extended ? "border-none" : "border-b-stone-400/30"
+      className={`font-century fixed top-0 left-0 right-0 z-[999999] w-full overflow-hidden text-background  border-b bg-background ${
+        extended ? "border-none backdrop-blur-sm" : "border-b-stone-400/30"
       }`}
       onMouseEnter={() => setExtended(true)}
       onMouseLeave={() => setExtended(false)}

@@ -2,7 +2,6 @@
 
 import React from "react";
 import { usePersonalizeStore } from "@/store/personalizeStore";
-import Image from "next/image";
 
 export default function SummaryStep() {
   const { formData, selectedProduct } = usePersonalizeStore();

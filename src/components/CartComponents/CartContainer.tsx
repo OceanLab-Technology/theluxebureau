@@ -9,7 +9,7 @@ import { Loader2 } from "lucide-react";
 import { Link } from 'next-view-transitions';
 
 export function CartContainer() {
-  const { cartItems, cartLoading, clearCart, products, fetchProducts } =
+  const { cartItems, cartLoading, products, fetchProducts } =
     useMainStore();
 
   useEffect(() => {
