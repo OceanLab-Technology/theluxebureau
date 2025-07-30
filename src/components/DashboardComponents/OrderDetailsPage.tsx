@@ -3,12 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -23,8 +18,8 @@ interface OrderDetailsPageProps {
 }
 
 export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
-  // const { order, loading, error, fetchOrder, updateOrder } = useOrderDetailsStore();
-  const { order, loading, error, fetchOrder, updateOrder, deleteOrder } = useOrderDetailsStore();
+  const { order, loading, error, fetchOrder, updateOrder, deleteOrder } =
+    useOrderDetailsStore();
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -56,7 +51,8 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
     setFormData((prev) => {
       const updated = { ...prev, [field]: value };
       const changed = Object.entries(updated).some(
-        ([key, val]) => val !== (order?.orderInfo[key as keyof typeof formData] || "")
+        ([key, val]) =>
+          val !== (order?.orderInfo[key as keyof typeof formData] || "")
       );
       setHasChanges(changed);
       return updated;
@@ -98,7 +94,9 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
   const handleDelete = async () => {
     if (!order) return;
 
-    const confirmed = window.confirm("Are you sure you want to delete this order?");
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this order?"
+    );
     if (!confirmed) return;
 
     await deleteOrder(order.id);
@@ -106,40 +104,90 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
     router.push("/admin/orders");
   };
 
+  function formatTimestamp(timestamp: string) {
+    const date = new Date(timestamp);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    return `${day}.${month}.${year} ${hours}:${minutes}`;
+  }
 
   if (loading || !order) {
     return (
-      <div className="flex flex-col gap-6 p-8">
-        <div className="flex items-center gap-2">
-          <Skeleton className="h-6 w-32" />
-          <Skeleton className="h-6 w-24" />
-        </div>
-        <div className="grid gap-6 sm:grid-cols-2">
-          {[...Array(2)].map((_, i) => (
-            <Card key={i}>
+      <div className="flex flex-col min-h-screen bg-muted/50">
+        <header className="flex h-16 items-center gap-2 border-b px-4 bg-background">
+          <SidebarTrigger className="-ml-1" />
+          <h1 className="text-lg font-[200]">Order Details</h1>
+          <Skeleton className="h-6 w-20" />
+        </header>
+
+        <main className="flex-1 p-8 space-y-6">
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-9 w-32" /> {/* Back button skeleton */}
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2">
+            {/* Customer Info Card Skeleton */}
+            <Card>
               <CardHeader>
-                <Skeleton className="h-5 w-40" />
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-5 w-5" /> {/* Icon skeleton */}
+                  <Skeleton className="h-5 w-40" /> {/* Title skeleton */}
+                </div>
               </CardHeader>
-              <CardContent className="space-y-2">
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
+              <CardContent className="space-y-4">
+                <div>
+                  <Skeleton className="h-4 w-16 mb-1" /> {/* Label skeleton */}
+                  <Skeleton className="h-4 w-40" /> {/* Value skeleton */}
+                </div>
+                <div>
+                  <Skeleton className="h-4 w-16 mb-1" />
+                  <Skeleton className="h-4 w-48" />
+                </div>
               </CardContent>
             </Card>
-          ))}
-        </div>
-        <Card>
-          <CardHeader>
-            <Skeleton className="h-5 w-40" />
-          </CardHeader>
-          <CardContent className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="space-y-1.5">
-                <Skeleton className="h-4 w-24" />
-                <Skeleton className="h-8 w-full" />
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+
+            {/* Recipient Info Card Skeleton */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-5 w-5" />
+                  <Skeleton className="h-5 w-40" />
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Skeleton className="h-4 w-16 mb-1" />
+                  <Skeleton className="h-4 w-40" />
+                </div>
+                <div>
+                  <Skeleton className="h-4 w-16 mb-1" />
+                  <Skeleton className="h-4 w-48" />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Order Info Card Skeleton */}
+            <Card className="sm:col-span-2">
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-5 w-5" />
+                  <Skeleton className="h-5 w-40" />
+                </div>
+              </CardHeader>
+              <CardContent className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+                {[...Array(7)].map((_, i) => (
+                  <div key={i} className="space-y-1.5">
+                    <Skeleton className="h-4 w-16" />
+                    <Skeleton className="h-9 w-full" />
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+        </main>
       </div>
     );
   }
@@ -174,8 +222,12 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p><strong>Name:</strong> {order.customerInfo.name}</p>
-              <p><strong>Email:</strong> {order.customerInfo.email}</p>
+              <p>
+                <strong>Name:</strong> {order.customerInfo.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {order.customerInfo.email}
+              </p>
             </CardContent>
           </Card>
 
@@ -188,8 +240,12 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p><strong>Name:</strong> {order.recipientInfo.name}</p>
-              <p><strong>Address:</strong> {order.recipientInfo.address}</p>
+              <p>
+                <strong>Name:</strong> {order.recipientInfo.name}
+              </p>
+              <p>
+                <strong>Address:</strong> {order.recipientInfo.address}
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -208,8 +264,14 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
             {renderInput("Status", "status")}
             {renderInput("Notes", "notes")}
             {renderReadOnly("Payment Status", order.orderInfo.paymentStatus)}
-            {renderReadOnly("Placed At", order.orderInfo.placedAt)}
-            {renderReadOnly("Updated At", order.orderInfo.updatedAt)}
+            {renderReadOnly(
+              "Placed At",
+              formatTimestamp(order.orderInfo.placedAt)
+            )}
+            {renderReadOnly(
+              "Updated At",
+              formatTimestamp(order.orderInfo.updatedAt)
+            )}
           </CardContent>
         </Card>
 

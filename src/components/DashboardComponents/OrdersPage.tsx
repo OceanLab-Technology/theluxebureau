@@ -1,247 +1,3 @@
-// "use client";
-
-// import { useEffect, useState } from "react";
-// import Link from "next/link";
-// import {
-//   Card,
-//   CardContent,
-//   CardHeader,
-//   CardTitle,
-// } from "@/components/ui/card";
-// import { SidebarTrigger } from "@/components/ui/sidebar";
-// import { Badge } from "@/components/ui/badge";
-// import { Button } from "@/components/ui/button";
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableHead,
-//   TableHeader,
-//   TableRow,
-// } from "@/components/ui/table";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-// import { Filter, Eye, Calendar } from "lucide-react";
-// import { useOrdersStore } from "@/store/admin/orderStore";
-
-// // 🎨 Status color helper
-// const getStatusColor = (status: string) => {
-//   switch (status.toLowerCase()) {
-//     case "new":
-//       return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400";
-//     case "processing":
-//       return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
-//     case "shipped":
-//       return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400";
-//     case "delivered":
-//       return "bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400";
-//     case "cancelled":
-//       return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400";
-//     default:
-//       return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
-//   }
-// };
-
-// export function OrdersPage() {
-//   const [statusFilter, setStatusFilter] = useState<string>("all");
-//   const [page, setPage] = useState(1);
-//   const limit = 10;
-//   const { orders, loading, fetchOrders, pagination } = useOrdersStore();
-
-//   useEffect(() => {
-//     const filters: Record<string, string> | undefined =
-//       statusFilter === "all" ? undefined : { status: statusFilter };
-
-//     fetchOrders(filters);
-//   }, [statusFilter]);
-
-//   const totalRevenue = orders.reduce((acc, order) => {
-//     const rawTotal = order.total ?? "0";
-//     const num = parseFloat(rawTotal.replace(/[^\d.-]/g, ""));
-//     return acc + (isNaN(num) ? 0 : num);
-//   }, 0);
-
-//   return (
-//     <div className="flex flex-col font-century">
-//       {/* 🔘 Header */}
-//       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-//         <SidebarTrigger className="-ml-1" />
-//         <h1 className="text-lg font-[200]">Orders</h1>
-//       </header>
-
-//       <div className="flex-1 space-y-4 p-8 pt-6">
-//         {/* 🏷️ Page Title + Filter */}
-//         <div className="flex items-center justify-between">
-//           <div>
-//             <h2 className="text-3xl font-semibold font-century">ORDERS</h2>
-//             <p className="text-muted-foreground">Manage and track customer orders</p>
-//           </div>
-//           <div className="flex items-center gap-2">
-//             <Select value={statusFilter} onValueChange={setStatusFilter}>
-//               <SelectTrigger className="w-[180px]">
-//                 <Filter className="mr-2 h-4 w-4" />
-//                 <SelectValue placeholder="Filter orders" />
-//               </SelectTrigger>
-//               <SelectContent>
-//                 <SelectItem value="all">All Orders</SelectItem>
-//                 <SelectItem value="new">New</SelectItem>
-//                 <SelectItem value="processing">Processing</SelectItem>
-//                 <SelectItem value="shipped">Shipped</SelectItem>
-//                 <SelectItem value="delivered">Delivered</SelectItem>
-//                 <SelectItem value="cancelled">Cancelled</SelectItem>
-//               </SelectContent>
-//             </Select>
-//           </div>
-//         </div>
-
-//         {/* 📋 Orders Table */}
-//         <Card>
-//           <CardContent className="p-0">
-//             {loading ? (
-//               <OrdersTableSkeleton />
-//             ) : (
-//               <Table>
-//                 <TableHeader>
-//                   <TableRow>
-//                     <TableHead>Order ID</TableHead>
-//                     <TableHead>Customer Name</TableHead>
-//                     <TableHead>Recipient Name</TableHead>
-//                     <TableHead>
-//                       <div className="flex items-center gap-2">
-//                         <Calendar className="h-4 w-4" />
-//                         Delivery Date
-//                       </div>
-//                     </TableHead>
-//                     <TableHead>Total</TableHead>
-//                     <TableHead>Status</TableHead>
-//                     <TableHead className="text-right">Actions</TableHead>
-//                   </TableRow>
-//                 </TableHeader>
-//                 <TableBody>
-//                   {orders.map((order) => (
-//                     <TableRow key={order.id}>
-//                       <TableCell className="font-medium">{order.id}</TableCell>
-//                       <TableCell>{order.customerName || "-"}</TableCell>
-//                       <TableCell>{order.recipientName}</TableCell>
-//                       <TableCell>{order.deliveryDate}</TableCell>
-//                       <TableCell className="font-medium">{order.total}</TableCell>
-//                       <TableCell>
-//                         <Badge
-//                           className={getStatusColor(order.status)}
-//                           variant="secondary"
-//                         >
-//                           {order.status}
-//                         </Badge>
-//                       </TableCell>
-//                       <TableCell className="text-right">
-//                         <Link href={`/admin/orders/${order.id}`}>
-//                           <Button variant="ghost" size="sm">
-//                             <Eye className="h-4 w-4" />
-//                           </Button>
-//                         </Link>
-//                       </TableCell>
-//                     </TableRow>
-//                   ))}
-//                 </TableBody>
-//               </Table>
-//             )}
-//           </CardContent>
-//         </Card>
-
-//         {/* 📊 Summary Cards */}
-//         {loading ? (
-//           <OrdersSummarySkeleton />
-//         ) : (
-//           <div className="grid gap-4 md:grid-cols-3">
-//             <Card>
-//               <CardHeader className="pb-2">
-//                 <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
-//               </CardHeader>
-//               <CardContent>
-//                 <div className="text-2xl font-bold">{orders.length}</div>
-//               </CardContent>
-//             </Card>
-//             <Card>
-//               <CardHeader className="pb-2">
-//                 <CardTitle className="text-sm font-medium">New Orders</CardTitle>
-//               </CardHeader>
-//               <CardContent>
-//                 <div className="text-2xl font-bold">
-//                   {orders.filter((o) => o.status.toLowerCase() === "new").length}
-//                 </div>
-//               </CardContent>
-//             </Card>
-//             <Card>
-//               <CardHeader className="pb-2">
-//                 <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-//               </CardHeader>
-//               <CardContent>
-//                 <div className="text-2xl font-bold">€{totalRevenue.toFixed(2)}</div>
-//               </CardContent>
-//             </Card>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
-// //
-// // ✅ Skeleton Components
-// //
-
-// function OrdersTableSkeleton() {
-//   return (
-//     <div className="space-y-4 p-4">
-//       {[...Array(5)].map((_, i) => (
-//         <div
-//           key={i}
-//           className="flex items-center justify-between gap-4 animate-pulse"
-//         >
-//           <Skeleton className="h-4 w-20" />
-//           <Skeleton className="h-4 w-32" />
-//           <Skeleton className="h-4 w-32" />
-//           <Skeleton className="h-4 w-28" />
-//           <Skeleton className="h-4 w-16" />
-//           <Skeleton className="h-6 w-20 rounded-full" />
-//           <Skeleton className="h-8 w-8 rounded-md" />
-//         </div>
-//       ))}
-//     </div>
-//   );
-// }
-
-// function OrdersSummarySkeleton() {
-//   return (
-//     <div className="grid gap-4 md:grid-cols-3">
-//       {[1, 2, 3].map((i) => (
-//         <Card key={i} className="animate-pulse">
-//           <CardHeader className="pb-2">
-//             <Skeleton className="h-4 w-32" />
-//           </CardHeader>
-//           <CardContent>
-//             <Skeleton className="h-8 w-24" />
-//           </CardContent>
-//         </Card>
-//       ))}
-//     </div>
-//   );
-// }
-
-// export function Skeleton({ className = "" }: { className?: string }) {
-//   return (
-//     <div
-//       aria-busy="true"
-//       className={`animate-pulse bg-muted rounded-md ${className}`}
-//     />
-//   );
-// }
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -265,31 +21,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Filter, Eye, Calendar } from "lucide-react";
+import { Filter, Edit, Euro, ShoppingCart } from "lucide-react";
 import { useOrdersStore } from "@/store/admin/orderStore";
-import { Separator } from "@/components/ui/separator";
 
 const getStatusColor = (status: string) => {
   switch (status.toLowerCase()) {
     case "new":
-      return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400";
+      return "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary";
     case "processing":
-      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
+      return "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400";
     case "shipped":
-      return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400";
+      return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-400";
     case "delivered":
-      return "bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400";
+      return "bg-violet-100 text-violet-800 dark:bg-violet-900/20 dark:text-violet-400";
     case "cancelled":
-      return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400";
+      return "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive";
     default:
-      return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
+      return "bg-muted text-muted-foreground dark:bg-muted/20 dark:text-muted-foreground";
   }
 };
 
 export function OrdersPage() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [page, setPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const { orders, loading, fetchOrders, pagination } = useOrdersStore();
 
@@ -297,13 +51,12 @@ export function OrdersPage() {
     const filters: Record<string, string> = {};
     if (statusFilter !== "all") filters.status = statusFilter;
 
-    fetchOrders(filters, page, rowsPerPage);
-  }, [statusFilter, page, rowsPerPage]);
+    fetchOrders(filters, page);
+  }, [statusFilter, page]);
 
-  // Reset to page 1 when filter or rows per page changes
   useEffect(() => {
     setPage(1);
-  }, [statusFilter, rowsPerPage]);
+  }, [statusFilter]);
 
   const totalRevenue = orders.reduce((acc, order) => {
     const rawTotal = order.total ?? "0";
@@ -316,7 +69,6 @@ export function OrdersPage() {
       {/* 🔘 Header */}
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <SidebarTrigger className="-ml-1" />
-        <Separator orientation="vertical" className="mr-2 h-4" />
         <h1 className="text-lg font-semibold font-century">Orders</h1>
       </header>
 
@@ -331,11 +83,11 @@ export function OrdersPage() {
           </div>
           <div className="flex items-center gap-2">
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[180px]">
-                <Filter className="mr-2 h-4 w-4" />
+              <SelectTrigger className="w-[180px] bg-foreground text-background font-century">
+                <Filter className="mr-2 h-4 w-4 text-background" />
                 <SelectValue placeholder="Filter orders" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="text-foreground font-century">
                 <SelectItem value="all">All Orders</SelectItem>
                 <SelectItem value="new">New</SelectItem>
                 <SelectItem value="processing">Processing</SelectItem>
@@ -354,10 +106,9 @@ export function OrdersPage() {
           ) : (
             <div className="grid gap-4 md:grid-cols-3">
               <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Total Orders
-                  </CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle>Total Orders</CardTitle>
+                  <ShoppingCart className="h-4 w-4 text-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
@@ -366,10 +117,9 @@ export function OrdersPage() {
                 </CardContent>
               </Card>
               <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    New Orders
-                  </CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle>New Orders</CardTitle>
+                  <ShoppingCart className="h-4 w-4 text-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
@@ -381,10 +131,9 @@ export function OrdersPage() {
                 </CardContent>
               </Card>
               <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Total Revenue
-                  </CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle>Total Revenue</CardTitle>
+                  <Euro className="h-4 w-4 text-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
@@ -409,12 +158,7 @@ export function OrdersPage() {
                       <TableHead>Order ID</TableHead>
                       <TableHead>Customer Name</TableHead>
                       <TableHead>Recipient Name</TableHead>
-                      <TableHead>
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4" />
-                          Delivery Date
-                        </div>
-                      </TableHead>
+                      <TableHead>Delivery Date</TableHead>
                       <TableHead>Total</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
@@ -443,7 +187,7 @@ export function OrdersPage() {
                         <TableCell className="text-right">
                           <Link href={`/admin/orders/${order.id}`}>
                             <Button variant="ghost" size="sm">
-                              <Eye className="h-4 w-4" />
+                              <Edit className="h-4 w-4" />  
                             </Button>
                           </Link>
                         </TableCell>
@@ -460,28 +204,11 @@ export function OrdersPage() {
         {!loading && pagination && (
           <div className="flex justify-between items-center gap-4 mt-4">
             <div className="text-sm text-muted-foreground">
-              Showing {(page - 1) * rowsPerPage + 1} to{" "}
-              {Math.min(page * rowsPerPage, pagination.total)} of{" "}
-              {pagination.total} entries
+              Showing {(page - 1) * 10 + 1} to{" "}
+              {Math.min(page * 10, pagination.total)} of {pagination.total}{" "}
+              entries
             </div>
             <div className="flex items-center gap-4">
-              <div className="flex items-center justify-end p-4">
-                <Select
-                  value={rowsPerPage.toString()}
-                  onValueChange={(value) => setRowsPerPage(Number(value))}
-                >
-                  <SelectTrigger className="w-[110px]">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="5">5 rows</SelectItem>
-                    <SelectItem value="10">10 rows</SelectItem>
-                    <SelectItem value="20">20 rows</SelectItem>
-                    <SelectItem value="50">50 rows</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
               <Button
                 variant="outline"
                 disabled={page <= 1}

@@ -1,13 +1,14 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import { useSiteSettingsStore } from "@/store/admin/siteSettingsStore"
-import { AddSettingDialog } from "@/components/DashboardComponents/Forms/AddSettingDialog"
-import { Trash2 } from "lucide-react"
+import { useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useSiteSettingsStore } from "@/store/admin/siteSettingsStore";
+import { AddSettingDialog } from "@/components/DashboardComponents/Forms/AddSettingDialog";
+import { Trash2 } from "lucide-react";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function SettingsPage() {
   const {
@@ -18,11 +19,11 @@ export default function SettingsPage() {
     saveSettings,
     hasChanges,
     deleteSetting,
-  } = useSiteSettingsStore()
+  } = useSiteSettingsStore();
 
   useEffect(() => {
-    fetchSettings()
-  }, [])
+    fetchSettings();
+  }, []);
 
   const renderFields = () => {
     return Object.entries(settings).map(([key, value]) => (
@@ -49,43 +50,49 @@ export default function SettingsPage() {
           className="w-full"
         />
       </div>
-    ))
-  }
+    ));
+  };
 
   return (
-    <div className="p-6 space-y-6 font-century">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-semibold">Site Settings</h1>
-          <p className="text-muted-foreground">
-            Manage key-value settings for your site.
-          </p>
-        </div>
-        <AddSettingDialog />
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Settings</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {loading ? (
-            <div className="space-y-4">
-              {[...Array(4)].map((_, i) => (
-                <Skeleton key={i} className="h-10 w-full rounded-md" />
-              ))}
-            </div>
-          ) : (
-            renderFields()
-          )}
-
-          <div className="flex justify-end">
-            <Button onClick={saveSettings} disabled={!hasChanges || loading}>
-              {loading ? "Saving..." : "Save Changes"}
-            </Button>
+    <div className="flex flex-col font-century">
+      <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+        <SidebarTrigger className="-ml-1" />
+        <h1 className="text-lg font-semibold font-century">Settings</h1>
+      </header>
+      
+      <div className="flex-1 space-y-4 p-8 pt-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-semibold">Site Settings</h1>
+            <p className="text-muted-foreground">
+              Manage key-value settings for your site.
+            </p>
           </div>
-        </CardContent>
-      </Card>
+          <AddSettingDialog />
+        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Settings</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {loading ? (
+              <div className="space-y-4">
+                {[...Array(4)].map((_, i) => (
+                  <Skeleton key={i} className="h-10 w-full rounded-md" />
+                ))}
+              </div>
+            ) : (
+              renderFields()
+            )}
+
+            <div className="flex justify-end">
+              <Button onClick={saveSettings} disabled={!hasChanges || loading}>
+                {loading ? "Saving..." : "Save Changes"}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
-  )
+  );
 }

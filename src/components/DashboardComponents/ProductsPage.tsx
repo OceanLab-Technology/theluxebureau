@@ -2,7 +2,6 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,13 +19,6 @@ import { useProductAdminStore } from "@/store/admin/productStore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProductFormDialog } from "./Forms/ProductFormDialog";
 import Link from "next/link";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 const getStatusColor = (inventory: number) => {
   if (inventory === 0) {
@@ -42,14 +34,13 @@ export function ProductsPage() {
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const { products, totalPages, loading, fetchProducts } =
+  const { products, totalPages, total, loading, fetchProducts } =
     useProductAdminStore();
 
   useEffect(() => {
     fetchProducts(page, rowsPerPage);
   }, [page, rowsPerPage]);
 
-  // Reset to page 1 when rows per page changes
   useEffect(() => {
     setPage(1);
   }, [rowsPerPage]);
@@ -88,7 +79,6 @@ export function ProductsPage() {
     <div className="flex flex-col">
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <SidebarTrigger className="-ml-1" />
-        <Separator orientation="vertical" className="mr-2 h-4" />
         <h1 className="text-lg font-semibold font-century">Products</h1>
       </header>
 
@@ -174,45 +164,36 @@ export function ProductsPage() {
             </Table>
           </CardContent>
         </Card>
-        <div className="flex items-center justify-between px-4 py-4">
-          <div className="flex items-center space-x-2">
-            <p className="text-sm font-medium">Rows per page</p>
-            <Select
-              value={rowsPerPage.toString()}
-              onValueChange={(value) => setRowsPerPage(Number(value))}
-            >
-              <SelectTrigger className="h-8 w-[70px]">
-                <SelectValue placeholder={rowsPerPage} />
-              </SelectTrigger>
-              <SelectContent side="top">
-                {[5, 10, 20, 30, 40, 50].map((pageSize) => (
-                  <SelectItem key={pageSize} value={pageSize.toString()}>
-                    {pageSize}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
 
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setPage(page - 1)}
-              disabled={page === 1}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setPage(page + 1)}
-              disabled={page === totalPages}
-            >
-              Next
-            </Button>
+        {/* Pagination Controls */}
+        {!loading && total > 0 && (
+          <div className="flex justify-between items-center gap-4 mt-4">
+            <div className="text-sm text-muted-foreground">
+              Showing {(page - 1) * rowsPerPage + 1} to{" "}
+              {Math.min(page * rowsPerPage, total)} of {total}{" "}
+              entries
+            </div>
+            <div className="flex items-center gap-4">
+              <Button
+                variant="outline"
+                disabled={page <= 1}
+                onClick={() => setPage((p) => p - 1)}
+              >
+                Previous
+              </Button>
+              <span className="text-sm">
+                Page {page} of {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                disabled={page >= totalPages}
+                onClick={() => setPage((p) => p + 1)}
+              >
+                Next
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

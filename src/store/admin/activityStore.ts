@@ -6,19 +6,28 @@ type ActivityStore = {
     recentActivities: Activity[]
     loading: boolean
     error: string | null
-    fetchActivities: () => Promise<void>
+    fetchActivities: (page: number) => Promise<void>
+    pagination: {
+        page: number
+        totalPages: number
+        total: number
+    }
 }
 
 export const useActivityStore = create<ActivityStore>((set) => ({
     recentActivities: [],
     loading: false,
     error: null,
-
-    fetchActivities: async () => {
+    pagination: {
+        page: 1,
+        totalPages: 1,
+        total: 0,
+    },
+    fetchActivities: async (page: number) => {
         set({ loading: true, error: null });
 
         try {
-            const res = await fetch("/api/activities");
+            const res = await fetch(`/api/activities?page=${page}`);
             const json = await res.json();
             console.log("Fetched activities:", json);
 
