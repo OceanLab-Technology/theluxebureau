@@ -3,7 +3,6 @@
 import React from "react";
 import { ProductCard } from "./ProductCard";
 
-// Mock data for recommendations
 const recommendedProducts = [
   {
     id: "3",
@@ -63,11 +62,11 @@ export function ProductRecommendations({ currentProductId }: ProductRecommendati
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredRecommendations.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
-      </div>
+      </div> */}
     </section>
   );
 }
