@@ -28,13 +28,16 @@ export async function withAuth<T>(
   };
 }
 
-export async function withAdminAuth<T>(
+export function withAdminAuth<T>(
   handler: (request: NextRequest, user: any) => Promise<NextResponse<ApiResponse<T>>>
 ) {
   return async (request: NextRequest) => {
     try {
       const supabase = await createClient();
-      const { data: { user }, error } = await supabase.auth.getUser();
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
 
       if (error || !user) {
         return NextResponse.json(

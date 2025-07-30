@@ -153,3 +153,55 @@ export async function PUT(request: NextRequest) {
     return handleError(error);
   }
 }
+
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const supabase = await createClient();
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+
+    if (!profile || profile.role !== 'admin') {
+      return NextResponse.json(
+        { success: false, error: 'Admin access required' },
+        { status: 403 }
+      );
+    }
+
+    const { searchParams } = new URL(request.url);
+    const key = searchParams.get('key');
+
+    if (!key) {
+      return NextResponse.json(
+        { success: false, error: 'Missing setting key' },
+        { status: 400 }
+      );
+    }
+
+    const { error } = await supabase
+      .from('site_settings')
+      .delete()
+      .eq('setting_key', key);
+
+    if (error) throw error;
+
+    return NextResponse.json({
+      success: true,
+      message: 'Setting deleted successfully',
+    });
+  } catch (error) {
+    return handleError(error);
+  }
+}

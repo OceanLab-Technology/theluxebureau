@@ -18,29 +18,31 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const { page, limit, offset } = parseQueryParams(searchParams);
-    
+
     const allowedFilters = ['status', 'customer_email', 'payment_status'];
     const filters = buildFilters(searchParams, allowedFilters);
-    
+
     let query = supabase
       .from('orders')
       .select('*', { count: 'exact' })
       .range(offset, offset + limit - 1)
       .order('created_at', { ascending: false });
-    
+
     // Apply filters
     Object.entries(filters).forEach(([key, value]) => {
       if (key === 'customer_email') {
         query = query.ilike('customer_email', `%${value}%`);
+      } else if (key === 'status') {
+        query = query.ilike('status', value); // match case-insensitive
       } else {
         query = query.eq(key, value);
       }
     });
-    
+
     const { data, error, count } = await query;
-    
+
     if (error) throw error;
-    
+
     return NextResponse.json({
       success: true,
       data: data,
@@ -61,7 +63,7 @@ export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient();
     const body = await request.json();
-    
+
     // Validate required fields
     if (!body.customer_name || !body.customer_email || !body.recipient_name || !body.recipient_address || !body.delivery_date) {
       return NextResponse.json(
@@ -69,7 +71,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    
+
     const orderData: Partial<Order> = {
       customer_name: body.customer_name,
       customer_email: body.customer_email,
@@ -85,15 +87,15 @@ export async function POST(request: NextRequest) {
       product_details: body.product_details,
       personalization: body.personalization,
     };
-    
+
     const { data, error } = await supabase
       .from('orders')
       .insert(orderData)
       .select()
       .single();
-    
+
     if (error) throw error;
-    
+
     return NextResponse.json({
       success: true,
       data: data,

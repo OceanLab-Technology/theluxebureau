@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { handleError } from '../../utils';
-import { Order, ApiResponse } from '../../types';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -60,8 +59,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     
     const allowedFields = [
       'customer_name', 'customer_email', 'recipient_name', 'recipient_address',
-      'delivery_date', 'notes', 'status', 'total_amount', 'stripe_session_id',
-      'stripe_payment_intent_id', 'payment_status', 'product_details', 'personalization'
+      'delivery_date', 'notes', 'status', 'product_details', 'personalization'
     ];
     
     allowedFields.forEach(field => {
