@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
-import { CartIcon } from "./CartComponents/CartIcon";
-import { CartDrawer } from "./CartComponents/CartDrawer";
+import { CartIcon } from "../CartComponents/CartIcon";
+import { CartDrawer } from "../CartComponents/CartDrawer";
 import { User2 } from "lucide-react";
 
 export default function Header() {

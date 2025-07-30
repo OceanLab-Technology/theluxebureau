@@ -246,12 +246,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -272,6 +267,7 @@ import {
 } from "@/components/ui/select";
 import { Filter, Eye, Calendar } from "lucide-react";
 import { useOrdersStore } from "@/store/admin/orderStore";
+import { Separator } from "@/components/ui/separator";
 
 const getStatusColor = (status: string) => {
   switch (status.toLowerCase()) {
@@ -293,7 +289,7 @@ const getStatusColor = (status: string) => {
 export function OrdersPage() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [page, setPage] = useState(1);
-  const limit = 10;
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const { orders, loading, fetchOrders, pagination } = useOrdersStore();
 
@@ -301,13 +297,13 @@ export function OrdersPage() {
     const filters: Record<string, string> = {};
     if (statusFilter !== "all") filters.status = statusFilter;
 
-    fetchOrders(filters, page, limit);
-  }, [statusFilter, page]);
+    fetchOrders(filters, page, rowsPerPage);
+  }, [statusFilter, page, rowsPerPage]);
 
-  // Reset to page 1 when filter changes
+  // Reset to page 1 when filter or rows per page changes
   useEffect(() => {
     setPage(1);
-  }, [statusFilter]);
+  }, [statusFilter, rowsPerPage]);
 
   const totalRevenue = orders.reduce((acc, order) => {
     const rawTotal = order.total ?? "0";
@@ -320,7 +316,8 @@ export function OrdersPage() {
       {/* 🔘 Header */}
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <SidebarTrigger className="-ml-1" />
-        <h1 className="text-lg font-[200]">Orders</h1>
+        <Separator orientation="vertical" className="mr-2 h-4" />
+        <h1 className="text-lg font-semibold font-century">Orders</h1>
       </header>
 
       <div className="flex-1 space-y-4 p-8 pt-6">
@@ -328,7 +325,9 @@ export function OrdersPage() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-semibold font-century">ORDERS</h2>
-            <p className="text-muted-foreground">Manage and track customer orders</p>
+            <p className="text-muted-foreground">
+              Manage and track customer orders
+            </p>
           </div>
           <div className="flex items-center gap-2">
             <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -348,114 +347,159 @@ export function OrdersPage() {
           </div>
         </div>
 
+        {/* 📊 Summary Cards */}
+        <div className="flex-1 space-y-4">
+          {loading ? (
+            <OrdersSummarySkeleton />
+          ) : (
+            <div className="grid gap-4 md:grid-cols-3">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Total Orders
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {pagination?.total || orders.length}
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    New Orders
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {
+                      orders.filter((o) => o.status.toLowerCase() === "new")
+                        .length
+                    }
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Total Revenue
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    €{totalRevenue.toFixed(2)}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+        </div>
+
         {/* 📋 Orders Table */}
         <Card>
           <CardContent className="p-0">
             {loading ? (
               <OrdersTableSkeleton />
             ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Order ID</TableHead>
-                    <TableHead>Customer Name</TableHead>
-                    <TableHead>Recipient Name</TableHead>
-                    <TableHead>
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4" />
-                        Delivery Date
-                      </div>
-                    </TableHead>
-                    <TableHead>Total</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {orders.map((order) => (
-                    <TableRow key={order.id}>
-                      <TableCell className="font-medium">{order.id}</TableCell>
-                      <TableCell>{order.customerName || "-"}</TableCell>
-                      <TableCell>{order.recipientName}</TableCell>
-                      <TableCell>{order.deliveryDate}</TableCell>
-                      <TableCell className="font-medium">{order.total}</TableCell>
-                      <TableCell>
-                        <Badge
-                          className={getStatusColor(order.status)}
-                          variant="secondary"
-                        >
-                          {order.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Link href={`/admin/orders/${order.id}`}>
-                          <Button variant="ghost" size="sm">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </Link>
-                      </TableCell>
+              <>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Order ID</TableHead>
+                      <TableHead>Customer Name</TableHead>
+                      <TableHead>Recipient Name</TableHead>
+                      <TableHead>
+                        <div className="flex items-center gap-2">
+                          <Calendar className="h-4 w-4" />
+                          Delivery Date
+                        </div>
+                      </TableHead>
+                      <TableHead>Total</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {orders.map((order) => (
+                      <TableRow key={order.id}>
+                        <TableCell className="font-medium">
+                          {order.id}
+                        </TableCell>
+                        <TableCell>{order.customerName || "-"}</TableCell>
+                        <TableCell>{order.recipientName}</TableCell>
+                        <TableCell>{order.deliveryDate}</TableCell>
+                        <TableCell className="font-medium">
+                          {order.total}
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            className={getStatusColor(order.status)}
+                            variant="secondary"
+                          >
+                            {order.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Link href={`/admin/orders/${order.id}`}>
+                            <Button variant="ghost" size="sm">
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </>
             )}
           </CardContent>
         </Card>
 
         {/* ⏩ Pagination Controls */}
         {!loading && pagination && (
-          <div className="flex justify-end items-center gap-4 mt-4">
-            <Button
-              variant="outline"
-              disabled={page <= 1}
-              onClick={() => setPage((p) => p - 1)}
-            >
-              Previous
-            </Button>
-            <span className="text-sm">
-              Page {pagination.page} of {pagination.totalPages}
-            </span>
-            <Button
-              variant="outline"
-              disabled={page >= pagination.totalPages}
-              onClick={() => setPage((p) => p + 1)}
-            >
-              Next
-            </Button>
-          </div>
-        )}
+          <div className="flex justify-between items-center gap-4 mt-4">
+            <div className="text-sm text-muted-foreground">
+              Showing {(page - 1) * rowsPerPage + 1} to{" "}
+              {Math.min(page * rowsPerPage, pagination.total)} of{" "}
+              {pagination.total} entries
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center justify-end p-4">
+                <Select
+                  value={rowsPerPage.toString()}
+                  onValueChange={(value) => setRowsPerPage(Number(value))}
+                >
+                  <SelectTrigger className="w-[110px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="5">5 rows</SelectItem>
+                    <SelectItem value="10">10 rows</SelectItem>
+                    <SelectItem value="20">20 rows</SelectItem>
+                    <SelectItem value="50">50 rows</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-        {/* 📊 Summary Cards */}
-        {loading ? (
-          <OrdersSummarySkeleton />
-        ) : (
-          <div className="grid gap-4 md:grid-cols-3">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{orders.length}</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">New Orders</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {orders.filter((o) => o.status.toLowerCase() === "new").length}
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">€{totalRevenue.toFixed(2)}</div>
-              </CardContent>
-            </Card>
+              <Button
+                variant="outline"
+                disabled={page <= 1}
+                onClick={() => setPage((p) => p - 1)}
+              >
+                Previous
+              </Button>
+              <span className="text-sm">
+                Page {pagination.page} of {pagination.totalPages}
+              </span>
+              <Button
+                variant="outline"
+                disabled={page >= pagination.totalPages}
+                onClick={() => setPage((p) => p + 1)}
+              >
+                Next
+              </Button>
+            </div>
           </div>
         )}
       </div>

@@ -81,14 +81,15 @@ export function AdminSidebar() {
   return (
     <Sidebar className="bg-background">
       <SidebarHeader className="border-b border-border bg-background">
-        <div className="flex flex-col items-center py-4 justify-center text-left text-lg leading-tight">
-          <span className="truncate font-[200] font-century lowercase tracking-widest">
-            the{" "}
-            <span className="uppercase">
-              <span className="italic">LUXE</span> BUREAU
+        <div className="flex items-center justify-between py-[11.5px] px-6">
+          <Link href="/" className="flex items-center gap-2">
+            <span className="truncate font-[200] font-century lowercase tracking-widest">
+              the{" "}
+              <span className="uppercase">
+                <span className="italic">LUXE</span> BUREAU
+              </span>
             </span>
-          </span>
-          <span className="truncate text-xs text-muted-foreground bg-muted py-1 px-4 rounded-full mt-4 font-century">ADMIN</span>
+          </Link>
         </div>
       </SidebarHeader>
 
