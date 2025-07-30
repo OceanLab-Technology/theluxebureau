@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Package, ImageIcon } from "lucide-react";
 import { useProductAdminStore } from "@/store/admin/productStore";
+import { useRouter } from "next/navigation";
 
 interface ProductDetailsPageProps {
     productId: string;
@@ -29,7 +30,11 @@ function ProductDetailsPage({ productId }: ProductDetailsPageProps) {
         error,
         fetchProductById,
         updateProduct,
+        deleteProduct,
     } = useProductAdminStore();
+    const router = useRouter(); // ADD
+    const [isDeleting, setIsDeleting] = useState(false); // ADD
+
 
     const [formData, setFormData] = useState({
         name: "",
@@ -110,6 +115,19 @@ function ProductDetailsPage({ productId }: ProductDetailsPageProps) {
             handleFieldChange(field, String(imageUrl));
         }
     };
+
+    const handleDelete = async () => {
+        if (!selectedProduct?.id) return;
+
+        const confirmed = window.confirm("Are you sure you want to delete this product?");
+        if (!confirmed) return;
+
+        setIsDeleting(true);
+        await deleteProduct(selectedProduct.id);
+        setIsDeleting(false);
+        router.push("/admin/products");
+    };
+
 
 
     const renderInput = (
@@ -259,7 +277,18 @@ function ProductDetailsPage({ productId }: ProductDetailsPageProps) {
                     <CardContent className="space-y-4">{renderImages()}</CardContent>
                 </Card>
 
-                <div className="flex justify-end">
+                <Button onClick={handleSave} disabled={!hasChanges}>
+                    Save
+                </Button>
+
+                <div className="flex justify-end gap-2">
+                    <Button
+                        variant="destructive"
+                        onClick={handleDelete}
+                        disabled={isDeleting}
+                    >
+                        {isDeleting ? "Deleting..." : "Delete"}
+                    </Button>
                     <Button onClick={handleSave} disabled={!hasChanges}>
                         Save
                     </Button>

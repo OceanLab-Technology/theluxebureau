@@ -11,19 +11,39 @@ type Order = {
   status: string;
 };
 
+type Pagination = {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+};
+
 type OrdersState = {
   orders: Order[];
   loading: boolean;
-  fetchOrders: () => Promise<void>;
+  pagination: Pagination | null;
+  fetchOrders: (
+    filters?: Record<string, string>,
+    page?: number,
+    limit?: number
+  ) => Promise<void>;
 };
 
 export const useOrdersStore = create<OrdersState>((set) => ({
   orders: [],
   loading: true,
-  fetchOrders: async () => {
+  pagination: null,
+
+  fetchOrders: async (filters: Record<string, string> = {}, page = 1, limit = 10) => {
     set({ loading: true });
     try {
-      const res = await axios.get("/api/orders");
+      const queryParams = new URLSearchParams({
+        ...filters,
+        page: String(page),
+        limit: String(limit),
+      }).toString();
+
+      const res = await axios.get(`/api/orders?${queryParams}`);
 
       const mappedOrders: Order[] = res.data.data.map((order: any) => ({
         id: order.id,
@@ -34,7 +54,11 @@ export const useOrdersStore = create<OrdersState>((set) => ({
         status: order.status,
       }));
 
-      set({ orders: mappedOrders, loading: false });
+      set({
+        orders: mappedOrders,
+        loading: false,
+        pagination: res.data.pagination,
+      });
     } catch (e) {
       console.error("Failed to fetch orders:", e);
       set({ loading: false });

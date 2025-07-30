@@ -115,3 +115,70 @@ export const PUT = withAdminAuth(
     }
   }
 );
+
+// DELETE /api/products/[id]
+export const DELETE = withAdminAuth(
+  async (req: NextRequest, user: any): Promise<NextResponse<ApiResponse<null>>> => {
+    const supabase = await createClient();
+
+    try {
+      const url = new URL(req.url);
+      const id = url.pathname.split("/").pop();
+
+      if (!id) {
+        return NextResponse.json({ success: false, error: "Missing product ID" }, { status: 400 });
+      }
+
+      // 1. Fetch product first to get image paths
+      const { data: product, error: fetchError } = await supabase
+        .from("products")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (fetchError || !product) {
+        return NextResponse.json(
+          { success: false, error: "Product not found" },
+          { status: 404 }
+        );
+      }
+
+      // 2. Collect all image paths from public URLs
+      const imageKeysToDelete: string[] = [];
+      for (let i = 1; i <= 5; i++) {
+        const url = product[`image_${i}` as keyof typeof product] as string | undefined;
+        if (url) {
+          const parts = url.split("/");
+          const key = parts.slice(parts.length - 2).join("/"); // e.g., "productId/filename.jpg"
+          imageKeysToDelete.push(key);
+        }
+      }
+
+      // 3. Delete all images from storage
+      if (imageKeysToDelete.length > 0) {
+        const { error: deleteError } = await supabase.storage
+          .from("product-images")
+          .remove(imageKeysToDelete);
+        if (deleteError) {
+          console.warn("Failed to delete some images:", deleteError.message);
+        }
+      }
+
+      // 4. Delete the product from the DB
+      const { error: deleteProductError } = await supabase
+        .from("products")
+        .delete()
+        .eq("id", id);
+
+      if (deleteProductError) throw deleteProductError;
+
+      return NextResponse.json({ success: true, data: null });
+    } catch (err: any) {
+      console.error("Product deletion error:", err.message);
+      return NextResponse.json(
+        { success: false, error: "Failed to delete product" },
+        { status: 500 }
+      );
+    }
+  }
+);
