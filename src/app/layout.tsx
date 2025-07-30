@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Cormorant_Infant, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { ViewTransitions } from "next-view-transitions";
 import Header from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,14 +32,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${cormorantInfant.variable} antialiased font-century`}
-      >
-        <Header/>
-        {children}
-        <Toaster duration={1000} />
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} ${cormorantInfant.variable} antialiased font-century`}
+        >
+          <Header />
+          {children}
+          <Footer />
+          <Toaster duration={1000} />
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }

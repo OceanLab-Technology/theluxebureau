@@ -103,12 +103,12 @@ export function ProductGrid({
   }
 
   return (
-    <div className="space-y-8 font-century">
+    <div className="space-y-8 font-century mb-10">
       <div className="md:px-10 px-4">
-        <h2 className="text-xs font-medium uppercase text-muted-foreground">
+        <h2 className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
           {selectedCategory === "" ? "All Products" : selectedCategory}
         </h2>
-        <p className="mt-2 text-[18px] md:w-170 font-[100] leading-5">
+        <p className="mt-2 text-[26px] md:w-180 font-[100] leading-7">
           {selectedCategory === ""
             ? "Explore our diverse range of products, each handpicked for its quality and uniqueness."
             : selectedCategory === "Literature"
@@ -135,7 +135,7 @@ export function ProductGrid({
       )}
 
       {pagination && pagination.totalPages > 1 && (
-        <div className="flex justify-center">
+        <div>
           <Pagination>
             <PaginationContent>
               <PaginationItem>
@@ -208,14 +208,6 @@ export function ProductGrid({
               </PaginationItem>
             </PaginationContent>
           </Pagination>
-        </div>
-      )}
-
-      {pagination && (
-        <div className="text-center text-sm text-muted-foreground mb-4">
-          Showing {(pagination.page - 1) * pagination.limit + 1} to{" "}
-          {Math.min(pagination.page * pagination.limit, pagination.total)} of{" "}
-          {pagination.total} products
         </div>
       )}
     </div>

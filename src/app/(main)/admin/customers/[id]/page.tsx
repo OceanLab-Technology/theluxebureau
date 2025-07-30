@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
+import { Link } from 'next-view-transitions';
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   Card,

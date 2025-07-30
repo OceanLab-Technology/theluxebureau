@@ -6,7 +6,7 @@ import { CartItem } from "./CartItem";
 import { CartSummary } from "./CartSummary";
 import { EmptyCart } from "./EmptyCart";
 import { Loader2 } from "lucide-react";
-import Link from "next/link";
+import { Link } from 'next-view-transitions';
 
 export function CartContainer() {
   const { cartItems, cartLoading, clearCart, products, fetchProducts } =

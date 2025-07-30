@@ -7,7 +7,7 @@ import Header from "@/components/Header";
 import { useMainStore } from "@/store/mainStore";
 import { Product } from "@/app/api/types";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from 'next-view-transitions';
 import { Loader2 } from "lucide-react";
 
 export default function CheckoutPage() {

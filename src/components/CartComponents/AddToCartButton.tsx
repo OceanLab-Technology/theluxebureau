@@ -28,17 +28,21 @@ export function AddToCartButton({
   variant = "default",
   size = "default",
 }: AddToCartButtonProps) {
-  const { addToCart, cartLoading } = useMainStore();
+  const { addToCart } = useMainStore();
   const [isAdded, setIsAdded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleAddToCart = async () => {
     try {
+      setIsLoading(true);
       await addToCart(productId, 1);
       setIsAdded(true);
       toast.success(`${productName} added to cart!`);
       setTimeout(() => setIsAdded(false), 2000);
     } catch (error) {
       toast.error("Failed to add item to cart");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -60,12 +64,12 @@ export function AddToCartButton({
     <div className="space-y-4">
       <Button
         onClick={handleAddToCart}
-        disabled={cartLoading}
+        disabled={isLoading}
         variant={variant}
         size={size}
         className={className}
       >
-        {cartLoading ? "Adding..." : "Add to Cart"}
+        {isLoading ? "Adding..." : "Add to Cart"}
       </Button>
     </div>
   );

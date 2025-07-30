@@ -1,7 +1,7 @@
 // "use client";
 
 // import { useEffect, useState } from "react";
-// import Link from "next/link";
+// import { Link } from 'next-view-transitions';
 // import {
 //   Card,
 //   CardContent,
@@ -245,7 +245,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { Link } from 'next-view-transitions';
 import {
   Card,
   CardContent,
