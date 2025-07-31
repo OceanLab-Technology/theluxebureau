@@ -3,7 +3,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from 'next-view-transitions';
 import { Product } from "@/app/api/types";
 import { AddToCartButton } from "@/components/CartComponents/AddToCartButton";
 
@@ -32,14 +32,9 @@ export function ProductCard({ product }: ProductCardProps) {
           />
         </div>
 
-        <div className="flex flex-col md:my-6 my-2">
-          <h2 className="md:text-lg leading-tight">{product.name}</h2>
-
-          <p className="text-sm md:block hidden text-muted-foreground line-clamp-2">
-            {product.description}
-          </p>
-
-          <span className="md:text-lg font-semibold">
+        <div className="flex flex-col md:my-3 my-2">
+          <h2 className="md:text-[16px]">{product.name}</h2>
+          <span className="md:text-[16px] font-medium">
             ${product.price}
           </span>
         </div>
@@ -59,6 +54,8 @@ export function ProductCard({ product }: ProductCardProps) {
           <AddToCartButton
             productId={product.id!}
             productName={product.name}
+            productImage={product.image_1}
+            productPrice={product.price}
             size="sm"
             variant="box_yellow"
             className="md:px-20"
@@ -68,4 +65,3 @@ export function ProductCard({ product }: ProductCardProps) {
     </div>
   );
 }
-
