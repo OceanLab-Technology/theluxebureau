@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import { useProductAdminStore } from "@/store/admin/productStore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProductFormDialog } from "./Forms/ProductFormDialog";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 
 const getStatusColor = (inventory: number) => {
   if (inventory === 0) {
