@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useMainStore } from '@/store/mainStore';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { ShoppingCart, X, Plus, Minus, ShoppingBagIcon } from 'lucide-react';
 import Image from 'next/image';

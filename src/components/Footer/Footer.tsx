@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Link } from 'next-view-transitions';
+import Link from "next/link";
 
 const footerData = {
   discover: {
@@ -55,12 +55,12 @@ export function Footer() {
           priority={false}
         />
       </div>
-
-      <div className="relative z-10 text-[#FBF7E5]">
+      
+      <div className="relative z-10">
         <div className="container mx-auto px-6 py-12 h-full min-h-[400px] flex flex-col justify-between">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-stone-200">
             <div>
-              <h3 className="font-[200] font-sans mb-4 tracking-wider uppercase">
+              <h3 className="font-[200] mb-4 tracking-wider uppercase">
                 {footerData.discover.title}
               </h3>
               <ul className="space-y-2">
@@ -78,7 +78,7 @@ export function Footer() {
             </div>
 
             <div>
-              <h3 className="font-[200] font-sans mb-4 tracking-wider uppercase">
+              <h3 className=" font-semibold mb-4 tracking-wider uppercase">
                 {footerData.concierge.title}
               </h3>
               <ul className="space-y-2 ">
@@ -96,7 +96,7 @@ export function Footer() {
             </div>
 
             <div>
-              <h3 className="font-[200] font-sans mb-4 tracking-wider uppercase">
+              <h3 className="text-sm font-semibold mb-4 tracking-wider uppercase">
                 {footerData.newsletter.title}
               </h3>
               <div className="flex border-b justify-between">
@@ -116,8 +116,8 @@ export function Footer() {
             <p>{footerData.copyright.text}</p>
             <p>
               {footerData.copyright.designCredit.text}{" "}
-              <Link
-                href={footerData.copyright.designCredit.href}
+              <Link 
+                href={footerData.copyright.designCredit.href} 
                 className="underline hover:no-underline"
               >
                 {footerData.copyright.designCredit.name}
@@ -126,13 +126,13 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 flex justify-center pb-10">
+        <div className="absolute bottom-0 left-0 right-0 flex justify-center pb-20">
           <Image
             src={footerData.logo.src}
             alt={footerData.logo.alt}
             width={footerData.logo.width}
             height={footerData.logo.height}
-            className="w-35"
+            className="opacity-80 w-20"
           />
         </div>
       </div>

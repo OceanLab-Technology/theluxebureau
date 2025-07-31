@@ -1,5 +1,5 @@
 import { SignUpForm } from "@/components/AuthComponents/SignUpForm";
-import { Footer } from "@/components/Footer";
+import { Footer } from "@/components/Footer/Footer";
 
 export default function Page() {
   return (

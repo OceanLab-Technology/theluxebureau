@@ -26,7 +26,7 @@ export function ProductFilters({ onFilterChange, activeCategory = "Shop All" }: 
       {categories.map((category) => (
         <div key={category} className="flex flex-col gap-2">
           <span
-            className={`text-[22px] font-[400] cursor-pointer transition-colors duration-200 ${
+            className={`text-xl font-semibold cursor-pointer transition-colors duration-200 ${
               activeCategory === category ? "text-primary" : "text-stone-400"
             }`}
             onClick={() => handleCategoryClick(category)}

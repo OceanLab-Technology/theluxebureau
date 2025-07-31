@@ -7,6 +7,7 @@ interface RouteParams {
   params: Promise<{ id: string }>;
 }
 
+// GET /api/products/[id] - Get a specific product
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
@@ -115,6 +116,7 @@ export const PUT = withAdminAuth(
   }
 );
 
+// DELETE /api/products/[id]
 export const DELETE = withAdminAuth(
   async (req: NextRequest, user: any): Promise<NextResponse<ApiResponse<null>>> => {
     const supabase = await createClient();

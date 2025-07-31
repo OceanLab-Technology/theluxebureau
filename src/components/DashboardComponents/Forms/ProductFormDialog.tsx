@@ -326,7 +326,6 @@
 //   );
 // }
 
-
 "use client";
 
 import { useState } from "react";
@@ -346,6 +345,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useProductAdminStore } from "@/store/admin/productStore";
 import { toast } from "sonner";
+import { Upload, X } from "lucide-react";
 
 const productSchema = z.object({
     name: z.string().min(1, "Title is required"),
@@ -362,13 +362,12 @@ const productSchema = z.object({
 
 type ProductFormValues = z.input<typeof productSchema>;
 
-const STEPS = ["Basic Information", "Images", "Content", "Review"];
+const STEPS = ["Basic Info", "Images", "Content", "Review"];
 
 export function ProductFormDialog() {
     const [open, setOpen] = useState(false);
     const [step, setStep] = useState(0);
     const [images, setImages] = useState<File[]>([]);
-
     const { createProduct, loading } = useProductAdminStore();
 
     const form = useForm<ProductFormValues>({
@@ -396,16 +395,16 @@ export function ProductFormDialog() {
         setImages(files);
     };
 
+    const removeImage = (index: number) => {
+        setImages(images.filter((_, i) => i !== index));
+    };
+
     const onSubmit = async (data: ProductFormValues) => {
         try {
             const formData = new FormData();
             Object.entries(data).forEach(([key, value]) => {
-                if (value instanceof Blob) {
-                    formData.append(key, value);
-                } else if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+                if (value != null) {
                     formData.append(key, String(value));
-                } else if (value != null) {
-                    formData.append(key, JSON.stringify(value));
                 }
             });
 
@@ -427,49 +426,55 @@ export function ProductFormDialog() {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button>
+                <Button size="lg">
                     <span className="mr-2">+</span> Add Product
                 </Button>
             </DialogTrigger>
             <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                    <DialogTitle className="text-2xl">Add New Product</DialogTitle>
-                    <p className="text-muted-foreground text-sm">
-                        Step {step + 1} of {STEPS.length}: {STEPS[step]}
-                    </p>
+                <DialogHeader className="space-y-4">
+                    <DialogTitle className="text-2xl font-bold">Add New Product</DialogTitle>
+                    
+                    {/* Progress Bar */}
+                    <div className="w-full flex items-center gap-2">
+                        {STEPS.map((s, i) => (
+                            <div key={s} className="flex-1">
+                                <div className={`h-2 rounded-full ${i <= step ? 'bg-primary' : 'bg-muted'}`} />
+                            </div>
+                        ))}
+                    </div>
                 </DialogHeader>
 
-                <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-6">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-4">
                     {step === 0 && (
-                        <div className="grid gap-4">
+                        <div className="space-y-6">
                             <div>
-                                <Label>Product Title *</Label>
-                                <Input {...form.register("name")} placeholder="Enter product title" />
+                                <Label className="text-base">Product Title *</Label>
+                                <Input {...form.register("name")} className="mt-2" placeholder="Enter product title" />
                                 <ErrorText message={form.formState.errors.name?.message} />
                             </div>
                             <div>
-                                <Label>URL Slug *</Label>
-                                <Input {...form.register("slug")} placeholder="product-url-slug" />
+                                <Label className="text-base">URL Slug *</Label>
+                                <Input {...form.register("slug")} className="mt-2" placeholder="product-url-slug" />
                                 <ErrorText message={form.formState.errors.slug?.message} />
                             </div>
                             <div>
-                                <Label>Description *</Label>
-                                <Textarea {...form.register("description")} rows={3} />
+                                <Label className="text-base">Description *</Label>
+                                <Textarea {...form.register("description")} className="mt-2" rows={3} />
                                 <ErrorText message={form.formState.errors.description?.message} />
                             </div>
-                            <div className="grid grid-cols-3 gap-4">
+                            <div className="grid grid-cols-3 gap-6">
                                 <div>
-                                    <Label>Price (€) *</Label>
-                                    <Input type="number" {...form.register("price")} />
+                                    <Label className="text-base">Price (€) *</Label>
+                                    <Input type="number" {...form.register("price")} className="mt-2" />
                                     <ErrorText message={form.formState.errors.price?.message} />
                                 </div>
                                 <div>
-                                    <Label>Inventory</Label>
-                                    <Input type="number" {...form.register("inventory")} />
+                                    <Label className="text-base">Inventory</Label>
+                                    <Input type="number" {...form.register("inventory")} className="mt-2" />
                                 </div>
                                 <div>
-                                    <Label>Category *</Label>
-                                    <Input {...form.register("category")} placeholder="Select a category" />
+                                    <Label className="text-base">Category *</Label>
+                                    <Input {...form.register("category")} className="mt-2" placeholder="Select a category" />
                                     <ErrorText message={form.formState.errors.category?.message} />
                                 </div>
                             </div>
@@ -477,50 +482,71 @@ export function ProductFormDialog() {
                     )}
 
                     {step === 1 && (
-                        <div>
-                            <Label>Images * (1-5 images)</Label>
-                            <Input type="file" multiple accept="image/*" onChange={handleImageChange} />
+                        <div className="space-y-6">
+                            <div className="border-2 border-dashed rounded-lg p-8 text-center">
+                                <Input 
+                                    type="file" 
+                                    multiple 
+                                    accept="image/*" 
+                                    onChange={handleImageChange}
+                                    className="hidden"
+                                    id="image-upload"
+                                />
+                                <Label 
+                                    htmlFor="image-upload" 
+                                    className="flex flex-col items-center gap-2 cursor-pointer"
+                                >
+                                    <Upload className="h-8 w-8 text-muted-foreground" />
+                                    <span className="font-medium">Click to upload images</span>
+                                    <span className="text-sm text-muted-foreground">Upload up to 5 product images</span>
+                                </Label>
+                            </div>
+
                             {images.length > 0 && (
-                                <div className="grid grid-cols-5 gap-2 mt-3">
+                                <div className="grid grid-cols-5 gap-4">
                                     {images.map((img, i) => (
-                                        <div
-                                            key={i}
-                                            className="aspect-square overflow-hidden rounded border bg-muted"
-                                        >
-                                            <img
-                                                src={URL.createObjectURL(img)}
-                                                alt={`preview-${i}`}
-                                                className="object-cover w-full h-full"
-                                            />
+                                        <div key={i} className="relative group">
+                                            <div className="aspect-square overflow-hidden rounded-lg border">
+                                                <img
+                                                    src={URL.createObjectURL(img)}
+                                                    alt={`preview-${i}`}
+                                                    className="object-cover w-full h-full"
+                                                />
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => removeImage(i)}
+                                                className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <X className="h-4 w-4" />
+                                            </button>
                                         </div>
                                     ))}
                                 </div>
-                            )}
-                            {images.length === 0 && (
-                                <p className="text-sm text-muted-foreground mt-2">Add at least 1 image.</p>
                             )}
                         </div>
                     )}
 
                     {step === 2 && (
-                        <div className="grid gap-4">
+                        <div className="space-y-6">
                             <div>
-                                <Label>Title</Label>
-                                <Input {...form.register("title")} placeholder="Optional title" />
+                                <Label className="text-base">Title</Label>
+                                <Input {...form.register("title")} className="mt-2" placeholder="Optional title" />
                             </div>
                             <div>
-                                <Label>Why We Chose It *</Label>
-                                <Textarea {...form.register("why_we_chose_it")} rows={2} />
+                                <Label className="text-base">Why We Chose It *</Label>
+                                <Textarea {...form.register("why_we_chose_it")} className="mt-2" rows={3} />
                             </div>
                             <div>
-                                <Label>About the Maker *</Label>
-                                <Textarea {...form.register("about_the_maker")} rows={2} />
+                                <Label className="text-base">About the Maker *</Label>
+                                <Textarea {...form.register("about_the_maker")} className="mt-2" rows={3} />
                             </div>
                             <div>
-                                <Label>Particulars *</Label>
+                                <Label className="text-base">Particulars *</Label>
                                 <Textarea
                                     {...form.register("particulars")}
-                                    placeholder="• Size\n• ISBN\n• What's included..."
+                                    className="mt-2"
+                                    placeholder="• Size&#13;• ISBN&#13;• What's included..."
                                     rows={4}
                                 />
                             </div>
@@ -528,22 +554,33 @@ export function ProductFormDialog() {
                     )}
 
                     {step === 3 && (
-                        <div className="grid gap-2 text-sm text-muted-foreground">
-                            <p>You're ready to submit your product. Click "Create Product" to finish.</p>
+                        <div className="space-y-4 p-6 bg-muted rounded-lg">
+                            <h3 className="font-medium">Review Your Product</h3>
+                            <p className="text-sm text-muted-foreground">
+                                Please review all the information you've entered. Click "Create Product" when you're ready to submit.
+                            </p>
+                            <div className="flex items-center gap-2 text-sm">
+                                <span className="font-medium">Images:</span>
+                                <span className="text-muted-foreground">{images.length} uploaded</span>
+                            </div>
                         </div>
                     )}
 
-                    {/* Navigation Buttons */}
-                    <div className="flex justify-between items-center gap-2 pt-4">
-                        <Button variant="outline" onClick={prevStep} disabled={step === 0}>
-                            Previous
+                    <div className="flex justify-between items-center gap-4 pt-4">
+                        <Button 
+                            type="button"
+                            variant="outline" 
+                            onClick={prevStep} 
+                            disabled={step === 0}
+                        >
+                            Back
                         </Button>
                         {step < STEPS.length - 1 ? (
                             <Button onClick={nextStep} type="button">
-                                Next
+                                Continue
                             </Button>
                         ) : (
-                            <Button type="submit" disabled={loading}>
+                            <Button type="submit" disabled={loading || images.length === 0}>
                                 {loading ? "Creating..." : "Create Product"}
                             </Button>
                         )}

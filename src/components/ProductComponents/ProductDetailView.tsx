@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { useMainStore } from "@/store/mainStore";
 import { usePersonalizeStore } from "@/store/personalizeStore";
@@ -16,7 +16,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ProductRecommendations } from "./ProductRecommendations";
 
 interface ProductDetailViewProps {
   productId: string;
@@ -64,6 +63,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
       </div>
     );
   }
+
 
   const availability = currentProduct.inventory > 0 ? "in-stock" : "sold-out";
 
@@ -134,8 +134,6 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                 <AddToCartButton
                   productId={currentProduct.id!}
                   productName={currentProduct.name}
-                  productImage={currentProduct.image_1}
-                  productPrice={currentProduct.price}
                   size="lg"
                   variant="box_yellow"
                   className="w-full"
@@ -146,12 +144,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                 </Button>
               )}
 
-              <Button
-                variant="box_yellow"
-                size={"lg"}
-                className="w-full"
-                onClick={handlePersonalize}
-              >
+              <Button variant="box_yellow" size={"lg"} className="w-full" onClick={handlePersonalize}>
                 Personalize
               </Button>
             </div>
@@ -217,7 +210,6 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
             )}
           </div>
         </div>
-        <ProductRecommendations currentProductId={currentProduct.id!} />
       </div>
     </>
   );
