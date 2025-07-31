@@ -5,7 +5,7 @@ import { CheckoutContainer } from "@/components/CheckoutComponents/CheckoutConta
 import { useMainStore } from "@/store/mainStore";
 import { Product } from "@/app/api/types";
 import { Button } from "@/components/ui/button";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { Loader2 } from "lucide-react";
 
 export default function CheckoutPage() {

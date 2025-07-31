@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { useMainStore } from "@/store/mainStore";
 import { usePersonalizeStore } from "@/store/personalizeStore";
