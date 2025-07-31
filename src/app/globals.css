@@ -218,3 +218,11 @@ h6 {
 .heading {
   font-family: var(--font-century);
 }
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

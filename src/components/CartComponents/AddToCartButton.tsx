@@ -79,7 +79,7 @@ export function AddToCartButton({
           disabled={isLoading}
           variant={variant}
           size={size}
-          className={className}
+          className={`${className} flex items-center justify-center gap-2`}
         >
           {isLoading ? "Adding..." : isAdded ? (
             <>

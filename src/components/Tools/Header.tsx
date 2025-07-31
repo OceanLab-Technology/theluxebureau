@@ -91,7 +91,7 @@ export default function Header() {
             transition={{ duration: 0.3 }}
             className="flex justify-center items-center px-6 pt-8"
           >
-            <div className="text-[32px]">
+            <div className="md:text-[32px]">
               <div className="grid grid-cols-2 gap-16">
                 <div className="flex flex-col items-start space-y-2">
                   <button className="hover:text-[#FBD060] cursor-pointer transition-colors">

@@ -38,7 +38,7 @@ export function CartToast({
             damping: 25,
             mass: 0.8,
           }}
-          className="fixed top-16 right-0 z-50 bg-background border border-stone-300  p-4 min-w-xl font-century"
+          className="fixed top-16 right-0 z-50 bg-background border border-stone-300  p-4 md:min-w-xl font-century"
         >
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
@@ -59,7 +59,7 @@ export function CartToast({
             className="flex gap-3 mb-4"
           >
             {productImage && (
-              <div className="h-35 overflow-hidden flex-shrink-0">
+              <div className="md:h-35 h-20 overflow-hidden flex-shrink-0">
                 <Image
                   src={productImage}
                   alt={productName}
@@ -70,7 +70,7 @@ export function CartToast({
               </div>
             )}
             <div className="flex-1 min-w-0">
-              <h3 className="font-medium text-stone-800 text-xl w-30">
+              <h3 className="font-medium text-stone-800 md:text-xl w-30">
                 {productName}
               </h3>
               {productPrice && (

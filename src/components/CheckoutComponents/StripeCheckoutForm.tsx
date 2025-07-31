@@ -1,5 +1,9 @@
 "use client";
 
+// OLD STRIPE ELEMENTS APPROACH - COMMENTED OUT FOR REFERENCE
+// This component uses Stripe Elements for embedded payment forms
+// Now replaced with simple checkout that redirects to Stripe's hosted page
+
 import React, { useState } from "react";
 import {
   useStripe,

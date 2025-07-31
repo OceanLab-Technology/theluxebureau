@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Link } from 'next-view-transitions';
+import { Link } from "next-view-transitions";
 
 const footerData = {
   discover: {
@@ -113,6 +113,15 @@ export function Footer() {
           </div>
 
           <div className="pt-8 text-white text-sm">
+          <div className="md:absolute bottom-0 left-0 right-0 flex justify-center pb-10">
+            <Image
+              src={footerData.logo.src}
+              alt={footerData.logo.alt}
+              width={footerData.logo.width}
+              height={footerData.logo.height}
+              className="w-35"
+            />
+          </div>
             <p>{footerData.copyright.text}</p>
             <p>
               {footerData.copyright.designCredit.text}{" "}
@@ -124,16 +133,6 @@ export function Footer() {
               </Link>
             </p>
           </div>
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0 flex justify-center pb-10">
-          <Image
-            src={footerData.logo.src}
-            alt={footerData.logo.alt}
-            width={footerData.logo.width}
-            height={footerData.logo.height}
-            className="w-35"
-          />
         </div>
       </div>
     </footer>

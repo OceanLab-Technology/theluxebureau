@@ -66,7 +66,7 @@ export function CartContainer() {
         
       </div>
 
-      <div className="space-y-6 mb-12">
+      <div className="space-y-6 mb-12 max-h-106 overflow-y-auto hide-scrollbar">
         {enrichedCartItems.map((item) => (
           <CartItem key={item.id} item={item} loading={cartLoading} />
         ))}
