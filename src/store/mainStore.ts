@@ -169,7 +169,7 @@ export const useMainStore = create<MainStore>()(
           }
 
           // Refresh cart items
-          toast.success(`Added ${quantity} item(s) to cart`);
+          // toast.success(`Added ${quantity} item(s) to cart`);
           await get().fetchCartItems();
         } catch (error) {
           set({

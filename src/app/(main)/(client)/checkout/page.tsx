@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo } from "react";
 import { CheckoutContainer } from "@/components/CheckoutComponents/CheckoutContainer";
+import { CheckoutPageSkeleton } from "@/components/CheckoutComponents/CheckoutSkeleton";
 import { useMainStore } from "@/store/mainStore";
 import { Product } from "@/app/api/types";
 import { Button } from "@/components/ui/button";
@@ -36,13 +37,7 @@ export default function CheckoutPage() {
   }, [cartItems, products]);
 
   if (cartLoading) {
-    return (
-      <div className="min-h-screen">
-        <div className="max-w-4xl mx-auto p-16 text-center">
-          <Loader2 className="animate-spin h-8 w-8 mx-auto mb-4" />
-        </div>
-      </div>
-    );
+    return <CheckoutPageSkeleton />;
   }
 
   if (cartItems.length === 0) {

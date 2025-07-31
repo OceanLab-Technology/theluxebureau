@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useMainStore } from "@/store/mainStore";
 import { CartItem } from "./CartItem";
 import { CartSummary } from "./CartSummary";
 import { EmptyCart } from "./EmptyCart";
+import { CartContainerSkeleton } from "./CartSkeleton";
 import { Loader2 } from "lucide-react";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 
 export function CartContainer() {
   const { cartItems, cartLoading, products, fetchProducts } =
@@ -35,14 +36,7 @@ export function CartContainer() {
   }, [cartItems, products]);
 
   if (cartLoading && cartItems.length === 0) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <div className="flex items-center gap-3">
-          <Loader2 className="h-6 w-6 animate-spin text-yellow-500" />
-          <span className="text-stone-600">Loading cart...</span>
-        </div>
-      </div>
-    );
+    return <CartContainerSkeleton />;
   }
 
   if (cartItems.length === 0) {

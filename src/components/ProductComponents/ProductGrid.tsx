@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { ProductCard } from "./ProductCard";
+import { ProductGridSkeleton } from "./ProductGridSkeleton";
 import { useMainStore } from "@/store/mainStore";
 import { Button } from "@/components/ui/button";
 import {
@@ -70,11 +71,7 @@ export function ProductGrid({
   };
 
   if (loading && products.length === 0) {
-    return (
-      <div className="flex justify-center min-h-screen fixed inset-0 items-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
+    return <ProductGridSkeleton />;
   }
 
   if (error) {
@@ -129,8 +126,14 @@ export function ProductGrid({
       </div>
 
       {loading && products.length > 0 && (
-        <div className="flex justify-center py-4">
-          <Loader2 className="h-6 w-6 animate-spin" />
+        <div className="grid grid-cols-2 md:gap-6 gap-3 md:px-10 px-4">
+          {Array.from({ length: 2 }).map((_, index) => (
+            <div key={index} className="space-y-2 animate-pulse">
+              <div className="md:h-130 h-66 bg-muted/20 rounded"></div>
+              <div className="h-4 bg-muted/20 rounded w-3/4"></div>
+              <div className="h-4 bg-muted/20 rounded w-16"></div>
+            </div>
+          ))}
         </div>
       )}
 

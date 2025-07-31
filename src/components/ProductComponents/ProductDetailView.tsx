@@ -9,6 +9,7 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import { useMainStore } from "@/store/mainStore";
 import { usePersonalizeStore } from "@/store/personalizeStore";
 import { AddToCartButton } from "@/components/CartComponents/AddToCartButton";
+import { ProductDetailSkeleton } from "./ProductDetailSkeleton";
 import { useRouter } from "next/navigation";
 import {
   Accordion,
@@ -42,13 +43,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
   };
 
   if (detailedProductLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="text-lg text-muted-foreground">
-          <Loader2 className="animate-spin h-6 w-6 mr-2 inline-block" />
-        </div>
-      </div>
-    );
+    return <ProductDetailSkeleton />;
   }
 
   if (!currentProduct) {
