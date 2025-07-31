@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import React from "react";
 import { CartIcon } from "../CartComponents/CartIcon";
 import { CartDrawer } from "../CartComponents/CartDrawer";

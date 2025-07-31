@@ -15,7 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Mail, Phone, Edit, UserPlus, Users } from "lucide-react";
 import { useCustomerAdminStore } from "@/store/admin/customerStore";
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import { CustomerFormDialog } from "./Forms/CustomerFormDialog";
 import {
   Select,

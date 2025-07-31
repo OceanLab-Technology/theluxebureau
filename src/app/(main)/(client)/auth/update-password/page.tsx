@@ -1,13 +1,12 @@
-import { ForgotPasswordForm } from "@/components/AuthComponents/ForgotPasswordForm";
-import { Footer } from "@/components/Footer/Footer";
-import Header from "@/components/Header";
+import { UpdatePasswordForm } from "@/components/AuthComponents/UpdatePasswordForm";
+import { Footer } from "@/components/Tools/Footer";
 
 export default function Page() {
   return (
     <div className="min-h-screen flex flex-col bg-background font-century">
       <main className="relative flex justify-between px-20 min-h-[calc(100vh-64px)]">
         <div className="w-96 py-50 text-sm uppercase">Account</div>
-        <ForgotPasswordForm />
+        <UpdatePasswordForm />
       </main>
       <Footer />
     </div>

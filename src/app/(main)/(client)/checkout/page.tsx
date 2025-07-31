@@ -2,12 +2,10 @@
 
 import React, { useEffect, useMemo } from "react";
 import { CheckoutContainer } from "@/components/CheckoutComponents/CheckoutContainer";
-import Image from "next/image";
-import Header from "@/components/Header";
 import { useMainStore } from "@/store/mainStore";
 import { Product } from "@/app/api/types";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import { Loader2 } from "lucide-react";
 
 export default function CheckoutPage() {
