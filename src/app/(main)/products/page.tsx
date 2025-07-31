@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { ProductGrid } from "@/components/ProductComponents/ProductGrid";
 import { ProductFilters } from "@/components/ProductComponents/ProductFilters";
-import Header from "@/components/Header";
 
 export default function Page() {
   const [selectedCategory, setSelectedCategory] = useState<string>("Shop All");

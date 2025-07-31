@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Footer } from "@/components/Footer/Footer";
 import Image from "next/image";
 import { useMainStore } from "@/store/mainStore";
 import { LogoutButton } from "@/components/AuthComponents/LogoutButton";
@@ -234,7 +233,6 @@ export default function AccountPage({ user }: AccountPageProps) {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

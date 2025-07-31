@@ -37,24 +37,24 @@ export function ForgotPasswordForm({
   };
 
   return (
-    <div className={cn("w-full px-10 font-century", className)} {...props}>
-      <h1 className="text-xs font-light mb-4 tracking-wide py-20">
+    <div className={cn("w-full px-4 sm:px-10 font-century", className)} {...props}>
+      <h1 className="text-xs font-light mb-4 tracking-wide sm:py-20">
         {success ? "CHECK YOUR EMAIL" : "RESET PASSWORD"}
       </h1>
       <div className="mb-8">
         {success ? (
-          <div className="flex flex-col w-120 gap-3 mb-8">
-            <div className="border border-stone-700 p-8 text-center">
-              <h2 className="text-lg font-medium mb-4 text-stone-800">
+          <div className="flex flex-col w-full sm:w-120 gap-3 mb-8">
+            <div className="border border-stone-700 p-4 sm:p-8 text-center">
+              <h2 className="text-base sm:text-lg font-medium mb-4 text-stone-800">
                 Password reset instructions sent
               </h2>
-              <p className="text-sm text-stone-600 mb-6">
+              <p className="text-xs sm:text-sm text-stone-600 mb-6">
                 If you registered using your email and password, you will receive
                 a password reset email.
               </p>
               <Link
                 href="/auth/login"
-                className="inline-block w-full rounded-none px-12 py-3 bg-yellow-400/70 hover:bg-yellow-500 text-stone-700 font-medium tracking-wider uppercase transition-colors text-center"
+                className="inline-block w-full rounded-none px-6 sm:px-12 py-2 sm:py-3 bg-yellow-400/70 hover:bg-yellow-500 text-stone-700 font-medium tracking-wider uppercase transition-colors text-center text-sm sm:text-base"
               >
                 BACK TO LOGIN
               </Link>
@@ -62,8 +62,8 @@ export function ForgotPasswordForm({
           </div>
         ) : (
           <form onSubmit={handleForgotPassword}>
-            <div className="flex flex-col w-120 gap-3 mb-8">
-              <div className="border border-stone-700 p-8">
+            <div className="flex flex-col w-full sm:w-120 gap-3 mb-8">
+              <div className="border border-stone-700 p-4 sm:p-8">
                 <Label
                   htmlFor="email"
                   className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
@@ -75,7 +75,7 @@ export function ForgotPasswordForm({
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600  focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none"
+                  className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
                   placeholder="johndoe@example.com"
                   required
                 />
@@ -85,7 +85,7 @@ export function ForgotPasswordForm({
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full rounded-none px-12 py-3 bg-yellow-400/70 hover:bg-yellow-500 text-stone-700 font-medium tracking-wider uppercase transition-colors"
+                  className="w-full rounded-none px-6 sm:px-12 py-2 sm:py-3 bg-yellow-400/70 hover:bg-yellow-500 text-stone-700 font-medium tracking-wider uppercase transition-colors text-sm sm:text-base"
                 >
                   {isLoading ? "Sending..." : "SEND RESET EMAIL"}
                 </Button>
@@ -94,7 +94,7 @@ export function ForgotPasswordForm({
 
             {error && (
               <div className="mb-6">
-                <p className="text-red-500">{error}</p>
+                <p className="text-red-500 text-sm">{error}</p>
               </div>
             )}
 
