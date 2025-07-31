@@ -3,6 +3,7 @@ import { Cormorant_Infant, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import HeaderWrapper from "@/components/Header/HeaderWrapper";
+import FooterWrapper from "@/components/Footer/FooterWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +36,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${cormorantInfant.variable} antialiased font-century`}
       >
         <HeaderWrapper />
-        {children}
+        <main className="pt-16">{children}</main>
+        <FooterWrapper />
         <Toaster duration={1000} />
       </body>
     </html>

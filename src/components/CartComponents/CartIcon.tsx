@@ -1,18 +1,13 @@
-'use client';
+"use client";
 
-import { useMainStore } from '@/store/mainStore';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ShoppingCart } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useMainStore } from "@/store/mainStore";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { cn } from "@/lib/utils";
 
-export function CartIcon() {
-  const { 
-    cartItemCount, 
-    fetchCartItems 
-  } = useMainStore();
-  
+export function CartIcon({ className }: { className?: string }) {
+  const { cartItemCount, fetchCartItems } = useMainStore();
+
   const router = useRouter();
 
   useEffect(() => {
@@ -21,17 +16,15 @@ export function CartIcon() {
   }, [fetchCartItems]);
 
   const handleCartClick = () => {
-    router.push('/cart');
+    router.push("/cart");
   };
 
   return (
-    <Button
-      variant="ghost"
-      size="sm"
+    <button
       onClick={handleCartClick}
-      className="relative"
+      className={cn("relative", className)}
     >
       CART ({cartItemCount})
-    </Button>
+    </button>
   );
 }
