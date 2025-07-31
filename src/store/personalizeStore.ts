@@ -13,6 +13,7 @@ export interface personalizeFormData {
   headerStyle: string
   selectedQuote: string
   customMessage: string
+  selectedFont: string
   smsUpdates: 'send-to-me' | 'send-to-recipient' | 'none'
 }
 
@@ -39,6 +40,7 @@ const initialFormData: personalizeFormData = {
   headerStyle: '',
   selectedQuote: '',
   customMessage: '',
+  selectedFont: 'default',
   smsUpdates: 'none'
 }
 

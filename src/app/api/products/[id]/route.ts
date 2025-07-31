@@ -31,7 +31,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 }
 
 export const PUT = withAdminAuth(
-  async (req: NextRequest, user: any): Promise<NextResponse<ApiResponse<any>>> => {
+  async (req: NextRequest): Promise<NextResponse<ApiResponse<any>>> => {
     const supabase = await createClient();
 
     try {

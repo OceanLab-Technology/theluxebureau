@@ -1,36 +1,31 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { handleError } from '../utils';
-import { SiteSetting, ApiResponse } from '../types';
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
+import { handleError } from "../utils";
+import { SiteSetting, FontSetting, ApiResponse } from "../types";
 
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient();
-    const { searchParams } = new URL(request.url);
-    const key = searchParams.get('key');
     
-    let query = supabase.from('site_settings').select('*');
-    
-    if (key) {
-      query = query.eq('setting_key', key);
-      const { data, error } = await query.single();
-      
-      if (error) throw error;
-      
-      return NextResponse.json({
-        success: true,
-        data: data
-      });
-    } else {
-      const { data, error } = await query.order('setting_key');
-      
-      if (error) throw error;
-      
-      return NextResponse.json({
-        success: true,
-        data: data
-      });
+    const { data, error } = await supabase
+      .from("site_settings")
+      .select("*")
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      throw error;
     }
+
+    const settings: SiteSetting = data || {
+      fonts: [],
+      quotes: [],
+      api_key: null
+    };
+
+    return NextResponse.json({
+      success: true,
+      data: settings,
+    });
   } catch (error) {
     return handleError(error);
   }
@@ -39,56 +34,121 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient();
-    
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
     if (authError || !user) {
       return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
+        { success: false, error: "Unauthorized" },
         { status: 401 }
       );
     }
 
     const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
       .single();
 
-    if (!profile || profile.role !== 'admin') {
+    if (!profile || profile.role !== "admin") {
       return NextResponse.json(
-        { success: false, error: 'Admin access required' },
+        { success: false, error: "Admin access required" },
         { status: 403 }
       );
     }
-    
-    const body = await request.json();
-    
-    // Validate required fields
-    if (!body.setting_key) {
+
+    const formData = await request.formData();
+    const fontName = formData.get("fontName") as string;
+    const fontFile = formData.get("fontFile") as File;
+
+    if (!fontName || !fontFile) {
       return NextResponse.json(
-        { success: false, error: 'Setting key is required' },
+        { success: false, error: "Font name and file are required" },
         { status: 400 }
       );
     }
-    
-    const settingData: Partial<SiteSetting> = {
-      setting_key: body.setting_key,
-      setting_value: body.setting_value,
-    };
-    
-    const { data, error } = await supabase
-      .from('site_settings')
-      .insert(settingData)
-      .select()
+
+    const { error: uploadErr } = await supabase.storage
+      .from("custom-fonts")
+      .upload(`${fontName}`, fontFile, { upsert: true });
+
+    if (uploadErr) {
+      console.log("Font upload error:", uploadErr);
+      return NextResponse.json(
+        { success: false, error: "Failed to upload font file" },
+        { status: 500 }
+      );
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from("custom-fonts")
+      .getPublicUrl(`${fontName}`);
+
+    if (!publicUrlData?.publicUrl) {
+      return NextResponse.json(
+        { success: false, error: "Failed to get public URL for font" },
+        { status: 500 }
+      );
+    }
+
+    const { data: currentSettings } = await supabase
+      .from("site_settings")
+      .select("*")
       .single();
+
+    const newFont: FontSetting = {
+      name: fontName,
+      url: publicUrlData.publicUrl
+    };
+
+    const fonts = currentSettings?.fonts || [];
+    const existingFontIndex = fonts.findIndex((font: FontSetting) => font.name === fontName);
     
-    if (error) throw error;
-    
-    return NextResponse.json({
-      success: true,
-      data: data,
-      message: 'Site setting created successfully'
-    });
+    if (existingFontIndex >= 0) {
+      fonts[existingFontIndex] = newFont; 
+    } else {
+      fonts.push(newFont);
+    }
+
+    const updateData = {
+      fonts: fonts,
+      updated_at: new Date().toISOString(),
+    };
+
+    if (currentSettings) {
+      const { data, error } = await supabase
+        .from("site_settings")
+        .update(updateData)
+        .eq("id", currentSettings.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return NextResponse.json({
+        success: true,
+        data: data,
+        message: "Font uploaded and added successfully",
+      });
+    } else {
+      const { data, error } = await supabase
+        .from("site_settings")
+        .insert({
+          ...updateData,
+          quotes: [],
+          api_key: null
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return NextResponse.json({
+        success: true,
+        data: data,
+        message: "Font uploaded and settings created successfully",
+      });
+    }
+
   } catch (error) {
     return handleError(error);
   }
@@ -97,110 +157,186 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const supabase = await createClient();
-    
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
     if (authError || !user) {
       return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
+        { success: false, error: "Unauthorized" },
         { status: 401 }
       );
     }
 
     const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
       .single();
 
-    if (!profile || profile.role !== 'admin') {
+    if (!profile || profile.role !== "admin") {
       return NextResponse.json(
-        { success: false, error: 'Admin access required' },
+        { success: false, error: "Admin access required" },
         { status: 403 }
       );
     }
-    
+
     const body = await request.json();
-    const { searchParams } = new URL(request.url);
-    const key = searchParams.get('key');
-    
-    if (!key) {
-      return NextResponse.json(
-        { success: false, error: 'Setting key is required in query params' },
-        { status: 400 }
-      );
-    }
-    
-    const updateData = {
-      setting_value: body.setting_value,
+    const { fonts, quotes, api_key } = body;
+
+    // Get current settings
+    const { data: currentSettings } = await supabase
+      .from("site_settings")
+      .select("*")
+      .single();
+
+    const updateData: Partial<SiteSetting> = {
       updated_at: new Date().toISOString(),
     };
-    
-    const { data, error } = await supabase
-      .from('site_settings')
-      .update(updateData)
-      .eq('setting_key', key)
-      .select()
-      .single();
-    
-    if (error) throw error;
-    
-    return NextResponse.json({
-      success: true,
-      data: data,
-      message: 'Site setting updated successfully'
-    });
+
+    if (fonts !== undefined) updateData.fonts = fonts;
+    if (quotes !== undefined) updateData.quotes = quotes;
+    if (api_key !== undefined) updateData.api_key = api_key;
+
+    if (currentSettings) {
+      const { data, error } = await supabase
+        .from("site_settings")
+        .update(updateData)
+        .eq("id", currentSettings.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return NextResponse.json({
+        success: true,
+        data: data,
+        message: "Site settings updated successfully",
+      });
+    } else {
+      const { data, error } = await supabase
+        .from("site_settings")
+        .insert({
+          fonts: fonts || [],
+          quotes: quotes || [],
+          api_key: api_key || null,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return NextResponse.json({
+        success: true,
+        data: data,
+        message: "Site settings created successfully",
+      });
+    }
   } catch (error) {
     return handleError(error);
   }
 }
 
-
 export async function DELETE(request: NextRequest) {
   try {
     const supabase = await createClient();
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
     if (authError || !user) {
       return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
+        { success: false, error: "Unauthorized" },
         { status: 401 }
       );
     }
 
     const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
       .single();
 
-    if (!profile || profile.role !== 'admin') {
+    if (!profile || profile.role !== "admin") {
       return NextResponse.json(
-        { success: false, error: 'Admin access required' },
+        { success: false, error: "Admin access required" },
         { status: 403 }
       );
     }
 
     const { searchParams } = new URL(request.url);
-    const key = searchParams.get('key');
+    const type = searchParams.get("type");
+    const fontName = searchParams.get("fontName");
+    const quoteIndex = searchParams.get("quoteIndex");
 
-    if (!key) {
+    if (!type) {
       return NextResponse.json(
-        { success: false, error: 'Missing setting key' },
+        { success: false, error: "Delete type is required (font or quote)" },
         { status: 400 }
       );
     }
 
-    const { error } = await supabase
-      .from('site_settings')
-      .delete()
-      .eq('setting_key', key);
+    // Get current settings
+    const { data: currentSettings, error: fetchError } = await supabase
+      .from("site_settings")
+      .select("*")
+      .single();
 
-    if (error) throw error;
+    if (fetchError || !currentSettings) {
+      return NextResponse.json(
+        { success: false, error: "No settings found" },
+        { status: 404 }
+      );
+    }
 
-    return NextResponse.json({
-      success: true,
-      message: 'Setting deleted successfully',
-    });
+    if (type === "font" && fontName) {
+      const fonts = (currentSettings.fonts || []).filter((font: FontSetting) => font.name !== fontName);
+      
+      const { data, error } = await supabase
+        .from("site_settings")
+        .update({ 
+          fonts: fonts,
+          updated_at: new Date().toISOString() 
+        })
+        .eq("id", currentSettings.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return NextResponse.json({
+        success: true,
+        data: data,
+        message: "Font deleted successfully",
+      });
+    } else if (type === "quote" && quoteIndex !== null) {
+      const quotes = [...(currentSettings.quotes || [])];
+      const index = parseInt(quoteIndex);
+      if (index >= 0 && index < quotes.length) {
+        quotes.splice(index, 1);
+        
+        const { data, error } = await supabase
+          .from("site_settings")
+          .update({ 
+            quotes: quotes,
+            updated_at: new Date().toISOString() 
+          })
+          .eq("id", currentSettings.id)
+          .select()
+          .single();
+
+        if (error) throw error;
+        return NextResponse.json({
+          success: true,
+          data: data,
+          message: "Quote deleted successfully",
+        });
+      }
+    }
+
+    return NextResponse.json(
+      { success: false, error: "Invalid delete parameters" },
+      { status: 400 }
+    );
   } catch (error) {
     return handleError(error);
   }

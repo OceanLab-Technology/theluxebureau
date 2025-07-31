@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Label } from "@/components/ui/label";
 import { useSiteSettingsStore } from "@/store/admin/siteSettingsStore";
-import { AddSettingDialog } from "@/components/DashboardComponents/Forms/AddSettingDialog";
-import { Trash2 } from "lucide-react";
+import { AddFontDialog } from "@/components/DashboardComponents/Forms/AddFontDialog";
+import { AddQuoteDialog } from "@/components/DashboardComponents/Forms/AddQuoteDialog";
+import { Trash2, Eye } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function SettingsPage() {
@@ -15,42 +17,125 @@ export default function SettingsPage() {
     settings,
     loading,
     fetchSettings,
-    updateSetting,
+    updateApiKey,
+    updateQuote,
+    deleteQuote,
+    deleteFont,
     saveSettings,
     hasChanges,
-    deleteSetting,
   } = useSiteSettingsStore();
+
+  const [localApiKey, setLocalApiKey] = useState(settings.api_key);
 
   useEffect(() => {
     fetchSettings();
   }, []);
 
-  const renderFields = () => {
-    return Object.entries(settings).map(([key, value]) => (
-      <div key={key} className="space-y-1">
-        <div className="flex items-center justify-between">
-          <label
-            htmlFor={key}
-            className="text-sm font-medium capitalize text-muted-foreground"
-          >
-            {key.replace(/_/g, " ")}
-          </label>
-          <button
-            onClick={() => deleteSetting(key)}
-            className="text-destructive hover:text-red-600"
-            aria-label={`Delete setting ${key}`}
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
+  useEffect(() => {
+    setLocalApiKey(settings.api_key);
+  }, [settings.api_key]);
+
+  const handleApiKeyChange = (value: string) => {
+    setLocalApiKey(value);
+    updateApiKey(value);
+  };
+
+  const handleQuoteChange = (index: number, value: string) => {
+    updateQuote(index, value);
+  };
+
+  const renderFonts = () => {
+    if (loading) {
+      return (
+        <div className="space-y-2">
+          {[...Array(2)].map((_, i) => (
+            <Skeleton key={i} className="h-12 w-full rounded-md" />
+          ))}
         </div>
-        <Input
-          id={key}
-          value={value}
-          onChange={(e) => updateSetting(key, e.target.value)}
-          className="w-full"
-        />
+      );
+    }
+
+    if (settings.fonts.length === 0) {
+      return (
+        <p className="text-muted-foreground text-sm">
+          No custom fonts uploaded yet. Upload your first font above.
+        </p>
+      );
+    }
+
+    return (
+      <div className="space-y-2">
+        {settings.fonts.map((font, index) => (
+          <div
+            key={index}
+            className="flex items-center justify-between p-3 border rounded-md"
+          >
+            <div className="flex items-center space-x-3">
+              <div className="font-medium">{font.name}</div>
+              <a
+                href={font.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800"
+              >
+                <Eye className="w-4 h-4" />
+              </a>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => deleteFont(font.name)}
+              className="text-destructive hover:text-red-600"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </div>
+        ))}
       </div>
-    ));
+    );
+  };
+
+  const renderQuotes = () => {
+    if (loading) {
+      return (
+        <div className="space-y-2">
+          {[...Array(3)].map((_, i) => (
+            <Skeleton key={i} className="h-10 w-full rounded-md" />
+          ))}
+        </div>
+      );
+    }
+
+    if (settings.quotes.length === 0) {
+      return (
+        <p className="text-muted-foreground text-sm">
+          No quotes added yet. Add your first quote above.
+        </p>
+      );
+    }
+
+    return (
+      <div className="space-y-2">
+        {settings.quotes.map((quote, index) => (
+          <div key={index} className="flex items-center space-x-2">
+            <Input
+              value={quote}
+              onChange={(e) => handleQuoteChange(index, e.target.value)}
+              className="flex-1"
+              placeholder={`Quote ${index + 1}`}
+            />
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => deleteQuote(index)}
+              className="text-destructive hover:text-red-600"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -60,38 +145,69 @@ export default function SettingsPage() {
         <h1 className="text-lg font-semibold font-century">Settings</h1>
       </header>
       
-      <div className="flex-1 space-y-4 p-8 pt-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-semibold">Site Settings</h1>
-            <p className="text-muted-foreground">
-              Manage key-value settings for your site.
-            </p>
-          </div>
-          <AddSettingDialog />
+      <div className="flex-1 space-y-6 p-8 pt-6">
+        <div>
+          <h1 className="text-3xl font-semibold">Site Settings</h1>
+          <p className="text-muted-foreground">
+            Manage fonts, quotes, and API configuration for your site.
+          </p>
         </div>
+
+        {/* API Key Section */}
         <Card>
           <CardHeader>
-            <CardTitle>Settings</CardTitle>
+            <CardTitle>API Configuration</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
-            {loading ? (
-              <div className="space-y-4">
-                {[...Array(4)].map((_, i) => (
-                  <Skeleton key={i} className="h-10 w-full rounded-md" />
-                ))}
-              </div>
-            ) : (
-              renderFields()
-            )}
-
-            <div className="flex justify-end">
-              <Button onClick={saveSettings} disabled={!hasChanges || loading}>
-                {loading ? "Saving..." : "Save Changes"}
-              </Button>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="apiKey">API Key</Label>
+              <Input
+                id="apiKey"
+                type="password"
+                value={localApiKey}
+                onChange={(e) => handleApiKeyChange(e.target.value)}
+                placeholder="Enter your API key"
+                className="w-full"
+              />
+              <p className="text-xs text-muted-foreground">
+                This API key will be used for external service integrations.
+              </p>
             </div>
           </CardContent>
         </Card>
+
+        {/* Fonts Section */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle>Custom Fonts</CardTitle>
+              <AddFontDialog />
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {renderFonts()}
+          </CardContent>
+        </Card>
+
+        {/* Quotes Section */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle>Quotes</CardTitle>
+              <AddQuoteDialog />
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {renderQuotes()}
+          </CardContent>
+        </Card>
+
+        {/* Save Button */}
+        <div className="flex justify-end">
+          <Button onClick={saveSettings} disabled={!hasChanges || loading}>
+            {loading ? "Saving..." : "Save Changes"}
+          </Button>
+        </div>
       </div>
     </div>
   );

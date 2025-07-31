@@ -128,10 +128,16 @@ export interface Profile {
 
 export interface SiteSetting {
   id?: string;
-  setting_key: string;
-  setting_value?: string;
+  fonts: FontSetting[];
+  quotes: string[];
+  api_key?: string;
   created_at?: string;
   updated_at?: string;
+}
+
+export interface FontSetting {
+  name: string;
+  url: string;
 }
 
 export interface TeamInvitation {

@@ -1,21 +1,41 @@
 import { create } from "zustand"
 import { toast } from "sonner"
 
+type FontSetting = {
+    name: string
+    url: string
+}
+
+type SiteSettings = {
+    fonts: FontSetting[]
+    quotes: string[]
+    api_key: string
+}
+
 type SiteSettingsStore = {
-    settings: Record<string, string>
-    original: Record<string, string>
+    settings: SiteSettings
+    original: SiteSettings
     loading: boolean
     fetchSettings: () => Promise<void>
-    updateSetting: (key: string, value: string) => void
+    updateApiKey: (apiKey: string) => void
+    addQuote: (quote: string) => void
+    updateQuote: (index: number, quote: string) => void
+    deleteQuote: (index: number) => Promise<void>
+    uploadFont: (fontName: string, fontFile: File) => Promise<void>
+    deleteFont: (fontName: string) => Promise<void>
     saveSettings: () => Promise<void>
-    hasChanges: boolean,
-    addSetting: (key: string, value: string) => Promise<void>,
-    deleteSetting: (key: string) => Promise<void>
+    hasChanges: boolean
+}
+
+const defaultSettings: SiteSettings = {
+    fonts: [],
+    quotes: [],
+    api_key: ""
 }
 
 export const useSiteSettingsStore = create<SiteSettingsStore>((set, get) => ({
-    settings: {},
-    original: {},
+    settings: defaultSettings,
+    original: defaultSettings,
     loading: false,
     hasChanges: false,
 
@@ -26,12 +46,13 @@ export const useSiteSettingsStore = create<SiteSettingsStore>((set, get) => ({
             const json = await res.json()
             if (!json.success) throw new Error(json.error)
 
-            const settingsMap: Record<string, string> = {}
-            for (const setting of json.data) {
-                settingsMap[setting.setting_key] = setting.setting_value
+            const settings: SiteSettings = {
+                fonts: json.data.fonts || [],
+                quotes: json.data.quotes || [],
+                api_key: json.data.api_key || ""
             }
 
-            set({ settings: settingsMap, original: settingsMap, hasChanges: false })
+            set({ settings, original: settings, hasChanges: false })
         } catch (err) {
             toast.error("Failed to load settings")
         } finally {
@@ -39,32 +60,100 @@ export const useSiteSettingsStore = create<SiteSettingsStore>((set, get) => ({
         }
     },
 
-    updateSetting: (key, value) => {
-        const newSettings = { ...get().settings, [key]: value }
+    updateApiKey: (apiKey: string) => {
+        const newSettings = { ...get().settings, api_key: apiKey }
         const hasChanges = JSON.stringify(newSettings) !== JSON.stringify(get().original)
         set({ settings: newSettings, hasChanges })
     },
 
+    addQuote: (quote: string) => {
+        if (!quote.trim()) return
+        const newQuotes = [...get().settings.quotes, quote.trim()]
+        const newSettings = { ...get().settings, quotes: newQuotes }
+        const hasChanges = JSON.stringify(newSettings) !== JSON.stringify(get().original)
+        set({ settings: newSettings, hasChanges })
+    },
+
+    updateQuote: (index: number, quote: string) => {
+        const newQuotes = [...get().settings.quotes]
+        newQuotes[index] = quote
+        const newSettings = { ...get().settings, quotes: newQuotes }
+        const hasChanges = JSON.stringify(newSettings) !== JSON.stringify(get().original)
+        set({ settings: newSettings, hasChanges })
+    },
+
+    deleteQuote: async (index: number) => {
+        try {
+            const res = await fetch(`/api/settings?type=quote&quoteIndex=${index}`, {
+                method: "DELETE",
+            })
+
+            const json = await res.json()
+            if (!json.success) throw new Error(json.error)
+
+            toast.success("Quote deleted")
+            await get().fetchSettings()
+        } catch (err) {
+            toast.error("Failed to delete quote")
+        }
+    },
+
+    uploadFont: async (fontName: string, fontFile: File) => {
+        set({ loading: true })
+        try {
+            const formData = new FormData()
+            formData.append("fontName", fontName)
+            formData.append("fontFile", fontFile)
+
+            const res = await fetch("/api/settings", {
+                method: "POST",
+                body: formData,
+            })
+
+            const json = await res.json()
+            if (!json.success) throw new Error(json.error)
+
+            toast.success("Font uploaded successfully")
+            await get().fetchSettings()
+        } catch (err) {
+            toast.error("Failed to upload font")
+        } finally {
+            set({ loading: false })
+        }
+    },
+
+    deleteFont: async (fontName: string) => {
+        try {
+            const res = await fetch(`/api/settings?type=font&fontName=${fontName}`, {
+                method: "DELETE",
+            })
+
+            const json = await res.json()
+            if (!json.success) throw new Error(json.error)
+
+            toast.success("Font deleted")
+            await get().fetchSettings()
+        } catch (err) {
+            toast.error("Failed to delete font")
+        }
+    },
+
     saveSettings: async () => {
         const { settings, original } = get()
-        const changedKeys = Object.keys(settings).filter(
-            key => settings[key] !== original[key]
-        )
-
-        if (changedKeys.length === 0) return
+        const hasChanges = JSON.stringify(settings) !== JSON.stringify(original)
+        
+        if (!hasChanges) return
 
         set({ loading: true })
         try {
-            for (const key of changedKeys) {
-                const res = await fetch(`/api/settings?key=${key}`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ setting_value: settings[key] }),
-                })
+            const res = await fetch("/api/settings", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(settings),
+            })
 
-                const json = await res.json()
-                if (!json.success) throw new Error(json.error)
-            }
+            const json = await res.json()
+            if (!json.success) throw new Error(json.error)
 
             toast.success("Settings saved successfully")
             set({ original: { ...settings }, hasChanges: false })
@@ -74,48 +163,4 @@ export const useSiteSettingsStore = create<SiteSettingsStore>((set, get) => ({
             set({ loading: false })
         }
     },
-    addSetting: async (key: string, value: string) => {
-        try {
-            const res = await fetch("/api/settings", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ setting_key: key, setting_value: value }),
-            })
-
-            const json = await res.json()
-            if (!json.success) throw new Error(json.error)
-
-            toast.success("Setting added")
-            await get().fetchSettings()
-        } catch (err) {
-            toast.error("Failed to add setting")
-        }
-    },
-
-    deleteSetting: async (key: string) => {
-        try {
-            const res = await fetch(`/api/settings?key=${key}`, {
-                method: "DELETE",
-            });
-
-            const json = await res.json();
-            if (!json.success) throw new Error(json.error);
-
-            toast.success("Setting deleted");
-
-            const newSettings = { ...get().settings };
-            delete newSettings[key];
-
-            const newOriginal = { ...get().original };
-            delete newOriginal[key];
-
-            const hasChanges = JSON.stringify(newSettings) !== JSON.stringify(newOriginal);
-
-            set({ settings: newSettings, original: newOriginal, hasChanges });
-        } catch (err) {
-            toast.error("Failed to delete setting");
-        }
-    },
-
-
 }))
