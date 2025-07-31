@@ -13,7 +13,7 @@ export default function AdminLayout({
       <SidebarProvider>
         <AdminSidebar  />
         <SidebarInset>
-          <div className="flex-1">
+          <div className="flex-1 pt-0">
             {children}
           </div>
         </SidebarInset>
