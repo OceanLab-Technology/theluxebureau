@@ -171,7 +171,6 @@ export default function CheckoutPage() {
                               className="text-amber-600"
                               title="Personalized Item"
                             >
-                              🎁
                             </span>
                           )}
                       </span>
