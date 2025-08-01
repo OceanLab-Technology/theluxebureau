@@ -27,19 +27,12 @@ type ProductStore = {
   selectedProduct: Product | null;
   loading: boolean;
   error: string | null;
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
 
-  fetchProducts: (page?: number, limit?: number) => Promise<void>;
+  fetchProducts: () => Promise<void>;
   fetchProductById: (id: string) => Promise<void>;
   createProduct: (data: FormData) => Promise<void>;
   updateProduct: (id: string, updates: ProductUpdate) => Promise<Product | null>;
   deleteProduct: (id: string) => Promise<void>;
-
-  setPage: (page: number) => void;
-  setLimit: (limit: number) => void;
 };
 
 export const useProductAdminStore = create<ProductStore>((set, get) => ({
@@ -48,19 +41,10 @@ export const useProductAdminStore = create<ProductStore>((set, get) => ({
   loading: false,
   error: null,
 
-  page: 1,
-  limit: 10,
-  total: 0,
-  totalPages: 0,
-
-  fetchProducts: async (pageParam, limitParam) => {
-    const state = get();
-    const page = pageParam || state.page;
-    const limit = limitParam || state.limit;
-
+  fetchProducts: async () => {
     set({ loading: true, error: null });
     try {
-      const res = await fetch(`/api/products?page=${page}&limit=${limit}`);
+      const res = await fetch(`/api/products`);
       const json = await res.json();
 
       if (!res.ok || !json.success) throw new Error(json.error || "Failed to fetch products");
@@ -68,10 +52,6 @@ export const useProductAdminStore = create<ProductStore>((set, get) => ({
       set({
         products: json.data,
         loading: false,
-        page,
-        limit,
-        total: json.pagination.total,
-        totalPages: json.pagination.totalPages,
       });
     } catch (err: any) {
       set({ loading: false, error: err.message || "Unknown error" });
@@ -155,8 +135,4 @@ export const useProductAdminStore = create<ProductStore>((set, get) => ({
       set({ loading: false, error: err.message || "Unknown error" });
     }
   },
-
-
-  setPage: (page) => set({ page }),
-  setLimit: (limit) => set({ limit }),
 }));

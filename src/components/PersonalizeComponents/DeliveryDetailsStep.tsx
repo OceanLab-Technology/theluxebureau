@@ -33,7 +33,7 @@ export default function DeliveryDetailsStep() {
               handleInputChange("recipientName", e.target.value)
             }
             placeholder="Recipients name*"
-            className="border-0 border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none"
+            className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
           />
         </div>
 
@@ -46,7 +46,7 @@ export default function DeliveryDetailsStep() {
               handleInputChange("recipientAddress", e.target.value)
             }
             placeholder="Recipients Address*"
-            className="border-0 border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none"
+            className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
           />
         </div>
 
@@ -59,7 +59,7 @@ export default function DeliveryDetailsStep() {
               handleInputChange("deliveryDate", e.target.value)
             }
             placeholder="Delivery date"
-            className="border-0 border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none"
+            className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
           />
         </div>
 
@@ -72,7 +72,7 @@ export default function DeliveryDetailsStep() {
               handleInputChange("preferredDeliveryTime", e.target.value)
             }
             placeholder="Preferred delivery time"
-            className="border-0 border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none"
+            className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
           />
         </div>
 

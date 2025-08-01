@@ -4,8 +4,9 @@ import Link from "next/link";
 import React from "react";
 import { CartIcon } from "../CartComponents/CartIcon";
 import { CartDrawer } from "../CartComponents/CartDrawer";
-import { User2 } from "lucide-react";
+import { Menu, User2, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Logo } from "./Logo";
 
 export default function Header() {
   const links = [
@@ -14,45 +15,96 @@ export default function Header() {
     { href: "/account", label: "ACCOUNT" },
   ];
 
+  const shopCategories = [
+    { label: "Shop All", href: "/products" },
+    { label: "Literature", href: "/products/literature" },
+    { label: "Drinks & Spirits", href: "/products/drinks-spirits" },
+    { label: "Floral", href: "/products/floral" },
+    { label: "Home", href: "/products/home" },
+  ];
+
+  const aboutLinks = [
+    { label: "About Us", href: "/about" },
+    { label: "The Campaign", href: "/campaign" },
+  ];
+
+  const socialLinks = [
+    { label: "Contact", href: "/contact" },
+    { label: "Instagram", href: "https://instagram.com" },
+    { label: "LinkedIn", href: "https://linkedin.com" },
+  ];
+
   const [extended, setExtended] = React.useState<boolean>(false);
+  const [isVisible, setIsVisible] = React.useState<boolean>(true);
+  const [lastScrollY, setLastScrollY] = React.useState<number>(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY < lastScrollY || currentScrollY < 10) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+        setExtended(false);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   return (
     <motion.div
       initial={false}
       animate={{
-        height: extended ? "60vh" : "4rem",
-        backgroundColor: extended ? "#50462DF2" : "#FBF7E5",
+        height: extended ? "41.25rem" : "5.9375rem",
+        backgroundColor: extended ? "rgba(80, 70, 45, 0.95)" : "#FBF7E5",
+        y: isVisible ? 0 : -100,
       }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-      className={`font-century fixed top-0 left-0 right-0 z-[999999] w-full overflow-hidden text-background  border-b bg-background ${
-        extended ? "border-none backdrop-blur-sm" : "border-b-stone-400/30"
-      }`}
-      onMouseEnter={() => setExtended(true)}
       onMouseLeave={() => setExtended(false)}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className={`font-century fixed top-0 left-0 right-0 z-[999999] w-full overflow-hidden text-background bg-background ${
+        extended ? "backdrop-blur-sm" : ""
+      }`}
     >
-      <div className="relative mx-auto flex h-16 max-w-8xl items-center justify-between px-6">
-        <Link
-          href="/"
-          className={`text-sm font-light tracking-wider flex items-center gap-2 cursor-pointer ${
-            extended ? "text-background" : "text-stone-600"
-          }`}
-        >
-          the{" "}
-          <span className="font-[200] text-xl tracking-widest">
-            <span className="italic">LUXE</span> BUREAU
-          </span>
-        </Link>
+      <div className="relative py-7 flex items-center justify-between px-6">
+        <div className="flex items-center space-x-4 md:space-x-8">
+          <div className="md:hidden flex items-center space-x-2">
+            {!mobileMenuOpen ? (
+              <button onClick={() => setMobileMenuOpen(true)}>
+                <Menu className="h-5 w-5 text-stone-700 hover:text-stone-900 transition-colors cursor-pointer" />
+              </button>
+            ) : (
+              <button onClick={() => setMobileMenuOpen(false)}>
+                <X className="h-5 w-5 text-stone-700 hover:text-stone-900 transition-colors cursor-pointer" />
+              </button>
+            )}
+          </div>
+          <Link
+            href="/"
+            className={` cursor-pointer md:w-auto md:h-auto w-[8.74969rem] h-[0.5625rem] flex-shrink-0 ${
+              extended ? "text-background" : "text-stone-600"
+            }`}
+          >
+            <Logo />
+          </Link>
+        </div>
 
-        <nav className="hidden md:flex items-center space-x-40">
+        <nav className="hidden md:flex items-center lg:space-x-60 space-x-25 lg:pr-30">
           {links.map((link) => (
             <Link
+              onMouseEnter={() => setExtended(true)}
               key={link.href}
               href={link.href}
-              className={`${
+              className={`text-[0.9rem] font-[400] ${
                 extended
                   ? "text-background hover:text-[#FBD060]"
                   : "text-stone-700 hover:text-stone-900"
-              } text-sm transition-colors`}
+              }`}
             >
               {link.label}
             </Link>
@@ -81,54 +133,129 @@ export default function Header() {
         </div>
       </div>
 
+      <motion.div
+        key="extended-content"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.3 }}
+        className="px-6 pt-8 h-full"
+      >
+        <div className="flex pl-84 gap-16 text-[2rem] leading-[1.8rem] font-light text-background">
+          <div className="col-span-2"></div>
+          <div className="flex flex-col items-start space-y-3 col-span-2">
+            {shopCategories.map((category) => (
+              <Link
+                key={category.href}
+                href={category.href}
+                className="hover:text-[#FBD060] transition-colors"
+              >
+                {category.label}
+              </Link>
+            ))}
+          </div>
+
+          <div className="flex flex-col items-start space-y-3 col-span-2">
+            {aboutLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="hover:text-[#FBD060] transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
+          {extended && (
+            <div className="flex absolute gap-30 bottom-10 text-[1rem] right-50 items-start">
+              {socialLinks.map((social) => (
+                <Link
+                  key={social.href}
+                  href={social.href}
+                  className="hover:text-background text-[#FBD060] transition-colors"
+                  {...(social.href.startsWith("http") && {
+                    target: "_blank",
+                    rel: "noopener noreferrer",
+                  })}
+                >
+                  {social.label}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </motion.div>
       <AnimatePresence>
-        {extended && (
+        {mobileMenuOpen && (
           <motion.div
-            key="extended-content"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="flex justify-center items-center px-6 pt-8"
+            className="fixed inset-0 z-[9999999] bg-[#50462D] px-6 py-8 text-background flex flex-col items-start"
           >
-            <div className="md:text-[32px]">
-              <div className="grid grid-cols-2 gap-16">
-                <div className="flex flex-col items-start space-y-2">
-                  <button className="hover:text-[#FBD060] cursor-pointer transition-colors">
-                    Shop All
-                  </button>
-                  <button className="hover:text-[#FBD060] cursor-pointer transition-colors">
-                    Literature
-                  </button>
-                  <button className="hover:text-[#FBD060] cursor-pointer transition-colors">
-                    Drinks & Spirits
-                  </button>
-                  <button className="hover:text-[#FBD060] cursor-pointer transition-colors">
-                    Floral
-                  </button>
-                  <button className="hover:text-[#FBD060] cursor-pointer transition-colors">
-                    Home
-                  </button>
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-3xl mb-6"
+            >
+              <X />
+            </button>
+
+            <div className="space-y-20 text-[1.5rem] font-light w-full">
+              <div className="grid grid-cols-2">
+                <div className="text-xs text-[#FBD060] tracking-widest">
+                  HOME
                 </div>
-                <div className="flex flex-col items-start space-y-2">
-                  <button className="hover:text-[#FBD060] cursor-pointer transition-colors">
-                    About Us
-                  </button>
-                  <button className="hover:text-[#FBD060] cursor-pointer transition-colors">
-                    The Campaign
-                  </button>
+                <div>
+                  {shopCategories.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block hover:text-[#FBD060] transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
                 </div>
               </div>
-              <div className="flex gap-16 pt-10 justify-end items-start text-[15px] text-[#FBD060] space-y-2">
-                <button className="hover:text-stone-300 cursor-pointer transition-colors">
-                  Instagram
-                </button>
-                <button className="hover:text-stone-300 cursor-pointer transition-colors">
-                  LinkedIn
-                </button>
-                <button className="hover:text-stone-300 cursor-pointer transition-colors">
-                  Email
-                </button>
+
+              <div className="grid grid-cols-2">
+                <div className="text-xs text-[#FBD060] tracking-widest">
+                  DISCOVER
+                </div>
+                <div>
+                  {aboutLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block hover:text-[#FBD060] transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-2 flex gap-4">
+                {socialLinks.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-[#FBD060] text-[1rem] hover:text-background transition-colors"
+                    {...(item.href.startsWith("http")
+                      ? {
+                          target: "_blank",
+                          rel: "noopener noreferrer",
+                        }
+                      : {})}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
               </div>
             </div>
           </motion.div>

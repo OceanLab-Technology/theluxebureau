@@ -5,14 +5,13 @@ import { usePersonalizeStore } from "@/store/personalizeStore";
 
 export default function SummaryStep() {
   const { formData, selectedProduct } = usePersonalizeStore();
-
   return (
     <div>
       <p className="text-stone-700 mb-6 font-medium md:text-[16px]">
         Please review or amend your gift details below.
       </p>
 
-      <div className="md:space-y-4 space-y-3 font-[Marfa]">
+      <div className="md:space-y-4 space-y-3">
         <div className="flex items-center gap-2 border-b border-b-stone-600">
           <h3 className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
             Your Name
@@ -88,7 +87,7 @@ export default function SummaryStep() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mt-8">
+        <div className="grid grid-cols-2 gap-2 mt-8">
           <div className="bg-stone-300 h-64 rounded-none flex items-center justify-center">
             <img
               src={selectedProduct?.image || selectedProduct?.image_1}
@@ -107,18 +106,16 @@ export default function SummaryStep() {
               }}
             >
               <div className="absolute inset-0 flex items-center justify-center p-8">
-                <div className="p-6 max-w-xs w-full">
-                  <div className="text-center mb-4">
+                <div className="p-4 max-w-xs w-full">
+                  <div className="text-center mb-1">
                     <div className="text-xs font-medium tracking-wider text-stone-600 mb-2">
-                      {formData.headerStyle
-                        ? formData.headerStyle.toUpperCase()
-                        : "HEADER"}
+                      {formData.headerText}
                     </div>
                     <div className="h-px bg-stone-300 w-16 mx-auto"></div>
                   </div>
 
-                  <div className="text-center">
-                    <div className="text-xs text-stone-500 italic">
+                  <div className="text-center flex items-center justify-center">
+                    <div className="text-[8px] w-42 text-stone-500 font-[monospace]">
                       {formData.customMessage ||
                         formData.selectedQuote ||
                         "Message"}

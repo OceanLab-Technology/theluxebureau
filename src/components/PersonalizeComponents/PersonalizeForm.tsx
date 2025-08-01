@@ -9,6 +9,7 @@ import PersonalizationStep from "./PersonalizationStep";
 import DeliveryDetailsStep from "./DeliveryDetailsStep";
 import SummaryStep from "./SummaryStep";
 import { useRouter } from "next/navigation";
+import { PersonalizedAddToCartButton } from "./PersonalizedAddToCartButton";
 
 const steps = [
   { id: 1, label: "Step 1" },
@@ -25,7 +26,14 @@ const stepTitles = {
 };
 
 export default function PersonalizeForm() {
-  const { currentStep, nextStep, prevStep, resetCheckout, formData, selectedProduct } = usePersonalizeStore();
+  const {
+    currentStep,
+    nextStep,
+    prevStep,
+    resetCheckout,
+    formData,
+    selectedProduct,
+  } = usePersonalizeStore();
   const { addToCart } = useMainStore();
   const router = useRouter();
 
@@ -48,9 +56,8 @@ export default function PersonalizeForm() {
 
   const handleAddToCart = async () => {
     if (!selectedProduct) return;
-    
+
     try {
-      // Create custom data from form data for personalization
       const personalizationData = {
         yourName: formData.yourName,
         recipientName: formData.recipientName,
@@ -59,11 +66,11 @@ export default function PersonalizeForm() {
         recipientEmail: formData.recipientEmail,
         deliveryDate: formData.deliveryDate,
         preferredDeliveryTime: formData.preferredDeliveryTime,
-        headerStyle: formData.headerStyle,
+        headerText: formData.headerText,
         selectedQuote: formData.selectedQuote,
         customMessage: formData.customMessage,
         smsUpdates: formData.smsUpdates,
-        isPersonalized: true
+        isPersonalized: true,
       };
 
       await addToCart(selectedProduct.id!, 1, personalizationData);
@@ -76,9 +83,8 @@ export default function PersonalizeForm() {
 
   const handleCheckout = async () => {
     if (!selectedProduct) return;
-    
+
     try {
-      // First add to cart with personalization data
       const personalizationData = {
         yourName: formData.yourName,
         recipientName: formData.recipientName,
@@ -87,11 +93,11 @@ export default function PersonalizeForm() {
         recipientEmail: formData.recipientEmail,
         deliveryDate: formData.deliveryDate,
         preferredDeliveryTime: formData.preferredDeliveryTime,
-        headerStyle: formData.headerStyle,
+        headerText: formData.headerText,
         selectedQuote: formData.selectedQuote,
         customMessage: formData.customMessage,
         smsUpdates: formData.smsUpdates,
-        isPersonalized: true
+        isPersonalized: true,
       };
 
       await addToCart(selectedProduct.id!, 1, personalizationData);
@@ -182,14 +188,9 @@ export default function PersonalizeForm() {
             >
               BACK
             </button>
+            <PersonalizedAddToCartButton />
             <button
-              onClick={handleAddToCart}
-              className="bg-[#FDCF5F] px-5 hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider text-sm py-2.5 rounded-none transition-colors cursor-pointer"
-            >
-              ADD TO CART
-            </button>
-            <button
-                onClick={handleCheckout}
+              onClick={handleCheckout}
               className="bg-[#FDCF5F] px-5 hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider text-sm py-2.5 rounded-none transition-colors cursor-pointer"
             >
               CHECKOUT

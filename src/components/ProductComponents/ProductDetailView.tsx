@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
@@ -30,9 +31,24 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
   const router = useRouter();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
+  const images = [
+    currentProduct?.image_1,
+    currentProduct?.image_2,
+    currentProduct?.image_3,
+    currentProduct?.image_4,
+  ];
+
   useEffect(() => {
     fetchProductById(productId);
   }, [productId, fetchProductById]);
+
+  const handleImageChange = (index: number) => {
+    if (index !== selectedImageIndex) {
+      setTimeout(() => {
+        setSelectedImageIndex(index);
+      }, 150);
+    }
+  };
 
   const handlePersonalize = () => {
     if (currentProduct) {
@@ -65,86 +81,111 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
   return (
     <>
       <div className="font-century">
-        <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-6 overflow-hidden">
           <div className="space-y-4">
-            <div className="md:aspect-square w-full bg-muted/20 overflow-hidden">
-              <Image
-                src={
-                  (currentProduct as any)[`image_${selectedImageIndex + 1}`] ||
-                  currentProduct.image_1!
-                }
-                alt={currentProduct.name}
-                width={400}
-                height={400}
-                className="lg:w-[950px] h-96 w-full lg:h-[1080px] md:object-cover"
-              />
+            <div className="lg:w-full lg:h-[60%] relative h-[30.5rem] bg-muted/20 overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={selectedImageIndex}
+                  src={
+                    (currentProduct as any)[
+                      `image_${selectedImageIndex + 1}`
+                    ] || currentProduct.image_1!
+                  }
+                  alt={currentProduct.name}
+                  className="h-full w-full object-cover"
+                  initial={{
+                    opacity: 0,
+                    filter: "blur(10px)",
+                  }}
+                  animate={{
+                    opacity: 1,
+                    filter: "blur(0px)",
+                  }}
+                  exit={{
+                    opacity: 0,
+                    filter: "blur(8px)",
+                  }}
+                  transition={{
+                    duration: 0.4,
+                    ease: "easeInOut",
+                  }}
+                />
+              </AnimatePresence>
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                {Array.from({ length: images.length }).map((_, index) => (
+                  <motion.span
+                    key={index}
+                    className={`h-2 w-2 rounded-full inline-block cursor-pointer ${
+                      selectedImageIndex === index
+                        ? "bg-[#FBD060]"
+                        : "bg-background/50"
+                    }`}
+                    onClick={() => handleImageChange(index)}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
+                    animate={
+                      selectedImageIndex === index ? { scale: [1, 1.2, 1] } : {}
+                    }
+                    transition={{ duration: 0.3 }}
+                  />
+                ))}
+              </div>
             </div>
 
-            <div className="grid grid-cols-4 gap-4 md:py-2 md:px-8 px-4">
-              {Array.from({ length: 4 }, (_, index) => {
-                const imageUrl = (currentProduct as any)[`image_${index + 1}`];
+            <div className="grid grid-cols-5 gap-2 px-4">
+              {images.map((imageUrl, index) => {
                 if (!imageUrl) return null;
-
                 return (
-                  <button
+                  <motion.button
                     key={index}
-                    onClick={() => setSelectedImageIndex(index)}
-                    className={`aspect-square bg-muted/20 overflow-hidden border-2 transition-all ${
+                    onClick={() => handleImageChange(index)}
+                    className={`md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-[10%] bg-muted/20 overflow-hidden border-2 transition-all ${
                       selectedImageIndex === index
                         ? "border-yellow-500"
                         : "border-transparent"
                     }`}
+                    animate={
+                      selectedImageIndex === index
+                        ? {
+                            borderColor: ["#eab308", "#fbbf24", "#eab308"],
+                            transition: { duration: 0.5 },
+                          }
+                        : {}
+                    }
                   >
-                    <Image
+                    <img
                       src={imageUrl}
                       alt={`${currentProduct.name} ${index + 1}`}
-                      width={150}
-                      height={150}
-                      className="w-[212px] h-[262px] object-cover"
+                      className="h-full w-full"
                     />
-                  </button>
+                  </motion.button>
                 );
               })}
             </div>
           </div>
 
-          <div className="space-y-6 md:p-25 py-8 px-4">
-            <div className="w-66">
+          <div className="space-y-6 lg:py-20 py-8 lg:px-4 px-8">
+            <div className="md:w-96">
               <div className="flex items-center gap-2 mb-2 text-stone-600">
                 <span>{currentProduct.category}</span>
               </div>
 
-              <h1 className="text-3xl font-medium">{currentProduct.name}</h1>
-              <span className="text-3xl font-medium">
-                ${currentProduct.price}
+              <h1 className="text-[2rem] leading-none text-secondary-foreground font-medium">{currentProduct.name}</h1>
+              <span className="text-[2rem] font-medium">
+                £{currentProduct.price}
               </span>
             </div>
 
-            <p className="text-muted-foreground text-base leading-relaxed">
+            <p className="text-[1.3rem] leading-relaxed">
               {currentProduct.description}
             </p>
 
-            <div className="grid grid-cols-2 gap-2">
-              {availability === "in-stock" ? (
-                <AddToCartButton
-                  productId={currentProduct.id!}
-                  productName={currentProduct.name}
-                  productImage={currentProduct.image_1}
-                  productPrice={currentProduct.price}
-                  size="lg"
-                  variant="box_yellow"
-                  className="w-full"
-                />
-              ) : (
-                <Button size="lg" disabled className="w-full">
-                  Sold Out
-                </Button>
-              )}
-
+            <div className="inline-flex">
               <Button
                 variant="box_yellow"
                 size={"lg"}
-                className="w-full"
+                className="w-full px-20"
                 onClick={handlePersonalize}
               >
                 Personalize
@@ -167,8 +208,8 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
             {(currentProduct.why_we_chose_it ||
               currentProduct.about_the_maker ||
               currentProduct.particulars) && (
-              <div className="mt-25">
-                <Accordion type="single" collapsible className="w-full">
+              <div className="mt-20">
+                <Accordion type="single" collapsible className="">
                   {currentProduct.why_we_chose_it && (
                     <AccordionItem value="why-we-chose-it">
                       <AccordionTrigger className="text-left font-medium uppercase">

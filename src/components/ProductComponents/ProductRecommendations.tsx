@@ -25,10 +25,9 @@ export function ProductRecommendations({
     })
     .slice(0, 2); // Limit to 2 recommendations
 
-  // Show skeleton while loading
   if (loading && products.length === 0) {
     return (
-      <section className="mt-16 p-10">
+      <section className="mt-16 py-10 px-4">
         <div className="mb-8">
           <Skeleton className="h-8 w-48 mb-4" />
         </div>
@@ -51,14 +50,14 @@ export function ProductRecommendations({
   }
 
   return (
-    <section className="mt-16 p-10">
+    <section className="mt-16 py-10 px-4">
       <div className="mb-8">
-        <h2 className="text-3xl font-[200] font-['Century_Old_Style'] mb-4">
+        <h2 className="text-[2rem] font-[200] font-['Century_Old_Style'] mb-4">
           You may also like
         </h2>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
+      <div className="gap-6 flex lg:mr-40">
         {filteredRecommendations.map((product) => (
           <ProductCard key={product.id} product={product}  />
         ))}

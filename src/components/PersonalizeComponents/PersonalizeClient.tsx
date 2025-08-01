@@ -42,29 +42,42 @@ export default function PersonalizeClient() {
   ].filter(Boolean); // remove undefined/null
 
   return (
-    <div className="grid md:grid-cols-2 grid-cols-1 min-h-screen">
-      <div className="h-[calc(100vh-4.1rem)] blur-xl overflow-hidden md:flex hidden flex-col">
-        <div className="pb-4">
-          <img
-            className="h-[75vh] w-full"
-            src={
-              selectedProduct?.image ||
-              selectedProduct?.image_1 ||
-              "/image.png"
-            }
-            alt={selectedProduct?.name || "Product"}
-          />
-        </div>
-        <div className="grid grid-cols-5 gap-4">
-          {productImages.map((img, index) => (
-            <div key={index} className="w-full h-28">
-              <img
-                className="object-cover w-full h-full"
-                src={img || "/image.png"}
-                alt={`Thumbnail ${index + 1}`}
-              />
+    <div className="grid md:grid-cols-2 grid-cols-1 min-h-screen pt-8">
+      <div className="blur-xl md:flex hidden flex-col">
+        <div className="space-y-4">
+          <div className="lg:w-full lg:h-[60%] relative h-[30.5rem] bg-muted/20 overflow-hidden">
+            <img
+              src={currentProduct?.image || currentProduct?.image_1}
+              alt={currentProduct?.name}
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+              {Array.from({ length: productImages.length }).map((_, index) => (
+                <span
+                  key={index}
+                  className={`h-2 w-2 rounded-full inline-block cursor-pointer`}
+                />
+              ))}
             </div>
-          ))}
+          </div>
+
+          <div className="grid grid-cols-5 gap-2 px-4">
+            {productImages.map((imageUrl, index) => {
+              if (!imageUrl) return null;
+              return (
+                <button
+                  key={index}
+                  className={`md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-[10%] bg-muted/20 overflow-hidden border-2 transition-all`}
+                >
+                  <img
+                    src={imageUrl}
+                    alt={`${currentProduct?.name} ${index + 1}`}
+                    className="h-full w-full"
+                  />
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 

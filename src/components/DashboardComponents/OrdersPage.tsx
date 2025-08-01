@@ -54,10 +54,6 @@ export function OrdersPage() {
     fetchOrders(filters, page);
   }, [statusFilter, page]);
 
-  useEffect(() => {
-    setPage(1);
-  }, [statusFilter]);
-
   const totalRevenue = orders.reduce((acc, order) => {
     const rawTotal = order.total ?? "0";
     const num = parseFloat(rawTotal.replace(/[^\d.-]/g, ""));
@@ -112,7 +108,7 @@ export function OrdersPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
-                    {pagination?.total || orders.length}
+                    {orders.length}
                   </div>
                 </CardContent>
               </Card>

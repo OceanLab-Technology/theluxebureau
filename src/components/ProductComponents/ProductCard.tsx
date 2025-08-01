@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { Link } from 'next-view-transitions';
+import { Link } from "next-view-transitions";
 import { Product } from "@/app/api/types";
 import { AddToCartButton } from "@/components/CartComponents/AddToCartButton";
 
@@ -16,31 +14,23 @@ export function ProductCard({ product }: ProductCardProps) {
   const fallbackImage = product.image_2 || product.image_1;
 
   return (
-    <div className="transition-all font-century duration-300 overflow-hidden md:w-120">
+    <div className="transition-all font-century duration-300 overflow-hidden">
       <Link href={`/products/${product.id}`} className="block">
-        <div className="relative aspect-auto overflow-hidden md:h-130 h-66 cursor-pointer">
-          <Image
+        <div className="relative aspect-auto overflow-hidden w-[11.8125rem] h-[15.875rem] md:w-[47.062rem] md:h-[59.1875rem] cursor-pointer">
+          <img
             src={product.image_1 || fallbackImage!}
             alt={product.name}
-            fill
-            className="object-cover h-96 transition-transform duration-300 hover:scale-105"
-            onError={(e) => {
-              if (fallbackImage && e.currentTarget.src !== fallbackImage) {
-                e.currentTarget.src = fallbackImage;
-              }
-            }}
+            className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
           />
         </div>
 
-        <div className="flex flex-col md:my-3 my-2">
-          <h2 className="md:text-[16px]">{product.name}</h2>
-          <span className="md:text-[16px] font-medium">
-            ${product.price}
-          </span>
+        <div className="flex flex-col md:my-8 my-6 uppercase font-semibold">
+          <h2 className="text-[1.05rem] leading-none">{product.name}</h2>
+          <span className="md:text-[1.05rem]">£{product.price}</span>
         </div>
       </Link>
 
-      <div className="md:mt-4">
+      {/* <div className="md:mt-4">
         {availability === "sold-out" ? (
           <Button
             size="sm"
@@ -61,7 +51,7 @@ export function ProductCard({ product }: ProductCardProps) {
             className="md:px-20"
           />
         )}
-      </div>
+      </div> */}
     </div>
   );
 }
