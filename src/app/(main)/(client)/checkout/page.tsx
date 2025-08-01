@@ -7,7 +7,6 @@ import { useMainStore } from "@/store/mainStore";
 import { Product } from "@/app/api/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-// import { Loader2 } from "lucide-react";
 import Script from "next/script";
 
 export default function CheckoutPage() {
@@ -94,9 +93,63 @@ export default function CheckoutPage() {
                           Qty: {(product as any).quantity}
                         </span>
                       </div>
-                      <p className="text-muted-foreground leading-relaxed text-xs line-clamp-2">
+                      <p className="text-muted-foreground leading-relaxed text-xs line-clamp-1">
                         {product.description}
                       </p>
+
+                      {product.customData &&
+                        Object.keys(product.customData).length > 0 && (
+                          <div className="text-xs text-stone-500 mb-3 space-y-1">
+                            {product.customData.isPersonalized ? (
+                              <div className="space-y-1">
+                                <div className="font-medium text-stone-600">
+                                  for{" "}
+                                  {product.customData.recipientName ||
+                                    "recipient"}
+                                </div>
+                                {product.customData.deliveryDate && (
+                                  <div>
+                                    <span className="font-medium">
+                                      Delivery:
+                                    </span>{" "}
+                                    {new Date(
+                                      product.customData.deliveryDate
+                                    ).toLocaleDateString()}
+                                  </div>
+                                )}
+                                {product.customData.customMessage && (
+                                  <div>
+                                    <span className="font-medium">
+                                      Message:
+                                    </span>{" "}
+                                    "{product.customData.customMessage}"
+                                  </div>
+                                )}
+                                {product.customData.selectedQuote && (
+                                  <div>
+                                    <span className="font-medium">Quote:</span>{" "}
+                                    {product.customData.selectedQuote}
+                                  </div>
+                                )}
+                                {product.customData.yourName && (
+                                  <div>
+                                    <span className="font-medium">From:</span>{" "}
+                                    {product.customData.yourName}
+                                  </div>
+                                )}
+                              </div>
+                            ) : (
+                              <div>
+                                <span className="font-medium">
+                                  Custom details:{" "}
+                                  {Object.entries(product.customData)
+                                    .map(([key, value]) => String(value))
+                                    .join(", ")}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        )}
                     </div>
                   </div>
                 </div>
@@ -110,8 +163,17 @@ export default function CheckoutPage() {
                 <div className="space-y-2 text-sm">
                   {checkoutItems.map((item) => (
                     <div key={item.id} className="flex justify-between">
-                      <span>
+                      <span className="flex items-center gap-1">
                         {item.name} × {(item as any).quantity}
+                        {(item as any).customData &&
+                          (item as any).customData.isPersonalized && (
+                            <span
+                              className="text-amber-600"
+                              title="Personalized Item"
+                            >
+                              🎁
+                            </span>
+                          )}
                       </span>
                       <span>
                         $
