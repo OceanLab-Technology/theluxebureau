@@ -133,7 +133,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               </div>
             </div>
 
-            <div className="flex gap-2 px-4">
+            <div className="grid grid-cols-5 gap-2 px-4">
               {images.map((imageUrl, index) => {
                 if (!imageUrl) return null;
                 return (

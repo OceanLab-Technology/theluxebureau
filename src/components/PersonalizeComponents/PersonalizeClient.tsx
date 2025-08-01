@@ -42,8 +42,8 @@ export default function PersonalizeClient() {
   ].filter(Boolean); // remove undefined/null
 
   return (
-    <div className="grid md:grid-cols-2 grid-cols-1 min-h-screen">
-      <div className="min-h-[calc(100vh-4.1rem)] blur-xl md:flex hidden flex-col">
+    <div className="grid md:grid-cols-2 grid-cols-1 min-h-screen pt-8">
+      <div className="blur-xl md:flex hidden flex-col">
         <div className="space-y-4">
           <div className="lg:w-full lg:h-[60%] relative h-[30.5rem] bg-muted/20 overflow-hidden">
             <img
@@ -61,7 +61,7 @@ export default function PersonalizeClient() {
             </div>
           </div>
 
-          <div className="flex gap-2 px-4">
+          <div className="grid grid-cols-5 gap-2 px-4">
             {productImages.map((imageUrl, index) => {
               if (!imageUrl) return null;
               return (
