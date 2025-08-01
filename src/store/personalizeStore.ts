@@ -10,10 +10,10 @@ export interface personalizeFormData {
   recipientEmail: string
   deliveryDate: string
   preferredDeliveryTime: string
-  headerStyle: string
+  selectedFont: string
+  headerText: string
   selectedQuote: string
   customMessage: string
-  selectedFont: string
   smsUpdates: 'send-to-me' | 'send-to-recipient' | 'none'
 }
 
@@ -37,7 +37,7 @@ const initialFormData: personalizeFormData = {
   recipientEmail: '',
   deliveryDate: '',
   preferredDeliveryTime: '',
-  headerStyle: '',
+  headerText: 'Header',
   selectedQuote: '',
   customMessage: '',
   selectedFont: 'default',

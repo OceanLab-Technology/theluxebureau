@@ -81,9 +81,9 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
   return (
     <>
       <div className="font-century">
-        <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-12 overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-6 overflow-hidden">
           <div className="space-y-4">
-            <div className="lg:w-[45.375rem] relative md:h-[40.5rem] bg-muted/20 overflow-hidden">
+            <div className="lg:w-full lg:h-[60%] relative h-[30.5rem] bg-muted/20 overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.img
                   key={selectedImageIndex}
@@ -140,7 +140,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                   <motion.button
                     key={index}
                     onClick={() => handleImageChange(index)}
-                    className={`md:h-[10.375rem] md:w-[8.25rem] bg-muted/20 overflow-hidden border-2 transition-all ${
+                    className={`md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-[10%] bg-muted/20 overflow-hidden border-2 transition-all ${
                       selectedImageIndex === index
                         ? "border-yellow-500"
                         : "border-transparent"

@@ -50,7 +50,6 @@ export default function PersonalizeForm() {
     if (!selectedProduct) return;
     
     try {
-      // Create custom data from form data for personalization
       const personalizationData = {
         yourName: formData.yourName,
         recipientName: formData.recipientName,
@@ -59,7 +58,7 @@ export default function PersonalizeForm() {
         recipientEmail: formData.recipientEmail,
         deliveryDate: formData.deliveryDate,
         preferredDeliveryTime: formData.preferredDeliveryTime,
-        headerStyle: formData.headerStyle,
+        headerText: formData.headerText,
         selectedQuote: formData.selectedQuote,
         customMessage: formData.customMessage,
         smsUpdates: formData.smsUpdates,
@@ -78,7 +77,6 @@ export default function PersonalizeForm() {
     if (!selectedProduct) return;
     
     try {
-      // First add to cart with personalization data
       const personalizationData = {
         yourName: formData.yourName,
         recipientName: formData.recipientName,
@@ -87,7 +85,7 @@ export default function PersonalizeForm() {
         recipientEmail: formData.recipientEmail,
         deliveryDate: formData.deliveryDate,
         preferredDeliveryTime: formData.preferredDeliveryTime,
-        headerStyle: formData.headerStyle,
+        headerText: formData.headerText,
         selectedQuote: formData.selectedQuote,
         customMessage: formData.customMessage,
         smsUpdates: formData.smsUpdates,

@@ -33,6 +33,26 @@ export default function PersonalizationStep() {
     (font) => font.name === formData.selectedFont
   );
 
+  // Ensure headerText is set to a default value if not provided
+  useEffect(() => {
+    if (!formData.headerText && formData.headerText !== "") {
+      updateFormData({ 
+        headerText: "Header",
+        selectedFont: "default"
+      });
+    }
+  }, []);
+
+  // Load the selected font if available
+  useEffect(() => {
+    if (siteSettings?.quotes?.length && !formData.selectedQuote) {
+      updateFormData({ 
+        selectedQuote: siteSettings.quotes[0],
+        customMessage: siteSettings.quotes[0]
+      });
+    }
+  }, [siteSettings, formData.selectedQuote, updateFormData]);
+
   useEffect(() => {
     const loadFont = async () => {
       if (!selectedFont || formData.selectedFont === "default") {
@@ -77,15 +97,13 @@ export default function PersonalizationStep() {
   const quotes = siteSettings?.quotes.length
     ? [...siteSettings.quotes, "Write my own"]
     : ["Write my own"];
-;
 
-  const isCustomMessage = formData.selectedQuote === "Write my own";
-
-  const getPreviewStyle = () => {
+  const getHeaderStyle = () => {
     const baseStyle: React.CSSProperties = {
-      fontSize: "12px",
+      fontSize: "16px",
       color: "#57534e",
-      fontStyle: "italic",
+      fontWeight: "bold",
+      marginBottom: "12px",
     };
 
     if (selectedFont && fontLoaded && formData.selectedFont !== "default") {
@@ -95,19 +113,30 @@ export default function PersonalizationStep() {
       };
     }
 
-    return baseStyle;
+    return {
+      ...baseStyle,
+      fontFamily: "serif",
+    };
+  };
+
+  const getMessageStyle = () => {
+    return {
+      fontSize: "12px",
+      color: "#57534e",
+      fontFamily: "monospace"
+    };
   };
 
   return (
     <div>
-      <p className="text-stone-700 text-sm leading-relaxed">
+      <p className="text-stone-700 text-[1rem] leading-relaxed">
         Our gifts are sent with custom stationery, letter-pressed by hand at the
         Luxe Bureau atelier. In the header field, please enter your own name,
         initials, or company to create your custom letterhead. You may choose
         between two type styles below.
       </p>
-
-      <p className="text-stone-700 mb-8 text-sm leading-relaxed">
+      <br />
+      <p className="text-stone-700 mb-8 text-[1rem] leading-relaxed">
         Your personal message will be typeset and printed in the Luxe Bureau's
         signature typewriter font. Please type your message directly onto the
         notecard. For added inspiration, select a quote from the drop down menu
@@ -117,7 +146,7 @@ export default function PersonalizationStep() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         <div className="flex-1">
           <label className="text-xs font-medium tracking-wider text-stone-600 mb-2 block">
-            Font Family
+            Header type style*
           </label>
           <Select
             value={formData.selectedFont}
@@ -152,7 +181,7 @@ export default function PersonalizationStep() {
             onValueChange={(value) => {
               updateFormData({
                 selectedQuote: value,
-                customMessage: value === "Write my own" ? "" : value,
+                customMessage: value === "Write my own" ? formData.customMessage || "" : value,
               });
             }}
           >
@@ -172,7 +201,7 @@ export default function PersonalizationStep() {
 
       <div className="mb-8">
         <div
-          className="relative h-64 rounded-none overflow-hidden"
+          className="relative h-[30rem] rounded-none overflow-hidden"
           style={{
             backgroundImage: "url(/notecard.jpg)",
             backgroundPosition: "center",
@@ -182,35 +211,26 @@ export default function PersonalizationStep() {
         >
           <div className="absolute inset-0 flex items-center justify-center p-8">
             <div className="p-6 max-w-xs w-full">
-              <div className="text-center">
-                {selectedFont && (
-                  <div className="text-xs text-stone-400 text-center">
-                    {fontLoaded
-                      ? `Font: ${selectedFont.name}`
-                      : "Loading font..."}
-                  </div>
-                )}
+              <div className="text-center mb-4">
+                <input
+                  type="text"
+                  value={formData.headerText || ""}
+                  onChange={(e) => updateFormData({ headerText: e.target.value })}
+                  placeholder="Enter header text"
+                  className="w-full text-center bg-transparent border-none outline-none resize-none"
+                  style={getHeaderStyle()}
+                />
               </div>
 
               <div className="text-center">
-                {isCustomMessage ? (
-                  <textarea
-                    value={formData.customMessage}
-                    onChange={(e) =>
-                      updateFormData({ customMessage: e.target.value })
-                    }
-                    placeholder="Write your message here..."
-                    className="w-full text-center italic resize-none outline-none bg-transparent"
-                    style={getPreviewStyle()}
-                    rows={3}
-                  />
-                ) : (
-                  <div className="text-center italic" style={getPreviewStyle()}>
-                    {formData.customMessage ||
-                      formData.selectedQuote ||
-                      "Message"}
-                  </div>
-                )}
+                <textarea
+                  value={formData.customMessage || ""}
+                  onChange={(e) => updateFormData({ customMessage: e.target.value })}
+                  placeholder="Your message will appear here..."
+                  className="w-full text-center bg-transparent border-none outline-none resize-none"
+                  style={getMessageStyle()}
+                  rows={4}
+                />
               </div>
             </div>
           </div>

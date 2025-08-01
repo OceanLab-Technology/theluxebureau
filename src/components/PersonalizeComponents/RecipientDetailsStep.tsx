@@ -17,7 +17,7 @@ export default function RecipientDetailsStep() {
         Please enter your recipient's contact details
       </p>
 
-            <form className="space-y-4">
+      <form className="space-y-4">
         <div>
           <Input
             id="your-name"
@@ -27,7 +27,7 @@ export default function RecipientDetailsStep() {
               handleInputChange("yourName", e.target.value)
             }
             placeholder="Your Name*"
-            className="border-0 border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none"
+            className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
           />
         </div>
 
@@ -40,7 +40,7 @@ export default function RecipientDetailsStep() {
               handleInputChange("recipientName", e.target.value)
             }
             placeholder="Recipients name*"
-            className="border-0 border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none"
+            className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
           />
         </div>
 
@@ -53,7 +53,7 @@ export default function RecipientDetailsStep() {
               handleInputChange("recipientAddress", e.target.value)
             }
             placeholder="Recipient address*"
-            className="border-0 border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none"
+            className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
           />
         </div>
 
@@ -66,7 +66,7 @@ export default function RecipientDetailsStep() {
               handleInputChange("recipientCity", e.target.value)
             }
             placeholder="Recipient phone number (only used for delivery issues)*"
-            className="border-0 border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none"
+            className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
           />
         </div>
 
@@ -79,7 +79,7 @@ export default function RecipientDetailsStep() {
               handleInputChange("recipientEmail", e.target.value)
             }
             placeholder="Recipient e-mail(only used for delivery issues)*"
-            className="border-0 border-b border-stone-500 bg-transparent px-0 py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none"
+            className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
           />
         </div>
       </form>
