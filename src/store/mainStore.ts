@@ -3,19 +3,11 @@ import { toast } from "sonner";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-interface PaginationInfo {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-}
-
 interface MainStore {
   products: Product[];
   currentProduct: Product | null;
   loading: boolean;
   error: string | null;
-  pagination: PaginationInfo | null;
 
   // Cart state
   cartItems: CartItem[];
@@ -25,8 +17,6 @@ interface MainStore {
   cartItemCount: number;
 
   fetchProducts: (params?: {
-    page?: number;
-    limit?: number;
     category?: string;
     name?: string;
   }) => Promise<void>;
@@ -49,7 +39,6 @@ export const useMainStore = create<MainStore>()(
       currentProduct: null,
       loading: false,
       error: null,
-      pagination: null,
       detailedProductLoading: false,
 
       // Cart initial state
@@ -64,8 +53,6 @@ export const useMainStore = create<MainStore>()(
           set({ loading: true, error: null });
 
           const searchParams = new URLSearchParams();
-          if (params.page) searchParams.append("page", params.page.toString());
-          if (params.limit) searchParams.append("limit", params.limit.toString());
           if (params.category) searchParams.append("category", params.category);
           if (params.name) searchParams.append("name", params.name);
 
@@ -82,7 +69,6 @@ export const useMainStore = create<MainStore>()(
           set({
             loading: false,
             products: apiResponse.data || [],
-            pagination: (apiResponse as any).pagination || null,
           });
         } catch (error) {
           set({

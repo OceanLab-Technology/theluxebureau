@@ -31,19 +31,12 @@ const getStatusColor = (inventory: number) => {
 };
 
 export function ProductsPage() {
-  const [page, setPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  const { products, totalPages, total, loading, fetchProducts } =
+  const { products, loading, fetchProducts } =
     useProductAdminStore();
 
   useEffect(() => {
-    fetchProducts(page, rowsPerPage);
-  }, [page, rowsPerPage]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [rowsPerPage]);
+    fetchProducts();
+  }, []);
 
   const renderSkeletonRow = () =>
     Array.from({ length: 5 }).map((_, i) => (
@@ -164,36 +157,6 @@ export function ProductsPage() {
             </Table>
           </CardContent>
         </Card>
-
-        {/* Pagination Controls */}
-        {!loading && total > 0 && (
-          <div className="flex justify-between items-center gap-4 mt-4">
-            <div className="text-sm text-muted-foreground">
-              Showing {(page - 1) * rowsPerPage + 1} to{" "}
-              {Math.min(page * rowsPerPage, total)} of {total}{" "}
-              entries
-            </div>
-            <div className="flex items-center gap-4">
-              <Button
-                variant="outline"
-                disabled={page <= 1}
-                onClick={() => setPage((p) => p - 1)}
-              >
-                Previous
-              </Button>
-              <span className="text-sm">
-                Page {page} of {totalPages}
-              </span>
-              <Button
-                variant="outline"
-                disabled={page >= totalPages}
-                onClick={() => setPage((p) => p + 1)}
-              >
-                Next
-              </Button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

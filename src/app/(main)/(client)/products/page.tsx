@@ -11,9 +11,13 @@ export default function Page() {
     setSelectedCategory(filters.category || "Shop All");
   };
 
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+  };
+
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 md:py-25 py-15">
+      <div className="mx-auto px-4 md:py-40 py-8">
         <ProductFilters
           onFilterChange={handleFilterChange}
           activeCategory={selectedCategory}
@@ -24,6 +28,7 @@ export default function Page() {
           selectedCategory={
             selectedCategory === "Shop All" ? "" : selectedCategory
           }
+          onCategoryChange={handleCategoryChange}
         />
       </div>
     </div>

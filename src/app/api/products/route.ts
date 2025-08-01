@@ -1,22 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { withAdminAuth, handleError, parseQueryParams, buildFilters } from '../utils';
+import { withAdminAuth, handleError, buildFilters } from '../utils';
 import { Product, ApiResponse } from '../types';
 
-// List all products with optional filtering and pagination
+// List all products with optional filtering
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient();
     const { searchParams } = new URL(request.url);
-    const { page, limit, offset } = parseQueryParams(searchParams);
     
     const allowedFilters = ['category', 'name', 'slug'];
     const filters = buildFilters(searchParams, allowedFilters);
     
     let query = supabase
       .from('products')
-      .select('id, name, description, price, inventory, category, image_1, image_2', { count: 'exact' })
-      .range(offset, offset + limit - 1)
+      .select('id, name, description, price, inventory, category, image_1, image_2')
       .order('created_at', { ascending: false });
     
     Object.entries(filters).forEach(([key, value]) => {
@@ -27,19 +25,13 @@ export async function GET(request: NextRequest) {
       }
     });
     
-    const { data, error, count } = await query;
+    const { data, error } = await query;
     
     if (error) throw error;
     
     return NextResponse.json({
       success: true,
-      data: data,
-      pagination: {
-        page,
-        limit,
-        total: count || 0,
-        totalPages: Math.ceil((count || 0) / limit)
-      }
+      data: data
     });
   } catch (error) {
     return handleError(error);

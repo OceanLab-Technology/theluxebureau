@@ -86,7 +86,7 @@ export default function Header() {
           </div>
           <Link
             href="/"
-            className={` cursor-pointer ${
+            className={` cursor-pointer md:w-auto md:h-auto w-[8.74969rem] h-[0.5625rem] flex-shrink-0 ${
               extended ? "text-background" : "text-stone-600"
             }`}
           >
