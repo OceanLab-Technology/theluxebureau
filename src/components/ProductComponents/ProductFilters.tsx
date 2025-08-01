@@ -12,6 +12,8 @@ export function ProductFilters({
   onFilterChange,
   activeCategory = "Shop All",
 }: ProductFiltersProps) {
+  console.log("ProductFilters activeCategory:", activeCategory);
+  
   const categories = [
     "Shop All",
     "Literature",
@@ -21,7 +23,8 @@ export function ProductFilters({
   ];
 
   const handleCategoryClick = (category: string) => {
-    const categoryFilter = category === "" ? undefined : category;
+    const categoryFilter = category === "Shop All" ? undefined : category;
+    console.log("Clicked category:", category, "Sending filter:", categoryFilter);
     onFilterChange?.({ category: categoryFilter });
   };
 

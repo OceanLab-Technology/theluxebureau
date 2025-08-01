@@ -8,7 +8,9 @@ export default function Page() {
   const [selectedCategory, setSelectedCategory] = useState<string>("Shop All");
 
   const handleFilterChange = (filters: { category?: string }) => {
+    console.log("handleFilterChange received:", filters.category);
     setSelectedCategory(filters.category || "Shop All");
+    console.log("selectedCategory set to:", filters.category || "Shop All");
   };
 
   const handleCategoryChange = (category: string) => {
