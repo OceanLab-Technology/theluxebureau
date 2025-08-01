@@ -1,78 +1,113 @@
+"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
 
 export function ProductDetailSkeleton() {
   return (
-    <div className="font-century">
-      <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-12">
-        {/* Image Section Skeleton */}
-        <div className="space-y-4">
-          <div className="md:aspect-square w-full bg-muted/20 overflow-hidden">
-            <Skeleton className="lg:w-[950px] h-96 w-full lg:h-[1080px]" />
-          </div>
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 30 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="grid grid-cols-1 lg:grid-cols-2 gap-12 px-4 py-10 md:px-12 font-century"
+    >
+      {/* Left: Image and thumbnails */}
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={staggerContainer}
+        className="space-y-6"
+      >
+        {/* Main Image */}
+        <motion.div variants={fadeInItem}>
+          <Skeleton className="w-full h-[500px] md:aspect-square bg-gradient-to-r from-muted/30 via-muted/20 to-muted/30 rounded-xl animate-pulse" />
+        </motion.div>
 
-          <div className="grid grid-cols-4 gap-4 md:py-2 md:px-8 px-4">
-            {Array.from({ length: 4 }).map((_, index) => (
-              <div key={index} className="aspect-square bg-muted/20 overflow-hidden">
-                <Skeleton className="w-[212px] h-[262px]" />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Product Info Section Skeleton */}
-        <div className="space-y-6 md:p-25 py-8 px-4">
-          <div className="w-66">
-            <div className="flex items-center gap-2 mb-2 text-stone-600">
-              <Skeleton className="h-4 w-20" />
-            </div>
-
-            <Skeleton className="h-8 w-64 mb-2" />
-            <Skeleton className="h-8 w-20" />
-          </div>
-
-          <Skeleton className="h-20 w-full" />
-
-          <div className="grid grid-cols-2 gap-2">
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
-          </div>
-
-          {/* Tags section skeleton */}
-          <div>
-            <Skeleton className="h-5 w-12 mb-2" />
-            <div className="flex flex-wrap gap-2">
-              {Array.from({ length: 3 }).map((_, index) => (
-                <Skeleton key={index} className="h-6 w-16" />
-              ))}
-            </div>
-          </div>
-
-          {/* Accordion sections skeleton */}
-          <div className="mt-25 space-y-4">
-            {Array.from({ length: 3 }).map((_, index) => (
-              <div key={index} className="border rounded-lg">
-                <Skeleton className="h-12 w-full" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Product Recommendations Section Skeleton */}
-      <div className="mt-16 space-y-6">
-        <Skeleton className="h-8 w-48 mx-auto" />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-4">
+        {/* Thumbnails */}
+        <motion.div
+          variants={fadeInItem}
+          className="grid grid-cols-4 gap-4 md:px-8"
+        >
           {Array.from({ length: 4 }).map((_, index) => (
-            <div key={index} className="space-y-2">
-              <Skeleton className="h-40 w-full" />
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-4 w-16" />
+            <Skeleton
+              key={index}
+              className="w-full h-[100px] aspect-square bg-gradient-to-r from-muted/20 via-muted/10 to-muted/20 rounded-lg animate-pulse"
+            />
+          ))}
+        </motion.div>
+      </motion.div>
+
+      {/* Right: Details */}
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={staggerContainer}
+        className="space-y-6 md:p-10"
+      >
+        <motion.div variants={fadeInItem}>
+          <Skeleton className="h-4 w-24 bg-muted rounded" />
+        </motion.div>
+
+        <motion.div variants={fadeInItem}>
+          <Skeleton className="h-10 w-3/4 bg-muted rounded-lg" />
+        </motion.div>
+
+        <motion.div variants={fadeInItem}>
+          <Skeleton className="h-8 w-1/3 bg-muted rounded-md" />
+        </motion.div>
+
+        <motion.div variants={fadeInItem} className="space-y-2">
+          <Skeleton className="h-4 w-full bg-muted/70 rounded" />
+          <Skeleton className="h-4 w-5/6 bg-muted/60 rounded" />
+          <Skeleton className="h-4 w-3/4 bg-muted/50 rounded" />
+        </motion.div>
+
+        {/* Buttons */}
+        <motion.div variants={fadeInItem} className="grid grid-cols-2 gap-3">
+          <Skeleton className="h-12 w-full rounded-lg bg-muted/80" />
+          <Skeleton className="h-12 w-full rounded-lg bg-muted/60" />
+        </motion.div>
+
+        {/* Tags */}
+        <motion.div variants={fadeInItem} className="flex flex-wrap gap-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={i} className="h-6 w-16 rounded-full bg-muted/70" />
+          ))}
+        </motion.div>
+
+        {/* Accordions */}
+        <motion.div variants={fadeInItem} className="space-y-4 pt-6">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="space-y-2">
+              <Skeleton className="h-4 w-1/2 bg-muted/60 rounded" />
+              <Skeleton className="h-4 w-full bg-muted/40 rounded" />
+              <Skeleton className="h-4 w-5/6 bg-muted/30 rounded" />
             </div>
           ))}
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 }
+
+// Framer Motion Animations
+const fadeInItem = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4 },
+  },
+};
+
+const staggerContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2,
+    },
+  },
+};

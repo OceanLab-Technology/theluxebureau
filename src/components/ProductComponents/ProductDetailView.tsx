@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { Link } from "next-view-transitions";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useMainStore } from "@/store/mainStore";
 import { usePersonalizeStore } from "@/store/personalizeStore";
 import { AddToCartButton } from "@/components/CartComponents/AddToCartButton";
-import { ProductDetailSkeleton } from "./ProductDetailSkeleton";
 import { useRouter } from "next/navigation";
 import {
   Accordion,
@@ -18,21 +18,29 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ProductRecommendations } from "./ProductRecommendations";
+import { ProductDetailSkeleton } from "./ProductDetailSkeleton";
 
 interface ProductDetailViewProps {
   productId: string;
 }
 
 export function ProductDetailView({ productId }: ProductDetailViewProps) {
-  const { fetchProductById, currentProduct, detailedProductLoading } =
-    useMainStore();
+  const { fetchProductById, currentProduct, detailedProductLoading } = useMainStore();
   const { setSelectedProduct, resetCheckout } = usePersonalizeStore();
   const router = useRouter();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [pageReady, setPageReady] = useState(false);
 
   useEffect(() => {
     fetchProductById(productId);
   }, [productId, fetchProductById]);
+
+  useEffect(() => {
+    if (!detailedProductLoading && currentProduct) {
+      const timeout = setTimeout(() => setPageReady(true), 400);
+      return () => clearTimeout(timeout);
+    }
+  }, [detailedProductLoading, currentProduct]);
 
   const handlePersonalize = () => {
     if (currentProduct) {
@@ -42,7 +50,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
     }
   };
 
-  if (detailedProductLoading) {
+  if (detailedProductLoading || !pageReady) {
     return <ProductDetailSkeleton />;
   }
 
@@ -63,11 +71,25 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
   const availability = currentProduct.inventory > 0 ? "in-stock" : "sold-out";
 
   return (
-    <>
-      <div className="font-century">
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={currentProduct.id}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 16 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="font-century"
+      >
         <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-12">
+          {/* Main Image */}
           <div className="space-y-4">
-            <div className="md:aspect-square w-full bg-muted/20 overflow-hidden">
+            <motion.div
+              key={selectedImageIndex}
+              initial={{ opacity: 0.5 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
+              className="md:aspect-square w-full bg-muted/20 overflow-hidden"
+            >
               <Image
                 src={
                   (currentProduct as any)[`image_${selectedImageIndex + 1}`] ||
@@ -78,22 +100,24 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                 height={400}
                 className="lg:w-[950px] h-96 w-full lg:h-[1080px] md:object-cover"
               />
-            </div>
+            </motion.div>
 
+            {/* Thumbnails */}
             <div className="grid grid-cols-4 gap-4 md:py-2 md:px-8 px-4">
-              {Array.from({ length: 4 }, (_, index) => {
+              {Array.from({ length: 5 }, (_, index) => {
                 const imageUrl = (currentProduct as any)[`image_${index + 1}`];
                 if (!imageUrl) return null;
 
                 return (
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.97 }}
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
-                    className={`aspect-square bg-muted/20 overflow-hidden border-2 transition-all ${
-                      selectedImageIndex === index
-                        ? "border-yellow-500"
-                        : "border-transparent"
-                    }`}
+                    className={`aspect-square bg-muted/20 overflow-hidden border-2 transition-all ${selectedImageIndex === index
+                      ? "border-yellow-500"
+                      : "border-transparent"
+                      }`}
                   >
                     <Image
                       src={imageUrl}
@@ -102,27 +126,30 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                       height={150}
                       className="w-[212px] h-[262px] object-cover"
                     />
-                  </button>
+                  </motion.button>
                 );
               })}
             </div>
           </div>
 
+          {/* Product Info */}
           <div className="space-y-6 md:p-25 py-8 px-4">
             <div className="w-66">
               <div className="flex items-center gap-2 mb-2 text-stone-600">
                 <span>{currentProduct.category}</span>
               </div>
-
               <h1 className="text-3xl font-medium">{currentProduct.name}</h1>
-              <span className="text-3xl font-medium">
-                ${currentProduct.price}
-              </span>
+              <span className="text-3xl font-medium">${currentProduct.price}</span>
             </div>
 
-            <p className="text-muted-foreground text-base leading-relaxed">
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-muted-foreground text-base leading-relaxed"
+            >
               {currentProduct.description}
-            </p>
+            </motion.p>
 
             <div className="grid grid-cols-2 gap-2">
               {availability === "in-stock" ? (
@@ -143,7 +170,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
 
               <Button
                 variant="box_yellow"
-                size={"lg"}
+                size="lg"
                 className="w-full"
                 onClick={handlePersonalize}
               >
@@ -151,7 +178,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               </Button>
             </div>
 
-            {currentProduct.tags && currentProduct.tags.length > 0 && (
+            {currentProduct.tags?.length > 0 && (
               <div>
                 <h3 className="font-medium mb-2">Tags:</h3>
                 <div className="flex flex-wrap gap-2">
@@ -164,6 +191,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               </div>
             )}
 
+            {/* Additional Details Accordion */}
             {(currentProduct.why_we_chose_it ||
               currentProduct.about_the_maker ||
               currentProduct.particulars) && (
@@ -181,7 +209,6 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                       </AccordionContent>
                     </AccordionItem>
                   )}
-
                   {currentProduct.about_the_maker && (
                     <AccordionItem value="about-the-maker">
                       <AccordionTrigger className="text-left font-medium uppercase">
@@ -194,7 +221,6 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                       </AccordionContent>
                     </AccordionItem>
                   )}
-
                   {currentProduct.particulars && (
                     <AccordionItem value="particulars">
                       <AccordionTrigger className="text-left font-medium uppercase">
@@ -212,8 +238,10 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
             )}
           </div>
         </div>
+
+        {/* Recommendations */}
         <ProductRecommendations currentProductId={currentProduct.id!} />
-      </div>
-    </>
+      </motion.div>
+    </AnimatePresence>
   );
 }

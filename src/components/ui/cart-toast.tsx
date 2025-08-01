@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Check } from "lucide-react";
+import { X } from "lucide-react";
 import Image from "next/image";
 import { Button } from "./button";
 
@@ -15,6 +15,37 @@ interface CartToastProps {
   onViewCart?: () => void;
   onCheckout?: () => void;
 }
+
+const containerVariants = {
+  hidden: { opacity: 0, y: -80, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "spring",
+      damping: 20,
+      stiffness: 300,
+      mass: 0.6,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: -60,
+    scale: 0.95,
+    transition: { duration: 0.25, ease: [0.4, 0, 0.2, 1] },
+  },
+};
+
+const childVariants = {
+  hidden: { opacity: 0, y: 15 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: 0.15 + i * 0.1, duration: 0.4 },
+  }),
+};
 
 export function CartToast({
   isVisible,
@@ -29,18 +60,19 @@ export function CartToast({
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: -100, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -100, scale: 0.95 }}
-          transition={{
-            type: "spring",
-            stiffness: 400,
-            damping: 25,
-            mass: 0.8,
-          }}
-          className="fixed top-16 right-0 z-50 bg-background border border-stone-300  p-4 md:min-w-xl font-century"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          className="fixed top-16 right-0 z-50 bg-background border border-stone-300 p-4 md:min-w-xl font-century shadow-xl"
         >
-          <div className="flex items-center justify-between mb-3">
+          <motion.div
+            variants={childVariants}
+            custom={0}
+            initial="hidden"
+            animate="visible"
+            className="flex items-center justify-between mb-3"
+          >
             <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
               Added to Cart
             </span>
@@ -50,12 +82,13 @@ export function CartToast({
             >
               <X className="w-4 h-4" />
             </button>
-          </div>
+          </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
+            variants={childVariants}
+            custom={1}
+            initial="hidden"
+            animate="visible"
             className="flex gap-3 mb-4"
           >
             {productImage && (
@@ -80,10 +113,12 @@ export function CartToast({
               )}
             </div>
           </motion.div>
+
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
+            variants={childVariants}
+            custom={2}
+            initial="hidden"
+            animate="visible"
             className="flex gap-2"
           >
             <Button

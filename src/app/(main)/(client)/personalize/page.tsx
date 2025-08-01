@@ -4,8 +4,8 @@ import { PersonalizeSkeleton } from "@/components/PersonalizeComponents/Personal
 
 export default function Page() {
   return (
-    <Suspense fallback={<PersonalizeSkeleton />}>
+    // <Suspense fallback={<PersonalizeSkeleton />}>
       <PersonalizeClient />
-    </Suspense>
+    // </Suspense>
   );
 }

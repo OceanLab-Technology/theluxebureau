@@ -40,6 +40,7 @@ interface MainStore {
   removeFromCart: (itemId: string) => Promise<void>;
   clearCart: () => Promise<void>;
   calculateCartTotal: () => void;
+  clearCurrentProduct: () => void;
 }
 
 export const useMainStore = create<MainStore>()(
@@ -59,6 +60,7 @@ export const useMainStore = create<MainStore>()(
       cartTotal: 0,
       cartItemCount: 0,
 
+      clearCurrentProduct: () => set({ currentProduct: null }),
       fetchProducts: async (params = {}) => {
         try {
           set({ loading: true, error: null });
