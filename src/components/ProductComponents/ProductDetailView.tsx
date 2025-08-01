@@ -178,7 +178,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               </Button>
             </div>
 
-            {currentProduct.tags?.length > 0 && (
+            {Array.isArray(currentProduct.tags) && currentProduct.tags.length > 0 && (
               <div>
                 <h3 className="font-medium mb-2">Tags:</h3>
                 <div className="flex flex-wrap gap-2">
@@ -191,51 +191,52 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               </div>
             )}
 
+
             {/* Additional Details Accordion */}
             {(currentProduct.why_we_chose_it ||
               currentProduct.about_the_maker ||
               currentProduct.particulars) && (
-              <div className="mt-25">
-                <Accordion type="single" collapsible className="w-full">
-                  {currentProduct.why_we_chose_it && (
-                    <AccordionItem value="why-we-chose-it">
-                      <AccordionTrigger className="text-left font-medium uppercase">
-                        Why We Chose It
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        <p className="text-muted-foreground leading-relaxed">
-                          {currentProduct.why_we_chose_it}
-                        </p>
-                      </AccordionContent>
-                    </AccordionItem>
-                  )}
-                  {currentProduct.about_the_maker && (
-                    <AccordionItem value="about-the-maker">
-                      <AccordionTrigger className="text-left font-medium uppercase">
-                        About the Maker
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        <p className="text-muted-foreground leading-relaxed">
-                          {currentProduct.about_the_maker}
-                        </p>
-                      </AccordionContent>
-                    </AccordionItem>
-                  )}
-                  {currentProduct.particulars && (
-                    <AccordionItem value="particulars">
-                      <AccordionTrigger className="text-left font-medium uppercase">
-                        Particulars
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        <p className="text-muted-foreground leading-relaxed">
-                          {currentProduct.particulars}
-                        </p>
-                      </AccordionContent>
-                    </AccordionItem>
-                  )}
-                </Accordion>
-              </div>
-            )}
+                <div className="mt-25">
+                  <Accordion type="single" collapsible className="w-full">
+                    {currentProduct.why_we_chose_it && (
+                      <AccordionItem value="why-we-chose-it">
+                        <AccordionTrigger className="text-left font-medium uppercase">
+                          Why We Chose It
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <p className="text-muted-foreground leading-relaxed">
+                            {currentProduct.why_we_chose_it}
+                          </p>
+                        </AccordionContent>
+                      </AccordionItem>
+                    )}
+                    {currentProduct.about_the_maker && (
+                      <AccordionItem value="about-the-maker">
+                        <AccordionTrigger className="text-left font-medium uppercase">
+                          About the Maker
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <p className="text-muted-foreground leading-relaxed">
+                            {currentProduct.about_the_maker}
+                          </p>
+                        </AccordionContent>
+                      </AccordionItem>
+                    )}
+                    {currentProduct.particulars && (
+                      <AccordionItem value="particulars">
+                        <AccordionTrigger className="text-left font-medium uppercase">
+                          Particulars
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <p className="text-muted-foreground leading-relaxed">
+                            {currentProduct.particulars}
+                          </p>
+                        </AccordionContent>
+                      </AccordionItem>
+                    )}
+                  </Accordion>
+                </div>
+              )}
           </div>
         </div>
 
