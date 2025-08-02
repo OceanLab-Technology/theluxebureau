@@ -16,7 +16,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="transition-all font-century duration-300 overflow-hidden">
       <Link href={`/products/${product.id}`} className="block">
-        <div className="relative aspect-auto overflow-hidden w-[11.8125rem] h-[15.875rem] md:w-[47.062rem] md:h-[59.1875rem] cursor-pointer">
+        <div className="relative aspect-auto overflow-hidden w-[10.8125rem] h-[15.875rem] md:w-[100%] md:h-[59.1875rem] cursor-pointer">
           <img
             src={product.image_1 || fallbackImage!}
             alt={product.name}

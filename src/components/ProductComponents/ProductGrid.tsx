@@ -193,7 +193,7 @@ export function ProductGrid({
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="grid grid-cols-2 gap-2 md:px-6 px-4 md:mr-40"
+            className="grid grid-cols-2 gap-2 md:px-6 px-4 md:w-[90%]"
           >
             {filteredProducts.map((product, index) => (
               <motion.div

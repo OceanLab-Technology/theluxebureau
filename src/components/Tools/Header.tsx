@@ -89,11 +89,11 @@ export default function Header() {
           </div>
           <Link
             href="/"
-            className={` cursor-pointer md:w-auto md:h-auto w-[8.74969rem] h-[0.5625rem] flex-shrink-0 ${
+            className={` cursor-pointer md:w-auto md:scale-100 scale-75 md:h-auto flex-shrink-0 ${
               extended ? "text-background" : "text-stone-600"
             }`}
           >
-            <Logo />
+            <Logo fill={extended ? "#FBF7E5" : "#50462D"} />
           </Link>
         </div>
 
