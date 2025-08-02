@@ -130,42 +130,44 @@ export default function PersonalizeForm() {
   };
 
   return (
-    <section className="flex flex-col justify-between h-[calc(100vh-7rem)] font-heading">
-      <div>
-        <div className="mb-10">
-          <div className="mb-4 flex items-center justify-between">
-            <h1 className="text-2xl mb-4 font-medium">
-              {stepTitles[currentStep as keyof typeof stepTitles]}
-            </h1>
-            <button
-              onClick={handleBackToStore}
-              className="text-xs font-medium cursor-pointer tracking-wider mb-4 hover:text-stone-600 transition-colors"
-            >
-              BACK TO STORE
-            </button>
-          </div>
-          <div className="grid grid-cols-4 justify-around uppercase text-black">
-            {steps.map((s) => (
-              <div
-                key={s.id}
-                className={`text-xs tracking-wider cursor-pointer ${
-                  currentStep === s.id ? "text-stone-700" : "text-stone-500"
-                }`}
-              >
-                {s.label}
-              </div>
-            ))}
-          </div>
-          <div className="mt-2 w-full bg-stone-500">
-            <motion.div
-              initial={{ width: "0%" }}
-              animate={{ width: `${(currentStep / steps.length) * 100}%` }}
-              transition={{ duration: 0.5 }}
-              className="mt-2 w-full h-1 bg-[#FAD15D]"
-            ></motion.div>
-          </div>
+    <section className="flex flex-col min-h-[calc(100vh-7rem)] font-heading">
+      {/* Header */}
+      <div className="mb-6 md:mb-10">
+        <div className="mb-4 flex items-center justify-between">
+          <h1 className="text-2xl mb-4 font-medium">
+            {stepTitles[currentStep as keyof typeof stepTitles]}
+          </h1>
+          <button
+            onClick={handleBackToStore}
+            className="text-xs font-medium cursor-pointer tracking-wider mb-4 hover:text-stone-600 transition-colors"
+          >
+            BACK TO STORE
+          </button>
         </div>
+        <div className="grid grid-cols-4 justify-around uppercase text-black">
+          {steps.map((s) => (
+            <div
+              key={s.id}
+              className={`text-xs tracking-wider cursor-pointer ${
+                currentStep === s.id ? "text-stone-700" : "text-stone-500"
+              }`}
+            >
+              {s.label}
+            </div>
+          ))}
+        </div>
+        <div className="mt-2 w-full bg-stone-500">
+          <motion.div
+            initial={{ width: "0%" }}
+            animate={{ width: `${(currentStep / steps.length) * 100}%` }}
+            transition={{ duration: 0.5 }}
+            className="mt-2 w-full h-1 bg-[#FAD15D]"
+          ></motion.div>
+        </div>
+      </div>
 
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-y-auto pb-6">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentStep}
@@ -179,39 +181,40 @@ export default function PersonalizeForm() {
         </AnimatePresence>
       </div>
 
-      <div className="flex gap-3 justify-end mt-8 md:mb-0 mb-8">
+      {/* Fixed Bottom Buttons */}
+      <div className="flex-shrink-0 bg-background pt-4 pb-4 flex gap-3 justify-end">
         {currentStep === 4 ? (
           <>
             <button
               onClick={handleBack}
-              className="bg-[#3B3215] px-5 hover:bg-[#3B3215]/80 font-medium text-stone-400 tracking-wider text-sm py-2.5 rounded-none transition-colors cursor-pointer"
+              className="bg-[#3B3215] px-3 md:px-5 hover:bg-[#3B3215]/80 font-medium text-stone-400 tracking-wider text-xs md:text-sm py-2 md:py-2.5 rounded-none transition-colors cursor-pointer"
             >
               BACK
             </button>
             <PersonalizedAddToCartButton />
             <button
               onClick={handleCheckout}
-              className="bg-[#FDCF5F] px-5 hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider text-sm py-2.5 rounded-none transition-colors cursor-pointer"
+              className="bg-[#FDCF5F] px-3 md:px-5 hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider text-xs md:text-sm py-2 md:py-2.5 rounded-none transition-colors cursor-pointer"
             >
               CHECKOUT
             </button>
           </>
         ) : (
-          <div className="md:mb-0 mb-8 flex gap-3">
+          <>
             <button
               onClick={handleBack}
               disabled={currentStep === 1}
-              className="bg-[#3B3215] px-5 hover:bg-[#3B3215]/80 font-medium text-stone-400 tracking-wider text-sm py-2.5 rounded-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="bg-[#3B3215] px-3 md:px-5 hover:bg-[#3B3215]/80 font-medium text-stone-400 tracking-wider text-xs md:text-sm py-2 md:py-2.5 rounded-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               BACK
             </button>
             <button
               onClick={handleNext}
-              className="bg-[#FDCF5F] px-5 hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider text-sm py-2.5 rounded-none transition-colors cursor-pointer"
+              className="bg-[#FDCF5F] px-3 md:px-5 hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider text-xs md:text-sm py-2 md:py-2.5 rounded-none transition-colors cursor-pointer"
             >
               {getButtonText()}
             </button>
-          </div>
+          </>
         )}
       </div>
     </section>

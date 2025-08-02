@@ -1,20 +1,45 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ProductGrid } from "@/components/ProductComponents/ProductGrid";
 import { ProductFilters } from "@/components/ProductComponents/ProductFilters";
 
 export default function Page() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState<string>("Shop All");
 
+  useEffect(() => {
+    const categoryFromUrl = searchParams.get("category");
+    if (categoryFromUrl) {
+      setSelectedCategory(categoryFromUrl);
+    } else {
+      setSelectedCategory("Shop All");
+    }
+  }, [searchParams]);
+
   const handleFilterChange = (filters: { category?: string }) => {
-    console.log("handleFilterChange received:", filters.category);
-    setSelectedCategory(filters.category || "Shop All");
-    console.log("selectedCategory set to:", filters.category || "Shop All");
+    const newCategory = filters.category || "Shop All";
+    setSelectedCategory(newCategory);
+    const params = new URLSearchParams(searchParams.toString());
+    if (filters.category && filters.category !== "Shop All") {
+      params.set("category", filters.category);
+    } else {
+      params.delete("category");
+    }
+    router.push(`/products?${params.toString()}`, { scroll: false });
   };
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
+    const params = new URLSearchParams(searchParams.toString());
+    if (category && category !== "Shop All") {
+      params.set("category", category);
+    } else {
+      params.delete("category");
+    }
+    router.push(`/products?${params.toString()}`, { scroll: false });
   };
 
   return (

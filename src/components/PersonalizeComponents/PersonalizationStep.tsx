@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { usePersonalizeStore } from "@/store/personalizeStore";
 import {
   Select,
@@ -28,6 +28,7 @@ export default function PersonalizationStep() {
   const [loading, setLoading] = useState(true);
   const [fontLoaded, setFontLoaded] = useState(false);
   const [fontError, setFontError] = useState<string | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const selectedFont = siteSettings?.fonts.find(
     (font) => font.name === formData.selectedFont
@@ -183,6 +184,13 @@ export default function PersonalizationStep() {
                 selectedQuote: value,
                 customMessage: value === "Write my own" ? formData.customMessage || "" : value,
               });
+              
+              // Focus on textarea when "Write my own" is selected
+              if (value === "Write my own") {
+                setTimeout(() => {
+                  textareaRef.current?.focus();
+                }, 100);
+              }
             }}
           >
             <SelectTrigger className="w-full">
@@ -224,8 +232,15 @@ export default function PersonalizationStep() {
 
               <div className="text-center">
                 <textarea
+                  ref={textareaRef}
                   value={formData.customMessage || ""}
-                  onChange={(e) => updateFormData({ customMessage: e.target.value })}
+                  onChange={(e) => {
+                    const newMessage = e.target.value;
+                    updateFormData({ 
+                      customMessage: newMessage,
+                      selectedQuote: newMessage.length > 0 ? "Write my own" : (siteSettings?.quotes?.[0] || "Write my own")
+                    });
+                  }}
                   placeholder="Your message will appear here..."
                   className="w-full text-center bg-transparent border-none outline-none resize-none"
                   style={getMessageStyle()}

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { Product } from "@/app/api/types";
 import { AddToCartButton } from "@/components/CartComponents/AddToCartButton";
 
