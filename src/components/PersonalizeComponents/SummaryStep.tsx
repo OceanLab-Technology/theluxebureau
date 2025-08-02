@@ -68,6 +68,16 @@ export default function SummaryStep() {
               <input
                 type="radio"
                 name="sms-updates-summary"
+                value="none"
+                checked={formData.smsUpdates === "none"}
+                className="w-4 h-4 text-stone-600 border-stone-300 focus:ring-stone-500"
+              />
+              <span className="text-sm text-stone-700">None</span>
+            </label>
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="radio"
+                name="sms-updates-summary"
                 value="send-to-me"
                 checked={formData.smsUpdates === "send-to-me"}
                 className="w-4 h-4 text-stone-600 border-stone-300 focus:ring-stone-500"

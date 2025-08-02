@@ -22,7 +22,7 @@ export function CartIcon({ className }: { className?: string }) {
   return (
     <button
       onClick={handleCartClick}
-      className={cn("relative", className)}
+      className={cn("relative cursor-pointer", className)}
     >
       CART ({cartItemCount})
     </button>

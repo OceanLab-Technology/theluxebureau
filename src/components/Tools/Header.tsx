@@ -17,10 +17,13 @@ export default function Header() {
 
   const shopCategories = [
     { label: "Shop All", href: "/products" },
-    { label: "Literature", href: "/products/literature" },
-    { label: "Drinks & Spirits", href: "/products/drinks-spirits" },
-    { label: "Floral", href: "/products/floral" },
-    { label: "Home", href: "/products/home" },
+    { label: "Literature", href: "/products?category=Literature" },
+    {
+      label: "Drinks & Spirits",
+      href: `/products?category=${encodeURIComponent("Drinks & Spirits")}`,
+    },
+    { label: "Floral", href: "/products?category=Floral" },
+    { label: "Home", href: "/products?category=Home" },
   ];
 
   const aboutLinks = [
@@ -86,11 +89,11 @@ export default function Header() {
           </div>
           <Link
             href="/"
-            className={` cursor-pointer md:w-auto md:h-auto w-[8.74969rem] h-[0.5625rem] flex-shrink-0 ${
+            className={` cursor-pointer md:w-auto md:scale-100 scale-75 md:h-auto flex-shrink-0 ${
               extended ? "text-background" : "text-stone-600"
             }`}
           >
-            <Logo />
+            <Logo fill={extended ? "#FBF7E5" : "#50462D"} />
           </Link>
         </div>
 
@@ -121,15 +124,18 @@ export default function Header() {
               }`}
             />
           </div>
-          <div className="md:hidden">
-            <CartDrawer />
-          </div>
-          <Link
-            href="/account"
-            className="text-stone-700 text-sm hover:text-stone-900 transition-colors md:hidden block"
-          >
-            <User2 className="h-5 w-5" />
-          </Link>
+          {/* Mobile icons - only show when menu is open */}
+          {mobileMenuOpen && (
+            <>
+              <Link
+                href="/account"
+                className="text-background text-sm hover:text-[#FBD060] transition-colors md:hidden block"
+              >
+                <User2 className="h-5 w-5" />
+              </Link>
+              <CartIcon className="text-background hover:text-[#FBD060] md:hidden" />
+            </>
+          )}
         </div>
       </div>
 
@@ -149,6 +155,7 @@ export default function Header() {
                 key={category.href}
                 href={category.href}
                 className="hover:text-[#FBD060] transition-colors"
+                onClick={() => setExtended(false)}
               >
                 {category.label}
               </Link>
@@ -161,6 +168,7 @@ export default function Header() {
                 key={link.href}
                 href={link.href}
                 className="hover:text-[#FBD060] transition-colors"
+                onClick={() => setExtended(false)}
               >
                 {link.label}
               </Link>
@@ -174,6 +182,7 @@ export default function Header() {
                   key={social.href}
                   href={social.href}
                   className="hover:text-background text-[#FBD060] transition-colors"
+                  onClick={() => setExtended(false)}
                   {...(social.href.startsWith("http") && {
                     target: "_blank",
                     rel: "noopener noreferrer",

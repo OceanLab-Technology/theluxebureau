@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { useMainStore } from "@/store/mainStore";
 import { usePersonalizeStore } from "@/store/personalizeStore";
@@ -140,7 +140,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                   <motion.button
                     key={index}
                     onClick={() => handleImageChange(index)}
-                    className={`md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-[10%] bg-muted/20 overflow-hidden border-2 transition-all ${
+                    className={`md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-full bg-muted/20 overflow-hidden border-2 transition-all ${
                       selectedImageIndex === index
                         ? "border-yellow-500"
                         : "border-transparent"
