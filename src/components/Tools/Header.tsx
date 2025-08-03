@@ -3,7 +3,6 @@
 import Link from "next/link";
 import React from "react";
 import { CartIcon } from "../CartComponents/CartIcon";
-import { CartDrawer } from "../CartComponents/CartDrawer";
 import { Menu, User2, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Logo } from "./Logo";
@@ -100,6 +99,7 @@ export default function Header() {
         <nav className="hidden md:flex items-center lg:space-x-60 space-x-25 lg:pr-30">
           {links.map((link) => (
             <Link
+              onClick={() => setExtended(false)}
               onMouseEnter={() => setExtended(true)}
               key={link.href}
               href={link.href}
