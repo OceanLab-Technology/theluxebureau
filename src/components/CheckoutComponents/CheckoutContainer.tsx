@@ -15,7 +15,6 @@ interface CheckoutContainerProps {
 
 export function CheckoutContainer({
   items = [],
-  useStripeElements = false,
 }: CheckoutContainerProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
