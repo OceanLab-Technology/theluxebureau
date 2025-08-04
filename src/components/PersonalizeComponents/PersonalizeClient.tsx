@@ -33,13 +33,12 @@ export default function PersonalizeClient() {
     }
   }, [productId, selectedProduct]);
 
-  let productImages = [
+  const images = [
     currentProduct?.image_1,
     currentProduct?.image_2,
     currentProduct?.image_3,
     currentProduct?.image_4,
-    currentProduct?.image_5,
-  ].filter(Boolean); // remove undefined/null
+  ].filter(Boolean);
 
   return (
     <div className="grid md:grid-cols-2 grid-cols-1 min-h-screen pt-8">
@@ -49,34 +48,31 @@ export default function PersonalizeClient() {
             <img
               src={currentProduct?.image || currentProduct?.image_1}
               alt={currentProduct?.name}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover object-center"
             />
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-              {Array.from({ length: productImages.length }).map((_, index) => (
+              {Array.from({ length: images.length }).map((_, index) => (
                 <span
                   key={index}
-                  className={`h-2 w-2 rounded-full inline-block cursor-pointer`}
+                  className="h-2 w-2 rounded-full inline-block bg-background/50"
                 />
               ))}
             </div>
           </div>
 
           <div className="grid grid-cols-5 gap-2 px-4">
-            {productImages.map((imageUrl, index) => {
-              if (!imageUrl) return null;
-              return (
-                <button
-                  key={index}
-                  className={`md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-[10%] bg-muted/20 overflow-hidden border-2 transition-all`}
-                >
-                  <img
-                    src={imageUrl}
-                    alt={`${currentProduct?.name} ${index + 1}`}
-                    className="h-full w-full"
-                  />
-                </button>
-              );
-            })}
+            {images.map((imageUrl, index) => (
+              <button
+                key={index}
+                className="md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-full bg-muted/20 overflow-hidden border-2 border-transparent"
+              >
+                <img
+                  src={imageUrl}
+                  alt={`${currentProduct?.name} ${index + 1}`}
+                  className="h-full w-full object-contain"
+                />
+              </button>
+            ))}
           </div>
         </div>
       </div>

@@ -4,12 +4,10 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useMainStore } from "@/store/mainStore";
 import { usePersonalizeStore } from "@/store/personalizeStore";
-import { AddToCartButton } from "@/components/CartComponents/AddToCartButton";
 import { ProductDetailSkeleton } from "./ProductDetailSkeleton";
 import { useRouter } from "next/navigation";
 import {
@@ -36,7 +34,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
     currentProduct?.image_2,
     currentProduct?.image_3,
     currentProduct?.image_4,
-  ];
+  ].filter(Boolean);
 
   useEffect(() => {
     fetchProductById(productId);
@@ -87,13 +85,9 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               <AnimatePresence mode="wait">
                 <motion.img
                   key={selectedImageIndex}
-                  src={
-                    (currentProduct as any)[
-                      `image_${selectedImageIndex + 1}`
-                    ] || currentProduct.image_1!
-                  }
+                  src={images[selectedImageIndex] || currentProduct.image_1!}
                   alt={currentProduct.name}
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-cover object-center"
                   initial={{
                     opacity: 0,
                     filter: "blur(10px)",
@@ -134,34 +128,31 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
             </div>
 
             <div className="grid grid-cols-5 gap-2 px-4">
-              {images.map((imageUrl, index) => {
-                if (!imageUrl) return null;
-                return (
-                  <motion.button
-                    key={index}
-                    onClick={() => handleImageChange(index)}
-                    className={`md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-full bg-muted/20 overflow-hidden border-2 transition-all ${
-                      selectedImageIndex === index
-                        ? "border-yellow-500"
-                        : "border-transparent"
-                    }`}
-                    animate={
-                      selectedImageIndex === index
-                        ? {
-                            borderColor: ["#eab308", "#fbbf24", "#eab308"],
-                            transition: { duration: 0.5 },
-                          }
-                        : {}
-                    }
-                  >
-                    <img
-                      src={imageUrl}
-                      alt={`${currentProduct.name} ${index + 1}`}
-                      className="h-full w-full"
-                    />
-                  </motion.button>
-                );
-              })}
+              {images.map((imageUrl, index) => (
+                <motion.button
+                  key={index}
+                  onClick={() => handleImageChange(index)}
+                  className={`md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-full bg-muted/20 overflow-hidden border-2 transition-all ${
+                    selectedImageIndex === index
+                      ? "border-yellow-500"
+                      : "border-transparent"
+                  }`}
+                  animate={
+                    selectedImageIndex === index
+                      ? {
+                          borderColor: ["#eab308", "#fbbf24", "#eab308"],
+                          transition: { duration: 0.5 },
+                        }
+                      : {}
+                  }
+                >
+                  <img
+                    src={imageUrl}
+                    alt={`${currentProduct.name} ${index + 1}`}
+                    className="h-full w-full object-contain"
+                  />
+                </motion.button>
+              ))}
             </div>
           </div>
 

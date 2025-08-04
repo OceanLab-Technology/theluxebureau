@@ -1,10 +1,24 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import { usePersonalizeStore } from "@/store/personalizeStore";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function SummaryStep() {
   const { formData, selectedProduct } = usePersonalizeStore();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: -288, behavior: "smooth" });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: 288, behavior: "smooth" });
+    }
+  };
   return (
     <div>
       <p className="text-stone-700 mb-6 font-medium md:text-[16px]">
@@ -98,50 +112,75 @@ export default function SummaryStep() {
         </div>
 
         <div className="mt-8">
-          <div className="overflow-x-auto overflow-y-hidden hide-scrollbar">
-            <div className="flex gap-2 pb-4">
-              <div className="bg-stone-300 h-64 w-72 rounded-none flex items-center justify-center flex-shrink-0">
-                <img
-                  src={selectedProduct?.image || selectedProduct?.image_1}
-                  alt=""
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="bg-stone-300 h-64 w-72 rounded-none flex items-center justify-center flex-shrink-0">
-                <img
-                  src={selectedProduct?.image || selectedProduct?.image_1}
-                  alt=""
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="w-72 flex-shrink-0">
-                <div
-                  className="relative h-64 rounded-none overflow-hidden"
-                  style={{
-                    backgroundImage: "url(/notecard.jpg)",
-                    backgroundPosition: "center",
-                    backgroundSize: "cover",
-                    backgroundRepeat: "no-repeat",
-                  }}
-                >
-                  <div className="absolute inset-0 flex items-center justify-center p-8">
-                    <div className="p-4 max-w-xs w-full">
-                      <div className="text-center mb-1">
-                        <div className="text-xs font-medium tracking-wider text-stone-600 mb-2">
-                          {formData.headerText}
-                        </div>
-                        <div className="h-px bg-stone-300 w-16 mx-auto"></div>
-                      </div>
+          <div className="relative">
+            {/* Left Arrow */}
+            <button
+              onClick={scrollLeft}
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-10"
+              aria-label="Scroll left"
+            >
+              <ChevronLeft className="w-8 h-8 text-[#FDCF5F]" />
+            </button>
 
-                      <div className="text-center flex items-center justify-center">
-                        <div className="text-[8px] w-42 text-stone-500 font-[monospace]">
-                          {formData.customMessage ||
-                            formData.selectedQuote ||
-                            "Message"}
+            {/* Right Arrow */}
+            <button
+              onClick={scrollRight}
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-10"
+              aria-label="Scroll right"
+            >
+              <ChevronRight className="w-8 h-8 text-[#FDCF5F]" />
+            </button>
+
+            <div
+              ref={scrollContainerRef}
+              className="overflow-x-auto overflow-y-hidden hide-scrollbar"
+            >
+              <div className="flex gap-2 pb-4">
+                <div className="bg-stone-300 h-64 w-72 rounded-none flex items-center justify-center flex-shrink-0">
+                  <img
+                    src={selectedProduct?.image || selectedProduct?.image_1}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+
+                <div className="w-72 flex-shrink-0">
+                  <div
+                    className="relative h-64 rounded-none overflow-hidden"
+                    style={{
+                      backgroundImage: "url(/notecard.jpg)",
+                      backgroundPosition: "center",
+                      backgroundSize: "cover",
+                      backgroundRepeat: "no-repeat",
+                    }}
+                  >
+                    <div className="absolute inset-0 flex items-center justify-center p-8">
+                      <div className="p-4 max-w-xs w-full">
+                        <div className="text-center mb-1">
+                          <div className="text-xs font-medium tracking-wider text-stone-600 mb-2">
+                            {formData.headerText}
+                          </div>
+                          <div className="h-px bg-stone-300 w-16 mx-auto"></div>
+                        </div>
+
+                        <div className="text-center flex items-center justify-center">
+                          <div className="text-[8px] w-42 text-stone-500 font-[monospace]">
+                            {formData.customMessage ||
+                              formData.selectedQuote ||
+                              "Message"}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                </div>
+
+                <div className="h-64 rounded-none flex items-center justify-center flex-shrink-0">
+                  <img
+                    src="/Bag.png"
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
                 </div>
               </div>
             </div>
