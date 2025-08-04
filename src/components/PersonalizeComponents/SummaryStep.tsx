@@ -97,41 +97,57 @@ export default function SummaryStep() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 mt-8">
-          <div className="bg-stone-300 h-64 rounded-none flex items-center justify-center">
-            <img
-              src={selectedProduct?.image || selectedProduct?.image_1}
-              alt=""
-              className="h-full w-full object-cover"
-            />
-          </div>
-          <div className="">
-            <div
-              className="relative h-64 rounded-none overflow-hidden"
-              style={{
-                backgroundImage: "url(/notecard.jpg)",
-                backgroundPosition: "center",
-                backgroundSize: "cover",
-                backgroundRepeat: "no-repeat",
-              }}
-            >
-              <div className="absolute inset-0 flex items-center justify-center p-8">
-                <div className="p-4 max-w-xs w-full">
-                  <div className="text-center mb-1">
-                    <div className="text-xs font-medium tracking-wider text-stone-600 mb-2">
-                      {formData.headerText}
-                    </div>
-                    <div className="h-px bg-stone-300 w-16 mx-auto"></div>
-                  </div>
+        <div className="mt-8">
+          <div className="overflow-x-auto overflow-y-hidden hide-scrollbar">
+            <div className="flex gap-2 pb-4">
+              {/* First card - Product image */}
+              <div className="bg-stone-300 h-64 w-72 rounded-none flex items-center justify-center flex-shrink-0">
+                <img
+                  src={selectedProduct?.image || selectedProduct?.image_1}
+                  alt=""
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              
+              {/* Second card - Notecard */}
+              <div className="w-72 flex-shrink-0">
+                <div
+                  className="relative h-64 rounded-none overflow-hidden"
+                  style={{
+                    backgroundImage: "url(/notecard.jpg)",
+                    backgroundPosition: "center",
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                  }}
+                >
+                  <div className="absolute inset-0 flex items-center justify-center p-8">
+                    <div className="p-4 max-w-xs w-full">
+                      <div className="text-center mb-1">
+                        <div className="text-xs font-medium tracking-wider text-stone-600 mb-2">
+                          {formData.headerText}
+                        </div>
+                        <div className="h-px bg-stone-300 w-16 mx-auto"></div>
+                      </div>
 
-                  <div className="text-center flex items-center justify-center">
-                    <div className="text-[8px] w-42 text-stone-500 font-[monospace]">
-                      {formData.customMessage ||
-                        formData.selectedQuote ||
-                        "Message"}
+                      <div className="text-center flex items-center justify-center">
+                        <div className="text-[8px] w-42 text-stone-500 font-[monospace]">
+                          {formData.customMessage ||
+                            formData.selectedQuote ||
+                            "Message"}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Duplicate cards for demonstration */}
+              <div className="bg-stone-300 h-64 w-72 rounded-none flex items-center justify-center flex-shrink-0">
+                <img
+                  src={selectedProduct?.image || selectedProduct?.image_1}
+                  alt=""
+                  className="h-full w-full object-cover"
+                />
               </div>
             </div>
           </div>
