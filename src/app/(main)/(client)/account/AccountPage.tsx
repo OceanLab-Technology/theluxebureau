@@ -21,9 +21,33 @@ interface User {
 }
 
 interface Order {
-  id: number;
-  items: any[];
-  date: string;
+  id: string;
+  customer_name: string;
+  customer_email: string;
+  recipient_name: string;
+  recipient_address: string;
+  delivery_date: string;
+  notes?: string;
+  status: 'New' | 'Active' | 'Complete';
+  total_amount: number;
+  created_at: string;
+  updated_at: string;
+  stripe_session_id?: string;
+  stripe_payment_intent_id?: string;
+  payment_status: 'pending' | 'completed' | 'failed' | 'refunded';
+  order_items?: Array<{
+    id: string;
+    order_id: string;
+    products: {
+      id: string;
+      name: string;
+      image_1: string;
+    };
+    quantity: number;
+    price_at_purchase: number;
+    custom_data?: any;
+  }>;
+  personalization?: any;
 }
 
 interface AccountPageProps {
@@ -34,6 +58,7 @@ export default function AccountPage({ user }: AccountPageProps) {
   const { products, fetchProducts } = useMainStore();
   const [orders, setOrders] = useState<Order[]>([]);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isLoadingOrders, setIsLoadingOrders] = useState(true);
   const supabase = createClient(); // Create client inside component
   const [profile, setProfile] = useState({
     name: user?.user_metadata?.full_name || "",
@@ -43,22 +68,31 @@ export default function AccountPage({ user }: AccountPageProps) {
     password: "••••••••••••••••••••",
   });
 
+  // Fetch user's orders
+  const fetchOrders = async () => {
+    try {
+      setIsLoadingOrders(true);
+      const response = await fetch('/api/orders/user');
+      if (response.ok) {
+        const result = await response.json();
+        setOrders(result.data || []);
+      } else {
+        console.error('Failed to fetch orders');
+        setOrders([]);
+      }
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      setOrders([]);
+    } finally {
+      setIsLoadingOrders(false);
+    }
+  };
+
   useEffect(() => {
     if (products.length === 0) {
       fetchProducts();
     }
-    setOrders([
-      {
-        id: 1,
-        items: products.slice(0, 3),
-        date: "2024-01-15",
-      },
-      {
-        id: 2,
-        items: products.slice(1, 3),
-        date: "2024-01-10",
-      },
-    ]);
+    fetchOrders();
   }, [products, fetchProducts]);
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
@@ -114,61 +148,122 @@ export default function AccountPage({ user }: AccountPageProps) {
             <h2 className="text-lg font-medium mb-6 border-b border-stone-300">
               ORDER HISTORY
             </h2>
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 md:mb-8">
-              <div className="mb-2 md:mb-0">
-                <div className="text-xs text-stone-500 uppercase tracking-wider">
-                  DELIVERED
-                </div>
-                <div className="text-sm font-medium">FRIDAY 01, APRIL</div>
-                <div className="text-lg font-medium">£286.27</div>
+            
+            {isLoadingOrders ? (
+              <div className="text-center py-8">
+                <div className="text-stone-500">Loading orders...</div>
               </div>
-              <Button className="bg-yellow-400 hover:bg-yellow-500 text-stone-800 px-6 py-2 text-xs uppercase tracking-wider w-fit">
-                VIEW ORDER
-              </Button>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-6 mb-8">
-              {products.slice(0, 3).map((product, index) => (
-                <div key={product.id || index} className="bg-stone-100">
-                  <div className="aspect-square relative">
-                    <Image
-                      src={product.image_1 || "/placeholder.jpg"}
-                      alt={product.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 md:mb-8">
-              <div className="mb-2 md:mb-0">
-                <div className="text-xs text-stone-500 uppercase tracking-wider">
-                  DELIVERED
-                </div>
-                <div className="text-sm font-medium">WEDNESDAY 18, JANUARY</div>
-                <div className="text-lg font-medium">£64.73</div>
+            ) : orders.length === 0 ? (
+              <div className="text-center py-8">
+                <div className="text-stone-500 mb-4">No orders found</div>
+                <Button 
+                  asChild 
+                  className="bg-yellow-400 hover:bg-yellow-500 text-stone-800 px-6 py-2 text-xs uppercase tracking-wider"
+                >
+                  <a href="/products">Start Shopping</a>
+                </Button>
               </div>
-              <Button className="bg-yellow-400 hover:bg-yellow-500 text-stone-800 px-6 py-2 text-xs uppercase tracking-wider w-fit">
-                VIEW ORDER
-              </Button>
-            </div>
+            ) : (
+              orders.map((order, index) => {
+                // Format order number as 001, 002, etc.
+                const orderNumber = String(index + 1).padStart(3, '0');
+                
+                return (
+                  <div key={order.id} className="mb-8">
+                    <div className="flex flex-col md:flex-row md:items-start justify-between mb-4 md:mb-6">
+                      <div className="mb-4 md:mb-0">
+                        <div className="text-sm text-stone-500 uppercase tracking-wider mb-1">
+                          BACK TO ORDERS
+                        </div>
+                        <div className="text-2xl font-light mb-2">
+                          Order no.{orderNumber}
+                        </div>
+                        <div className="text-xs text-stone-500 uppercase tracking-wider mb-1">
+                          ORDER DETAILS
+                        </div>
+                        <div className="text-sm text-stone-600 mb-1">
+                          Order created on {new Date(order.created_at).toLocaleDateString('en-GB', {
+                            day: '2-digit',
+                            month: 'long',
+                            year: 'numeric'
+                          })}
+                        </div>
+                        <div className="text-sm text-stone-600 mb-4">
+                          Total amount: ${order.total_amount?.toFixed(2)}
+                        </div>
+                      </div>
+                      <Button 
+                        className="bg-yellow-400 hover:bg-yellow-500 text-stone-800 px-6 py-2 text-xs uppercase tracking-wider w-fit"
+                        asChild
+                      >
+                        <a href={`/orders/${order.id}`}>VIEW ORDER</a>
+                      </Button>
+                    </div>
 
-            <div className="grid grid-cols-2 gap-2 md:gap-6 mb-8">
-              {products.slice(1, 3).map((product, index) => (
-                <div key={product.id || index} className="bg-stone-100">
-                  <div className="aspect-square relative">
-                    <Image
-                      src={product.image_1 || "/placeholder.jpg"}
-                      alt={product.name}
-                      fill
-                      className="object-cover"
-                    />
+                    {/* Product Images Carousel */}
+                    {order.order_items && order.order_items.length > 0 && (
+                      <div className="mb-6">
+                        <div className="text-xs text-stone-500 uppercase tracking-wider mb-3">
+                          COMPONENTS
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          {order.order_items.map((item, itemIndex) => (
+                            <div key={item.id} className="bg-stone-100 aspect-square relative">
+                              <Image
+                                src={item.products?.image_1 || "/placeholder.jpg"}
+                                alt={item.products?.name || "Product"}
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Order Status and Details */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-xs">
+                      <div>
+                        <div className="text-stone-500 uppercase tracking-wider mb-1">STATUS</div>
+                        <div className="text-stone-800">{order.status}</div>
+                      </div>
+                      <div>
+                        <div className="text-stone-500 uppercase tracking-wider mb-1">PAYMENT STATUS</div>
+                        <div className="text-stone-800 capitalize">{order.payment_status}</div>
+                      </div>
+                      <div>
+                        <div className="text-stone-500 uppercase tracking-wider mb-1">DELIVERY DATE</div>
+                        <div className="text-stone-800">
+                          {new Date(order.delivery_date).toLocaleDateString('en-GB', {
+                            day: '2-digit',
+                            month: 'long',
+                            year: 'numeric'
+                          })}
+                        </div>
+                      </div>
+                      {order.recipient_name && (
+                        <div>
+                          <div className="text-stone-500 uppercase tracking-wider mb-1">RECIPIENT</div>
+                          <div className="text-stone-800">{order.recipient_name}</div>
+                        </div>
+                      )}
+                      {order.recipient_address && (
+                        <div>
+                          <div className="text-stone-500 uppercase tracking-wider mb-1">DELIVERY ADDRESS</div>
+                          <div className="text-stone-800">{order.recipient_address}</div>
+                        </div>
+                      )}
+                      <div>
+                        <div className="text-stone-500 uppercase tracking-wider mb-1">ORDER ID</div>
+                        <div className="text-stone-800 font-mono text-xs">{order.id?.slice(-8)}</div>
+                      </div>
+                    </div>
+                    
+                    {index < orders.length - 1 && <hr className="border-stone-200 my-8" />}
                   </div>
-                </div>
-              ))}
-            </div>
+                );
+              })
+            )}
           </div>
 
           <div>

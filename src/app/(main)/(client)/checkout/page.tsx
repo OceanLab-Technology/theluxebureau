@@ -28,6 +28,7 @@ export default function CheckoutPage() {
         if (!product) return null;
 
         return {
+          product_id: product.id,
           ...product,
           quantity: cartItem.quantity,
           cartItemId: cartItem.id,
@@ -138,7 +139,6 @@ export default function CheckoutPage() {
               <div className="w-full">
                 <CheckoutContainer
                   items={checkoutItems}
-                  useStripeElements={false}
                 />
               </div>
             </div>

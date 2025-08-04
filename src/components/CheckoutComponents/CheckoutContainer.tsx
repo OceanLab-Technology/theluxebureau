@@ -10,12 +10,9 @@ import { Product } from "@/app/api/types";
 
 interface CheckoutContainerProps {
   items: Product[];
-  useStripeElements?: boolean;
 }
 
-export function CheckoutContainer({
-  items = [],
-}: CheckoutContainerProps) {
+export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [customerInfo, setCustomerInfo] = useState({
@@ -24,6 +21,8 @@ export function CheckoutContainer({
     email: "",
     phone: "",
   });
+
+  console.log("Checkout items:", items);
 
   const handleInputChange = (field: string, value: string) => {
     setCustomerInfo((prev) => ({
@@ -63,6 +62,17 @@ export function CheckoutContainer({
             quantity: (item as any).quantity || 1,
           })),
           customerInfo,
+          recipientInfo: {
+            firstName: customerInfo.firstName,
+            lastName: customerInfo.lastName,
+            email: customerInfo.email,
+            phone: customerInfo.phone,
+          },
+          personalization: items.map((item) => item.customData || ""),
+          deliveryDate: new Date(
+            Date.now() + 7 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          notes: "",
           total,
         }),
       });
