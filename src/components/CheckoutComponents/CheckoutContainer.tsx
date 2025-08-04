@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, CreditCard, Lock } from "lucide-react";
+import { Loader2, Lock } from "lucide-react";
 import { Product } from "@/app/api/types";
 
 interface CheckoutContainerProps {
@@ -22,7 +22,6 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
     phone: "",
   });
 
-  console.log("Checkout items:", items);
 
   const handleInputChange = (field: string, value: string) => {
     setCustomerInfo((prev) => ({

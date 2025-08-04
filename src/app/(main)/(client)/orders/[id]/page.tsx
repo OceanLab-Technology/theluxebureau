@@ -3,13 +3,14 @@ import { redirect } from "next/navigation";
 import OrderDetailPage from "./OrderDetailPage";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function Page({ params }: PageProps) {
   const supabase = await createClient();
+  const { id } = await params;
 
   const {
     data: { user },
@@ -23,7 +24,8 @@ export default async function Page({ params }: PageProps) {
   // Fetch the specific order
   const { data: order, error } = await supabase
     .from("orders")
-    .select(`
+    .select(
+      `
       *,
       order_items (
         *,
@@ -34,8 +36,9 @@ export default async function Page({ params }: PageProps) {
           price
         )
       )
-    `)
-    .eq("id", params.id)
+    `
+    )
+    .eq("id", id)
     .eq("user_email", user.email)
     .single();
 
