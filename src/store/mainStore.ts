@@ -30,6 +30,9 @@ interface MainStore {
   removeFromCart: (itemId: string) => Promise<void>;
   clearCart: () => Promise<void>;
   calculateCartTotal: () => void;
+  
+  // Global reset method
+  resetStore: () => void;
 }
 
 export const useMainStore = create<MainStore>()(
@@ -269,6 +272,21 @@ export const useMainStore = create<MainStore>()(
         });
 
         set({ cartTotal: total, cartItemCount: itemCount });
+      },
+
+      resetStore: () => {
+        set({
+          products: [],
+          currentProduct: null,
+          loading: false,
+          error: null,
+          detailedProductLoading: false,
+          cartItems: [],
+          cartLoading: false,
+          cartError: null,
+          cartTotal: 0,
+          cartItemCount: 0,
+        });
       },
     }),
     {

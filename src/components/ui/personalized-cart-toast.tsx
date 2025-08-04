@@ -46,7 +46,7 @@ export function PersonalizedCartToast({
             damping: 25,
             mass: 0.8,
           }}
-          className="fixed top-25 right-4 z-50 bg-background border border-amber-200 shadow-xl p-4 md:min-w-lg font-century max-w-xl"
+          className="fixed top-25 right-4 z-50 bg-background border shadow-xl p-4 md:min-w-lg font-century max-w-xl"
         >
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium  uppercase tracking-wider flex items-center gap-2">
@@ -92,7 +92,6 @@ export function PersonalizedCartToast({
                 <div className="space-y-1">
                   {personalizationData.recipientName && (
                     <p className="text-xs text-stone-500 flex items-center gap-1">
-                      <Heart className="w-3 h-3 text-amber-600" />
                       For: {personalizationData.recipientName}
                     </p>
                   )}
@@ -120,7 +119,7 @@ export function PersonalizedCartToast({
             <Button
               variant="outline"
               onClick={onViewCart}
-              className="flex-1 text-xs uppercase rounded-none tracking-wider border-amber-200 text-amber-700 hover:bg-amber-50"
+              className="flex-1 text-xs uppercase rounded-none tracking-wider"
             >
               View Cart
             </Button>

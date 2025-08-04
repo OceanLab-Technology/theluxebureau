@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
-import { Cormorant_Infant, Geist, Geist_Mono } from "next/font/google";
+import { Cormorant_Infant, Geist, Geist_Mono, PT_Serif } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+});
+
+const ptSerif = PT_Serif({
+  variable: "--font-pt-serif",
+  subsets: ["latin"],
+  display: "swap",
+  style: "normal",
+  weight: ["400", "700"],
+  fallback: ["serif"],
 });
 
 const cormorantInfant = Cormorant_Infant({
@@ -31,10 +40,25 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${cormorantInfant.variable} antialiased font-century`}
+        className={`${geistSans.variable} ${geistMono.variable} ${ptSerif.variable} ${cormorantInfant.variable} antialiased font-century`}
       >
         <main className="">{children}</main>
-        <Toaster duration={1000} />
+        <Toaster toastOptions={{
+          unstyled: true,
+          style:{
+            padding: "16px",
+            borderRadius: "8px",
+            fontSize: "14px",
+            // fontWeight: "100",
+            display: "flex",
+            gap: "8px",
+            fontFamily: "var(--font-pt-serif)",
+            background:"#40362c",
+            color:"#FBD060",
+            border:"1px solid #40362c",
+          },
+          // descriptionClassName: "text-sm text-stone-400",
+        }} duration={2000} />
       </body>
     </html>
   );

@@ -112,23 +112,21 @@ export default function SummaryStep() {
         </div>
 
         <div className="mt-8">
-          <div className="relative">
-            {/* Left Arrow */}
-            <button
+          <div className="relative ">
+            {/* <button
               onClick={scrollLeft}
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-10"
+              className="absolute left-2 cursor-pointer top-1/2 -translate-y-1/2 z-10"
               aria-label="Scroll left"
             >
-              <ChevronLeft className="w-8 h-8 text-[#FDCF5F]" />
-            </button>
+              <img src="/arrow.svg" className="rotate-180" alt="" />
+            </button> */}
 
-            {/* Right Arrow */}
             <button
               onClick={scrollRight}
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-10"
+              className="absolute right-2 scale-130 top-1/2 -translate-y-1/2 z-10 cursor-pointer"
               aria-label="Scroll right"
             >
-              <ChevronRight className="w-8 h-8 text-[#FDCF5F]" />
+              <img src="/arrow.svg" alt="" />
             </button>
 
             <div

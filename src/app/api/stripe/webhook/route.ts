@@ -33,6 +33,16 @@ export async function POST(request: Request) {
         })
         .eq("stripe_session_id", session.id);
 
+      // Clear the cart after successful payment
+      const { error: cartError } = await supabase
+        .from("carts")
+        .delete()
+        .eq("user_email", session.customer_email);
+
+      if (cartError) {
+        console.error("Cart Clear Error:", cartError);
+      }
+
       if (updateError) {
         console.error("Webhook Update Error:", updateError);
       }

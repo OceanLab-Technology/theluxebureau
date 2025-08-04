@@ -6,6 +6,8 @@ import { CartIcon } from "../CartComponents/CartIcon";
 import { Menu, User2, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Logo } from "./Logo";
+import { createClient } from "@/lib/supabase/client";
+import { toast } from "sonner";
 
 export default function Header() {
   const links = [
@@ -40,6 +42,19 @@ export default function Header() {
   const [isVisible, setIsVisible] = React.useState<boolean>(true);
   const [lastScrollY, setLastScrollY] = React.useState<number>(0);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const supabase = createClient();
+
+  const authenticateUser = async () => {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+    if (error || !user) {
+      console.error("User not authenticated");
+      return false;
+    }
+    return true;
+  };
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -99,7 +114,17 @@ export default function Header() {
         <nav className="hidden md:flex items-center lg:space-x-60 space-x-25 lg:pr-30">
           {links.map((link) => (
             <Link
-              onClick={() => setExtended(false)}
+              onClick={async (e) => {
+                if (link.href === "/account" || link.href === "/discover" || link.href === "/products") {
+                  const isAuthenticated = await authenticateUser();
+                  if (!isAuthenticated) {
+                    e.preventDefault();
+                    toast.error("Please log in to access this page.");
+                    return;
+                  }
+                }
+                setExtended(false);
+              }}
               onMouseEnter={() => setExtended(true)}
               key={link.href}
               href={link.href}
@@ -129,6 +154,15 @@ export default function Header() {
             <>
               <Link
                 href="/account"
+                onClick={async (e) => {
+                  const isAuthenticated = await authenticateUser();
+                  if (!isAuthenticated) {
+                    e.preventDefault();
+                    toast.error("Please log in to access this page.");
+                    return;
+                  }
+                  setMobileMenuOpen(false);
+                }}
                 className="text-background text-sm hover:text-[#FBD060] transition-colors md:hidden block"
               >
                 <User2 className="h-5 w-5" />
@@ -155,7 +189,14 @@ export default function Header() {
                 key={category.href}
                 href={category.href}
                 className="hover:text-[#FBD060] transition-colors"
-                onClick={() => setExtended(false)}
+                onClick={() => {
+                  const isAuthenticated = authenticateUser();
+                  if (!isAuthenticated) {
+                    toast.error("Please log in to access this page.");
+                    return;
+                  }
+                  setExtended(false);
+                }}
               >
                 {category.label}
               </Link>
@@ -239,7 +280,18 @@ export default function Header() {
                     <Link
                       key={item.href}
                       href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
+                      onClick={async (e) => {
+                        // Check if the link requires authentication
+                        if (item.href === "/discover") {
+                          const isAuthenticated = await authenticateUser();
+                          if (!isAuthenticated) {
+                            e.preventDefault();
+                            toast.error("Please log in to access this page.");
+                            return;
+                          }
+                        }
+                        setMobileMenuOpen(false);
+                      }}
                       className="block hover:text-[#FBD060] transition-colors"
                     >
                       {item.label}

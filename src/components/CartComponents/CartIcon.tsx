@@ -9,24 +9,24 @@ import { createClient } from "@/lib/supabase/client";
 export function CartIcon({ className }: { className?: string }) {
   const { cartItemCount, fetchCartItems } = useMainStore();
   const supabase = createClient();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  useEffect(() => {
-    const checkAuth = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      setIsAuthenticated(!!session);
-    };
+  // const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  // useEffect(() => {
+  //   const checkAuth = async () => {
+  //     const {
+  //       data: { session },
+  //     } = await supabase.auth.getSession();
+  //     setIsAuthenticated(!!session);
+  //   };
 
-    checkAuth();
-  }, [supabase]);
+  //   checkAuth();
+  // }, [supabase]);
 
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      fetchCartItems();
-    }
+    // if (isAuthenticated) {
+    //   fetchCartItems();
+    // }
     fetchCartItems();
   }, [fetchCartItems]);
 
@@ -39,7 +39,7 @@ export function CartIcon({ className }: { className?: string }) {
       onClick={handleCartClick}
       className={cn("relative cursor-pointer", className)}
     >
-      CART ({ isAuthenticated ? cartItemCount : 0})
+      CART ({cartItemCount})
     </button>
   );
 }
