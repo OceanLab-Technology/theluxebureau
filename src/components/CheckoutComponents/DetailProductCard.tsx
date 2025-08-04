@@ -4,10 +4,12 @@ import { Product } from "@/app/api/types";
 interface CheckoutItemProps {
   product: Product;
   index: number;
+  isOrder?: boolean;
 }
 
-export const CheckoutItem: React.FC<CheckoutItemProps> = ({
+export const DetailProductCard: React.FC<CheckoutItemProps> = ({
   product,
+  isOrder,
   index,
 }) => {
   return (
@@ -15,21 +17,25 @@ export const CheckoutItem: React.FC<CheckoutItemProps> = ({
       <h2 className="my-6 text-[0.93rem] pb-2 border-b">
         Item {String(index + 1).padStart(2, "0")}
       </h2>
-      <div className="flex flex-col gap-6">
-        <div className="flex items-start gap-6">
-          <div className="bg-muted/20 h-60  md:h-[17.93rem] md:w-[18.62rem] overflow-hidden">
+      <div className={`${isOrder ? "md:flex-row flex-col md:gap-15 gap-4" : "flex-col gap-6"} flex `}>
+        <div className={`flex items-start gap-6`}>
+          <div
+            className={` ${isOrder ? "md:h-full w-full" : ""} bg-muted/20 h-60 md:h-[17.93rem] md:w-[18.62rem] overflow-hidden`}
+          >
             <img
               src={product.image_1 || "/placeholder.jpg"}
               alt={product.name}
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="flex flex-col w-full text-[1.5rem] justify-center space-y-1">
-            <h1 className="font-medium">{product.name}</h1>
-            <p className="mt-2">
-              for {product.customData?.recipientName || "recipient"}
-            </p>
-          </div>
+          {!isOrder && (
+            <div className="flex flex-col w-full text-[1.5rem] justify-center space-y-1">
+              <h1 className="font-medium">{product.name}</h1>
+              <p className="mt-2">
+                for {product.customData?.recipientName || "recipient"}
+              </p>
+            </div>
+          )}
         </div>
         <div className="space-y-4">
           {product.customData && Object.keys(product.customData).length > 0 && (

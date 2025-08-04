@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo } from "react";
 import { CheckoutContainer } from "@/components/CheckoutComponents/CheckoutContainer";
 import { CheckoutPageSkeleton } from "@/components/CheckoutComponents/CheckoutSkeleton";
-import { CheckoutItem } from "@/components/CheckoutComponents/CheckoutItem";
+import { DetailProductCard } from "@/components/CheckoutComponents/DetailProductCard";
 import { useMainStore } from "@/store/mainStore";
 import { Product } from "@/app/api/types";
 import { Button } from "@/components/ui/button";
@@ -72,7 +72,7 @@ export default function CheckoutPage() {
           <div className="grid lg:grid-cols-2 gap-12 grid-cols-1">
             <div className="flex flex-col md:space-y-4 space-y-10">
               {checkoutItems.map((product, index) => (
-                <CheckoutItem key={product.id} product={product} index={index} />
+                <DetailProductCard key={product.id} product={product} index={index} />
               ))}
             </div>
 
