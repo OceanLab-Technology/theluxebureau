@@ -50,7 +50,7 @@ export async function updateSession(request: NextRequest) {
   }
 
   // If user is authenticated and trying to access auth pages, redirect to products
-  if (user && isPublicRoute) {
+  if (user && isPublicRoute && request.nextUrl.pathname !== "/api/stripe/webhook") {
     const url = request.nextUrl.clone();
     url.pathname = "/products";
     return NextResponse.redirect(url);

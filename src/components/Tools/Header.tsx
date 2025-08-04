@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import React from "react";
 import { CartIcon } from "../CartComponents/CartIcon";
@@ -42,6 +41,7 @@ export default function Header() {
   const [isVisible, setIsVisible] = React.useState<boolean>(true);
   const [lastScrollY, setLastScrollY] = React.useState<number>(0);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+
   const supabase = createClient();
 
   const authenticateUser = async () => {
@@ -49,6 +49,7 @@ export default function Header() {
       data: { user },
       error,
     } = await supabase.auth.getUser();
+
     if (error || !user) {
       console.error("User not authenticated");
       return false;
@@ -59,14 +60,12 @@ export default function Header() {
   React.useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-
       if (currentScrollY < lastScrollY || currentScrollY < 10) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
         setExtended(false);
       }
-
       setLastScrollY(currentScrollY);
     };
 
@@ -103,7 +102,7 @@ export default function Header() {
           </div>
           <Link
             href="/"
-            className={` cursor-pointer md:w-auto md:scale-100 scale-75 md:h-auto flex-shrink-0 ${
+            className={`cursor-pointer md:w-auto md:scale-100 scale-75 md:h-auto flex-shrink-0 ${
               extended ? "text-background" : "text-stone-600"
             }`}
           >
@@ -111,11 +110,15 @@ export default function Header() {
           </Link>
         </div>
 
-        <nav className="hidden md:flex items-center lg:space-x-60 space-x-25 lg:pr-30">
+        <nav className="hidden md:flex items-center space-x-16 lg:space-x-60">
           {links.map((link) => (
             <Link
               onClick={async (e) => {
-                if (link.href === "/account" || link.href === "/discover" || link.href === "/products") {
+                if (
+                  link.href === "/account" ||
+                  link.href === "/discover" ||
+                  link.href === "/products"
+                ) {
                   const isAuthenticated = await authenticateUser();
                   if (!isAuthenticated) {
                     e.preventDefault();
@@ -149,7 +152,7 @@ export default function Header() {
               }`}
             />
           </div>
-          {/* Mobile icons - only show when menu is open */}
+
           {mobileMenuOpen && (
             <>
               <Link
@@ -173,69 +176,80 @@ export default function Header() {
         </div>
       </div>
 
-      <motion.div
-        key="extended-content"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        transition={{ duration: 0.3 }}
-        className="px-6 pt-8 h-full"
-      >
-        <div className="flex md:pl-84 gap-16 text-[2rem] leading-[1.8rem] font-light text-background">
-          <div className="col-span-2"></div>
-          <div className="flex flex-col items-start space-y-3 col-span-2">
-            {shopCategories.map((category) => (
-              <Link
-                key={category.href}
-                href={category.href}
-                className="hover:text-[#FBD060] transition-colors"
-                onClick={() => {
-                  const isAuthenticated = authenticateUser();
-                  if (!isAuthenticated) {
-                    toast.error("Please log in to access this page.");
-                    return;
-                  }
-                  setExtended(false);
-                }}
-              >
-                {category.label}
-              </Link>
-            ))}
-          </div>
+      {extended && (
+        <motion.div
+          key="extended-content"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.3 }}
+          className="px-6 pt-8 h-full relative"
+        >
+          <div className="flex items-start justify-between">
+            <div className="flex-shrink-0" style={{ width: "450px" }}></div>
 
-          <div className="flex flex-col items-start space-y-3 col-span-2">
-            {aboutLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="hover:text-[#FBD060] transition-colors"
-                onClick={() => setExtended(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
+            <div className="flex-1 flex justify-center">
+              <div className="flex space-x-16 lg:space-x-40">
+                <div className="flex flex-col items-start space-y-3">
+                  {shopCategories.map((category) => (
+                    <Link
+                      key={category.href}
+                      href={category.href}
+                      className="text-[2rem] leading-[1.8rem] font-light text-background hover:text-[#FBD060] transition-colors"
+                      onClick={async () => {
+                        const isAuthenticated = await authenticateUser();
+                        if (!isAuthenticated) {
+                          toast.error("Please log in to access this page.");
+                          return;
+                        }
+                        setExtended(false);
+                      }}
+                    >
+                      {category.label}
+                    </Link>
+                  ))}
+                </div>
 
-          {extended && (
-            <div className="flex absolute gap-30 bottom-10 text-[1rem] md:right-50 lg:right-100 items-start">
-              {socialLinks.map((social) => (
-                <Link
-                  key={social.href}
-                  href={social.href}
-                  className="hover:text-background text-[#FBD060] transition-colors"
-                  onClick={() => setExtended(false)}
-                  {...(social.href.startsWith("http") && {
-                    target: "_blank",
-                    rel: "noopener noreferrer",
-                  })}
-                >
-                  {social.label}
-                </Link>
-              ))}
+                {/* About Links - positioned under DISCOVER */}
+                <div className="flex flex-col items-start space-y-3">
+                  {aboutLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="text-[2rem] leading-[1.8rem] font-light text-background hover:text-[#FBD060] transition-colors"
+                      onClick={() => setExtended(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+
+                <div style={{ width: "100px" }}></div>
+              </div>
             </div>
-          )}
-        </div>
-      </motion.div>
+
+            <div className="flex-shrink-0" style={{ width: "60px" }}></div>
+          </div>
+          <div className="absolute bottom-30 right-20 flex gap-20 text-[1rem]">
+            {socialLinks.map((social) => (
+              <Link
+                key={social.href}
+                href={social.href}
+                className="hover:text-background text-[#FBD060] transition-colors"
+                onClick={() => setExtended(false)}
+                {...(social.href.startsWith("http") && {
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                })}
+              >
+                {social.label}
+              </Link>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -243,26 +257,44 @@ export default function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[9999999] bg-[#50462D] px-6 py-8 text-background flex flex-col items-start"
+            className="fixed inset-0 z-[9999999] bg-[#50462D] px-6 py-8 text-background flex flex-col"
           >
-            <button
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-3xl mb-6"
-            >
-              <X />
-            </button>
+            {/* Mobile Header */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-3xl"
+                >
+                  <X />
+                </button>
+                <Link href="/" onClick={() => setMobileMenuOpen(false)}>
+                  <Logo fill="#FBF7E5" />
+                </Link>
+              </div>
+              <CartIcon className="text-background hover:text-[#FBD060]" />
+            </div>
 
+            {/* Mobile Menu Content */}
             <div className="space-y-20 text-[1.5rem] font-light w-full">
               <div className="grid grid-cols-2">
                 <div className="text-xs text-[#FBD060] tracking-widest">
-                  HOME
+                  SHOP
                 </div>
-                <div>
+                <div className="space-y-2">
                   {shopCategories.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
+                      onClick={async (e) => {
+                        const isAuthenticated = await authenticateUser();
+                        if (!isAuthenticated) {
+                          e.preventDefault();
+                          toast.error("Please log in to access this page.");
+                          return;
+                        }
+                        setMobileMenuOpen(false);
+                      }}
                       className="block hover:text-[#FBD060] transition-colors"
                     >
                       {item.label}
@@ -275,13 +307,12 @@ export default function Header() {
                 <div className="text-xs text-[#FBD060] tracking-widest">
                   DISCOVER
                 </div>
-                <div>
+                <div className="space-y-2">
                   {aboutLinks.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
                       onClick={async (e) => {
-                        // Check if the link requires authentication
                         if (item.href === "/discover") {
                           const isAuthenticated = await authenticateUser();
                           if (!isAuthenticated) {

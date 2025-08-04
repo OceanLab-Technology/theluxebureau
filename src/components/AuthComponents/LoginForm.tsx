@@ -26,25 +26,30 @@ export function LoginForm({
     setError(null);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       if (error) throw error;
-      router.push("/products");
+
+      window.location.replace("/products");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
-    } finally {
       setIsLoading(false);
     }
   };
 
   return (
     <div
-      className={cn("w-full px-4 sm:px-10 font-century md:pt-0 pt-20", className)}
+      className={cn(
+        "w-full px-4 sm:px-10 font-century md:pt-0 pt-20",
+        className
+      )}
       {...props}
     >
-      <h1 className="text-[1rem] font-light mb-4 tracking-wide md:py-20">LOGIN</h1>
+      <h1 className="text-[1rem] font-light mb-4 tracking-wide md:py-20">
+        LOGIN
+      </h1>
       <div className="mb-8">
         <form onSubmit={handleLogin}>
           <div className="flex flex-col w-full md:w-[600px] gap-3 mb-8">

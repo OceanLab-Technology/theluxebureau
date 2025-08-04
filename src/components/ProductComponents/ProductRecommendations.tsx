@@ -27,7 +27,7 @@ export function ProductRecommendations({
 
   if (loading && products.length === 0) {
     return (
-      <section className="mt-16 py-10 px-4">
+      <section className="py-10 px-4">
         <div className="mb-8">
           <Skeleton className="h-8 w-48 mb-4" />
         </div>
@@ -57,7 +57,7 @@ export function ProductRecommendations({
         </h2>
       </div>
 
-      <div className="gap-6 flex lg:mr-40">
+      <div className="grid grid-cols-2 gap-2 md:w-[80%]">
         {filteredRecommendations.map((product) => (
           <ProductCard key={product.id} product={product}  />
         ))}

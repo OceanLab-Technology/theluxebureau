@@ -26,7 +26,7 @@ const getStatusColor = (inventory: number) => {
   } else if (inventory < 10) {
     return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
   } else {
-    return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400";
+    return "bg-stone-400 text-stone-800 dark:bg-green-900/20 dark:text-green-400";
   }
 };
 
