@@ -13,7 +13,7 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
   index,
 }) => {
   return (
-    <div key={product.id}>
+    <div key={product.id} className="w-full">
       <h2 className="my-6 text-[0.93rem] pb-2 border-b">
         Item {String(index + 1).padStart(2, "0")}
       </h2>
@@ -37,9 +37,9 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
             </div>
           )}
         </div>
-        <div className="space-y-4">
+        <div className="space-y-4 w-full">
           {product.customData && Object.keys(product.customData).length > 0 && (
-            <div className="md:space-y-6 space-y-3">
+            <div className="md:space-y-6 space-y-3 w-full">
               <div className="flex items-center gap-2 border-b border-b-stone-300">
                 <h3 className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
                   Your Name

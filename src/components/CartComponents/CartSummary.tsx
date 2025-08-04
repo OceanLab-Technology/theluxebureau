@@ -6,12 +6,7 @@ import { useRouter } from "next/navigation";
 
 export function CartSummary() {
   const { cartItems, cartTotal, cartLoading } = useMainStore();
-
   const router = useRouter();
-
-  console.log("CartSummary rendered with items:", cartItems.length, "Total:", cartTotal);
-  
-
   const handleCheckout = () => {
     router.push("/checkout");
   };

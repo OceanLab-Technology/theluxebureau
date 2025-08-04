@@ -181,7 +181,7 @@ export default function Header() {
         transition={{ duration: 0.3 }}
         className="px-6 pt-8 h-full"
       >
-        <div className="flex pl-84 gap-16 text-[2rem] leading-[1.8rem] font-light text-background">
+        <div className="flex md:pl-84 gap-16 text-[2rem] leading-[1.8rem] font-light text-background">
           <div className="col-span-2"></div>
           <div className="flex flex-col items-start space-y-3 col-span-2">
             {shopCategories.map((category) => (
@@ -217,7 +217,7 @@ export default function Header() {
           </div>
 
           {extended && (
-            <div className="flex absolute gap-30 bottom-10 text-[1rem] right-50 items-start">
+            <div className="flex absolute gap-30 bottom-10 text-[1rem] md:right-50 lg:right-100 items-start">
               {socialLinks.map((social) => (
                 <Link
                   key={social.href}

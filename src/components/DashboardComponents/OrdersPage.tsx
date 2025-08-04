@@ -164,13 +164,18 @@ export function OrdersPage() {
                     {orders.map((order) => (
                       <TableRow key={order.id}>
                         <TableCell className="font-medium">
-                          {order.id}
+                          #{order.id?.slice(-8)}
                         </TableCell>
                         <TableCell>{order.customerName || "-"}</TableCell>
-                        <TableCell>{order.recipientName}</TableCell>
-                        <TableCell>{order.deliveryDate}</TableCell>
+                        <TableCell>{order.recipientName || "-"}</TableCell>
+                        <TableCell>
+                          {order.deliveryDate ? 
+                            new Date(order.deliveryDate).toLocaleDateString() : 
+                            "-"
+                          }
+                        </TableCell>
                         <TableCell className="font-medium">
-                          {order.total}
+                          ${order.total || "0.00"}
                         </TableCell>
                         <TableCell>
                           <Badge
@@ -196,7 +201,6 @@ export function OrdersPage() {
           </CardContent>
         </Card>
 
-        {/* ⏩ Pagination Controls */}
         {!loading && pagination && (
           <div className="flex justify-between items-center gap-4 mt-4">
             <div className="text-sm text-muted-foreground">

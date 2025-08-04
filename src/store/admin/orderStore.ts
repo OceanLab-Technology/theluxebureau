@@ -9,6 +9,23 @@ type Order = {
   deliveryDate: string;
   total: string;
   status: string;
+  paymentStatus?: string;
+  orderItems?: Array<{
+    id: string;
+    products: {
+      id: string;
+      name: string;
+      image_1: string;
+      price: number;
+    };
+    quantity: number;
+    price_at_purchase: number;
+    custom_data: any;
+  }>;
+  personalization?: any[];
+  notes?: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 type Pagination = {
@@ -50,8 +67,14 @@ export const useOrdersStore = create<OrdersState>((set) => ({
         customerName: order.customer_name || "Unknown",
         recipientName: order.recipient_name || "",
         deliveryDate: order.delivery_date || "",
-        total: order.total_amount.toFixed(2),
+        total: order.total_amount ? order.total_amount.toFixed(2) : "0.00",
         status: order.status,
+        paymentStatus: order.payment_status,
+        orderItems: order.order_items || [],
+        personalization: order.personalization || [],
+        notes: order.notes,
+        createdAt: order.created_at,
+        updatedAt: order.updated_at,
       }));
 
       set({
@@ -86,10 +109,28 @@ interface OrderDetails {
     notes: string;
     placedAt: string;
     paymentStatus: string;
-    // productDetails: any[];
-    // personalization: any[];
     updatedAt: string;
   };
+  orderItems: Array<{
+    id: string;
+    products: {
+      id: string;
+      name: string;
+      image_1: string;
+      image_2?: string;
+      image_3?: string;
+      price: number;
+      description?: string;
+      category?: string;
+      why_we_chose_it?: string;
+      about_the_maker?: string;
+      particulars?: string;
+    };
+    quantity: number;
+    price_at_purchase: number;
+    custom_data: any;
+  }>;
+  personalization: any[];
 }
 
 interface OrderDetailsState {
@@ -134,11 +175,11 @@ export const useOrderDetailsStore = create<OrderDetailsState>((set, get) => ({
             status: order.status,
             notes: order.notes,
             placedAt: order.created_at,
-            paymentStatus: order.paymentStatus,
-            // productDetails: order.product_details,
-            // personalization: order.personalization,
+            paymentStatus: order.payment_status,
             updatedAt: order.updated_at
           },
+          orderItems: order.order_items || [],
+          personalization: order.personalization || [],
         },
         loading: false,
       });

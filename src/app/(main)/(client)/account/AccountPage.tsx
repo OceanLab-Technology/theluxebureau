@@ -123,10 +123,10 @@ export default function AccountPage({ user }: AccountPageProps) {
   const userName = profile.name || user?.email?.split("@")[0] || "User";
 
   return (
-    <div className="min-h-screen flex flex-col bg-background font-century overflow-x-hidden">
-      <main className="relative flex md:flex-row flex-col md:px-20 px-4 min-h-[calc(100vh-64px)]">
-        <div className="md:w-64 w-full md:py-20 py-6">
-          <h1 className="block md:hidden text-[2rem] font-light mb-6">
+    <div className="min-h-screen flex flex-col bg-background font-century overflow-hidde">
+      <main className="relative grid grid-cols-1 md:grid-cols-5 md:flex-row flex-col md:pl-20 pl-4 min-h-[calc(100vh-64px)]">
+        <div className="md:w-64 w-full col-span-1 md:py-20 py-8">
+          <h1 className="block md:hidden md:text-[2rem] text-[1.5rem] font-light mb-6">
             Welcome back,
             <br />
             {userName}
@@ -145,7 +145,7 @@ export default function AccountPage({ user }: AccountPageProps) {
           </div>
         </div>
 
-        <div className="flex-1 md:py-20 py-6 md:px-10 px-0">
+        <div className="flex-1 md:py-20 py-6 md:px-10 px-0 col-span-4 ">
           <h1 className="md:block hidden text-2xl font-light mb-12">
             Welcome back, {userName}
           </h1>
@@ -161,12 +161,8 @@ export default function AccountPage({ user }: AccountPageProps) {
             ) : orders.length === 0 ? (
               <div className="text-center py-8">
                 <div className="text-stone-500 mb-4">No orders found</div>
-                <Button
-                  asChild
-                  className="bg-yellow-400 hover:bg-yellow-500 text-stone-800 px-6 py-2 text-xs uppercase tracking-wider"
-                >
-                  <a href="/products">Start Shopping</a>
-                </Button>
+                <Link href="/products"></Link>
+                <Button variant={"box_yellow"}>Start Shopping</Button>
               </div>
             ) : (
               orders.map((order, index) => {
@@ -189,12 +185,12 @@ export default function AccountPage({ user }: AccountPageProps) {
                         <h3 className="">${order.total_amount?.toFixed(2)}</h3>
                       </div>
                       <Link href={`/orders/${order.id}`}>
-                        <Button variant="box_yellow">VIEW ORDER</Button>
+                        <Button variant="box_yellow" className="px-14 h-10 rounded-sm">VIEW ORDER</Button>
                       </Link>
                     </div>
                     {order.order_items && order.order_items.length > 0 && (
                       <div className="relative w-full">
-                        <div className="overflow-x-auto overflow-y-hidden">
+                        <div className="overflow-x-auto overflow-y-hidden hide-scrollbar">
                           <div className="flex gap-4 pb-4 w-max">
                             {order.order_items.map((item, itemIndex) => (
                               <div
@@ -221,7 +217,7 @@ export default function AccountPage({ user }: AccountPageProps) {
             )}
           </div>
 
-          <div>
+          <div className="pr-4 md:pr0">
             <h2 className="text-lg font-medium mb-8 hidden md:block">
               PROFILE SETTINGS
             </h2>

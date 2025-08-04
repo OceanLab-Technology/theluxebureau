@@ -22,7 +22,26 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     
     const { data, error } = await supabase
       .from('orders')
-      .select('*')
+      .select(`
+        *,
+        order_items (
+          *,
+          products (
+            id,
+            name,
+            image_1,
+            image_2,
+            image_3,
+            price,
+            description,
+            category,
+            inventory,
+            why_we_chose_it,
+            about_the_maker,
+            particulars
+          )
+        )
+      `)
       .eq('id', id)
       .single();
     

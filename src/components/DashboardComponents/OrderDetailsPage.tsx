@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +10,17 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Calendar, User, MapPin } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { 
+  ArrowLeft, 
+  Calendar, 
+  User, 
+  MapPin, 
+  Package, 
+  Settings,
+  CreditCard,
+  ShoppingBag 
+} from "lucide-react";
 import { useOrderDetailsStore } from "@/store/admin/orderStore";
 import { useRouter } from "next/navigation";
 
@@ -69,28 +80,6 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
     setHasChanges(false);
   };
 
-  const renderInput = (
-    label: string,
-    field: keyof typeof formData,
-    type: "text" | "number" = "text"
-  ) => (
-    <div className="space-y-1.5">
-      <Label>{label}</Label>
-      <Input
-        type={type}
-        value={formData[field]}
-        onChange={(e) => handleFieldChange(field, e.target.value)}
-      />
-    </div>
-  );
-
-  const renderReadOnly = (label: string, value?: string | null) => (
-    <div className="space-y-1.5">
-      <Label>{label}</Label>
-      <p className="text-sm text-muted-foreground">{value || "—"}</p>
-    </div>
-  );
-
   const handleDelete = async () => {
     if (!order) return;
 
@@ -100,7 +89,6 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
     if (!confirmed) return;
 
     await deleteOrder(order.id);
-
     router.push("/admin/orders");
   };
 
@@ -114,6 +102,52 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
     return `${day}.${month}.${year} ${hours}:${minutes}`;
   }
 
+  const renderOrderItemCard = (item: any, index: number) => (
+    <Card key={item.id} className="overflow-hidden">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-sm">Item #{index + 1}</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="flex gap-4">
+          <div className="w-20 h-20 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
+            <Image
+              src={item.products?.image_1 || "/placeholder.jpg"}
+              alt={item.products?.name || "Product"}
+              width={80}
+              height={80}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h4 className="font-medium text-sm truncate">{item.products?.name}</h4>
+            <p className="text-xs text-muted-foreground">{item.products?.category}</p>
+            <div className="flex justify-between items-center mt-2">
+              <span className="text-xs">Qty: {item.quantity}</span>
+              <span className="font-medium text-sm">${item.price_at_purchase?.toFixed(2)}</span>
+            </div>
+          </div>
+        </div>
+        {item.custom_data && Object.keys(item.custom_data).length > 0 && (
+          <div>
+            <Label className="text-xs font-medium">Personalization</Label>
+            <div className="mt-1 space-y-1">
+              {Object.entries(item.custom_data).map(([key, value]) => (
+                <div key={key} className="flex justify-between text-xs">
+                  <span className="text-muted-foreground capitalize">
+                    {key.replace(/([A-Z])/g, ' $1').trim()}:
+                  </span>
+                  <span className="font-medium max-w-32 truncate">
+                    {String(value)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+
   if (loading || !order) {
     return (
       <div className="flex flex-col min-h-screen bg-muted/50">
@@ -122,70 +156,20 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
           <h1 className="text-lg font-[200]">Order Details</h1>
           <Skeleton className="h-6 w-20" />
         </header>
-
         <main className="flex-1 p-8 space-y-6">
-          <div className="flex items-center gap-2">
-            <Skeleton className="h-9 w-32" /> {/* Back button skeleton */}
-          </div>
-
-          <div className="grid gap-6 sm:grid-cols-2">
-            {/* Customer Info Card Skeleton */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <Skeleton className="h-5 w-5" /> {/* Icon skeleton */}
-                  <Skeleton className="h-5 w-40" /> {/* Title skeleton */}
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Skeleton className="h-4 w-16 mb-1" /> {/* Label skeleton */}
-                  <Skeleton className="h-4 w-40" /> {/* Value skeleton */}
-                </div>
-                <div>
-                  <Skeleton className="h-4 w-16 mb-1" />
-                  <Skeleton className="h-4 w-48" />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Recipient Info Card Skeleton */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <Skeleton className="h-5 w-5" />
+          <Skeleton className="h-9 w-32" />
+          <div className="grid gap-6 lg:grid-cols-2">
+            {[...Array(4)].map((_, i) => (
+              <Card key={i}>
+                <CardHeader>
                   <Skeleton className="h-5 w-40" />
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Skeleton className="h-4 w-16 mb-1" />
-                  <Skeleton className="h-4 w-40" />
-                </div>
-                <div>
-                  <Skeleton className="h-4 w-16 mb-1" />
-                  <Skeleton className="h-4 w-48" />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Order Info Card Skeleton */}
-            <Card className="sm:col-span-2">
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <Skeleton className="h-5 w-5" />
-                  <Skeleton className="h-5 w-40" />
-                </div>
-              </CardHeader>
-              <CardContent className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-                {[...Array(7)].map((_, i) => (
-                  <div key={i} className="space-y-1.5">
-                    <Skeleton className="h-4 w-16" />
-                    <Skeleton className="h-9 w-full" />
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </main>
       </div>
@@ -212,7 +196,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
           </Link>
         </Button>
 
-        <div className="grid gap-6 sm:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-2">
           {/* Customer Info */}
           <Card>
             <CardHeader>
@@ -221,13 +205,15 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
                 <CardTitle>Customer Information</CardTitle>
               </div>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <p>
-                <strong>Name:</strong> {order.customerInfo.name}
-              </p>
-              <p>
-                <strong>Email:</strong> {order.customerInfo.email}
-              </p>
+            <CardContent className="space-y-3">
+              <div>
+                <Label className="text-sm">Name</Label>
+                <p className="text-sm text-muted-foreground">{order.customerInfo.name}</p>
+              </div>
+              <div>
+                <Label className="text-sm">Email</Label>
+                <p className="text-sm text-muted-foreground">{order.customerInfo.email}</p>
+              </div>
             </CardContent>
           </Card>
 
@@ -239,51 +225,145 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
                 <CardTitle>Recipient Information</CardTitle>
               </div>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <p>
-                <strong>Name:</strong> {order.recipientInfo.name}
-              </p>
-              <p>
-                <strong>Address:</strong> {order.recipientInfo.address}
-              </p>
+            <CardContent className="space-y-3">
+              <div>
+                <Label className="text-sm">Name</Label>
+                <p className="text-sm text-muted-foreground">{order.recipientInfo.name}</p>
+              </div>
+              <div>
+                <Label className="text-sm">Address</Label>
+                <p className="text-sm text-muted-foreground">{order.recipientInfo.address}</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Payment & Status Info */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <CreditCard className="h-5 w-5" />
+                <CardTitle>Payment & Status</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div>
+                <Label className="text-sm">Payment Status</Label>
+                <Badge variant="outline" className="ml-2">
+                  {order.orderInfo.paymentStatus}
+                </Badge>
+              </div>
+              <div>
+                <Label className="text-sm">Order Status</Label>
+                <Badge variant="outline" className="ml-2">
+                  {order.orderInfo.status}
+                </Badge>
+              </div>
+              <div>
+                <Label className="text-sm">Total Amount</Label>
+                <p className="text-lg font-semibold">${order.orderInfo.total}</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Timestamps */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Calendar className="h-5 w-5" />
+                <CardTitle>Timeline</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div>
+                <Label className="text-sm">Delivery Date</Label>
+                <p className="text-sm text-muted-foreground">
+                  {new Date(order.orderInfo.deliveryDate).toLocaleDateString()}
+                </p>
+              </div>
+              <div>
+                <Label className="text-sm">Placed At</Label>
+                <p className="text-sm text-muted-foreground">
+                  {formatTimestamp(order.orderInfo.placedAt)}
+                </p>
+              </div>
+              <div>
+                <Label className="text-sm">Updated At</Label>
+                <p className="text-sm text-muted-foreground">
+                  {formatTimestamp(order.orderInfo.updatedAt)}
+                </p>
+              </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Order Info */}
+        {/* Order Items */}
+        {order.orderItems && order.orderItems.length > 0 && (
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <ShoppingBag className="h-5 w-5" />
+                <CardTitle>Order Items ({order.orderItems.length})</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {order.orderItems.map((item, index) => renderOrderItemCard(item, index))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Editable Order Info */}
         <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5" />
-              <CardTitle>Order Information</CardTitle>
+              <Package className="h-5 w-5" />
+              <CardTitle>Edit Order Information</CardTitle>
             </div>
           </CardHeader>
-          <CardContent className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-            {renderInput("Delivery Date", "deliveryDate")}
-            {renderInput("Total (€)", "total", "number")}
-            {renderInput("Status", "status")}
-            {renderInput("Notes", "notes")}
-            {renderReadOnly("Payment Status", order.orderInfo.paymentStatus)}
-            {renderReadOnly(
-              "Placed At",
-              formatTimestamp(order.orderInfo.placedAt)
-            )}
-            {renderReadOnly(
-              "Updated At",
-              formatTimestamp(order.orderInfo.updatedAt)
-            )}
+          <CardContent className="grid gap-4 md:grid-cols-2">
+            <div className="space-y-1.5">
+              <Label>Delivery Date</Label>
+              <Input
+                type="date"
+                value={formData.deliveryDate}
+                onChange={(e) => handleFieldChange("deliveryDate", e.target.value)}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Status</Label>
+              <Input
+                value={formData.status}
+                onChange={(e) => handleFieldChange("status", e.target.value)}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Total ($)</Label>
+              <Input
+                type="number"
+                step="0.01"
+                value={formData.total}
+                onChange={(e) => handleFieldChange("total", e.target.value)}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Notes</Label>
+              <Textarea
+                value={formData.notes}
+                onChange={(e) => handleFieldChange("notes", e.target.value)}
+                className="min-h-[80px]"
+              />
+            </div>
           </CardContent>
         </Card>
 
-        <div className="flex justify-end">
-          <div className="flex justify-end gap-2">
-            <Button onClick={handleSave} disabled={!hasChanges}>
-              Save
-            </Button>
-            <Button onClick={handleDelete} variant="destructive">
-              Delete
-            </Button>
-          </div>
+        <div className="flex justify-end gap-2">
+          <Button onClick={handleSave} disabled={!hasChanges}>
+            Save Changes
+          </Button>
+          <Button onClick={handleDelete} variant="destructive">
+            Delete Order
+          </Button>
         </div>
       </main>
     </div>

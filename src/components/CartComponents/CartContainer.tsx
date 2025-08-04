@@ -54,7 +54,7 @@ export function CartContainer() {
   }
 
   return (
-    <div className="md:mx-12 md:my-14 py-10 px-6">
+    <div className="md:mx-12 md:my-14 py-10 px-6 h-screen flex flex-col justify-between">
       <div className="flex items-center justify-between md:mb-8 pb-4">
         <h1 className="text-2xl font-light">Shopping Cart</h1>
         <Link
@@ -63,10 +63,9 @@ export function CartContainer() {
         >
           CONTINUE SHOPPING
         </Link>
-        
       </div>
 
-      <div className="space-y-6 mb-12 max-h-106 overflow-y-auto hide-scrollbar">
+      <div className="space-y-6 mb-12 max-h overflow-y-auto hide-scrollbar">
         {enrichedCartItems.map((item) => (
           <CartItem key={item.id} item={item} loading={cartLoading} />
         ))}
