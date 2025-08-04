@@ -39,7 +39,7 @@ export async function updateSession(request: NextRequest) {
   const user = data?.claims;
 
   // Define public routes that don't require authentication
-  const publicRoutes = ["/auth/login", "/auth/sign-up", "/auth/forgot-password", "/auth/sign-up-success"];
+  const publicRoutes = ["/auth/login", "/auth/sign-up", "/auth/forgot-password", "/auth/sign-up-success", "/api/stripe/webhook"];
   const isPublicRoute = publicRoutes.includes(request.nextUrl.pathname);
 
   // If user is not authenticated and trying to access a protected route

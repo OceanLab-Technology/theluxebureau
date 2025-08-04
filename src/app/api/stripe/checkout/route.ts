@@ -10,6 +10,7 @@ export async function POST(request: NextRequest) {
     data: { user },
     error: authError,
   } = await supabase.auth.getUser();
+
   if (authError || !user) {
     return NextResponse.json(
       { success: false, error: "Unauthorized" },
@@ -19,73 +20,94 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { items, customerInfo, total } = body;
-    const lineItems = items.map((item: any) => {
-      let productImages: string[] = [];
-      if (item.image && typeof item.image === "string") {
-        try {
-          const baseUrl =
-            process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-          const url = new URL(
-            item.image.startsWith("http")
-              ? item.image
-              : `${baseUrl}${item.image}`
-          );
-          productImages = [url.toString()];
-        } catch (e) {
-          console.warn("Invalid image URL:", item.image);
-          productImages = [];
-        }
-      }
+    const {
+      items,
+      customerInfo,
+      total,
+      recipientInfo,
+      deliveryDate,
+      personalization,
+      notes,
+    } = body;
 
-      return {
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: item.name,
-            ...(productImages.length > 0 && { images: productImages }),
-          },
-          unit_amount: Math.round(item.price * 100),
+    console.log("Payload for Stripe Checkout Session:", items);
+
+    const lineItems = items.map((item: any) => ({
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: item.name,
+          images: item.image_1 ? [item.image_1] : [],
         },
-        quantity: item.quantity,
-      };
-    });
+        unit_amount: Math.round(item.price * 100),
+      },
+      quantity: item.quantity,
+    }));
 
     lineItems.push({
       price_data: {
         currency: "usd",
-        product_data: {
-          name: "Shipping",
-        },
+        product_data: { name: "Shipping" },
         unit_amount: 1500,
       },
       quantity: 1,
     });
-    
-    // Create Stripe checkout session
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
       customer_email: customerInfo.email,
-      success_url: `${
-        process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
-      }/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${
-        process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
-      }/checkout/cancelled`,
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/cancelled`,
       metadata: {
-        customerFirstName: customerInfo.firstName,
-        customerLastName: customerInfo.lastName,
+        userId: user.id,
+        customerName: `${customerInfo.firstName} ${customerInfo.lastName}`,
         customerEmail: customerInfo.email,
+        totalAmount: total.toString(),
       },
     });
+
+    const { data: orderData, error: orderError } = await supabase
+      .from("orders")
+      .insert({
+        stripe_session_id: session.id,
+        user_email: user.email,
+        customer_name: `${customerInfo.firstName} ${customerInfo.lastName}`,
+        customer_email: user.email,
+        recipient_name: user.user_metadata.full_name,
+        recipient_address: user.user_metadata.shipping_address,
+        delivery_date: deliveryDate,
+        notes,
+        status: "New",
+        payment_status: "pending",
+        total_amount: total,
+        personalization,
+      })
+      .select()
+      .single();
+
+    if (orderError || !orderData) {
+      console.error("Order creation failed:", orderError);
+    } else {
+      const orderId = orderData.id;
+      // Insert order items
+      for (const item of items) {
+        await supabase.from("order_items").insert({
+          order_id: orderId,
+          product_id: item.product_id,
+          quantity: item.quantity,
+          price_at_purchase: item.price,
+          custom_data: item.customData,
+        });
+      }
+    }
 
     return NextResponse.json({ sessionId: session.id });
   } catch (error: any) {
     console.error("Stripe Checkout Error:", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Internal Server Error" },
+      { success: false, error: error.message },
       { status: 500 }
     );
   }

@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo } from "react";
 import { CheckoutContainer } from "@/components/CheckoutComponents/CheckoutContainer";
 import { CheckoutPageSkeleton } from "@/components/CheckoutComponents/CheckoutSkeleton";
+import { DetailProductCard } from "@/components/CheckoutComponents/DetailProductCard";
 import { useMainStore } from "@/store/mainStore";
 import { Product } from "@/app/api/types";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,7 @@ export default function CheckoutPage() {
         if (!product) return null;
 
         return {
+          product_id: product.id,
           ...product,
           quantity: cartItem.quantity,
           cartItemId: cartItem.id,
@@ -60,104 +62,22 @@ export default function CheckoutPage() {
     <>
       <Script src="https://js.stripe.com/v3/" />
       <div className="min-h-screen">
-        <div className="max-w-6xl md:p-10 md:pb-10 md:px-0 px-4 mx-auto">
+        <div className="max-w-[75rem] md:p-10 md:pb-10 md:px-20 lg:px-10 px-4 mx-auto">
           <div className="flex items-center justify-between py-10">
-            <h2 className="text-3xl font-medium">Check-out</h2>
+            <h2 className="text-[2rem] font-medium">Check-out</h2>
             <Button variant="link" asChild>
               <Link href="/cart">Back to Cart</Link>
             </Button>
           </div>
-          <div className="grid lg:grid-cols-2 md:gap-12 gap-4">
-            <div className="flex flex-col md:space-y-4">
+          <div className="grid lg:grid-cols-2 gap-12 grid-cols-1">
+            <div className="flex flex-col md:space-y-4 space-y-10">
               {checkoutItems.map((product, index) => (
-                <div key={product.id}>
-                  <h2 className="my-4 pb-2 border-b">
-                    Item {String(index + 1).padStart(2, "0")}
-                  </h2>
-                  <div className="flex gap-6">
-                    <div className="bg-muted/20 w-30 h-40 overflow-hidden">
-                      <img
-                        src={product.image_1 || "/placeholder.jpg"}
-                        alt={product.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-
-                    <div className="flex flex-col w-full justify-center space-y-1">
-                      <h1 className="font-medium">{product.name}</h1>
-                      <div className="flex items-center gap-4">
-                        <span className="font-medium">
-                          ${product.price.toLocaleString()}
-                        </span>
-                        <span className="text-muted-foreground text-xs ">
-                          Qty: {(product as any).quantity}
-                        </span>
-                      </div>
-                      <p className="text-muted-foreground leading-relaxed text-xs line-clamp-1">
-                        {product.description}
-                      </p>
-
-                      {product.customData &&
-                        Object.keys(product.customData).length > 0 && (
-                          <div className="text-xs text-stone-500 mb-3 space-y-1">
-                            {product.customData.isPersonalized ? (
-                              <div className="space-y-1">
-                                <div className="font-medium text-stone-600">
-                                  for{" "}
-                                  {product.customData.recipientName ||
-                                    "recipient"}
-                                </div>
-                                {product.customData.deliveryDate && (
-                                  <div>
-                                    <span className="font-medium">
-                                      Delivery:
-                                    </span>{" "}
-                                    {new Date(
-                                      product.customData.deliveryDate
-                                    ).toLocaleDateString()}
-                                  </div>
-                                )}
-                                {product.customData.customMessage && (
-                                  <div>
-                                    <span className="font-medium">
-                                      Message:
-                                    </span>{" "}
-                                    "{product.customData.customMessage}"
-                                  </div>
-                                )}
-                                {product.customData.selectedQuote && (
-                                  <div>
-                                    <span className="font-medium">Quote:</span>{" "}
-                                    {product.customData.selectedQuote}
-                                  </div>
-                                )}
-                                {product.customData.yourName && (
-                                  <div>
-                                    <span className="font-medium">From:</span>{" "}
-                                    {product.customData.yourName}
-                                  </div>
-                                )}
-                              </div>
-                            ) : (
-                              <div>
-                                <span className="font-medium">
-                                  Custom details:{" "}
-                                  {Object.entries(product.customData)
-                                    .map(([key, value]) => String(value))
-                                    .join(", ")}
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                    </div>
-                  </div>
-                </div>
+                <DetailProductCard key={product.id} product={product} index={index} />
               ))}
             </div>
 
-            <div className="">
-              <h2 className="my-4 pb-2 border-b">Payment</h2>
+            <div className="sticky top-6 self-start">
+              <h2 className="my-6 pb-2 border-b">Payment</h2>
               <div className="mb-6 p-4 bg-muted/20 rounded-lg">
                 <h3 className="font-semibold mb-4">Order Summary</h3>
                 <div className="space-y-2 text-sm">
@@ -170,8 +90,7 @@ export default function CheckoutPage() {
                             <span
                               className="text-amber-600"
                               title="Personalized Item"
-                            >
-                            </span>
+                            ></span>
                           )}
                       </span>
                       <span>
@@ -220,7 +139,6 @@ export default function CheckoutPage() {
               <div className="w-full">
                 <CheckoutContainer
                   items={checkoutItems}
-                  useStripeElements={false}
                 />
               </div>
             </div>

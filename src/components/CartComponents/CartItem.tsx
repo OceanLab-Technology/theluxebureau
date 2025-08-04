@@ -204,7 +204,7 @@ export function CartItem({ item, loading }: CartItemProps) {
               value={quantity}
               onChange={handleInputChange}
               disabled={isUpdating || loading}
-              className="md:w-12 w-8 h-8 text-center border-0 focus:ring-0 rounded-none"
+              className="md:w-12 w-6 h-8 text-center border-0 focus:ring-0 rounded-none shadow-none"
               min="1"
             />
 

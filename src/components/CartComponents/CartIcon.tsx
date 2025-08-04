@@ -2,16 +2,31 @@
 
 import { useMainStore } from "@/store/mainStore";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/client";
 
 export function CartIcon({ className }: { className?: string }) {
   const { cartItemCount, fetchCartItems } = useMainStore();
+  const supabase = createClient();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  useEffect(() => {
+    const checkAuth = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+    };
+
+    checkAuth();
+  }, [supabase]);
 
   const router = useRouter();
 
   useEffect(() => {
-    // Fetch cart items when component mounts
+    if (isAuthenticated) {
+      fetchCartItems();
+    }
     fetchCartItems();
   }, [fetchCartItems]);
 
@@ -24,7 +39,7 @@ export function CartIcon({ className }: { className?: string }) {
       onClick={handleCartClick}
       className={cn("relative cursor-pointer", className)}
     >
-      CART ({cartItemCount})
+      CART ({ isAuthenticated ? cartItemCount : 0})
     </button>
   );
 }

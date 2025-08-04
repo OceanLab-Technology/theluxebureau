@@ -5,18 +5,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, CreditCard, Lock } from "lucide-react";
+import { Loader2, Lock } from "lucide-react";
 import { Product } from "@/app/api/types";
 
 interface CheckoutContainerProps {
   items: Product[];
-  useStripeElements?: boolean;
 }
 
-export function CheckoutContainer({
-  items = [],
-  useStripeElements = false,
-}: CheckoutContainerProps) {
+export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [customerInfo, setCustomerInfo] = useState({
@@ -25,6 +21,7 @@ export function CheckoutContainer({
     email: "",
     phone: "",
   });
+
 
   const handleInputChange = (field: string, value: string) => {
     setCustomerInfo((prev) => ({
@@ -64,6 +61,17 @@ export function CheckoutContainer({
             quantity: (item as any).quantity || 1,
           })),
           customerInfo,
+          recipientInfo: {
+            firstName: customerInfo.firstName,
+            lastName: customerInfo.lastName,
+            email: customerInfo.email,
+            phone: customerInfo.phone,
+          },
+          personalization: items.map((item) => item.customData || ""),
+          deliveryDate: new Date(
+            Date.now() + 7 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          notes: "",
           total,
         }),
       });

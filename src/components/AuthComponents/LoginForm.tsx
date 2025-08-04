@@ -41,13 +41,13 @@ export function LoginForm({
 
   return (
     <div
-      className={cn("w-full px-4 sm:px-10 font-century", className)}
+      className={cn("w-full px-4 sm:px-10 font-century md:pt-0 pt-20", className)}
       {...props}
     >
-      <h1 className="text-xs font-light mb-4 tracking-wide sm:py-20">LOGIN</h1>
+      <h1 className="text-[1rem] font-light mb-4 tracking-wide md:py-20">LOGIN</h1>
       <div className="mb-8">
         <form onSubmit={handleLogin}>
-          <div className="flex flex-col w-full sm:w-[400px] gap-3 mb-8">
+          <div className="flex flex-col w-full md:w-[600px] gap-3 mb-8">
             <div className="border border-stone-700 p-4 sm:p-8">
               <Label
                 htmlFor="email"

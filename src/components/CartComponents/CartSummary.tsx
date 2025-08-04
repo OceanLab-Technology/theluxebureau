@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
 export function CartSummary() {
-  const { cartItems, cartTotal, cartItemCount, cartLoading, products } =
-    useMainStore();
+  const { cartItems, cartTotal, cartLoading } = useMainStore();
 
   const router = useRouter();
+
+  console.log("CartSummary rendered with items:", cartItems.length, "Total:", cartTotal);
+  
 
   const handleCheckout = () => {
     router.push("/checkout");

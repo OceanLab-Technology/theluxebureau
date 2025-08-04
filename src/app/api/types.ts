@@ -83,7 +83,7 @@ export interface Order {
   updated_at?: string;
   stripe_session_id?: string;
   stripe_payment_intent_id?: string;
-  payment_status?: string;
+  payment_status?: 'pending' | 'completed' | 'failed' | 'refunded';
   product_details?: Record<string, any>;
   personalization?: Record<string, any>;
 }

@@ -1,150 +1,54 @@
-import Stripe from "stripe";
-import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
+import Stripe from "stripe";
 import { createClient } from "@/lib/supabase/server";
-
-type METADATA = {
-  userId: string;
-  priceId: string;
-  customerFirstName?: string;
-  customerLastName?: string;
-  customerEmail?: string;
-  orderItems?: string;
-};
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
+  const head = await headers();
+  const sign = head.get("stripe-signature");
   const body = await request.text();
-  const endpointSecret = process.env.STRIPE_SECRET_WEBHOOK_KEY!;
-  const header = await headers();
-  const sig = header.get("stripe-signature") as string;
-  let event: Stripe.Event;
-  try {
-    event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
-  } catch (err) {
-    return new Response(`Webhook Error: ${err}`, {
-      status: 400,
-    });
-  }
-
-  const supabase = await createClient();
-  const eventType = event.type;
 
   try {
-    switch (eventType) {
-      // Handle Stripe Checkout Sessions (original flow)
-      case "checkout.session.completed":
-      case "checkout.session.async_payment_succeeded":
-        const sessionData = event.data.object as Stripe.Checkout.Session;
-        const sessionMetadata = sessionData.metadata as METADATA;
-        
-        const sessionTransactionDetails = {
-          userId: sessionMetadata.userId,
-          priceId: sessionMetadata.priceId,
-          created: sessionData.created,
-          currency: sessionData.currency,
-          customerDetails: sessionData.customer_details,
-          amount: sessionData.amount_total,
-        };
+    const event = stripe.webhooks.constructEvent(
+      body,
+      sign!,
+      process.env.STRIPE_SECRET_WEBHOOK_KEY!
+    );
+    const supabase = await createClient();
 
-        // Handle checkout session completion
-        console.log("Checkout session completed:", sessionTransactionDetails);
-        break;
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object as Stripe.Checkout.Session;
 
-      // Handle Payment Intents (Stripe Elements flow)
-      case "payment_intent.succeeded":
-        const paymentIntent = event.data.object as Stripe.PaymentIntent;
-        const metadata = paymentIntent.metadata;
-        
-        // Extract order items if they exist
-        const orderItems = metadata.orderItems ? JSON.parse(metadata.orderItems) : [];
+      const { error: updateError } = await supabase
+        .from("orders")
+        .update({
+          stripe_payment_intent_id: session.payment_intent as string,
+          stripe_customer_id: session.customer as string,
+          stripe_payment_status: session.payment_status,
+          stripe_payment_method: session.payment_method_types?.[0],
+          status: "Active",
+          payment_status: "completed",
+          updated_at: new Date().toISOString(),
+        })
+        .eq("stripe_session_id", session.id);
 
-        // Create order record
-        const { data: order, error: orderError } = await supabase
-          .from("orders")
-          .insert({
-            user_id: metadata.userId,
-            stripe_payment_intent_id: paymentIntent.id,
-            amount: paymentIntent.amount,
-            currency: paymentIntent.currency,
-            status: "completed",
-            customer_email: metadata.customerEmail,
-            customer_first_name: metadata.customerFirstName,
-            customer_last_name: metadata.customerLastName,
-            shipping_address: paymentIntent.shipping?.address ? {
-              line1: paymentIntent.shipping.address.line1,
-              city: paymentIntent.shipping.address.city,
-              postal_code: paymentIntent.shipping.address.postal_code,
-              country: paymentIntent.shipping.address.country,
-            } : null,
-          })
-          .select()
-          .single();
-
-        if (orderError) {
-          console.error("Error creating order:", orderError);
-          throw orderError;
-        }
-
-        // Create order items if they exist
-        if (orderItems.length > 0 && order) {
-          const orderItemsData = orderItems.map((item: any) => ({
-            order_id: order.id,
-            product_id: item.id,
-            product_name: item.name,
-            price: item.price,
-            quantity: item.quantity,
-          }));
-
-          const { error: itemsError } = await supabase
-            .from("order_items")
-            .insert(orderItemsData);
-
-          if (itemsError) {
-            console.error("Error creating order items:", itemsError);
-            throw itemsError;
-          }
-        }
-
-        console.log("Payment intent succeeded, order created:", order.id);
-        break;
-
-      case "payment_intent.payment_failed":
-        const failedPayment = event.data.object as Stripe.PaymentIntent;
-        console.log("Payment failed:", failedPayment.id);
-        
-        // Optionally log failed payments
-        const { error: failedOrderError } = await supabase
-          .from("orders")
-          .insert({
-            user_id: failedPayment.metadata.userId || null,
-            stripe_payment_intent_id: failedPayment.id,
-            amount: failedPayment.amount / 100,
-            currency: failedPayment.currency,
-            status: "failed",
-            customer_email: failedPayment.metadata.customerEmail || null,
-          });
-
-        if (failedOrderError) {
-          console.error("Error logging failed payment:", failedOrderError);
-        }
-        break;
-
-      default:
-        console.log(`Unhandled event type: ${eventType}`);
-        return new Response("Unhandled event type", { status: 400 });
+      if (updateError) {
+        console.error("Webhook Update Error:", updateError);
+      }
+    } else if (event.type === "payment_intent.payment_failed") {
+      const intent = event.data.object as Stripe.PaymentIntent;
+      await supabase
+        .from("orders")
+        .update({
+          payment_status: "failed",
+        })
+        .eq("stripe_payment_intent_id", intent.id);
     }
 
-    return NextResponse.json({
-      status: 200,
-      received: true,
-    });
-  } catch (error: any) {
-    console.error("Webhook handler error:", error);
-    return NextResponse.json({
-      status: 500,
-      error: "Server error",
-    });
+    return new Response("Webhook received", { status: 200 });
+  } catch (err: any) {
+    console.error("Stripe Webhook Error:", err.message);
+    return new Response(`Webhook Error: ${err.message}`, { status: 400 });
   }
 }

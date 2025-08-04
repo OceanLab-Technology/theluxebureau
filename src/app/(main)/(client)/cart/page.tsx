@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMainStore } from "@/store/mainStore";
 import { CartContainer } from "@/components/CartComponents";
 import { CartContainerSkeleton } from "@/components/CartComponents/CartSkeleton";
 import { Loader2 } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 export default function CartPage() {
   const {
@@ -23,11 +24,16 @@ export default function CartPage() {
     }
   }, [fetchCartItems, fetchProducts, products.length]);
 
+
   if (cartLoading && cartItems.length === 0) {
     return (
       <div className="h-screen overflow-hidden">
         <div className="grid md:grid-cols-2 grid-cols-1">
-          <img src="/image.png" alt="" className="object-cover md:block hidden" />
+          <img
+            src="/image.png"
+            alt=""
+            className="object-cover md:block hidden"
+          />
           <CartContainerSkeleton />
         </div>
       </div>
@@ -35,7 +41,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="md:h-[calc(100vh+4rem)] overflow-hidden">
       <div className="grid md:grid-cols-2 grid-cols-1">
         <img src="/image.png" alt="" className="object-cover md:block hidden" />
         <CartContainer />

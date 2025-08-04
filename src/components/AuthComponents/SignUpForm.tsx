@@ -57,8 +57,8 @@ export function SignUpForm({
   };
 
   return (
-    <div className={cn("w-full px-4 sm:px-10 font-century", className)} {...props}>
-      <h1 className="text-xs font-light mb-4 tracking-wide sm:py-20">SIGN UP</h1>
+    <div className={cn("w-full px-4 sm:px-10 md:pt-0 pt-10 font-century", className)} {...props}>
+      <h1 className="text-[1rem] font-light mb-4 tracking-wide md:py-20">SIGN UP</h1>
       <div className="mb-8">
         <form onSubmit={handleSignUp}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
