@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React from "react";
 import { CartIcon } from "../CartComponents/CartIcon";
-import { Menu, User2, X } from "lucide-react";
+import { Menu, ShoppingCartIcon, User2, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Logo } from "./Logo";
 import { createClient } from "@/lib/supabase/client";
@@ -261,18 +261,25 @@ export default function Header() {
           >
             {/* Mobile Header */}
             <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center">
                 <button
                   onClick={() => setMobileMenuOpen(false)}
                   className="text-3xl"
                 >
                   <X />
                 </button>
-                <Link href="/" onClick={() => setMobileMenuOpen(false)}>
+                <Link
+                  className="scale-50"
+                  href="/"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
                   <Logo fill="#FBF7E5" />
                 </Link>
               </div>
-              <CartIcon className="text-background hover:text-[#FBD060]" />
+              {/* <CartIcon className="text-background hover:text-[#FBD060]" /> */}
+              <Link href={"/cart"} onClick={() => setMobileMenuOpen(false)}>
+                <ShoppingCartIcon className="text-background hover:text-[#FBD060] h-4 w-4" />
+              </Link>
             </div>
 
             {/* Mobile Menu Content */}
