@@ -46,19 +46,21 @@ export default function DeliveryDetailsStep() {
     updateFormData({ preferredDeliveryTime: time });
   };
 
-  const handleSMSChange = (value: "send-to-me" | "send-to-recipient" | "none") => {
+  const handleSMSChange = (
+    value: "send-to-me" | "send-to-recipient" | "none"
+  ) => {
     updateFormData({ smsUpdates: value });
   };
 
   return (
-    <div>
-      <p className="text-stone-700 mb-4 font-medium md:text-xl">
+    <div className="">
+      <p className="text-stone-700 mb-4 font-medium md:text-xl font-century">
         Our gifts are sent by zero-emission, nominated-day delivery. Please add
         your recipient's details, and your preferred delivery day and time,
         below.
       </p>
 
-      <form className="space-y-4">
+      <form className="space-y-4 font-[Marfa]">
         <div>
           <Input
             id="recipient-name"
@@ -91,7 +93,7 @@ export default function DeliveryDetailsStep() {
               <Button
                 variant="ghost"
                 className={cn(
-                  "w-full justify-start text-left font-normal border-0 bg-transparent px-0 py-2 sm:py-3 text-stone-800 hover:bg-transparent border-b border-stone-500 focus:border-stone-600 rounded-none shadow-none text-sm sm:text-base h-auto",
+                  "w-full justify-start text-left font-normal border-0 bg-transparent px-0 py-2 sm:py-3 text-stone-800 hover:bg-transparent border-b border-stone-500 focus:border-stone-600 rounded-none shadow-none text-sm h-auto",
                   !date && "text-stone-500"
                 )}
               >
@@ -113,9 +115,15 @@ export default function DeliveryDetailsStep() {
         </div>
 
         <div>
-          <Select onValueChange={handleTimeSelect} value={formData.preferredDeliveryTime}>
-            <SelectTrigger className="w-full border-0 bg-transparent px-0 py-2 sm:py-3 text-stone-800 border-b border-stone-500 focus:border-stone-600 rounded-none shadow-none text-sm sm:text-base h-auto">
-              <SelectValue placeholder="Preferred delivery time" className="text-stone-500" />
+          <Select
+            onValueChange={handleTimeSelect}
+            value={formData.preferredDeliveryTime}
+          >
+            <SelectTrigger className="w-full border-0 bg-transparent px-0 py-2 sm:py-3 text-stone-800 border-b border-stone-500 focus:border-stone-600 rounded-none shadow-none text-sm h-auto">
+              <SelectValue
+                placeholder="Preferred delivery time"
+                className="text-stone-500"
+              />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="8am-1pm">8 AM to 1 PM</SelectItem>
@@ -125,43 +133,82 @@ export default function DeliveryDetailsStep() {
           </Select>
         </div>
 
-        <div className="pt-4 flex items-center justify-between border-b border-stone-700">
+        <div className="pt-4 flex md:items-center items-start md:flex-row flex-col pb-1 justify-between border-b border-stone-500">
           <p className="text-stone-700 text-sm mb-3">
             Would you like shipping updates via SMS?
           </p>
           <div className="flex gap-6">
-          <label className="flex items-center space-x-2 cursor-pointer">
-            <span className="text-sm text-stone-700">None</span>
-              <input
-                type="radio"
-                name="sms-updates"
-                value="none"
-                checked={formData.smsUpdates === "none"}
-                onChange={() => handleSMSChange("none")}
-                className="w-4 h-4 text-stone-600 border-stone-300 focus:ring-stone-500"
-              />
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <span className="text-sm text-stone-700">None</span>
+              <div className="relative">
+                <input
+                  type="radio"
+                  name="sms-updates"
+                  value="none"
+                  checked={formData.smsUpdates === "none"}
+                  onChange={() => handleSMSChange("none")}
+                  className="sr-only"
+                />
+                <div
+                  className={`w-4 h-4 rounded-full border-2 ${
+                    formData.smsUpdates === "none"
+                      ? "bg-[#40362c] border-[#40362c]"
+                      : "border-stone-400"
+                  }`}
+                >
+                  {formData.smsUpdates === "none" && (
+                    <div className="w-full h-full rounded-full bg-[#40362c]"></div>
+                  )}
+                </div>
+              </div>
             </label>
             <label className="flex items-center space-x-2 cursor-pointer">
               <span className="text-sm text-stone-700">Send to me</span>
-              <input
-                type="radio"
-                name="sms-updates"
-                value="send-to-me"
-                checked={formData.smsUpdates === "send-to-me"}
-                onChange={() => handleSMSChange("send-to-me")}
-                className="w-4 h-4 text-stone-600 border-stone-300 focus:ring-stone-500"
-              />
+              <div className="relative">
+                <input
+                  type="radio"
+                  name="sms-updates"
+                  value="send-to-me"
+                  checked={formData.smsUpdates === "send-to-me"}
+                  onChange={() => handleSMSChange("send-to-me")}
+                  className="sr-only"
+                />
+                <div
+                  className={`w-4 h-4 rounded-full border-2 ${
+                    formData.smsUpdates === "send-to-me"
+                      ? "bg-[#40362c] border-[#40362c]"
+                      : "border-stone-400"
+                  }`}
+                >
+                  {formData.smsUpdates === "send-to-me" && (
+                    <div className="w-full h-full rounded-full bg-[#40362c]"></div>
+                  )}
+                </div>
+              </div>
             </label>
             <label className="flex items-center space-x-2 cursor-pointer">
               <span className="text-sm text-stone-700">Send to recipient</span>
-              <input
-                type="radio"
-                name="sms-updates"
-                value="send-to-recipient"
-                checked={formData.smsUpdates === "send-to-recipient"}
-                onChange={() => handleSMSChange("send-to-recipient")}
-                className="w-4 h-4 text-stone-600 border-stone-300 focus:ring-stone-500"
-              />
+              <div className="relative">
+                <input
+                  type="radio"
+                  name="sms-updates"
+                  value="send-to-recipient"
+                  checked={formData.smsUpdates === "send-to-recipient"}
+                  onChange={() => handleSMSChange("send-to-recipient")}
+                  className="sr-only"
+                />
+                <div
+                  className={`w-4 h-4 rounded-full border-2 ${
+                    formData.smsUpdates === "send-to-recipient"
+                      ? "bg-[#40362c] border-[#40362c]"
+                      : "border-stone-400"
+                  }`}
+                >
+                  {formData.smsUpdates === "send-to-recipient" && (
+                    <div className="w-full h-full rounded-full bg-[#40362c]"></div>
+                  )}
+                </div>
+              </div>
             </label>
           </div>
         </div>

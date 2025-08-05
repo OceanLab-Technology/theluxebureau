@@ -41,7 +41,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="md:h-[calc(100vh+4rem)] overflow-hidden">
+    <div className="md:h-[calc(100vh+4rem)] overflow-hidden font-century">
       <div className="grid md:grid-cols-2 grid-cols-1">
         <img src="/image.png" alt="" className="object-cover md:block hidden" />
         <CartContainer />

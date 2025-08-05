@@ -34,7 +34,6 @@ export default function PersonalizationStep() {
     (font) => font.name === formData.selectedFont
   );
 
-  // Ensure headerText is set to a default value if not provided
   useEffect(() => {
     if (!formData.headerText && formData.headerText !== "") {
       updateFormData({ 
@@ -129,7 +128,7 @@ export default function PersonalizationStep() {
   };
 
   return (
-    <div>
+    <div className="font-century">
       <p className="text-stone-700 text-[1rem] leading-relaxed">
         Our gifts are sent with custom stationery, letter-pressed by hand at the
         Luxe Bureau atelier. In the header field, please enter your own name,
@@ -209,7 +208,7 @@ export default function PersonalizationStep() {
 
       <div className="mb-8">
         <div
-          className="relative h-[30rem] rounded-none overflow-hidden"
+          className="relative md:h-[30rem] h-[50vh] rounded-none overflow-hidden"
           style={{
             backgroundImage: "url(/notecard.jpg)",
             backgroundPosition: "center",

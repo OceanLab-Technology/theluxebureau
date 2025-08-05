@@ -44,7 +44,7 @@ export default function CheckoutPage() {
 
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen">
+      <div className="min-h-screen font-century">
         <div className="max-w-4xl mx-auto p-16 text-center">
           <h2 className="text-2xl font-semibold mb-4">Your cart is empty</h2>
           <p className="text-muted-foreground mb-8">
@@ -78,7 +78,7 @@ export default function CheckoutPage() {
 
             <div className="sticky top-6 self-start">
               <h2 className="my-6 pb-2 border-b">Payment</h2>
-              <div className="mb-6 p-4 bg-muted/20 rounded-lg">
+              <div className="mb-6 p-4 bg-muted/20 rounded-lg font-century">
                 <h3 className="font-semibold mb-4">Order Summary</h3>
                 <div className="space-y-2 text-sm">
                   {checkoutItems.map((item) => (

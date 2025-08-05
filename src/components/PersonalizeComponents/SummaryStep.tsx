@@ -21,33 +21,33 @@ export default function SummaryStep() {
   };
   return (
     <div>
-      <p className="text-stone-700 mb-6 font-medium md:text-[16px]">
+      <p className="text-stone-700 mb-4 font-medium md:text-[1.5rem] text-md font-century">
         Please review or amend your gift details below.
       </p>
 
       <div className="md:space-y-4 space-y-3">
-        <div className="flex items-center gap-2 border-b border-b-stone-600">
-          <h3 className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+        <div className="flex items-center gap-2 border-b border-b-stone-400">
+          <label className="text-muted font-medium text-sm tracking-wider">
             Your Name
-          </h3>
+          </label>
           <p className="text-stone-600">
             {formData.yourName || "Not provided"}
           </p>
         </div>
 
-        <div className="flex items-center gap-2 border-b border-b-stone-600">
-          <h3 className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+        <div className="flex items-center gap-2 border-b border-b-stone-400">
+          <label className="text-muted font-medium text-sm tracking-wider">
             Recipients Name
-          </h3>
+          </label>
           <p className="text-stone-600">
             {formData.recipientName || "Not provided"}
           </p>
         </div>
 
-        <div className="flex items-center gap-2 border-b border-b-stone-600">
-          <h3 className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+        <div className="flex items-center gap-2 border-b border-b-stone-400">
+          <label className="text-muted font-medium text-sm tracking-wider">
             Recipients Address
-          </h3>
+          </label>
           <p className="text-stone-600">
             {formData.recipientAddress && formData.recipientCity
               ? `${formData.recipientAddress}, ${formData.recipientCity}`
@@ -55,57 +55,90 @@ export default function SummaryStep() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 border-b border-b-stone-600">
-          <h3 className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+        <div className="flex items-center gap-2 border-b border-b-stone-400">
+          <label className="text-muted font-medium text-sm tracking-wider">
             Delivery Date
-          </h3>
+          </label>
           <p className="text-stone-600">
             {formData.deliveryDate || "Not selected"}
           </p>
         </div>
 
-        <div className="flex items-center gap-2 border-b border-b-stone-600">
-          <h3 className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+        <div className="flex items-center gap-2 border-b border-b-stone-400">
+          <label className="text-muted font-medium text-sm tracking-wider">
             Delivery Time
-          </h3>
+          </label>
           <p className="text-stone-600">
             {formData.preferredDeliveryTime || "Not selected"}
           </p>
         </div>
 
-        <div className="flex items-center gap-2 border-b border-b-stone-600 justify-between border-mutedftext-muted-foreground font-[Marfa]">
+        <div className="flex md:items-center items-start md:flex-row flex-col gap-2 border-b border-b-stone-400 justify-between border-mutedftext-muted pb-1">
           <p className="text-stone-700 text-sm">
             Would you like shipping updates via SMS?
           </p>
           <div className="flex gap-6">
             <label className="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="radio"
-                name="sms-updates-summary"
-                value="none"
-                checked={formData.smsUpdates === "none"}
-                className="w-4 h-4 text-stone-600 border-stone-300 focus:ring-stone-500"
-              />
+              <div className="relative">
+                <input
+                  type="radio"
+                  name="sms-updates-summary"
+                  value="none"
+                  checked={formData.smsUpdates === "none"}
+                  className="sr-only"
+                />
+                <div className={`w-4 h-4 rounded-full border-2 ${
+                  formData.smsUpdates === "none" 
+                    ? "bg-[#40362c] border-[#40362c]" 
+                    : "border-stone-400"
+                }`}>
+                  {formData.smsUpdates === "none" && (
+                    <div className="w-full h-full rounded-full bg-[#40362c]"></div>
+                  )}
+                </div>
+              </div>
               <span className="text-sm text-stone-700">None</span>
             </label>
             <label className="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="radio"
-                name="sms-updates-summary"
-                value="send-to-me"
-                checked={formData.smsUpdates === "send-to-me"}
-                className="w-4 h-4 text-stone-600 border-stone-300 focus:ring-stone-500"
-              />
+              <div className="relative">
+                <input
+                  type="radio"
+                  name="sms-updates-summary"
+                  value="send-to-me"
+                  checked={formData.smsUpdates === "send-to-me"}
+                  className="sr-only"
+                />
+                <div className={`w-4 h-4 rounded-full border-2 ${
+                  formData.smsUpdates === "send-to-me" 
+                    ? "bg-[#40362c] border-[#40362c]" 
+                    : "border-stone-400"
+                }`}>
+                  {formData.smsUpdates === "send-to-me" && (
+                    <div className="w-full h-full rounded-full bg-[#40362c]"></div>
+                  )}
+                </div>
+              </div>
               <span className="text-sm text-stone-700">Send to me</span>
             </label>
             <label className="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="radio"
-                name="sms-updates-summary"
-                value="send-to-recipient"
-                checked={formData.smsUpdates === "send-to-recipient"}
-                className="w-4 h-4 text-stone-600 border-stone-300 focus:ring-stone-500"
-              />
+              <div className="relative">
+                <input
+                  type="radio"
+                  name="sms-updates-summary"
+                  value="send-to-recipient"
+                  checked={formData.smsUpdates === "send-to-recipient"}
+                  className="sr-only"
+                />
+                <div className={`w-4 h-4 rounded-full border-2 ${
+                  formData.smsUpdates === "send-to-recipient" 
+                    ? "bg-[#40362c] border-[#40362c]" 
+                    : "border-stone-400"
+                }`}>
+                  {formData.smsUpdates === "send-to-recipient" && (
+                    <div className="w-full h-full rounded-full bg-[#40362c]"></div>
+                  )}
+                </div>
+              </div>
               <span className="text-sm text-stone-700">Send to recipient</span>
             </label>
           </div>

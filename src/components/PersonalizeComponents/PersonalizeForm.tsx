@@ -130,11 +130,10 @@ export default function PersonalizeForm() {
   };
 
   return (
-    <section className="flex flex-col min-h-[calc(100vh-7rem)] font-heading">
-      {/* Header */}
+    <section className="flex flex-col min-h-[calc(100vh-7rem)]">
       <div className="mb-6 md:mb-10">
-        <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-2xl mb-4 font-medium">
+        <div className="font-century mb-4 flex md:items-center items-start justify-between md:flex-row flex-col">
+          <h1 className="md:text-[2rem] text-[1.5rem] md:mb-4 font-medium">
             {stepTitles[currentStep as keyof typeof stepTitles]}
           </h1>
           <button
@@ -144,7 +143,7 @@ export default function PersonalizeForm() {
             BACK TO STORE
           </button>
         </div>
-        <div className="grid grid-cols-4 justify-around uppercase text-black">
+        <div className="grid grid-cols-4 justify-around uppercase text-stone-600 font-century">
           {steps.map((s) => (
             <div
               key={s.id}
@@ -166,7 +165,6 @@ export default function PersonalizeForm() {
         </div>
       </div>
 
-      {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto pb-6">
         <AnimatePresence mode="wait">
           <motion.div
@@ -181,8 +179,7 @@ export default function PersonalizeForm() {
         </AnimatePresence>
       </div>
 
-      {/* Fixed Bottom Buttons */}
-      <div className="flex-shrink-0 bg-background pt-4 pb-4 flex gap-3 justify-end">
+      <div className="flex-shrink-0 bg-background pt-4 pb-4 flex gap-3 justify-end font-century">
         {currentStep === 4 ? (
           <>
             <button

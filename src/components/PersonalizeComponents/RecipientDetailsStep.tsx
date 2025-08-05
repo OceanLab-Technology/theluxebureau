@@ -13,11 +13,11 @@ export default function RecipientDetailsStep() {
 
   return (
     <div>
-      <p className="text-stone-700 mb-4 font-semibold text-xl">
+      <p className="text-stone-700 mb-4 font-[200] text-[1.5rem] font-century">
         Please enter your recipient's contact details
       </p>
 
-      <form className="space-y-4">
+      <form className="space-y-4 font-[Marfa]">
         <div>
           <Input
             id="your-name"

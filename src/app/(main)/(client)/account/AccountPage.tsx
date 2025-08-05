@@ -123,7 +123,7 @@ export default function AccountPage({ user }: AccountPageProps) {
   const userName = profile.name || user?.email?.split("@")[0] || "User";
 
   return (
-    <div className="min-h-screen flex flex-col bg-background font-century overflow-hidde">
+    <div className="min-h-screen flex flex-col bg-background overflow-hidde">
       <main className="relative grid grid-cols-1 md:grid-cols-5 md:flex-row flex-col md:pl-20 pl-4 min-h-[calc(100vh-64px)]">
         <div className="md:w-64 w-full col-span-1 md:py-20 py-8">
           <h1 className="block md:hidden md:text-[2rem] text-[1.5rem] font-light mb-6">
@@ -131,7 +131,7 @@ export default function AccountPage({ user }: AccountPageProps) {
             <br />
             {userName}
           </h1>
-          <div className="md:space-y-2 md:pt-22 md:text-[1rem] text-xs uppercase tracking-wider md:block flex md:flex-col flex-row space-x-4 md:space-x-0">
+          <div className="md:space-y-2 md:pt-22 md:text-[1rem] font-century text-xs uppercase tracking-wider md:block flex md:flex-col flex-row space-x-4 md:space-x-0">
             <div className="text-stone-500  md:mb-4 mb-0 md:block cursor-pointer hidden">
               ACCOUNT
             </div>

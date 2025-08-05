@@ -40,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${ptSerif.variable} ${cormorantInfant.variable} antialiased font-century`}
+        className={`${geistSans.variable} ${geistMono.variable} ${ptSerif.variable} ${cormorantInfant.variable} antialiased`}
       >
         <main className="">{children}</main>
         <Toaster toastOptions={{

@@ -41,7 +41,7 @@ export default function PersonalizeClient() {
   ].filter(Boolean);
 
   return (
-    <div className="grid md:grid-cols-2 grid-cols-1 max-h-[calc(100vh+10rem)] pt-8">
+    <div className="grid md:grid-cols-2 grid-cols-1 md:max-h-[calc(100vh+20rem)] pt-8">
       <div className="blur-xl md:flex hidden flex-col">
         <div className="space-y-4">
           <div className="lg:w-full lg:h-[60%] relative h-[30.5rem] bg-muted/20 overflow-hidden">

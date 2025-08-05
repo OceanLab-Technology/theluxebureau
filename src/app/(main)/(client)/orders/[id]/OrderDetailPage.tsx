@@ -65,10 +65,10 @@ export default function OrderDetailPage({ order, user }: OrderDetailPageProps) {
   }));
 
   return (
-    <div className="min-h-screen flex flex-col bg-background font-century">
+    <div className="min-h-screen flex flex-col bg-background font-[Marfa]">
       <main className="relative grid md:grid-cols-5 grid-cols-1 md:px-20 px-4 min-h-[calc(100vh-64px)]">
         <div className="md:w-64 w-full md:py-20 py-6 col-span-1">
-          <div className=" md:text-[1rem] text-xs uppercase tracking-wider md:flex hidden md:flex-col flex-row space-x-4 md:space-x-0">
+          <div className=" md:text-[1rem] text-xs font-century uppercase tracking-wider md:flex hidden md:flex-col flex-row space-x-4 md:space-x-0">
             <Link
               href="/account"
               className="hover:text-stone-800 text-muted transition-colors"

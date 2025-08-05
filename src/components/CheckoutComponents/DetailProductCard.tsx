@@ -13,7 +13,7 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
   index,
 }) => {
   return (
-    <div key={product.id} className="w-full">
+    <div key={product.id} className="w-full font-[Marfa]">
       <h2 className="my-6 text-[0.93rem] pb-2 border-b">
         Item {String(index + 1).padStart(2, "0")}
       </h2>
@@ -29,7 +29,7 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
             />
           </div>
           {!isOrder && (
-            <div className="flex flex-col w-full text-[1.5rem] justify-center space-y-1">
+            <div className="flex flex-col w-full text-[1.5rem] justify-center space-y-1 font-century">
               <h1 className="font-medium">{product.name}</h1>
               <p className="mt-2">
                 for {product.customData?.recipientName || "recipient"}
@@ -41,25 +41,25 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
           {product.customData && Object.keys(product.customData).length > 0 && (
             <div className="md:space-y-6 space-y-3 w-full">
               <div className="flex items-center gap-2 border-b border-b-stone-300">
-                <h3 className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
                   Your Name
-                </h3>
+                </label>
                 <p className="text-stone-600">{product.customData.yourName}</p>
               </div>
 
               <div className="flex items-center gap-2 border-b border-b-stone-300">
-                <h3 className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
                   Recipients Name
-                </h3>
+                </label>
                 <p className="text-stone-600">
                   {product.customData.recipientName}
                 </p>
               </div>
 
               <div className="flex items-center gap-2 border-b border-b-stone-300">
-                <h3 className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
                   Recipients Address
-                </h3>
+                </label>
                 <p className="text-stone-600">
                   {product.customData.recipientAddress &&
                   product.customData.recipientCity
@@ -69,18 +69,18 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
               </div>
 
               <div className="flex items-center gap-2 border-b border-b-stone-300">
-                <h3 className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
                   Delivery Date
-                </h3>
+                </label>
                 <p className="text-stone-600">
                   {product.customData.deliveryDate || "Not selected"}
                 </p>
               </div>
 
               <div className="flex items-center gap-2 border-b border-b-stone-300">
-                <h3 className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
                   Delivery Time
-                </h3>
+                </label>
                 <p className="text-stone-600">
                   {product.customData.preferredDeliveryTime || "Not selected"}
                 </p>
@@ -99,17 +99,17 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
                 </span>
               </div>
               <div className="flex items-center gap-2 border-b border-b-stone-300">
-                <h3 className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
                   Custom Letterhead
-                </h3>
+                </label>
                 <p className="text-stone-600">
                   {product.customData.headerText}
                 </p>
               </div>
               <div className="flex flex-col gap-2 border-b border-b-stone-300">
-                <h3 className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
                   Personal Message
-                </h3>
+                </label>
                 <p className="text-stone-600">
                   {product.customData.customMessage}
                 </p>
