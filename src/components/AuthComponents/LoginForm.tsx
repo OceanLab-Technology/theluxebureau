@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
 export function LoginForm({
   className,
@@ -17,8 +17,19 @@ export function LoginForm({
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [redirectTo, setRedirectTo] = useState("/products");
   const router = useRouter();
-  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    // Safely get search params on client side
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirect = urlParams.get('redirect');
+      if (redirect) {
+        setRedirectTo(redirect);
+      }
+    }
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,8 +44,7 @@ export function LoginForm({
       });
       if (error) throw error;
 
-      // Check for redirect parameter
-      const redirectTo = searchParams.get('redirect') || '/products';
+      // Use the redirect state
       window.location.replace(redirectTo);
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
