@@ -10,6 +10,7 @@ import DeliveryDetailsStep from "./DeliveryDetailsStep";
 import SummaryStep from "./SummaryStep";
 import { useRouter } from "next/navigation";
 import { PersonalizedAddToCartButton } from "./PersonalizedAddToCartButton";
+import { toast } from "sonner";
 
 const steps = [
   { id: 1, label: "Step 1" },
@@ -33,11 +34,32 @@ export default function PersonalizeForm() {
     resetCheckout,
     formData,
     selectedProduct,
+    isStepValid,
   } = usePersonalizeStore();
   const { addToCart } = useMainStore();
   const router = useRouter();
 
   const handleNext = () => {
+    if (!isStepValid(currentStep)) {
+      switch (currentStep) {
+        case 1:
+          toast.error(
+            "Please fill in all required recipient details to continue."
+          );
+          break;
+        case 2:
+          toast.error(
+            "Please complete the personalization (header text, font, and message) to continue."
+          );
+          break;
+        case 3:
+          toast.error("Please select delivery date and time to continue.");
+          break;
+        default:
+          toast.error("Please complete all required fields to continue.");
+      }
+      return;
+    }
     if (currentStep < steps.length) {
       nextStep();
     }
@@ -83,6 +105,10 @@ export default function PersonalizeForm() {
 
   const handleCheckout = async () => {
     if (!selectedProduct) return;
+    if (!isStepValid(4)) {
+      toast.error("Please complete all required fields before checkout.");
+      return;
+    }
 
     try {
       const personalizationData = {
@@ -132,13 +158,13 @@ export default function PersonalizeForm() {
   return (
     <section className="flex flex-col min-h-[calc(100vh-7rem)]">
       <div className="mb-6 md:mb-10">
-        <div className="font-century mb-4 flex md:items-center items-start justify-between md:flex-row flex-col">
-          <h1 className="md:text-[2rem] text-[1.5rem] md:mb-4 font-medium">
+        <div className="mb-4 flex md:items-center items-start justify-between md:flex-row flex-col">
+          <h1 className="md:text-[2rem] text-secondary-foreground font-century text-[1.5rem] md:mb-4 font-medium">
             {stepTitles[currentStep as keyof typeof stepTitles]}
           </h1>
           <button
             onClick={handleBackToStore}
-            className="text-xs font-medium cursor-pointer tracking-wider mb-4 hover:text-stone-600 transition-colors"
+            className="text-xs font-medium cursor-pointer small-text tracking-wider mb-4 hover:text-stone-600 transition-colors"
           >
             BACK TO STORE
           </button>
@@ -147,8 +173,10 @@ export default function PersonalizeForm() {
           {steps.map((s) => (
             <div
               key={s.id}
-              className={`text-xs tracking-wider cursor-pointer ${
-                currentStep === s.id ? "text-stone-700" : "text-stone-500"
+              className={`text-[0.93rem] tracking-wider small-text cursor-pointer ${
+                currentStep === s.id
+                  ? "text-secondary-foreground"
+                  : "text-stone-500"
               }`}
             >
               {s.label}
@@ -179,40 +207,42 @@ export default function PersonalizeForm() {
         </AnimatePresence>
       </div>
 
-      <div className="flex-shrink-0 bg-background pt-4 pb-4 flex gap-3 justify-end font-century">
-        {currentStep === 4 ? (
-          <>
-            <button
-              onClick={handleBack}
-              className="bg-[#3B3215] px-3 md:px-5 hover:bg-[#3B3215]/80 font-medium text-stone-400 tracking-wider text-xs md:text-sm py-2 md:py-2.5 rounded-none transition-colors cursor-pointer"
-            >
-              BACK
-            </button>
-            <PersonalizedAddToCartButton />
-            <button
-              onClick={handleCheckout}
-              className="bg-[#FDCF5F] px-3 md:px-5 hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider text-xs md:text-sm py-2 md:py-2.5 rounded-none transition-colors cursor-pointer"
-            >
-              CHECKOUT
-            </button>
-          </>
-        ) : (
-          <>
-            <button
-              onClick={handleBack}
-              disabled={currentStep === 1}
-              className="bg-[#3B3215] px-3 md:px-5 hover:bg-[#3B3215]/80 font-medium text-stone-400 tracking-wider text-xs md:text-sm py-2 md:py-2.5 rounded-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-            >
-              BACK
-            </button>
-            <button
-              onClick={handleNext}
-              className="bg-[#FDCF5F] px-3 md:px-5 hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider text-xs md:text-sm py-2 md:py-2.5 rounded-none transition-colors cursor-pointer"
-            >
-              {getButtonText()}
-            </button>
-          </>
-        )}
+      <div className="flex-shrink-0 bg-background pt-4 pb-4 font-century">
+        <div className="flex gap-3 justify-end">
+          {currentStep === 4 ? (
+            <>
+              <button
+                onClick={handleBack}
+                className="bg-[#3B3215] hover:bg-[#3B3215]/80 text-stone-400 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%]"
+              >
+                BACK
+              </button>
+              <PersonalizedAddToCartButton />
+              <button
+                onClick={handleCheckout}
+                className="bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%]"
+              >
+                CHECKOUT
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={handleBack}
+                disabled={currentStep === 1}
+                className="bg-[#3B3215] hover:bg-[#3B3215]/80 text-stone-400 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%]"
+              >
+                BACK
+              </button>
+              <button
+                onClick={handleNext}
+                className="bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800 ftracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%]"
+              >
+                {getButtonText()}
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </section>
   );

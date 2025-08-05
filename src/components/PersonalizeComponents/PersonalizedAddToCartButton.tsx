@@ -73,7 +73,7 @@ export function PersonalizedAddToCartButton() {
       <button
         onClick={handleAddToCart}
         disabled={isLoading || !selectedProduct}
-        className="bg-[#FDCF5F] px-3 md:px-5 flex items-center justify-center gap-1 hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider text-xs md:text-sm py-2 md:py-2.5 rounded-none transition-colors cursor-pointer disabled:opacity-50 uppercase disabled:cursor-not-allowed"
+        className="bg-[#FDCF5F] uppercase flex items-center justify-center gap-1 hover:bg-[#FDCF5F]/80 text-stone-800 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%] disabled:cursor-not-allowed"
       >
         {isLoading ? (
           <span className="text-xs md:text-sm">Adding...</span>
@@ -85,7 +85,7 @@ export function PersonalizedAddToCartButton() {
           </>
         ) : (
           <>
-            <span className="hidden md:inline">Add Personalized Gift</span>
+            <span className="hidden md:inline">Add to Cart</span>
             <span className="md:hidden">Add Gift</span>
           </>
         )}

@@ -60,7 +60,7 @@ export function Footer() {
         <div className="container mx-auto px-6 py-12 h-full min-h-[400px] flex flex-col justify-between">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <h3 className="font-[200] font-sans mb-4 tracking-wider uppercase">
+              <h3 className="font-[400] font-[Marfa] text-[0.875rem] mb-4 leading-[1.625rem] tracking-[0.0875rem] uppercase">
                 {footerData.discover.title}
               </h3>
               <ul className="space-y-2">
@@ -68,7 +68,7 @@ export function Footer() {
                   <li key={index}>
                     <Link
                       href={link.href}
-                      className="hover:text-stone-300 transition-colors"
+                      className="hover:text-stone-300 transition-colors font-century"
                     >
                       {link.label}
                     </Link>
@@ -78,7 +78,7 @@ export function Footer() {
             </div>
 
             <div>
-              <h3 className="font-[200] font-sans mb-4 tracking-wider uppercase">
+              <h3 className="font-[400] font-[Marfa] text-[0.875rem] mb-4 leading-[1.625rem] tracking-[0.0875rem] uppercase">
                 {footerData.concierge.title}
               </h3>
               <ul className="space-y-2 ">
@@ -86,7 +86,7 @@ export function Footer() {
                   <li key={index}>
                     <Link
                       href={link.href}
-                      className="hover:text-stone-300 transition-colors"
+                      className="hover:text-stone-300 transition-colors font-century"
                     >
                       {link.label}
                     </Link>
@@ -96,7 +96,7 @@ export function Footer() {
             </div>
 
             <div>
-              <h3 className="font-[200] font-sans mb-4 tracking-wider uppercase">
+              <h3 className="font-[400] font-[Marfa] text-[0.875rem] mb-4 leading-[1.625rem] tracking-[0.0875rem] uppercase">
                 {footerData.newsletter.title}
               </h3>
               <div className="flex border-b justify-between">
@@ -113,17 +113,17 @@ export function Footer() {
           </div>
 
           <div className="pt-8 text-white text-sm">
-          <div className="md:absolute bottom-0 left-0 right-0 flex justify-center pb-10">
-            <Image
-              src={footerData.logo.src}
-              alt={footerData.logo.alt}
-              width={footerData.logo.width}
-              height={footerData.logo.height}
-              className="w-35"
-            />
-          </div>
-            <p>{footerData.copyright.text}</p>
-            <p>
+            <div className="md:absolute bottom-0 left-0 right-0 flex justify-center pb-10">
+              <Image
+                src={footerData.logo.src}
+                alt={footerData.logo.alt}
+                width={footerData.logo.width}
+                height={footerData.logo.height}
+                className="w-35"
+              />
+            </div>
+            <p className="font-century">{footerData.copyright.text}</p>
+            <p className="font-century">
               {footerData.copyright.designCredit.text}{" "}
               <Link
                 href={footerData.copyright.designCredit.href}

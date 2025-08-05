@@ -32,7 +32,7 @@ export function CartSummary() {
         <Button
           onClick={handleCheckout}
           disabled={cartLoading || cartItems.length === 0}
-          className="md:px-22 md:py-6 rounded-none bg-yellow-400 hover:bg-yellow-500 text-stone-700 font-medium uppercase tracking-wider"
+          className="md:px-22 md:py-6 rounded-sm bg-yellow-400 hover:bg-yellow-500 text-stone-700 font-medium uppercase tracking-wider"
         >
           CHECKOUT
         </Button>

@@ -64,8 +64,8 @@ export default function CheckoutPage() {
       <div className="min-h-screen">
         <div className="max-w-[75rem] md:p-10 md:pb-10 md:px-20 lg:px-10 px-4 mx-auto">
           <div className="flex items-center justify-between py-10">
-            <h2 className="text-[2rem] font-medium">Check-out</h2>
-            <Button variant="link" asChild>
+            <h2 className="text-[2rem] font-medium font-century">Check-out</h2>
+            <Button variant="link" asChild className="small-text">
               <Link href="/cart">Back to Cart</Link>
             </Button>
           </div>
@@ -77,7 +77,7 @@ export default function CheckoutPage() {
             </div>
 
             <div className="sticky top-6 self-start">
-              <h2 className="my-6 pb-2 border-b">Payment</h2>
+              <h2 className="my-6 pb-2 border-b small-text">Payment</h2>
               <div className="mb-6 p-4 bg-muted/20 rounded-lg font-century">
                 <h3 className="font-semibold mb-4">Order Summary</h3>
                 <div className="space-y-2 text-sm">

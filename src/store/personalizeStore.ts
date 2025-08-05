@@ -27,6 +27,8 @@ interface PersonalizeState {
   updateFormData: (data: Partial<personalizeFormData>) => void
   setSelectedProduct: (product: Product) => void
   resetCheckout: () => void
+  validateStep: (step: number) => boolean
+  isStepValid: (step: number) => boolean
 }
 
 const initialFormData: personalizeFormData = {
@@ -71,7 +73,48 @@ export const usePersonalizeStore = create<PersonalizeState>()(
       setSelectedProduct: (product: Product) =>
         set({ selectedProduct: product }),
       resetCheckout: () =>
-        set({ currentStep: 1, formData: initialFormData, selectedProduct: null })
+        set({ currentStep: 1, formData: initialFormData, selectedProduct: null }),
+      validateStep: (step: number) => {
+        const { formData } = get()
+        
+        switch (step) {
+          case 1: // Recipient Details Step
+            return !!(
+              formData.yourName?.trim() &&
+              formData.recipientName?.trim() &&
+              formData.recipientAddress?.trim() &&
+              formData.recipientCity?.trim() &&
+              formData.recipientEmail?.trim()
+            )
+          
+          case 2: // Personalization Step
+            return !!(
+              formData.headerText?.trim() &&
+              formData.selectedFont &&
+              (formData.customMessage?.trim() || formData.selectedQuote?.trim())
+            )
+          
+          case 3: // Delivery Details Step
+            return !!(
+              formData.deliveryDate &&
+              formData.preferredDeliveryTime &&
+              formData.smsUpdates
+            )
+          
+          case 4: // Summary Step - all previous steps should be valid
+            return (
+              get().validateStep(1) &&
+              get().validateStep(2) &&
+              get().validateStep(3)
+            )
+          
+          default:
+            return false
+        }
+      },
+      isStepValid: (step: number) => {
+        return get().validateStep(step)
+      }
     }),
     {
       name: 'checkout-storage',

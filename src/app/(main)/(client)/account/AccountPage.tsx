@@ -123,22 +123,27 @@ export default function AccountPage({ user }: AccountPageProps) {
   const userName = profile.name || user?.email?.split("@")[0] || "User";
 
   return (
-    <div className="min-h-screen flex flex-col bg-background overflow-hidde">
+    <div className="min-h-screen flex flex-col bg-background overflow-hidden">
       <main className="relative grid grid-cols-1 md:grid-cols-5 md:flex-row flex-col md:pl-20 pl-4 min-h-[calc(100vh-64px)]">
         <div className="md:w-64 w-full col-span-1 md:py-20 py-8">
-          <h1 className="block md:hidden md:text-[2rem] text-[1.5rem] font-light mb-6">
+          <h1 className="block md:hidden md:text-[2rem] text-[1.5rem] font-light mb-6 font-century">
             Welcome back,
             <br />
             {userName}
           </h1>
-          <div className="md:space-y-2 md:pt-22 md:text-[1rem] font-century text-xs uppercase tracking-wider md:block flex md:flex-col flex-row space-x-4 md:space-x-0">
-            <div className="text-stone-500  md:mb-4 mb-0 md:block cursor-pointer hidden">
-              ACCOUNT
-            </div>
+          <div className="md:space-y-2 md:pt-22 md:text-[1rem] small-text uppercase tracking-wider md:block flex md:flex-col flex-row space-x-4 md:space-x-0">
             <div className="text-stone-800 hover:text-stone-500 transition-colors cursor-pointer font-medium">
               ORDER HISTORY
             </div>
-            <div className="text-stone-800 hover:text-stone-500 transition-colors cursor-pointer font-medium">
+            <div 
+              className="text-stone-800 hover:text-stone-500 transition-colors cursor-pointer font-medium"
+              onClick={() => {
+                document.getElementById('profile-settings')?.scrollIntoView({ 
+                  behavior: 'smooth',
+                  block: 'start'
+                });
+              }}
+            >
               PROFILE SETTINGS
             </div>
             <LogoutButton />
@@ -146,12 +151,12 @@ export default function AccountPage({ user }: AccountPageProps) {
         </div>
 
         <div className="flex-1 md:py-20 py-6 md:px-10 px-0 col-span-4 ">
-          <h1 className="md:block hidden text-2xl font-light mb-12">
+          <h1 className="md:block hidden text-2xl font-light mb-12 font-century">
             Welcome back, {userName}
           </h1>
 
           <div className="mb-16">
-            <h2 className="text-lg font-medium mb-6 border-b border-stone-300">
+            <h2 className="text-lg font-medium mb-6 border-b border-stone-300 small-text">
               ORDER HISTORY
             </h2>
             {isLoadingOrders ? (
@@ -169,7 +174,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                 const orderNumber = String(index + 1).padStart(3, "0");
                 return (
                   <div key={order.id} className="mb-8 space-y-10">
-                    <div className="flex flex-col md:flex-row md:items-start justify-between mb-4 md:mb-6">
+                    <div className="flex flex-col md:flex-row small-text md:items-start justify-between mb-4 md:mb-6">
                       <div className="mb-4 uppercase md:mb-0 text-[#50462D] text-[0.93rem]">
                         <h3 className="">Order no.{orderNumber}</h3>
                         <h3 className="">
@@ -217,8 +222,8 @@ export default function AccountPage({ user }: AccountPageProps) {
             )}
           </div>
 
-          <div className="pr-4 md:pr0">
-            <h2 className="text-lg font-medium mb-8 hidden md:block">
+          <div className="pr-4 md:pr0" id="profile-settings">
+            <h2 className="small-text mb-8 hidden md:block border-b border-stone-300 pb-1">
               PROFILE SETTINGS
             </h2>
             <form>
@@ -232,7 +237,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                     onChange={(e) =>
                       setProfile({ ...profile, name: e.target.value })
                     }
-                    className="border-0 focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                    className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-[1.5rem]"
                     placeholder="John Doe"
                   />
                 </div>
@@ -247,7 +252,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                     onChange={(e) =>
                       setProfile({ ...profile, email: e.target.value })
                     }
-                    className="border-0 focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                    className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-[1.5rem]"
                     placeholder="johndoe@example.com"
                   />
                 </div>
@@ -264,7 +269,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                         shippingAddress: e.target.value,
                       })
                     }
-                    className="border-0 focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                    className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-[1.5rem]"
                     placeholder="206 Batran's Street, 39, 2044 Ontario..."
                   />
                 </div>
@@ -278,7 +283,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                     onChange={(e) =>
                       setProfile({ ...profile, phoneNumber: e.target.value })
                     }
-                    className="border-0 focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                    className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-[1.5rem]"
                     placeholder="+1 222 333 4444"
                   />
                 </div>
@@ -293,7 +298,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                     onChange={(e) =>
                       setProfile({ ...profile, password: e.target.value })
                     }
-                    className="border-0 focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                    className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-[1.5rem]"
                     placeholder="••••••••••••••••••••"
                   />
                 </div>

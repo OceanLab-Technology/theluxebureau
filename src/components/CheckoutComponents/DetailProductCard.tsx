@@ -14,10 +14,10 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
 }) => {
   return (
     <div key={product.id} className="w-full font-[Marfa]">
-      <h2 className="my-6 text-[0.93rem] pb-2 border-b">
+      <h2 className="my-6 small-text pb-2 border-b">
         Item {String(index + 1).padStart(2, "0")}
       </h2>
-      <div className={`${isOrder ? "md:flex-row flex-col md:gap-15 gap-4" : "flex-col gap-6"} flex `}>
+      <div className={`${isOrder ? "md:flex-row flex-col md:gap-18 gap-4" : "flex-col gap-6"} flex `}>
         <div className={`flex items-start gap-6`}>
           <div
             className={` ${isOrder ? "md:h-full w-full" : ""} bg-muted/20 h-60 md:h-[17.93rem] md:w-[18.62rem] overflow-hidden`}

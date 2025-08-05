@@ -39,18 +39,44 @@ export async function updateSession(request: NextRequest) {
   const user = data?.claims;
 
   // Define public routes that don't require authentication
-  const publicRoutes = ["/auth/login", "/auth/sign-up", "/auth/forgot-password", "/auth/sign-up-success", "/api/stripe/webhook"];
-  const isPublicRoute = publicRoutes.includes(request.nextUrl.pathname);
+  const publicRoutes = [
+    "/auth/login", 
+    "/auth/sign-up", 
+    "/auth/forgot-password", 
+    "/auth/sign-up-success", 
+    "/auth/confirm",
+    "/auth/update-password",
+    "/auth/error",
+    "/api/stripe/webhook",
+    "/products",
+    "/",
+    // Allow accessing individual product pages
+    "/products/"
+  ];
+  
+  // Define protected routes that require authentication
+  const protectedRoutes = ["/personalize", "/admin", "/account", "/cart"];
+  
+  const isPublicRoute = publicRoutes.some(route => 
+    request.nextUrl.pathname === route || 
+    (route.endsWith("/") && request.nextUrl.pathname.startsWith(route))
+  );
+  
+  const isProtectedRoute = protectedRoutes.some(route => 
+    request.nextUrl.pathname.startsWith(route)
+  );
 
   // If user is not authenticated and trying to access a protected route
-  if (!user && !isPublicRoute) {
+  if (!user && isProtectedRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
+    url.searchParams.set("redirect", request.nextUrl.pathname);
     return NextResponse.redirect(url);
   }
 
   // If user is authenticated and trying to access auth pages, redirect to products
-  if (user && isPublicRoute && request.nextUrl.pathname !== "/api/stripe/webhook") {
+  const authPages = ["/auth/login", "/auth/sign-up"];
+  if (user && authPages.includes(request.nextUrl.pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = "/products";
     return NextResponse.redirect(url);

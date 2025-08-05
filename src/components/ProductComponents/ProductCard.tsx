@@ -14,7 +14,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const fallbackImage = product.image_2 || product.image_1;
 
   return (
-    <div className="transition-all font-century duration-300 overflow-hidden">
+    <div className="transition-all font-century duration-300 overflow-hidden text-secondary-foreground">
       <Link href={`/products/${product.id}`} className="block">
         <div className="relative aspect-auto overflow-hidden w-[10.8125rem] h-[15.875rem] md:w-[100%] md:h-[59.1875rem] cursor-pointer">
           <img
@@ -24,9 +24,9 @@ export function ProductCard({ product }: ProductCardProps) {
           />
         </div>
 
-        <div className="flex flex-col md:my-8 my-6 uppercase font-semibold">
-          <h2 className="text-[1.05rem] leading-none">{product.name}</h2>
-          <span className="md:text-[1.05rem]">£{product.price}</span>
+        <div className="flex flex-col my-6 uppercase font-schoolbook-cond text-[20px] leading-[24px] font-[400]">
+          <h2 className="">{product.name}</h2>
+          <span className="">£{product.price}</span>
         </div>
       </Link>
 

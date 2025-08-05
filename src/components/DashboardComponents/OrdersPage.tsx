@@ -69,7 +69,6 @@ export function OrdersPage() {
       </header>
 
       <div className="flex-1 space-y-4 p-8 pt-6">
-        {/* 🏷️ Page Title + Filter */}
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-semibold font-century">ORDERS</h2>

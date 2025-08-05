@@ -21,34 +21,34 @@ export default function SummaryStep() {
   };
   return (
     <div>
-      <p className="text-stone-700 mb-4 font-medium md:text-[1.5rem] text-md font-century">
+      <p className="text-secondary-foreground mb-4 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
         Please review or amend your gift details below.
       </p>
 
       <div className="md:space-y-4 space-y-3">
-        <div className="flex items-center gap-2 border-b border-b-stone-400">
-          <label className="text-muted font-medium text-sm tracking-wider">
+        <div className="flex items-center gap-2 border-b border-b-stone-400 pb-1">
+          <label className="text-muted font-[300] text-[0.93rem] tracking-[0.01875rem]">
             Your Name
           </label>
-          <p className="text-stone-600">
+          <p className="text-secondary-foreground">
             {formData.yourName || "Not provided"}
           </p>
         </div>
 
         <div className="flex items-center gap-2 border-b border-b-stone-400">
-          <label className="text-muted font-medium text-sm tracking-wider">
+          <label className="text-muted font-[300] text-[0.93rem] tracking-[0.01875rem]">
             Recipients Name
           </label>
-          <p className="text-stone-600">
+          <p className="text-secondary-foreground">
             {formData.recipientName || "Not provided"}
           </p>
         </div>
 
         <div className="flex items-center gap-2 border-b border-b-stone-400">
-          <label className="text-muted font-medium text-sm tracking-wider">
+          <label className="text-muted font-[300] text-[0.93rem] tracking-[0.01875rem]">
             Recipients Address
           </label>
-          <p className="text-stone-600">
+          <p className="text-secondary-foreground">
             {formData.recipientAddress && formData.recipientCity
               ? `${formData.recipientAddress}, ${formData.recipientCity}`
               : "Not provided"}
@@ -56,25 +56,25 @@ export default function SummaryStep() {
         </div>
 
         <div className="flex items-center gap-2 border-b border-b-stone-400">
-          <label className="text-muted font-medium text-sm tracking-wider">
+          <label className="text-muted font-[300] text-[0.93rem] tracking-[0.01875rem]">
             Delivery Date
           </label>
-          <p className="text-stone-600">
+          <p className="text-secondary-foreground">
             {formData.deliveryDate || "Not selected"}
           </p>
         </div>
 
         <div className="flex items-center gap-2 border-b border-b-stone-400">
-          <label className="text-muted font-medium text-sm tracking-wider">
+          <label className="text-muted font-[300] text-[0.93rem] tracking-[0.01875rem]">
             Delivery Time
           </label>
-          <p className="text-stone-600">
+          <p className="text-secondary-foreground">
             {formData.preferredDeliveryTime || "Not selected"}
           </p>
         </div>
 
         <div className="flex md:items-center items-start md:flex-row flex-col gap-2 border-b border-b-stone-400 justify-between border-mutedftext-muted pb-1">
-          <p className="text-stone-700 text-sm">
+          <p className="text-stone-700 text-[0.93rem]" >
             Would you like shipping updates via SMS?
           </p>
           <div className="flex gap-6">
@@ -97,7 +97,7 @@ export default function SummaryStep() {
                   )}
                 </div>
               </div>
-              <span className="text-sm text-stone-700">None</span>
+              <span className="text-[0.93rem] text-stone-700">None</span>
             </label>
             <label className="flex items-center space-x-2 cursor-pointer">
               <div className="relative">
@@ -118,7 +118,7 @@ export default function SummaryStep() {
                   )}
                 </div>
               </div>
-              <span className="text-sm text-stone-700">Send to me</span>
+              <span className="text-[0.93rem] text-stone-700">Send to me</span>
             </label>
             <label className="flex items-center space-x-2 cursor-pointer">
               <div className="relative">
@@ -139,7 +139,7 @@ export default function SummaryStep() {
                   )}
                 </div>
               </div>
-              <span className="text-sm text-stone-700">Send to recipient</span>
+              <span className="text-[0.93rem] text-stone-700">Send to recipient</span>
             </label>
           </div>
         </div>
@@ -188,7 +188,7 @@ export default function SummaryStep() {
                     <div className="absolute inset-0 flex items-center justify-center p-8">
                       <div className="p-4 max-w-xs w-full">
                         <div className="text-center mb-1">
-                          <div className="text-xs font-medium tracking-wider text-stone-600 mb-2">
+                          <div className="text-xs font-[300] tracking-[0.01875rem] text-secondary-foreground mb-2">
                             {formData.headerText}
                           </div>
                           <div className="h-px bg-stone-300 w-16 mx-auto"></div>

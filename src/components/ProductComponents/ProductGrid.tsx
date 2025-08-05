@@ -159,7 +159,7 @@ export function ProductGrid({
           transition={{ delay: 0.2, duration: 0.5 }}
         >
           <motion.h2
-            className="md:text-[1rem] text-[20px] font-[600] md:font-medium uppercase text-secondary-foreground"
+            className="text-[20px] leading-[24px] font-schoolbook-cond font-[400] uppercase text-secondary-foreground"
             initial={{ opacity: 0, filter: "blur(3px)" }}
             animate={{ opacity: 1, filter: "blur(0px)" }}
             transition={{ delay: 0.3, duration: 0.4 }}
@@ -167,7 +167,7 @@ export function ProductGrid({
             {selectedCategory === "" ? "Shop All" : selectedCategory}
           </motion.h2>
           <motion.p
-            className="mt-2 md:text-[1.625rem] text-[1.1rem] md:w-[55.56rem] font-[100] md:leading-7"
+            className="mt-2 md:text-[1.625rem] text-[1.1rem] md:w-[55.56rem] text-secondary-foreground font-[100] md:leading-7"
             initial={{ opacity: 0, filter: "blur(3px)" }}
             animate={{ opacity: 1, filter: "blur(0px)" }}
             transition={{ delay: 0.4, duration: 0.5 }}

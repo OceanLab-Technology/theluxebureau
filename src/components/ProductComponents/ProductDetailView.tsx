@@ -10,6 +10,8 @@ import { useMainStore } from "@/store/mainStore";
 import { usePersonalizeStore } from "@/store/personalizeStore";
 import { ProductDetailSkeleton } from "./ProductDetailSkeleton";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { LoginRequiredModal } from "@/components/ui/login-required-modal";
 import {
   Accordion,
   AccordionContent,
@@ -23,11 +25,19 @@ interface ProductDetailViewProps {
 }
 
 export function ProductDetailView({ productId }: ProductDetailViewProps) {
-  const { fetchProductById, currentProduct, detailedProductLoading } =
-    useMainStore();
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [user, setUser] = useState<any>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const {
+    products,
+    currentProduct,
+    loading,
+    detailedProductLoading,
+    fetchProductById,
+  } = useMainStore();
   const { setSelectedProduct, resetCheckout } = usePersonalizeStore();
   const router = useRouter();
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const supabase = createClient();
 
   const images = [
     currentProduct?.image_1,
@@ -40,6 +50,26 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
     fetchProductById(productId);
   }, [productId, fetchProductById]);
 
+  // Check authentication state
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+    };
+
+    getUser();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase.auth]);
+
   const handleImageChange = (index: number) => {
     if (index !== selectedImageIndex) {
       setTimeout(() => {
@@ -49,6 +79,12 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
   };
 
   const handlePersonalize = () => {
+    // Check if user is authenticated
+    if (!user) {
+      setShowLoginModal(true);
+      return;
+    }
+
     if (currentProduct) {
       resetCheckout();
       setSelectedProduct(currentProduct);
@@ -155,9 +191,9 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
           </div>
         </div>
 
-        <div className="space-y-6 py-10 lg:px-4 px-8">
+        <div className="space-y-6 py-10 lg:px-4 px-6">
           <div className="md:w-96">
-            <div className="flex items-center gap-2 mb-2 text-stone-600">
+            <div className="small-text gap-2 mb-2 text-stone-600">
               <span>{currentProduct.category}</span>
             </div>
 
@@ -169,7 +205,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
             </span>
           </div>
 
-          <p className="text-[1.3rem] leading-relaxed">
+          <p className="text-[20px] leading-[30px] font-[400]">
             {currentProduct.description}
           </p>
 
@@ -177,7 +213,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
             <Button
               variant="box_yellow"
               size={"lg"}
-              className="w-full px-20"
+              className="text-[0.75rem] leading-[119.58%] w-[20.812rem] h-[2.5rem] tracking-[0.075rem]"
               onClick={handlePersonalize}
             >
               Personalize
@@ -204,11 +240,11 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               <Accordion type="single" collapsible className="">
                 {currentProduct.why_we_chose_it && (
                   <AccordionItem value="why-we-chose-it">
-                    <AccordionTrigger className="text-left font-medium uppercase">
+                    <AccordionTrigger className="text-left small-text font-medium uppercase">
                       Why We Chose It
                     </AccordionTrigger>
                     <AccordionContent>
-                      <p className="text-muted-foreground leading-relaxed">
+                      <p className="text-muted-foreground leading-relaxed font-[Marfa]">
                         {currentProduct.why_we_chose_it}
                       </p>
                     </AccordionContent>
@@ -217,11 +253,11 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
 
                 {currentProduct.about_the_maker && (
                   <AccordionItem value="about-the-maker">
-                    <AccordionTrigger className="text-left font-medium uppercase">
+                    <AccordionTrigger className="text-left font-medium uppercase small-text">
                       About the Maker
                     </AccordionTrigger>
                     <AccordionContent>
-                      <p className="text-muted-foreground leading-relaxed">
+                      <p className="text-muted-foreground leading-relaxed font-[Marfa]">
                         {currentProduct.about_the_maker}
                       </p>
                     </AccordionContent>
@@ -230,11 +266,11 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
 
                 {currentProduct.particulars && (
                   <AccordionItem value="particulars">
-                    <AccordionTrigger className="text-left font-medium uppercase">
+                    <AccordionTrigger className="text-left font-medium uppercase small-text">
                       Particulars
                     </AccordionTrigger>
                     <AccordionContent>
-                      <p className="text-muted-foreground leading-relaxed">
+                      <p className="text-muted-foreground leading-relaxed font-[Marfa]">
                         {currentProduct.particulars}
                       </p>
                     </AccordionContent>
@@ -246,6 +282,13 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
         </div>
       </div>
       <ProductRecommendations currentProductId={currentProduct.id!} />
+
+      {/* Login Required Modal */}
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        feature="personalization"
+      />
     </div>
   );
 }

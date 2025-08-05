@@ -59,7 +59,7 @@ export function CartContainer() {
         <h1 className="text-2xl font-light">Shopping Cart</h1>
         <Link
           href="/products"
-          className="md:block hidden text-xs text-stone-600 hover:text-stone-800 uppercase tracking-wider"
+          className="md:block hidden small-text hover:text-stone-500 transition-colors uppercase tracking-wider"
         >
           CONTINUE SHOPPING
         </Link>

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -54,7 +53,7 @@ export default function DeliveryDetailsStep() {
 
   return (
     <div className="">
-      <p className="text-stone-700 mb-4 font-medium md:text-xl font-century">
+      <p className="text-secondary-foreground mb-4 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
         Our gifts are sent by zero-emission, nominated-day delivery. Please add
         your recipient's details, and your preferred delivery day and time,
         below.
@@ -70,7 +69,7 @@ export default function DeliveryDetailsStep() {
               handleInputChange("recipientName", e.target.value)
             }
             placeholder="Recipients name*"
-            className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+            className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-[0.9375rem] font-[300] tracking-[0.01875]"
           />
         </div>
 
@@ -83,7 +82,7 @@ export default function DeliveryDetailsStep() {
               handleInputChange("recipientAddress", e.target.value)
             }
             placeholder="Recipients Address*"
-            className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+            className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-[0.9375rem] font-[300] tracking-[0.01875]"
           />
         </div>
 
@@ -97,11 +96,14 @@ export default function DeliveryDetailsStep() {
                   !date && "text-stone-500"
                 )}
               >
-                {date ? format(date, "PPP") : <span>Delivery date</span>}
+                {date ? format(date, "PPP") : <span>Delivery date*</span>}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
+                style={{
+                  borderRadius: "1.375rem",
+                }}
                 mode="single"
                 selected={date}
                 onSelect={handleDateSelect}
@@ -121,7 +123,7 @@ export default function DeliveryDetailsStep() {
           >
             <SelectTrigger className="w-full border-0 bg-transparent px-0 py-2 sm:py-3 text-stone-800 border-b border-stone-500 focus:border-stone-600 rounded-none shadow-none text-sm h-auto">
               <SelectValue
-                placeholder="Preferred delivery time"
+                placeholder="Preferred delivery time*"
                 className="text-stone-500"
               />
             </SelectTrigger>

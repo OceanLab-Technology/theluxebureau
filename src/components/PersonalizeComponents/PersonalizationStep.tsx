@@ -34,11 +34,32 @@ export default function PersonalizationStep() {
     (font) => font.name === formData.selectedFont
   );
 
+  const getHeaderStyle = () => {
+    const baseStyle: React.CSSProperties = {
+      fontSize: "16px",
+      color: "#57534e",
+      fontWeight: "bold",
+      marginBottom: "12px",
+    };
+
+    if (selectedFont && fontLoaded && formData.selectedFont !== "default") {
+      return {
+        ...baseStyle,
+        fontFamily: `"${selectedFont.name}", serif`,
+      };
+    }
+
+    return {
+      ...baseStyle,
+      fontFamily: "serif",
+    };
+  };
+
   useEffect(() => {
     if (!formData.headerText && formData.headerText !== "") {
-      updateFormData({ 
+      updateFormData({
         headerText: "Header",
-        selectedFont: "default"
+        selectedFont: "default",
       });
     }
   }, []);
@@ -46,9 +67,9 @@ export default function PersonalizationStep() {
   // Load the selected font if available
   useEffect(() => {
     if (siteSettings?.quotes?.length && !formData.selectedQuote) {
-      updateFormData({ 
+      updateFormData({
         selectedQuote: siteSettings.quotes[0],
-        customMessage: siteSettings.quotes[0]
+        customMessage: siteSettings.quotes[0],
       });
     }
   }, [siteSettings, formData.selectedQuote, updateFormData]);
@@ -98,45 +119,24 @@ export default function PersonalizationStep() {
     ? [...siteSettings.quotes, "Write my own"]
     : ["Write my own"];
 
-  const getHeaderStyle = () => {
-    const baseStyle: React.CSSProperties = {
-      fontSize: "16px",
-      color: "#57534e",
-      fontWeight: "bold",
-      marginBottom: "12px",
-    };
-
-    if (selectedFont && fontLoaded && formData.selectedFont !== "default") {
-      return {
-        ...baseStyle,
-        fontFamily: `"${selectedFont.name}", serif`,
-      };
-    }
-
-    return {
-      ...baseStyle,
-      fontFamily: "serif",
-    };
-  };
-
   const getMessageStyle = () => {
     return {
       fontSize: "12px",
       color: "#57534e",
-      fontFamily: "monospace"
+      fontFamily: "monospace",
     };
   };
 
   return (
     <div className="font-century">
-      <p className="text-stone-700 text-[1rem] leading-relaxed">
+      <p className="text-secondary-foreground font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
         Our gifts are sent with custom stationery, letter-pressed by hand at the
         Luxe Bureau atelier. In the header field, please enter your own name,
         initials, or company to create your custom letterhead. You may choose
         between two type styles below.
       </p>
       <br />
-      <p className="text-stone-700 mb-8 text-[1rem] leading-relaxed">
+      <p className="text-secondary-foreground mb-8 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
         Your personal message will be typeset and printed in the Luxe Bureau's
         signature typewriter font. Please type your message directly onto the
         notecard. For added inspiration, select a quote from the drop down menu
@@ -144,8 +144,8 @@ export default function PersonalizationStep() {
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        <div className="flex-1">
-          <label className="text-xs font-medium tracking-wider text-stone-600 mb-2 block">
+        <div className="flex-1 font-[Marfa]">
+          <label className="text-[1rem] font-[300] tracking-[0.01875] text-secondary-foreground mb-1 block">
             Header type style*
           </label>
           <Select
@@ -172,18 +172,21 @@ export default function PersonalizationStep() {
           )}
         </div>
 
-        <div className="flex-1">
-          <label className="text-xs font-medium tracking-wider text-stone-600 mb-2 block">
-            Quotes
+        <div className="flex-1 font-[Marfa]">
+          <label className="text-[1rem] font-[300] tracking-[0.01875] text-secondary-foreground mb-1 block">
+            Quotes*
           </label>
           <Select
             value={formData.selectedQuote}
             onValueChange={(value) => {
               updateFormData({
                 selectedQuote: value,
-                customMessage: value === "Write my own" ? formData.customMessage || "" : value,
+                customMessage:
+                  value === "Write my own"
+                    ? formData.customMessage || ""
+                    : value,
               });
-              
+
               // Focus on textarea when "Write my own" is selected
               if (value === "Write my own") {
                 setTimeout(() => {
@@ -216,36 +219,38 @@ export default function PersonalizationStep() {
             backgroundRepeat: "no-repeat",
           }}
         >
-          <div className="absolute inset-0 flex items-center justify-center p-8">
-            <div className="p-6 max-w-xs w-full">
-              <div className="text-center mb-4">
-                <input
-                  type="text"
-                  value={formData.headerText || ""}
-                  onChange={(e) => updateFormData({ headerText: e.target.value })}
-                  placeholder="Enter header text"
-                  className="w-full text-center bg-transparent border-none outline-none resize-none"
-                  style={getHeaderStyle()}
-                />
-              </div>
+          <div className="max-w-xs w-full">
+            <div className="text-center mb-10 absolute top-[8.75rem] left-1/2 transform -translate-x-1/2 w-full z-30">
+              <input
+                type="text"
+                value={formData.headerText || ""}
+                onChange={(e) => updateFormData({ headerText: e.target.value })}
+                placeholder="Enter header text*"
+                className="w-full text-center text-[0.75rem] bg-transparent border-none outline-none pointer-events-auto focus:outline-none"
+                style={{...getHeaderStyle(), position: 'relative', zIndex: 50}}
+                tabIndex={0}
+              />
+            </div>
 
-              <div className="text-center">
-                <textarea
-                  ref={textareaRef}
-                  value={formData.customMessage || ""}
-                  onChange={(e) => {
-                    const newMessage = e.target.value;
-                    updateFormData({ 
-                      customMessage: newMessage,
-                      selectedQuote: newMessage.length > 0 ? "Write my own" : (siteSettings?.quotes?.[0] || "Write my own")
-                    });
-                  }}
-                  placeholder="Your message will appear here..."
-                  className="w-full text-center bg-transparent border-none outline-none resize-none"
-                  style={getMessageStyle()}
-                  rows={4}
-                />
-              </div>
+            <div className="text-center absolute inset-0 flex items-center justify-center mt-15 p-8">
+              <textarea
+                ref={textareaRef}
+                value={formData.customMessage || ""}
+                onChange={(e) => {
+                  const newMessage = e.target.value;
+                  updateFormData({
+                    customMessage: newMessage,
+                    selectedQuote:
+                      newMessage.length > 0
+                        ? "Write my own"
+                        : siteSettings?.quotes?.[0] || "Write my own",
+                  });
+                }}
+                placeholder="Your message will appear here..."
+                className="w-full text-center text-[0.065rem] bg-transparent border-none outline-none resize-none"
+                style={getMessageStyle()}
+                rows={4}
+              />
             </div>
           </div>
         </div>

@@ -68,7 +68,7 @@ export default function OrderDetailPage({ order, user }: OrderDetailPageProps) {
     <div className="min-h-screen flex flex-col bg-background font-[Marfa]">
       <main className="relative grid md:grid-cols-5 grid-cols-1 md:px-20 px-4 min-h-[calc(100vh-64px)]">
         <div className="md:w-64 w-full md:py-20 py-6 col-span-1">
-          <div className=" md:text-[1rem] text-xs font-century uppercase tracking-wider md:flex hidden md:flex-col flex-row space-x-4 md:space-x-0">
+          <div className="small-text uppercase md:flex hidden md:flex-col flex-row space-x-4 md:space-x-0">
             <Link
               href="/account"
               className="hover:text-stone-800 text-muted transition-colors"
@@ -95,15 +95,15 @@ export default function OrderDetailPage({ order, user }: OrderDetailPageProps) {
 
         <div className="flex-1 md:py-20 py-6 md:px-10 px-0 col-span-4">
           <div className="mb-20">
-            <h1 className="text-3xl font-light mb-6">Order no.{orderNumber}</h1>
+            <h1 className="text-3xl font-light mb-6 font-century text-secondary-foreground">Order no.{orderNumber}</h1>
           </div>
 
           <div className="mb-8">
             <div className="flex flex-col md:items-start justify-between mb-4 md:mb-6">
-              <h2 className="border-b mb-6 text-lg text-secondary-foreground font-semibold w-full">
+              <h2 className="border-b mb-6 small-text pb-1 text-secondary-foreground font-semibold w-full">
                 ORDER DETAILS
               </h2>
-              <div className="mb-4 uppercase md:mb-0 text-[#50462D] text-[0.93rem]">
+              <div className="mb-4 uppercase small-text md:mb-0">
                 <h3 className="mb-1">Order no.{orderNumber}</h3>
                 <h3 className="mb-1">
                   {new Date(order.created_at).toLocaleDateString("en-GB", {
