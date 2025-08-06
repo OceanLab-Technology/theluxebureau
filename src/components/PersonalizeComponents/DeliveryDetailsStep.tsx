@@ -139,7 +139,7 @@ export default function DeliveryDetailsStep() {
           <p className="text-stone-700 text-sm mb-3">
             Would you like shipping updates via SMS?
           </p>
-          <div className="flex gap-6">
+          <div className="flex md:gap-6 gap-4">
             <label className="flex items-center space-x-2 cursor-pointer">
               <span className="text-sm text-stone-700">None</span>
               <div className="relative">

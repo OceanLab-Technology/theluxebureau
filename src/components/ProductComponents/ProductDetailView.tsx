@@ -19,6 +19,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ProductRecommendations } from "./ProductRecommendations";
+import { PersonalizeSheet } from "../PersonalizeComponents/PersonalizeSheet";
 
 interface ProductDetailViewProps {
   productId: string;
@@ -28,13 +29,8 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [user, setUser] = useState<any>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const {
-    products,
-    currentProduct,
-    loading,
-    detailedProductLoading,
-    fetchProductById,
-  } = useMainStore();
+  const { currentProduct, detailedProductLoading, fetchProductById } =
+    useMainStore();
   const { setSelectedProduct, resetCheckout } = usePersonalizeStore();
   const router = useRouter();
   const supabase = createClient();
@@ -209,7 +205,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
             {currentProduct.description}
           </p>
 
-          <div className="inline-flex">
+          {/* <div className="inline-flex">
             <Button
               variant="box_yellow"
               size={"lg"}
@@ -218,7 +214,12 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
             >
               Personalize
             </Button>
-          </div>
+          </div> */}
+          <PersonalizeSheet
+            handleOnClick={() => {
+              setSelectedProduct(currentProduct);
+            }}
+          />
 
           {currentProduct.tags && currentProduct.tags.length > 0 && (
             <div>

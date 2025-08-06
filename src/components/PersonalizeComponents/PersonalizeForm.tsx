@@ -26,7 +26,7 @@ const stepTitles = {
   4: "Summary",
 };
 
-export default function PersonalizeForm() {
+export default function PersonalizeForm({ onCloseSheet }: { onCloseSheet?: () => void }) {
   const {
     currentStep,
     nextStep,
@@ -73,7 +73,11 @@ export default function PersonalizeForm() {
 
   const handleBackToStore = () => {
     resetCheckout();
-    window.history.back();
+    if (onCloseSheet) {
+      onCloseSheet();
+    } else {
+      window.history.back();
+    }
   };
 
   const handleAddToCart = async () => {
@@ -156,7 +160,7 @@ export default function PersonalizeForm() {
   };
 
   return (
-    <section className="flex flex-col min-h-[calc(100vh-7rem)]">
+    <section className="flex flex-col min-h-[calc(100vh-2rem)] md:pt-20 pt-15">
       <div className="mb-6 md:mb-10">
         <div className="mb-4 flex md:items-center items-start justify-between md:flex-row flex-col">
           <h1 className="md:text-[2rem] text-secondary-foreground font-century text-[1.5rem] md:mb-4 font-medium">
@@ -193,7 +197,7 @@ export default function PersonalizeForm() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-6">
+      <div className="flex-1 overflow-y-auto pb-6 hide-scrollbar">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentStep}
@@ -208,19 +212,19 @@ export default function PersonalizeForm() {
       </div>
 
       <div className="flex-shrink-0 bg-background pt-4 pb-4 font-century">
-        <div className="flex gap-3 justify-end">
+        <div className="flex md:gap-3 gap-1 justify-end">
           {currentStep === 4 ? (
             <>
               <button
                 onClick={handleBack}
-                className="bg-[#3B3215] hover:bg-[#3B3215]/80 text-stone-400 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%]"
+                className="bg-[#3B3215] hover:bg-[#3B3215]/80 text-stone-400 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm md:py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%]"
               >
                 BACK
               </button>
               <PersonalizedAddToCartButton />
               <button
                 onClick={handleCheckout}
-                className="bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%]"
+                className="bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm md:py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%]"
               >
                 CHECKOUT
               </button>

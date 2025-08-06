@@ -77,7 +77,7 @@ export default function SummaryStep() {
           <p className="text-stone-700 text-[0.93rem]" >
             Would you like shipping updates via SMS?
           </p>
-          <div className="flex gap-6">
+          <div className="flex md:gap-6 gap-4">
             <label className="flex items-center space-x-2 cursor-pointer">
               <div className="relative">
                 <input
@@ -167,7 +167,7 @@ export default function SummaryStep() {
               className="overflow-x-auto overflow-y-hidden hide-scrollbar"
             >
               <div className="flex gap-2 pb-4">
-                <div className="bg-stone-300 h-64 w-72 rounded-none flex items-center justify-center flex-shrink-0">
+                <div className="bg-stone-300 h-[34vh] md:w-[50%] w-full rounded-none flex items-center justify-center flex-shrink-0">
                   <img
                     src={selectedProduct?.image || selectedProduct?.image_1}
                     alt=""
@@ -175,9 +175,9 @@ export default function SummaryStep() {
                   />
                 </div>
 
-                <div className="w-72 flex-shrink-0">
+                <div className="md:w-[50%] w-full flex-shrink-0">
                   <div
-                    className="relative h-64 rounded-none overflow-hidden"
+                    className="relative h-[34vh] rounded-none overflow-hidden"
                     style={{
                       backgroundImage: "url(/notecard.jpg)",
                       backgroundPosition: "center",
@@ -206,7 +206,7 @@ export default function SummaryStep() {
                   </div>
                 </div>
 
-                <div className="h-64 rounded-none flex items-center justify-center flex-shrink-0">
+                <div className="h-[34vh] md:w-[50%] w-full rounded-none flex items-center justify-center flex-shrink-0">
                   <img
                     src="/Bag.png"
                     alt=""
