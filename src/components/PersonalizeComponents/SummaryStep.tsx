@@ -74,24 +74,27 @@ export default function SummaryStep() {
         </div>
 
         <div className="flex md:items-center items-start md:flex-row flex-col gap-2 border-b border-b-stone-400 justify-between border-mutedftext-muted pb-1">
-          <p className="text-stone-700 text-[0.93rem]" >
+          <p className="text-stone-700 text-[0.93rem]">
             Would you like shipping updates via SMS?
           </p>
           <div className="flex md:gap-6 gap-4">
             <label className="flex items-center space-x-2 cursor-pointer">
               <div className="relative">
                 <input
+                  readOnly
                   type="radio"
                   name="sms-updates-summary"
                   value="none"
                   checked={formData.smsUpdates === "none"}
                   className="sr-only"
                 />
-                <div className={`w-4 h-4 rounded-full border-2 ${
-                  formData.smsUpdates === "none" 
-                    ? "bg-[#40362c] border-[#40362c]" 
-                    : "border-stone-400"
-                }`}>
+                <div
+                  className={`w-4 h-4 rounded-full border-2 ${
+                    formData.smsUpdates === "none"
+                      ? "bg-[#40362c] border-[#40362c]"
+                      : "border-stone-400"
+                  }`}
+                >
                   {formData.smsUpdates === "none" && (
                     <div className="w-full h-full rounded-full bg-[#40362c]"></div>
                   )}
@@ -102,17 +105,20 @@ export default function SummaryStep() {
             <label className="flex items-center space-x-2 cursor-pointer">
               <div className="relative">
                 <input
+                  readOnly
                   type="radio"
                   name="sms-updates-summary"
                   value="send-to-me"
                   checked={formData.smsUpdates === "send-to-me"}
                   className="sr-only"
                 />
-                <div className={`w-4 h-4 rounded-full border-2 ${
-                  formData.smsUpdates === "send-to-me" 
-                    ? "bg-[#40362c] border-[#40362c]" 
-                    : "border-stone-400"
-                }`}>
+                <div
+                  className={`w-4 h-4 rounded-full border-2 ${
+                    formData.smsUpdates === "send-to-me"
+                      ? "bg-[#40362c] border-[#40362c]"
+                      : "border-stone-400"
+                  }`}
+                >
                   {formData.smsUpdates === "send-to-me" && (
                     <div className="w-full h-full rounded-full bg-[#40362c]"></div>
                   )}
@@ -123,23 +129,28 @@ export default function SummaryStep() {
             <label className="flex items-center space-x-2 cursor-pointer">
               <div className="relative">
                 <input
+                  readOnly
                   type="radio"
                   name="sms-updates-summary"
                   value="send-to-recipient"
                   checked={formData.smsUpdates === "send-to-recipient"}
                   className="sr-only"
                 />
-                <div className={`w-4 h-4 rounded-full border-2 ${
-                  formData.smsUpdates === "send-to-recipient" 
-                    ? "bg-[#40362c] border-[#40362c]" 
-                    : "border-stone-400"
-                }`}>
+                <div
+                  className={`w-4 h-4 rounded-full border-2 ${
+                    formData.smsUpdates === "send-to-recipient"
+                      ? "bg-[#40362c] border-[#40362c]"
+                      : "border-stone-400"
+                  }`}
+                >
                   {formData.smsUpdates === "send-to-recipient" && (
                     <div className="w-full h-full rounded-full bg-[#40362c]"></div>
                   )}
                 </div>
               </div>
-              <span className="text-[0.93rem] text-stone-700">Send to recipient</span>
+              <span className="text-[0.93rem] text-stone-700">
+                Send to recipient
+              </span>
             </label>
           </div>
         </div>
@@ -175,7 +186,7 @@ export default function SummaryStep() {
                   />
                 </div>
 
-                <div className="md:w-[50%] w-full flex-shrink-0">
+                <div className="md:w-[70%] w-full flex-shrink-0">
                   <div
                     className="relative h-[34vh] rounded-none overflow-hidden"
                     style={{
@@ -185,22 +196,15 @@ export default function SummaryStep() {
                       backgroundRepeat: "no-repeat",
                     }}
                   >
-                    <div className="absolute inset-0 flex items-center justify-center p-8">
-                      <div className="p-4 max-w-xs w-full">
-                        <div className="text-center mb-1">
-                          <div className="text-xs font-[300] tracking-[0.01875rem] text-secondary-foreground mb-2">
-                            {formData.headerText}
-                          </div>
-                          <div className="h-px bg-stone-300 w-16 mx-auto"></div>
-                        </div>
+                    <div className="max-w-xs w-full">
+                      <div className="text-center mb-10 absolute top-[6.75rem] left-1/2 transform -translate-x-1/2 w-full z-30">
+                        <span className="text-center text-[0.75rem]">{formData.headerText || "No header text"}</span>
+                      </div>
 
-                        <div className="text-center flex items-center justify-center">
-                          <div className="text-[8px] w-42 text-stone-500 font-[monospace]">
-                            {formData.customMessage ||
-                              formData.selectedQuote ||
-                              "Message"}
-                          </div>
-                        </div>
+                      <div className="text-center w-76 mx-auto absolute inset-0 flex items-center justify-center p-8">
+                        <span className="font-[monospace] text-secondary-foreground text-[0.55rem]">
+                          {formData.customMessage || "No custom message"}
+                        </span>
                       </div>
                     </div>
                   </div>

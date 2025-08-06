@@ -232,7 +232,7 @@ export default function PersonalizationStep() {
               />
             </div>
 
-            <div className="text-center absolute inset-0 flex items-center justify-center mt-15 p-8">
+            <div className="text-center w-96 mx-auto absolute inset-0 flex items-center justify-center mt-11 p-8">
               <textarea
                 ref={textareaRef}
                 value={formData.customMessage || ""}
