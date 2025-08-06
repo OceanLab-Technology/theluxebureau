@@ -4,11 +4,19 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export function EmptyCart() {
+interface EmptyCartProps {
+  onClose?: () => void;
+}
+
+export function EmptyCart({ onClose }: EmptyCartProps) {
   const router = useRouter();
 
   const handleStartShopping = () => {
-    router.push("/products");
+    if (onClose) {
+      onClose(); // Close the sheet instead of navigating
+    } else {
+      router.push("/products"); // Navigate if not in sheet (legacy behavior)
+    }
   };
 
   return (
@@ -26,7 +34,7 @@ export function EmptyCart() {
           </div>
           <div className="space-y-3">
             <Button onClick={handleStartShopping} className="w-full" size="lg">
-              Start Shopping
+              {onClose ? "Continue Shopping" : "Start Shopping"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
 

@@ -1,24 +1,23 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { CartIcon } from "../CartComponents/CartIcon";
-import { Menu, ShoppingCartIcon, User2, X } from "lucide-react";
+import { User2, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Logo } from "./Logo";
 import { createClient } from "@/lib/supabase/client";
-import { toast } from "sonner";
 import { LoginRequiredModal } from "@/components/ui/login-required-modal";
 import { useRouter } from "next/navigation";
+import { CartSheet } from "../CartComponents";
 
 export default function Header() {
   const [extended, setExtended] = React.useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [user, setUser] = useState<any>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
   const router = useRouter();
   const supabase = createClient();
 
-  // Check authentication state
   useEffect(() => {
     const getUser = async () => {
       const {
@@ -38,7 +37,6 @@ export default function Header() {
     return () => subscription.unsubscribe();
   }, [supabase.auth]);
 
-  // Handle protected route clicks
   const handleProtectedRoute = (
     e: React.MouseEvent,
     route: string,
@@ -80,26 +78,41 @@ export default function Header() {
     { label: "LinkedIn", href: "https://linkedin.com" },
   ];
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <motion.div
       initial={false}
       animate={{
-        height: extended ? "41.25rem" : "5.9375rem",
+        height: extended ? "41.25rem" : isMobile ? "3.9375rem" : "5.9375rem",
         backgroundColor: extended ? "rgba(80, 70, 45, 0.95)" : "#FBF7E5",
       }}
       onMouseLeave={() => setExtended(false)}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className={`font-century fixed top-0 left-0 right-0 z-[9999] w-full overflow-hidden text-background bg-background ${
+      className={`font-century fixed top-0 left-0 right-0 z-[9999] md:h-[5.9375rem] md:py-0 py-5 w-full overflow-hidden text-background bg-background ${
         extended ? "backdrop-blur-sm" : ""
       }`}
     >
-      <div className="relative py-7.5 flex items-center justify-between px-6">
+      <div className="relative md:py-8.5 flex items-center justify-between px-6">
         <div className="flex items-center space-x-4 md:space-x-35">
           <div className="flex items-center space-x-2">
             <div className="md:hidden flex items-center space-x-2">
               {!mobileMenuOpen ? (
-                <button onClick={() => setMobileMenuOpen(true)}>
-                  <Menu className="h-5 w-5 text-stone-700 hover:text-stone-900 transition-colors cursor-pointer" />
+                <button
+                  className="flex flex-col space-y-1"
+                  onClick={() => setMobileMenuOpen(true)}
+                >
+                  <span className="block w-5 h-0.5 bg-stone-700 rounded-[2px]"></span>
+                  <span className="block w-5 h-0.5 bg-stone-700 rounded-[2px]"></span>
                 </button>
               ) : (
                 <button onClick={() => setMobileMenuOpen(false)}>
@@ -109,7 +122,7 @@ export default function Header() {
             </div>
             <Link
               href="/"
-              className={`cursor-pointer md:w-auto md:scale-100 scale-75 md:h-auto flex-shrink-0 ${
+              className={`md:relative absolute left-1/2 -translate-x-1/2 cursor-pointer md:w-auto md:scale-100 scale-55 md:h-auto flex-shrink-0 ${
                 extended ? "text-background" : "text-stone-600"
               }`}
             >
@@ -172,7 +185,7 @@ export default function Header() {
 
         <div className="flex items-center space-x-2">
           <div className="hidden md:block">
-            <CartIcon
+            <CartSheet
               className={`${
                 extended
                   ? "text-background hover:text-[#FBD060]"
@@ -180,25 +193,44 @@ export default function Header() {
               }`}
             />
           </div>
+          <div className="md:hidden flex gap-4">
+            <svg
+              onClick={(e) => {
+                if (
+                  handleProtectedRoute(e, "/account", "access your account")
+                ) {
+                  router.push("/account");
+                }
+                setMobileMenuOpen(false);
+              }}
+              width="15"
+              height="17"
+              viewBox="0 0 15 17"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g clip-path="url(#clip0_2437_16208)">
+                <path
+                  d="M14.8278 16.006C14.8278 16.2303 14.6316 16.4138 14.3917 16.4138C14.1519 16.4138 13.9556 16.2303 13.9556 16.006C13.9556 12.6298 11.025 9.88966 7.41404 9.88966C3.80308 9.88966 0.872455 12.6298 0.872455 16.006C0.872455 16.2303 0.676208 16.4138 0.43635 16.4138C0.196492 16.4138 0.000244141 16.2303 0.000244141 16.006C0.000244141 12.1772 3.31901 9.07414 7.41404 9.07414C11.5091 9.07414 14.8278 12.1772 14.8278 16.006ZM7.41404 8.25863C5.00674 8.25863 3.05298 6.43187 3.05298 4.18104C3.05298 1.93021 5.00674 0.103455 7.41404 0.103455C9.82134 0.103455 11.7751 1.93021 11.7751 4.18104C11.7751 6.43187 9.82134 8.25863 7.41404 8.25863ZM7.41404 7.44311C9.34162 7.44311 10.9029 5.98333 10.9029 4.18104C10.9029 2.37875 9.34162 0.918972 7.41404 0.918972C5.48645 0.918972 3.92519 2.37875 3.92519 4.18104C3.92519 5.98333 5.48645 7.44311 7.41404 7.44311Z"
+                  fill="#1e1204"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_2437_16208">
+                  <rect
+                    width="14.8276"
+                    height="16.3103"
+                    fill="white"
+                    transform="translate(0.000244141 0.103455)"
+                  />
+                </clipPath>
+              </defs>
+            </svg>
 
-          {mobileMenuOpen && (
-            <>
-              <button
-                onClick={(e) => {
-                  if (
-                    handleProtectedRoute(e, "/account", "access your account")
-                  ) {
-                    router.push("/account");
-                  }
-                  setMobileMenuOpen(false);
-                }}
-                className="text-background text-sm hover:text-[#FBD060] transition-colors md:hidden block"
-              >
-                <User2 className="h-5 w-5" />
-              </button>
-              <CartIcon className="text-background hover:text-[#FBD060] md:hidden" />
-            </>
-          )}
+            <div>
+              <CartSheet className="text-secondary-foreground" />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -213,7 +245,7 @@ export default function Header() {
         >
           <div className="flex items-start">
             <div className="flex-shrink-0" style={{ width: "425px" }}></div>
-            
+
             <div className="flex items-start space-x-16 lg:space-x-4">
               <div className="flex flex-col items-start space-y-3">
                 {shopCategories.map((category) => (
@@ -274,10 +306,10 @@ export default function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[9999999] bg-[#50462D] px-6 py-8 text-background flex flex-col"
+            className="fixed inset-0 z-[9998] bg-secondary-foreground px- py-4 text-background flex flex-col"
           >
             {/* Mobile Header */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center relative justify-between mb-6 px-4">
               <div className="flex items-center">
                 <button
                   onClick={() => setMobileMenuOpen(false)}
@@ -285,34 +317,44 @@ export default function Header() {
                 >
                   <X />
                 </button>
-                <Link
-                  className="scale-50"
-                  href="/"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <Logo fill="#FBF7E5" />
-                </Link>
               </div>
-              {/* <CartIcon className="text-background hover:text-[#FBD060]" /> */}
-              <button
-                onClick={(e) => {
-                  if (handleProtectedRoute(e, "/cart", "access your cart")) {
-                    router.push("/cart");
-                  }
-                  setMobileMenuOpen(false);
-                }}
-              >
-                <ShoppingCartIcon className="text-background hover:text-[#FBD060] h-4 w-4" />
-              </button>
+              <h2 className="absolute left-1/2 transform -translate-x-1/2 text-[.9rem] font-century flex items-center gap-1 font-[100] text-background">
+                <span className="tracking-widest">the</span>
+                <span className="uppercase italic tracking-[5px]">luxe</span>
+                <span className="uppercase tracking-[5px]">BUreau</span>
+              </h2>
+              <div className="flex gap-6">
+                <img
+                  onClick={(e) => {
+                    if (
+                      handleProtectedRoute(e, "/account", "access your account")
+                    ) {
+                      router.push("/account");
+                    }
+                    setMobileMenuOpen(false);
+                  }}
+                  src="/user.svg"
+                  alt=""
+                />
+                <div>
+                  <CartSheet fill="#fbf7e5" />
+                </div>
+              </div>
             </div>
 
             {/* Mobile Menu Content */}
-            <div className="space-y-20 text-[1.5rem] font-light w-full">
-              <div className="grid grid-cols-2">
-                <div className="text-xs font-schoolbook-cond text-[#FBD060] tracking-widest">
+            <div className="space-y-10 py-10 text-[1.5rem] px-6 font-light w-full">
+              <div className="grid grid-cols-3">
+                <div className="text-xs font-schoolbook-cond tracking-widest">
+                  HOME
+                </div>
+                <div className="space-y-2"></div>
+              </div>
+              <div className="grid grid-cols-3">
+                <div className="text-xs col-span-1 font-schoolbook-cond tracking-widest">
                   SHOP
                 </div>
-                <div className="space-y-2">
+                <div className="col-span-2">
                   {shopCategories.map((item) => (
                     <Link
                       key={item.href}
@@ -328,11 +370,11 @@ export default function Header() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2">
-                <div className="text-xs text-[#FBD060] font-schoolbook-cond tracking-widest">
+              <div className="grid grid-cols-3">
+                <div className="text-xs font-schoolbook-cond tracking-widest col-span-1">
                   DISCOVER
                 </div>
-                <div className="space-y-2">
+                <div className="col-span-2">
                   {aboutLinks.map((item) => (
                     <Link
                       key={item.href}
@@ -348,13 +390,13 @@ export default function Header() {
                 </div>
               </div>
 
-              <div className="space-y-2 flex gap-4">
+              <div className="space-y-4 pt-4 gap-4">
                 {socialLinks.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block text-[#FBD060] font-schoolbook-cond text-[1rem] hover:text-background transition-colors"
+                    className="block text-[#FBD060] font-[100] font-century text-[1rem] uppercase hover:text-background transition-colors"
                     {...(item.href.startsWith("http")
                       ? {
                           target: "_blank",

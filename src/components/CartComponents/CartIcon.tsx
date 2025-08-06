@@ -24,11 +24,11 @@ export function CartIcon({ className }: { className?: string }) {
 
     checkAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setIsAuthenticated(!!session?.user);
-      }
-    );
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      setIsAuthenticated(!!session?.user);
+    });
 
     return () => subscription.unsubscribe();
   }, [supabase]);
@@ -44,6 +44,7 @@ export function CartIcon({ className }: { className?: string }) {
       setShowLoginModal(true);
       return;
     }
+    // Navigate to cart page (legacy behavior)
     router.push("/cart");
   };
 
@@ -51,11 +52,14 @@ export function CartIcon({ className }: { className?: string }) {
     <>
       <button
         onClick={handleCartClick}
-        className={cn("relative cursor-pointer text-[15px] leading-[18px] font-schoolbook-cond font-[400]", className)}
+        className={cn(
+          "relative cursor-pointer text-[15px] leading-[18px] font-schoolbook-cond font-[400]",
+          className
+        )}
       >
         CART ({cartItemCount})
       </button>
-      
+
       <LoginRequiredModal
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}

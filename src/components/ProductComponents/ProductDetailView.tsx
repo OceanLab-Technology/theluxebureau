@@ -174,7 +174,9 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                         borderColor: ["#eab308", "#fbbf24", "#eab308"],
                         transition: { duration: 0.5 },
                       }
-                    : {}
+                    : {
+                        borderColor: "transparent",
+                      }
                 }
               >
                 <img

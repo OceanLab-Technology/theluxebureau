@@ -73,7 +73,7 @@ export function CartItem({ item, loading }: CartItemProps) {
   };
 
   return (
-    <div className="flex items-start space-x-6 md:py-6 py-4 border-y border-secondary-foreground">
+    <div className="flex items-start space-x-6 md:py-6 py-4 border-y border-secondary-foreground/50">
       <div className="flex-shrink-0">
         <div className="w-32 h-32 relative overflow-hidden bg-stone-100">
           {product.image_1 || product.image ? (

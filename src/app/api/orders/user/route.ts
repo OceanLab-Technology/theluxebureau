@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { handleError, buildFilters } from "../../utils";
+import { handleError, buildFilters, parseQueryParams } from "../../utils";
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,6 +22,12 @@ export async function GET(request: NextRequest) {
 
     const allowedFilters = ["status", "payment_status", "delivery_status"];
     const filters = buildFilters(searchParams, allowedFilters);
+    
+    // Parse pagination parameters
+    const { page, limit, offset } = parseQueryParams(searchParams);
+    // Override limit to 3 for orders
+    const ordersLimit = 3;
+    const ordersOffset = (page - 1) * ordersLimit;
 
     // order either payment_status 
     let query = supabase
@@ -42,7 +48,8 @@ export async function GET(request: NextRequest) {
       .eq("user_email", user.email)
       .eq("payment_status", "completed")
       // .eq("status", "Active")
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false }) // newest orders first
+      .range(ordersOffset, ordersOffset + ordersLimit - 1); // Apply pagination
 
     for (const [key, value] of Object.entries(filters)) {
       if (key === "status") {
@@ -56,9 +63,26 @@ export async function GET(request: NextRequest) {
 
     if (error) throw error;
 
+    // Get total count for pagination
+    const { count } = await supabase
+      .from("orders")
+      .select("*", { count: "exact", head: true })
+      .eq("user_email", user.email)
+      .eq("payment_status", "completed");
+
+    const totalPages = Math.ceil((count || 0) / ordersLimit);
+
     return NextResponse.json({
       success: true,
       data,
+      pagination: {
+        page,
+        limit: ordersLimit,
+        total: count || 0,
+        totalPages,
+        hasNext: page < totalPages,
+        hasPrev: page > 1,
+      },
     });
   } catch (error) {
     return handleError(error);

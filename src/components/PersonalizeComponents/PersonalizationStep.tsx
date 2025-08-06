@@ -143,8 +143,8 @@ export default function PersonalizationStep() {
         to add this to your message.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        <div className="flex-1 font-[Marfa]">
+      <div className="flex gap-4 mb-8">
+        <div className="w-40 font-[Marfa]">
           <label className="text-[1rem] font-[300] tracking-[0.01875] text-secondary-foreground mb-1 block">
             Header type style*
           </label>
@@ -172,7 +172,7 @@ export default function PersonalizationStep() {
           )}
         </div>
 
-        <div className="flex-1 font-[Marfa]">
+        <div className="w-40 font-[Marfa]">
           <label className="text-[1rem] font-[300] tracking-[0.01875] text-secondary-foreground mb-1 block">
             Quotes*
           </label>

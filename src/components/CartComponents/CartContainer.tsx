@@ -9,9 +9,12 @@ import { CartContainerSkeleton } from "./CartSkeleton";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 
-export function CartContainer() {
-  const { cartItems, cartLoading, products, fetchProducts } =
-    useMainStore();
+interface CartContainerProps {
+  onClose?: () => void;
+}
+
+export function CartContainer({ onClose }: CartContainerProps) {
+  const { cartItems, cartLoading, products, fetchProducts } = useMainStore();
 
   useEffect(() => {
     if (products.length === 0) {
@@ -40,7 +43,7 @@ export function CartContainer() {
   }
 
   if (cartItems.length === 0) {
-    return <EmptyCart />;
+    return <EmptyCart onClose={onClose} />;
   }
 
   if (enrichedCartItems.length === 0 && products.length === 0) {
@@ -54,24 +57,38 @@ export function CartContainer() {
   }
 
   return (
-    <div className="md:mx-12 md:my-14 py-10 px-6 h-screen flex flex-col justify-between">
-      <div className="flex items-center justify-between md:mb-8 pb-4">
-        <h1 className="text-2xl font-light">Shopping Cart</h1>
-        <Link
-          href="/products"
-          className="md:block hidden small-text hover:text-stone-500 transition-colors uppercase tracking-wider"
-        >
-          CONTINUE SHOPPING
-        </Link>
+    <div className="min-h-[calc(100vh-2rem)] md:pt-20 pt-15 flex flex-col justify-between">
+      <div>
+        <div className="flex items-center justify-between md:mb-2">
+          <h1 className="text-[1.5rem] font-century font-light ">
+            Shopping Cart
+          </h1>
+          {onClose ? (
+            <button
+              onClick={onClose}
+              className="small-text hover:text-stone-500 transition-colors uppercase tracking-wider"
+            >
+              <span className="md:hidden">Close</span>
+              <span className="hidden md:block">CONTINUE SHOPPING</span>
+            </button>
+          ) : (
+            <Link
+              href="/products"
+              className="md:block hidden small-text hover:text-stone-500 transition-colors uppercase tracking-wider"
+            >
+              CONTINUE SHOPPING
+            </Link>
+          )}
+        </div>
+
+        <div className="space-y-6 mb-6 overflow-y-auto font-century hide-scrollbar">
+          {enrichedCartItems.map((item) => (
+            <CartItem key={item.id} item={item} loading={cartLoading} />
+          ))}
+        </div>
       </div>
 
-      <div className="space-y-6 mb-12 max-h overflow-y-auto hide-scrollbar">
-        {enrichedCartItems.map((item) => (
-          <CartItem key={item.id} item={item} loading={cartLoading} />
-        ))}
-      </div>
-
-      <div className="">
+      <div className="font-century py-2">
         <CartSummary />
       </div>
     </div>
