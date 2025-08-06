@@ -188,7 +188,7 @@ export default function SummaryStep() {
 
                 <div className="md:w-[70%] w-full flex-shrink-0">
                   <div
-                    className="relative h-[34vh] rounded-none overflow-hidden"
+                    className="relative w-full h-[34vh] rounded-none overflow-hidden"
                     style={{
                       backgroundImage: "url(/notecard.jpg)",
                       backgroundPosition: "center",
@@ -196,13 +196,13 @@ export default function SummaryStep() {
                       backgroundRepeat: "no-repeat",
                     }}
                   >
-                    <div className="max-w-xs w-full">
-                      <div className="text-center mb-10 absolute md:top-[5.75rem] top-[4rem] left-1/2 transform -translate-x-1/2 w-full z-30">
-                        <span className="text-center md:text-[0.75rem] text-[10px]">{formData.headerText || "No header text"}</span>
+                    <div className="max-w-xs w-full absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-1/2">
+                      <div className="text-center mb-10 absolute md:top-3 top-2 left-1/2 transform -translate-x-1/2 w-full z-30">
+                        <span className="text-center md:text-[0.70rem] text-[10px]">{formData.headerText || "No header text"}</span>
                       </div>
 
-                      <div className="text-center md:w-76 w-56 mx-auto absolute inset-0 flex items-center justify-center p-8">
-                        <span className="font-[monospace] text-secondary-foreground md:text-[0.55rem] text-[6px]">
+                      <div className="text-center md:w-72 w-56 mx-auto absolute inset-0 flex items-center justify-center md:p-10">
+                        <span className="font-[monospace] text-secondary-foreground md:text-[0.45rem] text-[8px]">
                           {formData.customMessage || "No custom message"}
                         </span>
                       </div>

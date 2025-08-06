@@ -211,7 +211,7 @@ export default function PersonalizationStep() {
 
       <div className="mb-8">
         <div
-          className="relative md:h-[30rem] h-[50vh] rounded-none overflow-hidden"
+          className="relative md:h-[30rem] h-[50vh] w-full flex items-center justify-center rounded-none overflow-hidden"
           style={{
             backgroundImage: "url(/notecard.jpg)",
             backgroundPosition: "center",
@@ -219,8 +219,8 @@ export default function PersonalizationStep() {
             backgroundRepeat: "no-repeat",
           }}
         >
-          <div className="max-w-xs w-full">
-            <div className="text-center mb-10 absolute md:top-[8.75rem] top-[5.95rem] left-1/2 transform -translate-x-1/2 w-full z-30">
+          <div className="max-w-sm w-full h-1/2 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 absolute inset-0">
+            <div className="text-center mb-10 absolute md:top-5 top-4 left-1/2 transform -translate-x-1/2 w-full z-30">
               <input
                 type="text"
                 value={formData.headerText || ""}
@@ -232,7 +232,7 @@ export default function PersonalizationStep() {
               />
             </div>
 
-            <div className="text-center md:w-96 w-66 mx-auto absolute inset-0 flex items-center justify-center md:mt-11 mt-4 p-8">
+            <div className="text-center md:w-96 mx-auto absolute inset-0 flex items-center justify-center md:mt-10 mt-4 p-8">
               <textarea
                 ref={textareaRef}
                 value={formData.customMessage || ""}
