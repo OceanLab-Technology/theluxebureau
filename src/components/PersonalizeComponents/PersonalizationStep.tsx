@@ -220,7 +220,7 @@ export default function PersonalizationStep() {
           }}
         >
           <div className="max-w-xs w-full">
-            <div className="text-center mb-10 absolute top-[8.75rem] left-1/2 transform -translate-x-1/2 w-full z-30">
+            <div className="text-center mb-10 absolute md:top-[8.75rem] top-[5.95rem] left-1/2 transform -translate-x-1/2 w-full z-30">
               <input
                 type="text"
                 value={formData.headerText || ""}
@@ -232,7 +232,7 @@ export default function PersonalizationStep() {
               />
             </div>
 
-            <div className="text-center w-96 mx-auto absolute inset-0 flex items-center justify-center mt-11 p-8">
+            <div className="text-center md:w-96 w-66 mx-auto absolute inset-0 flex items-center justify-center md:mt-11 mt-4 p-8">
               <textarea
                 ref={textareaRef}
                 value={formData.customMessage || ""}
@@ -247,7 +247,7 @@ export default function PersonalizationStep() {
                   });
                 }}
                 placeholder="Your message will appear here..."
-                className="w-full text-center text-[0.065rem] bg-transparent border-none outline-none resize-none"
+                className="w-full text-center md:text-[0.065rem] text-[8px] bg-transparent border-none outline-none resize-none"
                 style={getMessageStyle()}
                 rows={4}
               />

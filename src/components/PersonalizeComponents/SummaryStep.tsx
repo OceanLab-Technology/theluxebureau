@@ -197,12 +197,12 @@ export default function SummaryStep() {
                     }}
                   >
                     <div className="max-w-xs w-full">
-                      <div className="text-center mb-10 absolute top-[6.75rem] left-1/2 transform -translate-x-1/2 w-full z-30">
-                        <span className="text-center text-[0.75rem]">{formData.headerText || "No header text"}</span>
+                      <div className="text-center mb-10 absolute md:top-[5.75rem] top-[4rem] left-1/2 transform -translate-x-1/2 w-full z-30">
+                        <span className="text-center md:text-[0.75rem] text-[10px]">{formData.headerText || "No header text"}</span>
                       </div>
 
-                      <div className="text-center w-76 mx-auto absolute inset-0 flex items-center justify-center p-8">
-                        <span className="font-[monospace] text-secondary-foreground text-[0.55rem]">
+                      <div className="text-center md:w-76 w-56 mx-auto absolute inset-0 flex items-center justify-center p-8">
+                        <span className="font-[monospace] text-secondary-foreground md:text-[0.55rem] text-[6px]">
                           {formData.customMessage || "No custom message"}
                         </span>
                       </div>

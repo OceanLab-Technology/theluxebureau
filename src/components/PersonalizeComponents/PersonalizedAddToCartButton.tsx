@@ -1,56 +1,30 @@
 "use client";
 
-import { useState } from "react";
-import { useMainStore } from "@/store/mainStore";
+import React, { useState, useEffect } from "react";
 import { usePersonalizeStore } from "@/store/personalizeStore";
 import { PersonalizedCartToast } from "@/components/ui/personalized-cart-toast";
 import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export function PersonalizedAddToCartButton() {
-  const { addToCart } = useMainStore();
+export function PersonalizedAddToCartButton({
+  handleAddToCart,
+  isAdded,
+  isLoading,
+}: {
+  handleAddToCart: () => void;
+  isLoading?: boolean;
+  isAdded?: boolean;
+}) {
   const { formData, selectedProduct, resetCheckout } = usePersonalizeStore();
   const router = useRouter();
-  const [isAdded, setIsAdded] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
-  const handleAddToCart = async () => {
-    if (!selectedProduct) return;
-
-    try {
-      setIsLoading(true);
-
-      const personalizationData = {
-        yourName: formData.yourName,
-        recipientName: formData.recipientName,
-        recipientAddress: formData.recipientAddress,
-        recipientCity: formData.recipientCity,
-        recipientEmail: formData.recipientEmail,
-        deliveryDate: formData.deliveryDate,
-        preferredDeliveryTime: formData.preferredDeliveryTime,
-        headerText: formData.headerText,
-        selectedQuote: formData.selectedQuote,
-        customMessage: formData.customMessage,
-        smsUpdates: formData.smsUpdates,
-        isPersonalized: true,
-      };
-
-      await addToCart(selectedProduct.id!, 1, personalizationData);
-      setIsAdded(true);
+  // Show toast when item is successfully added
+  useEffect(() => {
+    if (isAdded) {
       setShowToast(true);
-
-      setTimeout(() => {
-        setShowToast(false);
-      }, 6000);
-
-      setTimeout(() => setIsAdded(false), 3000);
-    } catch (error) {
-      console.error("Failed to add personalized item to cart:", error);
-    } finally {
-      setIsLoading(false);
     }
-  };
+  }, [isAdded]);
 
   const handleViewCart = () => {
     setShowToast(false);

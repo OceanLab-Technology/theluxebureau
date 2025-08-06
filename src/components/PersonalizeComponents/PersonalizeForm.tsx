@@ -26,7 +26,11 @@ const stepTitles = {
   4: "Summary",
 };
 
-export default function PersonalizeForm({ onCloseSheet }: { onCloseSheet?: () => void }) {
+export default function PersonalizeForm({
+  onCloseSheet,
+}: {
+  onCloseSheet?: () => void;
+}) {
   const {
     currentStep,
     nextStep,
@@ -37,6 +41,8 @@ export default function PersonalizeForm({ onCloseSheet }: { onCloseSheet?: () =>
     isStepValid,
   } = usePersonalizeStore();
   const { addToCart } = useMainStore();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [isAdded, setIsAdded] = React.useState(false);
   const router = useRouter();
 
   const handleNext = () => {
@@ -84,6 +90,7 @@ export default function PersonalizeForm({ onCloseSheet }: { onCloseSheet?: () =>
     if (!selectedProduct) return;
 
     try {
+      setIsLoading(true);
       const personalizationData = {
         yourName: formData.yourName,
         recipientName: formData.recipientName,
@@ -100,9 +107,23 @@ export default function PersonalizeForm({ onCloseSheet }: { onCloseSheet?: () =>
       };
 
       await addToCart(selectedProduct.id!, 1, personalizationData);
-      resetCheckout();
-      router.push("/cart");
+      setIsLoading(false);
+      setIsAdded(true);
+      
+      // Reset states after a delay
+      setTimeout(() => {
+        setIsAdded(false);
+        resetCheckout();
+        if (onCloseSheet) {
+          onCloseSheet();
+        }
+      }, 2000);
     } catch (error) {
+      setIsLoading(false);
+      setIsAdded(false);
+      toast.error("Failed to add to cart", {
+        description: "Please try again.",
+      });
       console.error("Failed to add personalized item to cart:", error);
     }
   };
@@ -115,6 +136,7 @@ export default function PersonalizeForm({ onCloseSheet }: { onCloseSheet?: () =>
     }
 
     try {
+      setIsLoading(true);
       const personalizationData = {
         yourName: formData.yourName,
         recipientName: formData.recipientName,
@@ -131,9 +153,18 @@ export default function PersonalizeForm({ onCloseSheet }: { onCloseSheet?: () =>
       };
 
       await addToCart(selectedProduct.id!, 1, personalizationData);
+      setIsLoading(false);
+      setIsAdded(true);
       resetCheckout();
+      
+      toast.success("Proceeding to checkout...");
       router.push("/checkout");
     } catch (error) {
+      setIsLoading(false);
+      setIsAdded(false);
+      toast.error("Failed to add to cart", {
+        description: "Please try again.",
+      });
       console.error("Failed to add personalized item to cart:", error);
     }
   };
@@ -217,16 +248,22 @@ export default function PersonalizeForm({ onCloseSheet }: { onCloseSheet?: () =>
             <>
               <button
                 onClick={handleBack}
-                className="bg-[#3B3215] hover:bg-[#3B3215]/80 text-stone-400 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm md:py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%]"
+                disabled={isLoading}
+                className="bg-[#3B3215] hover:bg-[#3B3215]/80 text-stone-400 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm md:py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 BACK
               </button>
-              <PersonalizedAddToCartButton />
+              <PersonalizedAddToCartButton
+                handleAddToCart={handleAddToCart}
+                isLoading={isLoading}
+                isAdded={isAdded}
+              />
               <button
                 onClick={handleCheckout}
-                className="bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm md:py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%]"
+                disabled={isLoading}
+                className="bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm md:py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%] disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                CHECKOUT
+                {isLoading ? "PROCESSING..." : "CHECKOUT"}
               </button>
             </>
           ) : (
