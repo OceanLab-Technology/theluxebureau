@@ -7,6 +7,7 @@ import { useMainStore } from "@/store/mainStore";
 import { createClient } from "@/lib/supabase/client";
 import { LoginRequiredModal } from "@/components/ui/login-required-modal";
 import { cn } from "@/lib/utils";
+import { ShoppingCart } from "lucide-react";
 
 interface CartSheetProps {
   className?: string;
@@ -61,16 +62,15 @@ export function CartSheet({ className, children, fill }: CartSheetProps) {
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
           <div>
-            <button
-              onClick={handleCartClick}
-              className={cn(
-                "md:block hidden relative cursor-pointer text-[15px] leading-[18px] font-schoolbook-cond font-[400]",
-                className
-              )}
-            >
-              {children || `CART (${cartItemCount})`}
-            </button>
-            <div className="md:hidden flex items-center justify-center">
+            <div className="relative md:flex hidden items-center justify-center cursor-pointer" onClick={handleCartClick}>
+              <ShoppingCart className="h-5 w-5 text-secondary-foreground" />
+               {/* {cartItemCount > 0 && (
+                <span className="absolute top-[4px] text-secondary-foreground text-[8px] font-semibold px-1.5 py-0.5 rounded-full">
+                  {cartItemCount}
+                </span>
+              )} */}
+            </div>
+            <div className="md:hidden relative flex items-center md:scale-115 justify-center cursor-pointer">
               <svg
                 onClick={handleCartClick}
                 width="14"
@@ -84,6 +84,11 @@ export function CartSheet({ className, children, fill }: CartSheetProps) {
                   fill={fill || "#1e1204"}
                 />
               </svg>
+              {cartItemCount > 0 && (
+                <span className="absolute top-[4px] text-secondary-foreground text-[8px] font-semibold px-1.5 py-0.5 rounded-full">
+                  {cartItemCount}
+                </span>
+              )}
             </div>
           </div>
         </SheetTrigger>

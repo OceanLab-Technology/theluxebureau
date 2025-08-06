@@ -284,6 +284,13 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
           )}
         </div>
       </div>
+      <div className="md:flex hidden justify-end flex-col items-end px-10">
+        <p className="text-[1.5rem] w-110 font-century text-right leading-[1.875rem] font-[400] text-secondary-foreground">
+          “The meaning of life is to find your gift. The purpose of life is to
+          give it away.”
+        </p>
+        <span className="small-text pt-2">PABLO PICASSO</span>
+      </div>
       <ProductRecommendations currentProductId={currentProduct.id!} />
 
       {/* Login Required Modal */}

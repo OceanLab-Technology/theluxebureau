@@ -98,7 +98,7 @@ export default function Header() {
       }}
       onMouseLeave={() => setExtended(false)}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className={`font-century fixed top-0 left-0 right-0 z-[9999] md:h-[5.9375rem] md:py-0 py-5 w-full overflow-hidden text-background bg-background ${
+      className={`font-century fixed top-0 left-0 right-0 z-[99999] md:h-[5.9375rem] md:py-0 py-5 w-full overflow-hidden text-background bg-background ${
         extended ? "backdrop-blur-sm" : ""
       }`}
     >

@@ -201,7 +201,7 @@ export default function SummaryStep() {
                         <span className="text-center md:text-[0.70rem] text-[10px]">{formData.headerText || "No header text"}</span>
                       </div>
 
-                      <div className="text-center md:w-72 w-56 mx-auto absolute inset-0 flex items-center justify-center md:p-10">
+                      <div className="text-center md:w-72 w-56 mx-auto absolute inset-0 flex items-center justify-center md:p-12">
                         <span className="font-[monospace] text-secondary-foreground md:text-[0.45rem] text-[8px]">
                           {formData.customMessage || "No custom message"}
                         </span>
