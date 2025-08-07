@@ -68,7 +68,7 @@ export function Footer() {
                   <li key={index}>
                     <Link
                       href={link.href}
-                      className="hover:text-stone-300 transition-colors font-century"
+                      className="hover:text-stone-300 transition-colors font-[Marfa]"
                     >
                       {link.label}
                     </Link>
@@ -86,7 +86,7 @@ export function Footer() {
                   <li key={index}>
                     <Link
                       href={link.href}
-                      className="hover:text-stone-300 transition-colors font-century"
+                      className="hover:text-stone-300 transition-colors font-[Marfa]"
                     >
                       {link.label}
                     </Link>
@@ -103,9 +103,9 @@ export function Footer() {
                 <input
                   type="email"
                   placeholder={footerData.newsletter.placeholder}
-                  className="border-0 bg-transparent px-0 py-3 text-stone-200 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none focus-visible:ring-0 placeholder:text-stone-300"
+                  className="border-0 bg-transparent px-0 py-3 text-stone-200 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none focus-visible:ring-0 placeholder:text-stone-300 font-[Marfa]"
                 />
-                <button className="px-6 py-2 text-white text-sm font-medium transition-colors">
+                <button className="px-6 py-2 text-white text-sm font-medium transition-colors font-[Marfa]">
                   {footerData.newsletter.buttonText}
                 </button>
               </div>
@@ -122,12 +122,12 @@ export function Footer() {
                 className="w-35"
               />
             </div>
-            <p className="font-century">{footerData.copyright.text}</p>
-            <p className="font-century">
+            <p className="font-[Marfa]">{footerData.copyright.text}</p>
+            <p className="font-[Marfa]">
               {footerData.copyright.designCredit.text}{" "}
               <Link
                 href={footerData.copyright.designCredit.href}
-                className="underline hover:no-underline"
+                className="underline hover:no-underline font-[Marfa]"
               >
                 {footerData.copyright.designCredit.name}
               </Link>

@@ -119,13 +119,33 @@ export default function PersonalizationStep() {
     ? [...siteSettings.quotes, "Write my own"]
     : ["Write my own"];
 
-  const getMessageStyle = () => {
-    return {
+  // const getMessageStyle = () => {
+  //   return {
+  //     fontSize: "12px",
+  //     color: "#57534e",
+  //     fontFamily: "monospace",
+  //   };
+  // };
+
+  const getMessageStyle = (): React.CSSProperties => {
+    const baseStyle: React.CSSProperties = {
       fontSize: "12px",
       color: "#57534e",
-      fontFamily: "monospace",
+    };
+
+    if (selectedFont && fontLoaded && formData.selectedFont !== "default") {
+      return {
+        ...baseStyle,
+        fontFamily: `"${selectedFont.name}", serif`,
+      };
+    }
+
+    return {
+      ...baseStyle,
+      fontFamily: "serif", // or your default fallback
     };
   };
+
 
   return (
     <div className="font-century">
@@ -251,9 +271,8 @@ export default function PersonalizationStep() {
                   });
                 }}
                 placeholder="Your message will appear here..."
-                className={`w-full ${
-                  formData.customMessage.length > 150 ? "h-[70%]" : ""
-                } text-center md:text-[0.065rem] text-[8px] bg-transparent border-none outline-none resize-none`}
+                className={`w-full ${formData.customMessage.length > 150 ? "h-[70%]" : ""
+                  } text-center md:text-[0.065rem] text-[8px] bg-transparent border-none outline-none resize-none`}
                 style={getMessageStyle()}
                 rows={4}
               />
