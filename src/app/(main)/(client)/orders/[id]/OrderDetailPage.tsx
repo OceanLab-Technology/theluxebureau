@@ -75,7 +75,7 @@ export default function OrderDetailPage({ order, user }: OrderDetailPageProps) {
             >
               BACK TO ORDERS
             </Link>
-            <div className="md:mt-30 flex flex-col items-start">
+            <div className="md:mt-30 flex flex-col items-start space-y-1">
               <Link
                 href="/account"
                 className="text-stone-800 font-medium hover:text-stone-500"

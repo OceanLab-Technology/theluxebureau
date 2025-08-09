@@ -6,13 +6,13 @@ import { X, Gift, Heart, Check } from "lucide-react";
 import Image from "next/image";
 import { Button } from "./button";
 
-interface PersonalizationData {
+interface PersonalisationData {
   recipientName?: string;
   headerText?: string;
   customMessage?: string;
 }
 
-interface PersonalizedCartToastProps {
+interface PersonalisedCartToastProps {
   isVisible: boolean;
   onClose: () => void;
   productName: string;
@@ -20,10 +20,10 @@ interface PersonalizedCartToastProps {
   productPrice?: number;
   onViewCart?: () => void;
   onContinueShopping?: () => void;
-  personalizationData?: PersonalizationData;
+  personalisationData?: PersonalisationData;
 }
 
-export function PersonalizedCartToast({
+export function PersonalisedCartToast({
   isVisible,
   onClose,
   productName,
@@ -31,8 +31,8 @@ export function PersonalizedCartToast({
   productPrice,
   onViewCart,
   onContinueShopping,
-  personalizationData,
-}: PersonalizedCartToastProps) {
+  personalisationData,
+}: PersonalisedCartToastProps) {
   return (
     <AnimatePresence>
       {isVisible && (
@@ -88,21 +88,21 @@ export function PersonalizedCartToast({
                 </p>
               )}
 
-              {personalizationData && (
+              {personalisationData && (
                 <div className="space-y-1">
-                  {personalizationData.recipientName && (
+                  {personalisationData.recipientName && (
                     <p className="text-xs text-stone-500 flex items-center gap-1">
-                      For: {personalizationData.recipientName}
+                      For: {personalisationData.recipientName}
                     </p>
                   )}
-                  {personalizationData.headerText && (
+                  {personalisationData.headerText && (
                     <p className="text-xs text-stone-500 truncate">
-                      Header: "{personalizationData.headerText}"
+                      Header: "{personalisationData.headerText}"
                     </p>
                   )}
-                  {personalizationData.customMessage && (
+                  {personalisationData.customMessage && (
                     <p className="text-xs text-stone-500 truncate">
-                      Message: "{personalizationData.customMessage}"
+                      Message: "{personalisationData.customMessage}"
                     </p>
                   )}
                 </div>

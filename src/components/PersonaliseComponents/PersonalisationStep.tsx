@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { usePersonalizeStore } from "@/store/personalizeStore";
+import { usePersonaliseStore } from "@/store/personaliseStore";
 import {
   Select,
   SelectContent,
@@ -23,7 +23,7 @@ interface SiteSettings {
 }
 
 export default function PersonalizationStep() {
-  const { formData, updateFormData } = usePersonalizeStore();
+  const { formData, updateFormData } = usePersonaliseStore();
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [fontLoaded, setFontLoaded] = useState(false);

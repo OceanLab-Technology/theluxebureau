@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { usePersonalizeStore } from "@/store/personalizeStore";
-import { PersonalizedCartToast } from "@/components/ui/personalized-cart-toast";
+import { usePersonaliseStore } from "@/store/personaliseStore";
+import { PersonalisedCartToast } from "@/components/ui/personalised-cart-toast";
 import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export function PersonalizedAddToCartButton({
+export function PersonalisedAddToCartButton({
   handleAddToCart,
   isAdded,
   isLoading,
@@ -15,7 +15,7 @@ export function PersonalizedAddToCartButton({
   isLoading?: boolean;
   isAdded?: boolean;
 }) {
-  const { formData, selectedProduct, resetCheckout } = usePersonalizeStore();
+  const { formData, selectedProduct, resetCheckout } = usePersonaliseStore();
   const router = useRouter();
   const [showToast, setShowToast] = useState(false);
 
@@ -65,7 +65,7 @@ export function PersonalizedAddToCartButton({
         )}
       </button>
 
-      <PersonalizedCartToast
+      <PersonalisedCartToast
         isVisible={showToast}
         onClose={handleCloseToast}
         productName={selectedProduct?.name || "Personalized Gift"}
@@ -73,7 +73,7 @@ export function PersonalizedAddToCartButton({
         productPrice={selectedProduct?.price}
         onViewCart={handleViewCart}
         onContinueShopping={handleContinueShopping}
-        personalizationData={{
+        personalisationData={{
           recipientName: formData.recipientName,
           headerText: formData.headerText,
           customMessage: formData.customMessage,

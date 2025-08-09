@@ -18,10 +18,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { usePersonalizeStore } from "@/store/personalizeStore";
+import { usePersonaliseStore } from "@/store/personaliseStore";
 
 export default function DeliveryDetailsStep() {
-  const { formData, updateFormData } = usePersonalizeStore();
+  const { formData, updateFormData } = usePersonaliseStore();
   const [date, setDate] = React.useState<Date>();
 
   React.useEffect(() => {

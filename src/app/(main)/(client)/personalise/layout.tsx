@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { PersonalizeSkeleton } from "@/components/PersonalizeComponents/PersonalizeSkeleton";
+import { PersonaliseSkeleton } from "@/components/PersonaliseComponents/PersonaliseSkeleton";
 
-export default function PersonalizeLayout({
+export default function PersonaliseLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -22,7 +22,7 @@ export default function PersonalizeLayout({
         
         if (error || !user) {
           setIsAuthenticated(false);
-          router.push('/auth/login?redirect=/personalize');
+          router.push('/auth/login?redirect=/personalise');
           return;
         }
         
@@ -30,7 +30,7 @@ export default function PersonalizeLayout({
       } catch (error) {
         console.error('Auth check error:', error);
         setIsAuthenticated(false);
-        router.push('/auth/login?redirect=/personalize');
+        router.push('/auth/login?redirect=/personalise');
       } finally {
         setIsLoading(false);
       }
@@ -43,7 +43,7 @@ export default function PersonalizeLayout({
       (event, session) => {
         if (event === 'SIGNED_OUT') {
           setIsAuthenticated(false);
-          router.push('/auth/login?redirect=/personalize');
+          router.push('/auth/login?redirect=/personalise');
         } else if (event === 'SIGNED_IN' && session) {
           setIsAuthenticated(true);
         }
@@ -54,11 +54,11 @@ export default function PersonalizeLayout({
   }, [router, supabase.auth]);
 
   if (isLoading) {
-    return <PersonalizeSkeleton />;
+    return <PersonaliseSkeleton />;
   }
 
   if (!isAuthenticated) {
-    return <PersonalizeSkeleton />;
+    return <PersonaliseSkeleton />;
   }
 
   return <>{children}</>;

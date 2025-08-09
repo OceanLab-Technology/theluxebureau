@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { useMainStore } from "@/store/mainStore";
-import { usePersonalizeStore } from "@/store/personalizeStore";
+import { usePersonaliseStore } from "@/store/personaliseStore";
 import { ProductDetailSkeleton } from "./ProductDetailSkeleton";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -19,7 +19,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ProductRecommendations } from "./ProductRecommendations";
-import { PersonalizeSheet } from "../PersonalizeComponents/PersonalizeSheet";
+import { PersonaliseSheet } from "../PersonaliseComponents/PersonaliseSheet";
 
 interface ProductDetailViewProps {
   productId: string;
@@ -31,7 +31,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { currentProduct, detailedProductLoading, fetchProductById } =
     useMainStore();
-  const { setSelectedProduct, resetCheckout } = usePersonalizeStore();
+  const { setSelectedProduct, resetCheckout } = usePersonaliseStore();
   const router = useRouter();
   const supabase = createClient();
 
@@ -74,7 +74,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
     }
   };
 
-  const handlePersonalize = () => {
+  const handlePersonalise = () => {
     // Check if user is authenticated
     if (!user) {
       setShowLoginModal(true);
@@ -84,7 +84,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
     if (currentProduct) {
       resetCheckout();
       setSelectedProduct(currentProduct);
-      router.push(`/personalize?productId=${currentProduct.id}`);
+      router.push(`/personalise?productId=${currentProduct.id}`);
     }
   };
 
@@ -214,11 +214,12 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               className="text-[0.75rem] leading-[119.58%] w-[20.812rem] h-[2.5rem] tracking-[0.075rem]"
               onClick={handlePersonalize}
             >
-              Personalize
+              Personalise
             </Button>
           </div> */}
-          <PersonalizeSheet
+          <PersonaliseSheet
             handleOnClick={() => {
+              resetCheckout();
               setSelectedProduct(currentProduct);
             }}
           />

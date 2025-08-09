@@ -3,12 +3,12 @@
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useMainStore } from "@/store/mainStore";
-import { usePersonalizeStore } from "@/store/personalizeStore";
+import { usePersonaliseStore } from "@/store/personaliseStore";
 
 export function LogoutButton() {
   const router = useRouter();
   const resetMainStore = useMainStore((state) => state.resetStore);
-  const resetPersonalizeStore = usePersonalizeStore((state) => state.resetCheckout);
+  const resetPersonalizeStore = usePersonaliseStore((state) => state.resetCheckout);
 
   const logout = async () => {
     try {

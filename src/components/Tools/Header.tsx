@@ -103,7 +103,7 @@ export default function Header() {
       }`}
     >
       <div className="relative md:py-8.5 flex items-center justify-between px-6">
-        <div className="flex items-center space-x-4 md:space-x-35">
+        <div className="flex items-center gap-x-1 md:gap-x-36">
           <div className="flex items-center space-x-2">
             <div className="md:hidden flex items-center space-x-2">
               {!mobileMenuOpen ? (
@@ -130,7 +130,7 @@ export default function Header() {
             </Link>
           </div>
 
-          <nav className="hidden md:flex items-center space-x-16 lg:space-x-50">
+          <nav className="hidden md:flex items-center space-x-32 lg:space-x-56">
             {links.map((link) => {
               const isProtectedRoute = link.href === "/account";
 
@@ -183,7 +183,7 @@ export default function Header() {
           </nav>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 mr-2">
           <div className="hidden md:block">
             <CartSheet
               className={`${
@@ -246,7 +246,7 @@ export default function Header() {
           <div className="flex items-start">
             <div className="flex-shrink-0" style={{ width: "425px" }}></div>
 
-            <div className="flex items-start space-x-16 lg:space-x-4">
+            <div className="flex items-start space-x-16 lg:space-x-10">
               <div className="flex flex-col items-start space-y-3">
                 {shopCategories.map((category) => (
                   <Link

@@ -4,7 +4,7 @@
 
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { usePersonalizeStore } from "@/store/personalizeStore";
+import { usePersonalizeStore } from "@/store/personaliseStore";
 import { useMainStore } from "@/store/mainStore";
 import PersonalizeForm from "@/components/PersonalizeComponents/PersonalizeForm";
 

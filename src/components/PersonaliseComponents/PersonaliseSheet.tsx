@@ -2,9 +2,9 @@ import React, { useState } from "react";
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "../ui/button";
-import PersonalizeForm from "./PersonalizeForm";
+import PersonaliseForm from "./PersonaliseForm";
 
-export function PersonalizeSheet({
+export function PersonaliseSheet({
   handleOnClick,
 }: {
   handleOnClick: () => void;
@@ -32,12 +32,12 @@ export function PersonalizeSheet({
             size={"lg"}
             className="text-[0.75rem] leading-[119.58%] w-[20.812rem] h-[2.5rem] tracking-[0.075rem]"
           >
-            Personalize
+            Personalise
           </Button>
         </div>
       </SheetTrigger>
       <SheetContent className="md:px-6 px-4 py-8" side={isMobile ? "bottom" : "right"}>
-        <PersonalizeForm onCloseSheet={closeSheet} />
+        <PersonaliseForm onCloseSheet={closeSheet} />
       </SheetContent>
     </Sheet>
   );

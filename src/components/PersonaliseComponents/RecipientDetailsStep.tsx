@@ -2,10 +2,10 @@
 
 import React from "react";
 import { Input } from "@/components/ui/input";
-import { usePersonalizeStore } from "@/store/personalizeStore";
+import { usePersonaliseStore } from "@/store/personaliseStore";
 
 export default function RecipientDetailsStep() {
-  const { formData, updateFormData } = usePersonalizeStore();
+  const { formData, updateFormData } = usePersonaliseStore();
 
   const handleInputChange = (field: string, value: string) => {
     updateFormData({ [field]: value });

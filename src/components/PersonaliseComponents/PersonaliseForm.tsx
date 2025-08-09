@@ -2,14 +2,14 @@
 
 import React from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { usePersonalizeStore } from "@/store/personalizeStore";
+import { usePersonaliseStore } from "@/store/personaliseStore";
 import { useMainStore } from "@/store/mainStore";
 import RecipientDetailsStep from "./RecipientDetailsStep";
-import PersonalizationStep from "./PersonalizationStep";
+import PersonalizationStep from "./PersonalisationStep";
 import DeliveryDetailsStep from "./DeliveryDetailsStep";
 import SummaryStep from "./SummaryStep";
 import { useRouter } from "next/navigation";
-import { PersonalizedAddToCartButton } from "./PersonalizedAddToCartButton";
+import { PersonalisedAddToCartButton } from "./PersonalisedAddToCartButton";
 import { toast } from "sonner";
 
 const steps = [
@@ -21,12 +21,12 @@ const steps = [
 
 const stepTitles = {
   1: "Recipient Details",
-  2: "Personalize Your Gift",
+  2: "Personalise Your Gift",
   3: "Delivery Details",
   4: "Summary",
 };
 
-export default function PersonalizeForm({
+export default function PersonaliseForm({
   onCloseSheet,
 }: {
   onCloseSheet?: () => void;
@@ -39,7 +39,7 @@ export default function PersonalizeForm({
     formData,
     selectedProduct,
     isStepValid,
-  } = usePersonalizeStore();
+  } = usePersonaliseStore();
   const { addToCart } = useMainStore();
   const [isLoading, setIsLoading] = React.useState(false);
   const [isAdded, setIsAdded] = React.useState(false);
@@ -103,7 +103,7 @@ export default function PersonalizeForm({
         selectedQuote: formData.selectedQuote,
         customMessage: formData.customMessage,
         smsUpdates: formData.smsUpdates,
-        isPersonalized: true,
+        isPersonalised: true,
       };
 
       await addToCart(selectedProduct.id!, 1, personalizationData);
@@ -124,7 +124,7 @@ export default function PersonalizeForm({
       toast.error("Failed to add to cart", {
         description: "Please try again.",
       });
-      console.error("Failed to add personalized item to cart:", error);
+      console.error("Failed to add personalised item to cart:", error);
     }
   };
 
@@ -149,7 +149,7 @@ export default function PersonalizeForm({
         selectedQuote: formData.selectedQuote,
         customMessage: formData.customMessage,
         smsUpdates: formData.smsUpdates,
-        isPersonalized: true,
+        isPersonalised: true,
       };
 
       await addToCart(selectedProduct.id!, 1, personalizationData);
@@ -165,7 +165,7 @@ export default function PersonalizeForm({
       toast.error("Failed to add to cart", {
         description: "Please try again.",
       });
-      console.error("Failed to add personalized item to cart:", error);
+      console.error("Failed to add personalised item to cart:", error);
     }
   };
   const renderStepContent = () => {
@@ -253,7 +253,7 @@ export default function PersonalizeForm({
               >
                 BACK
               </button>
-              <PersonalizedAddToCartButton
+              <PersonalisedAddToCartButton
                 handleAddToCart={handleAddToCart}
                 isLoading={isLoading}
                 isAdded={isAdded}

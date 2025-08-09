@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useRef } from "react";
-import { usePersonalizeStore } from "@/store/personalizeStore";
+import { usePersonaliseStore } from "@/store/personaliseStore";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function SummaryStep() {
-  const { formData, selectedProduct } = usePersonalizeStore();
+  const { formData, selectedProduct } = usePersonaliseStore();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollLeft = () => {

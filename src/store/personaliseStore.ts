@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { Product } from '@/app/api/types'
 
-export interface personalizeFormData {
+export interface personaliseFormData {
   yourName: string
   recipientName: string
   recipientAddress: string
@@ -17,21 +17,21 @@ export interface personalizeFormData {
   smsUpdates: 'send-to-me' | 'send-to-recipient' | 'none'
 }
 
-interface PersonalizeState {
+interface PersonaliseState {
   currentStep: number
-  formData: personalizeFormData
+  formData: personaliseFormData
   selectedProduct: Product | null
   setStep: (step: number) => void
   nextStep: () => void
   prevStep: () => void
-  updateFormData: (data: Partial<personalizeFormData>) => void
+  updateFormData: (data: Partial<personaliseFormData>) => void
   setSelectedProduct: (product: Product) => void
   resetCheckout: () => void
   validateStep: (step: number) => boolean
   isStepValid: (step: number) => boolean
 }
 
-const initialFormData: personalizeFormData = {
+const initialFormData: personaliseFormData = {
   yourName: '',
   recipientName: '',
   recipientAddress: '',
@@ -46,7 +46,7 @@ const initialFormData: personalizeFormData = {
   smsUpdates: 'none'
 }
 
-export const usePersonalizeStore = create<PersonalizeState>()(
+export const usePersonaliseStore = create<PersonaliseState>()(
   persist(
     (set, get) => ({
       currentStep: 1,
@@ -66,7 +66,7 @@ export const usePersonalizeStore = create<PersonalizeState>()(
           set({ currentStep: currentStep - 1 })
         }
       },
-      updateFormData: (data: Partial<personalizeFormData>) =>
+      updateFormData: (data: Partial<personaliseFormData>) =>
         set((state) => ({
           formData: { ...state.formData, ...data }
         })),
