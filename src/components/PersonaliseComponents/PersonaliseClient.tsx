@@ -4,15 +4,15 @@
 
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { usePersonalizeStore } from "@/store/personaliseStore";
+import { usePersonaliseStore } from "@/store/personaliseStore";
 import { useMainStore } from "@/store/mainStore";
-import PersonalizeForm from "@/components/PersonalizeComponents/PersonalizeForm";
+import PersonalizeForm from "@/components/PersonaliseComponents/PersonaliseForm";
 
 export default function PersonalizeClient() {
   const searchParams = useSearchParams();
   const productId = searchParams.get("productId");
   const { setSelectedProduct, selectedProduct, resetCheckout } =
-    usePersonalizeStore();
+    usePersonaliseStore();
   const { fetchProductById, currentProduct } = useMainStore();
 
   useEffect(() => {
