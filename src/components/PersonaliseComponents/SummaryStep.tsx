@@ -1,12 +1,108 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { usePersonaliseStore } from "@/store/personaliseStore";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import axios from "axios";
+
+interface FontSetting {
+  name: string;
+  url: string;
+}
+
+interface SiteSettings {
+  fonts: FontSetting[];
+  quotes: string[];
+  api_key: string;
+}
 
 export default function SummaryStep() {
   const { formData, selectedProduct } = usePersonaliseStore();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  const selectedFont = siteSettings?.fonts.find(
+    (font) => font.name === formData.selectedFont
+  );
+
+  const getHeaderStyle = () => {
+    const baseStyle: React.CSSProperties = {
+      fontSize: "0.70rem",
+      color: "#57534e",
+    };
+
+    if (selectedFont && fontLoaded && formData.selectedFont !== "default") {
+      return {
+        ...baseStyle,
+        fontFamily: `"${selectedFont.name}", serif`,
+      };
+    }
+
+    return {
+      ...baseStyle,
+      fontFamily: "serif",
+    };
+  };
+
+  const getMessageStyle = (): React.CSSProperties => {
+    const baseStyle: React.CSSProperties = {
+      fontSize: "0.45rem",
+      color: "#57534e",
+    };
+
+    if (selectedFont && fontLoaded && formData.selectedFont !== "default") {
+      return {
+        ...baseStyle,
+        fontFamily: `"${selectedFont.name}", serif`,
+      };
+    }
+
+    return {
+      ...baseStyle,
+      fontFamily: "serif",
+    };
+  };
+
+  // Load the selected font if available
+  useEffect(() => {
+    const loadFont = async () => {
+      if (!selectedFont || formData.selectedFont === "default") {
+        setFontLoaded(false);
+        return;
+      }
+
+      try {
+        const fontFace = new FontFace(
+          selectedFont.name,
+          `url(${selectedFont.url})`
+        );
+        await fontFace.load();
+        document.fonts.add(fontFace);
+        setFontLoaded(true);
+      } catch (err) {
+        console.error("Error loading font:", err);
+        setFontLoaded(false);
+      }
+    };
+
+    loadFont();
+  }, [selectedFont, formData.selectedFont]);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await axios.get("/api/settings");
+        if (response.data.success) {
+          setSiteSettings(response.data.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch site settings:", error);
+      }
+    };
+
+    fetchSettings();
+  }, []);
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
@@ -198,11 +294,19 @@ export default function SummaryStep() {
                   >
                     <div className="max-w-xs w-full absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-1/2">
                       <div className="text-center mb-10 absolute md:top-3 top-2 left-1/2 transform -translate-x-1/2 w-full z-30">
-                        <span className="text-center md:text-[0.70rem] text-[10px]">{formData.headerText || "No header text"}</span>
+                        <span 
+                          className="text-center md:text-[0.70rem] text-[10px]"
+                          style={getHeaderStyle()}
+                        >
+                          {formData.headerText || "No header text"}
+                        </span>
                       </div>
 
                       <div className="text-center md:w-72 w-56 mx-auto absolute inset-0 flex items-center justify-center md:p-12">
-                        <span className="font-[monospace] text-secondary-foreground md:text-[0.45rem] text-[8px]">
+                        <span 
+                          className="text-secondary-foreground md:text-[0.45rem] text-[8px]"
+                          style={getMessageStyle()}
+                        >
                           {formData.customMessage || "No custom message"}
                         </span>
                       </div>
