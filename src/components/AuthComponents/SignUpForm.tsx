@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useMainStore } from "@/store/mainStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
@@ -21,6 +22,7 @@ export function SignUpForm({
   const [repeatPassword, setRepeatPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { handleLoginSuccess } = useMainStore();
   const router = useRouter();
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -48,6 +50,10 @@ export function SignUpForm({
         },
       });
       if (error) throw error;
+
+      // Handle cart migration for new user
+      await handleLoginSuccess();
+      
       router.push("/auth/sign-up-success");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
@@ -58,7 +64,7 @@ export function SignUpForm({
 
   return (
     <div className={cn("w-full px-4 sm:px-10 md:pt-0 pt-10 font-century", className)} {...props}>
-      <h1 className="text-[1rem] font-light mb-4 tracking-wide md:py-20">SIGN UP</h1>
+      <h1 className="text-[1rem] font-light mb-4 tracking-wide md:py-20 small-text">SIGN UP</h1>
       <div className="mb-8">
         <form onSubmit={handleSignUp}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">

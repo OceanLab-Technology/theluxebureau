@@ -41,7 +41,7 @@ export function LoginRequiredModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-xl font-century rounded-sm">
         <DialogHeader className="text-center">
-          <DialogTitle className="text-[2rem] font-[400] text-secondary-foreground">
+          <DialogTitle className="text-[2rem] font-[400] text-secondary-foreground font-century">
             Login Required
           </DialogTitle>
           <DialogDescription className="text-stone-600 mt-2 text-[1rem]">

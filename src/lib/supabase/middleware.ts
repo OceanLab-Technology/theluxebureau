@@ -55,7 +55,7 @@ export async function updateSession(request: NextRequest) {
   ];
   
   // Define protected routes that require authentication
-  const protectedRoutes = ["/personalize", "/admin", "/account", "/cart"];
+  const protectedRoutes = ["/personalize", "/admin", "/account", "/checkout"];
   
   const isPublicRoute = publicRoutes.some(route => 
     request.nextUrl.pathname === route || 

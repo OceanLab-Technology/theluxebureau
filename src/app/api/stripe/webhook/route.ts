@@ -67,15 +67,9 @@
 // /app/api/stripe/webhook/route.ts
 import { headers } from "next/headers";
 import Stripe from "stripe";
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/supabase/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
-
-// Service-role Supabase client (bypass RLS)
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 export async function POST(request: Request) {
   const headerList = await headers();
@@ -89,6 +83,8 @@ export async function POST(request: Request) {
       signature!,
       process.env.STRIPE_SECRET_WEBHOOK_KEY!
     );
+
+    const supabase = await createClient();
 
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
@@ -113,9 +109,9 @@ export async function POST(request: Request) {
 
       // ✅ Clear cart after successful payment
       const { error: cartError } = await supabase
-        .from("carts")
+        .from("cart_items")
         .delete()
-        .eq("user_email", session.customer_email);
+        .eq("user_id", session.metadata?.userId);
 
       if (cartError) {
         console.error("Cart Clear Error:", cartError);

@@ -1,29 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useMainStore } from "@/store/mainStore";
 import { CartContainer } from "@/components/CartComponents";
 import { CartContainerSkeleton } from "@/components/CartComponents/CartSkeleton";
-import { Loader2 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
 
 export default function CartPage() {
   const {
     cartItems,
     cartLoading,
-    cartError,
     fetchCartItems,
     fetchProducts,
     products,
+    checkAuthStatus,
   } = useMainStore();
 
   useEffect(() => {
-    fetchCartItems();
-    if (products.length === 0) {
-      fetchProducts();
-    }
-  }, [fetchCartItems, fetchProducts, products.length]);
-
+    const initializePage = async () => {
+      await checkAuthStatus();
+      await fetchCartItems();
+      if (products.length === 0) {
+        await fetchProducts();
+      }
+    };
+    
+    initializePage();
+  }, [checkAuthStatus, fetchCartItems, fetchProducts, products.length]);
 
   if (cartLoading && cartItems.length === 0) {
     return (

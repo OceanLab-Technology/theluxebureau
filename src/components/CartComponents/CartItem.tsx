@@ -154,7 +154,6 @@ export function CartItem({ item, loading }: CartItemProps) {
             <span className="md:text-sm text-xs text-stone-600 uppercase tracking-wider">
               QUANTITY
             </span>
-            {/* Mobile actions */}
             <div className="flex-col flex md:hidden  justify-start items-end text-sm">
               <button className="text-stone-600 md:block hidden cursor-pointer hover:text-stone-800 uppercase tracking-wider">
                 EDIT
@@ -170,7 +169,7 @@ export function CartItem({ item, loading }: CartItemProps) {
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle className="text-2xl">
+                    <AlertDialogTitle className="text-xl font-century font-[100]">
                       Remove Item
                     </AlertDialogTitle>
                     <AlertDialogDescription className="text-lg leading-6">

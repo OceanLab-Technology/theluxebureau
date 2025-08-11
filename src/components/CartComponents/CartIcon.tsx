@@ -2,49 +2,25 @@
 
 import { useMainStore } from "@/store/mainStore";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/supabase/client";
-import { LoginRequiredModal } from "@/components/ui/login-required-modal";
 
 export function CartIcon({ className }: { className?: string }) {
-  const { cartItemCount, fetchCartItems } = useMainStore();
-  const supabase = createClient();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const { cartItemCount, fetchCartItems, checkAuthStatus } = useMainStore();
   const router = useRouter();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setIsAuthenticated(!!user);
+    // Initialize cart - check auth status and fetch cart items
+    const initializeCart = async () => {
+      await checkAuthStatus();
+      await fetchCartItems();
     };
-
-    checkAuth();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      setIsAuthenticated(!!session?.user);
-    });
-
-    return () => subscription.unsubscribe();
-  }, [supabase]);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchCartItems();
-    }
-  }, [fetchCartItems, isAuthenticated]);
+    
+    initializeCart();
+  }, [checkAuthStatus, fetchCartItems]);
 
   const handleCartClick = () => {
-    if (!isAuthenticated) {
-      setShowLoginModal(true);
-      return;
-    }
-    // Navigate to cart page (legacy behavior)
+    // No longer requires authentication to view cart
     router.push("/cart");
   };
 
@@ -59,12 +35,6 @@ export function CartIcon({ className }: { className?: string }) {
       >
         CART ({cartItemCount})
       </button>
-
-      <LoginRequiredModal
-        isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-        feature="access your cart"
-      />
     </>
   );
 }

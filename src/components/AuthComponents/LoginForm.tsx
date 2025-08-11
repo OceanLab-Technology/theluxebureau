@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useMainStore } from "@/store/mainStore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -18,6 +19,7 @@ export function LoginForm({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [redirectTo, setRedirectTo] = useState("/products");
+  const { handleLoginSuccess } = useMainStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -44,6 +46,9 @@ export function LoginForm({
       });
       if (error) throw error;
 
+      // Handle cart migration and authentication state
+      await handleLoginSuccess();
+
       // Use the redirect state
       window.location.replace(redirectTo);
     } catch (error: unknown) {
@@ -60,7 +65,7 @@ export function LoginForm({
       )}
       {...props}
     >
-      <h1 className="text-[1rem] font-light mb-4 tracking-wide md:py-20">
+      <h1 className="text-[1rem] font-light mb-4 tracking-wide md:py-20 small-text">
         LOGIN
       </h1>
       <div className="mb-8">

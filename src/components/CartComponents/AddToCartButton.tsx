@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMainStore } from "@/store/mainStore";
 import { Button } from "@/components/ui/button";
 import { CartToast } from "@/components/ui/cart-toast";
@@ -33,15 +33,21 @@ export function AddToCartButton({
   variant = "default",
   size = "default",
 }: AddToCartButtonProps) {
-  const { addToCart } = useMainStore();
+  const { addToCart, checkAuthStatus } = useMainStore();
   const router = useRouter();
   const [isAdded, setIsAdded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
+  // Check authentication status on component mount
+  useEffect(() => {
+    checkAuthStatus();
+  }, [checkAuthStatus]);
+
   const handleAddToCart = async () => {
     try {
       setIsLoading(true);
+      // addToCart now handles both authenticated and guest users
       await addToCart(productId, 1);
       setIsAdded(true);
       setShowToast(true);
