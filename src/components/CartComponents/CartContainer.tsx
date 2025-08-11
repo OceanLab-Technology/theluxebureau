@@ -89,7 +89,7 @@ export function CartContainer({ onClose }: CartContainerProps) {
       </div>
 
       <div className="font-century py-2">
-        <CartSummary />
+        <CartSummary onClose={onClose} />
       </div>
     </div>
   );

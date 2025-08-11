@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Minus, Plus, Loader2 } from "lucide-react";
 import Image from "next/image";
+import { EditPersonaliseSheet } from "@/components/PersonaliseComponents/EditPersonaliseSheet";
+import { personaliseFormData } from "@/store/personaliseStore";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,6 +37,40 @@ export function CartItem({ item, loading }: CartItemProps) {
   if (!product) {
     return null;
   }
+
+  const convertToPersonaliseData = (customData: any): personaliseFormData => {
+    return {
+      yourName: customData?.yourName || '',
+      recipientName: customData?.recipientName || '',
+      recipientAddress: customData?.recipientAddress || '',
+      recipientCity: customData?.recipientCity || '',
+      recipientEmail: customData?.recipientEmail || '',
+      deliveryDate: customData?.deliveryDate || '',
+      preferredDeliveryTime: customData?.preferredDeliveryTime || '',
+      selectedFont: customData?.selectedFont || 'default',
+      headerText: customData?.headerText || 'Header',
+      selectedQuote: customData?.selectedQuote || '',
+      customMessage: customData?.customMessage || '',
+      smsUpdates: customData?.smsUpdates || 'none',
+    };
+  };
+
+  const handleSaveEdit = async (newData: personaliseFormData) => {
+    setIsUpdating(true);
+    try {
+      const updatedCustomData = {
+        ...newData,
+        isPersonalized: true,
+      };
+      await updateCartItem(item.id!, item.quantity, updatedCustomData);
+    } catch (error) {
+      console.error("Failed to update cart item:", error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const isPersonalized = item.custom_data?.isPersonalized || item.custom_data?.isPersonalised;
 
   const handleQuantityChange = async (newQuantity: number) => {
     if (newQuantity < 1) return;
@@ -154,11 +190,22 @@ export function CartItem({ item, loading }: CartItemProps) {
             <span className="md:text-sm text-xs text-stone-600 uppercase tracking-wider">
               QUANTITY
             </span>
-            {/* Mobile actions */}
             <div className="flex-col flex md:hidden  justify-start items-end text-sm">
-              <button className="text-stone-600 md:block hidden cursor-pointer hover:text-stone-800 uppercase tracking-wider">
-                EDIT
-              </button>
+              {isPersonalized ? (
+                <EditPersonaliseSheet
+                  product={product}
+                  existingData={convertToPersonaliseData(item.custom_data)}
+                  onSave={handleSaveEdit}
+                >
+                  <button className="text-stone-600 md:block hidden cursor-pointer hover:text-stone-800 uppercase tracking-wider">
+                    EDIT
+                  </button>
+                </EditPersonaliseSheet>
+              ) : (
+                <button className="text-stone-600 md:block hidden cursor-pointer hover:text-stone-800 uppercase tracking-wider opacity-50" disabled>
+                  EDIT
+                </button>
+              )}
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <button
@@ -170,7 +217,7 @@ export function CartItem({ item, loading }: CartItemProps) {
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle className="text-2xl">
+                    <AlertDialogTitle className="text-xl font-century font-[100]">
                       Remove Item
                     </AlertDialogTitle>
                     <AlertDialogDescription className="text-lg leading-6">
@@ -222,9 +269,21 @@ export function CartItem({ item, loading }: CartItemProps) {
       </div>
 
       <div className="hidden flex-col md:flex  justify-start items-end text-sm">
-        <button className="text-stone-600 md:block hidden cursor-pointer hover:text-stone-800 uppercase tracking-wider">
-          EDIT
-        </button>
+        {isPersonalized ? (
+          <EditPersonaliseSheet
+            product={product}
+            existingData={convertToPersonaliseData(item.custom_data)}
+            onSave={handleSaveEdit}
+          >
+            <button className="text-stone-600 md:block hidden cursor-pointer hover:text-stone-800 uppercase tracking-wider">
+              EDIT
+            </button>
+          </EditPersonaliseSheet>
+        ) : (
+          <button className="text-stone-600 md:block hidden cursor-pointer hover:text-stone-800 uppercase tracking-wider opacity-50" disabled>
+            EDIT
+          </button>
+        )}
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <button

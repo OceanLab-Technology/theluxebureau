@@ -38,7 +38,6 @@ export default function PersonalizationStep() {
     const baseStyle: React.CSSProperties = {
       fontSize: "16px",
       color: "#57534e",
-      fontWeight: "bold",
       marginBottom: "12px",
     };
 
