@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { CartToast } from "@/components/ui/cart-toast";
 import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useAuthenticatedNavigation } from "@/hooks/use-authenticated-navigation";
+import { LoginRequiredModal } from "@/components/ui/login-required-modal";
 
 interface AddToCartButtonProps {
   productId: string;
@@ -35,6 +37,7 @@ export function AddToCartButton({
 }: AddToCartButtonProps) {
   const { addToCart, checkAuthStatus } = useMainStore();
   const router = useRouter();
+  const { navigateWithAuth, showLoginModal, handleCloseModal, featureName } = useAuthenticatedNavigation();
   const [isAdded, setIsAdded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -70,7 +73,7 @@ export function AddToCartButton({
 
   const handleCheckout = () => {
     setShowToast(false);
-    router.push("/checkout");
+    navigateWithAuth("/checkout", "proceed to checkout");
   };
 
   const handleCloseToast = () => {
@@ -104,6 +107,12 @@ export function AddToCartButton({
         productPrice={productPrice}
         onViewCart={handleViewCart}
         onCheckout={handleCheckout}
+      />
+      
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={handleCloseModal}
+        feature={featureName}
       />
     </>
   );

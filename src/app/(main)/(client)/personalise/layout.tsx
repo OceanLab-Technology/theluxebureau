@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { PersonaliseSkeleton } from "@/components/PersonaliseComponents/PersonaliseSkeleton";
+import { LoginRequiredModal } from "@/components/ui/login-required-modal";
 
 export default function PersonaliseLayout({
   children,
@@ -12,6 +13,7 @@ export default function PersonaliseLayout({
 }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
@@ -22,7 +24,7 @@ export default function PersonaliseLayout({
         
         if (error || !user) {
           setIsAuthenticated(false);
-          router.push('/auth/login?redirect=/personalise');
+          setShowLoginModal(true);
           return;
         }
         
@@ -30,7 +32,7 @@ export default function PersonaliseLayout({
       } catch (error) {
         console.error('Auth check error:', error);
         setIsAuthenticated(false);
-        router.push('/auth/login?redirect=/personalise');
+        setShowLoginModal(true);
       } finally {
         setIsLoading(false);
       }
@@ -43,9 +45,10 @@ export default function PersonaliseLayout({
       (event, session) => {
         if (event === 'SIGNED_OUT') {
           setIsAuthenticated(false);
-          router.push('/auth/login?redirect=/personalise');
+          setShowLoginModal(true);
         } else if (event === 'SIGNED_IN' && session) {
           setIsAuthenticated(true);
+          setShowLoginModal(false);
         }
       }
     );
@@ -53,12 +56,27 @@ export default function PersonaliseLayout({
     return () => subscription.unsubscribe();
   }, [router, supabase.auth]);
 
+  const handleCloseModal = () => {
+    setShowLoginModal(false);
+    // Navigate back to products or previous page
+    router.push('/products');
+  };
+
   if (isLoading) {
     return <PersonaliseSkeleton />;
   }
 
   if (!isAuthenticated) {
-    return <PersonaliseSkeleton />;
+    return (
+      <>
+        <PersonaliseSkeleton />
+        <LoginRequiredModal
+          isOpen={showLoginModal}
+          onClose={handleCloseModal}
+          feature="personalize products"
+        />
+      </>
+    );
   }
 
   return <>{children}</>;

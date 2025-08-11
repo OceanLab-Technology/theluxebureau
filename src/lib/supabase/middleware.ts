@@ -55,7 +55,10 @@ export async function updateSession(request: NextRequest) {
   ];
   
   // Define protected routes that require authentication
-  const protectedRoutes = ["/personalize", "/admin", "/account", "/checkout"];
+  const protectedRoutes = ["/admin", "/account"];
+  
+  // Routes that show dialog before redirecting (handled by client-side)
+  const dialogRoutes = ["/personalize", "/personalise", "/checkout"];
   
   const isPublicRoute = publicRoutes.some(route => 
     request.nextUrl.pathname === route || 
@@ -66,13 +69,20 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith(route)
   );
 
-  // If user is not authenticated and trying to access a protected route
-  if (!user && isProtectedRoute) {
+  const isDialogRoute = dialogRoutes.some(route => 
+    request.nextUrl.pathname.startsWith(route)
+  );
+
+  // If user is not authenticated and trying to access a protected route (but not dialog routes)
+  if (!user && isProtectedRoute && !isDialogRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     url.searchParams.set("redirect", request.nextUrl.pathname);
     return NextResponse.redirect(url);
   }
+
+  // For dialog routes, let the client-side components handle the auth flow
+  // We don't redirect here to allow the modal to show first
 
   // If user is authenticated and trying to access auth pages, redirect to products
   const authPages = ["/auth/login", "/auth/sign-up"];
