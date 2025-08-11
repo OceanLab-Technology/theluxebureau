@@ -27,6 +27,7 @@ interface PersonaliseState {
   updateFormData: (data: Partial<personaliseFormData>) => void
   setSelectedProduct: (product: Product) => void
   resetCheckout: () => void
+  loadExistingData: (data: personaliseFormData, product: Product) => void
   validateStep: (step: number) => boolean
   isStepValid: (step: number) => boolean
 }
@@ -74,6 +75,8 @@ export const usePersonaliseStore = create<PersonaliseState>()(
         set({ selectedProduct: product }),
       resetCheckout: () =>
         set({ currentStep: 1, formData: initialFormData, selectedProduct: null }),
+      loadExistingData: (data: personaliseFormData, product: Product) =>
+        set({ currentStep: 1, formData: data, selectedProduct: product }),
       validateStep: (step: number) => {
         const { formData } = get()
         

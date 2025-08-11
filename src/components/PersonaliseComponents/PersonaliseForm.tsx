@@ -28,8 +28,12 @@ const stepTitles = {
 
 export default function PersonaliseForm({
   onCloseSheet,
+  isEditMode = false,
+  onSave,
 }: {
   onCloseSheet?: () => void;
+  isEditMode?: boolean;
+  onSave?: (data: any) => void;
 }) {
   const {
     currentStep,
@@ -125,6 +129,51 @@ export default function PersonaliseForm({
         description: "Please try again.",
       });
       console.error("Failed to add personalised item to cart:", error);
+    }
+  };
+
+  const handleSaveEdit = async () => {
+    if (!selectedProduct) return;
+
+    try {
+      setIsLoading(true);
+      const personalizationData = {
+        yourName: formData.yourName,
+        recipientName: formData.recipientName,
+        recipientAddress: formData.recipientAddress,
+        recipientCity: formData.recipientCity,
+        recipientEmail: formData.recipientEmail,
+        deliveryDate: formData.deliveryDate,
+        preferredDeliveryTime: formData.preferredDeliveryTime,
+        headerText: formData.headerText,
+        selectedQuote: formData.selectedQuote,
+        customMessage: formData.customMessage,
+        smsUpdates: formData.smsUpdates,
+        isPersonalised: true,
+      };
+
+      if (onSave) {
+        onSave(personalizationData);
+      }
+      
+      setIsLoading(false);
+      setIsAdded(true);
+      
+      // Close sheet after a delay
+      setTimeout(() => {
+        setIsAdded(false);
+        resetCheckout();
+        if (onCloseSheet) {
+          onCloseSheet();
+        }
+      }, 1500);
+    } catch (error) {
+      setIsLoading(false);
+      setIsAdded(false);
+      toast.error("Failed to save changes", {
+        description: "Please try again.",
+      });
+      console.error("Failed to save personalised item changes:", error);
     }
   };
 
@@ -253,18 +302,30 @@ export default function PersonaliseForm({
               >
                 BACK
               </button>
-              <PersonalisedAddToCartButton
-                handleAddToCart={handleAddToCart}
-                isLoading={isLoading}
-                isAdded={isAdded}
-              />
-              <button
-                onClick={handleCheckout}
-                disabled={isLoading}
-                className="bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm md:py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%] disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isLoading ? "PROCESSING..." : "CHECKOUT"}
-              </button>
+              {isEditMode ? (
+                <button
+                  onClick={handleSaveEdit}
+                  disabled={isLoading}
+                  className="bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm md:py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%] disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? "SAVING..." : isAdded ? "SAVED!" : "SAVE"}
+                </button>
+              ) : (
+                <>
+                  <PersonalisedAddToCartButton
+                    handleAddToCart={handleAddToCart}
+                    isLoading={isLoading}
+                    isAdded={isAdded}
+                  />
+                  <button
+                    onClick={handleCheckout}
+                    disabled={isLoading}
+                    className="bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm md:py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%] disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isLoading ? "PROCESSING..." : "CHECKOUT"}
+                  </button>
+                </>
+              )}
             </>
           ) : (
             <>

@@ -102,9 +102,9 @@ export default function CheckoutPage() {
         <div className="max-w-[75rem] md:p-10 md:pb-10 md:px-20 lg:px-10 px-4 mx-auto">
           <div className="flex items-center justify-between py-10">
             <h2 className="text-[2rem] font-medium font-century">Check-out</h2>
-            <Button variant="link" asChild className="small-text">
+            {/* <Button variant="link" asChild className="small-text">
               <Link href="/cart">Back to Cart</Link>
-            </Button>
+            </Button> */}
           </div>
           <div className="grid lg:grid-cols-2 gap-12 grid-cols-1">
             <div className="flex flex-col md:space-y-4 space-y-10">

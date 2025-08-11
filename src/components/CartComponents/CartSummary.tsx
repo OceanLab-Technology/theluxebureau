@@ -3,11 +3,21 @@
 import { useMainStore } from "@/store/mainStore";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/use-auth";
 
-export function CartSummary() {
+interface CartSummaryProps {
+  onClose?: () => void;
+}
+
+export function CartSummary({ onClose }: CartSummaryProps) {
   const { cartItems, cartTotal, cartLoading } = useMainStore();
   const router = useRouter();
+  const { user } = useAuth();
+  
   const handleCheckout = () => {
+    if (onClose) {
+      onClose();
+    }
     router.push("/checkout");
   };
 
