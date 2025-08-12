@@ -40,10 +40,6 @@ export default function SettingsPage() {
     updateApiKey(value);
   };
 
-  const handleQuoteChange = (index: number, value: string) => {
-    updateQuote(index, value);
-  };
-
   const renderFonts = () => {
     if (loading) {
       return (
@@ -119,10 +115,20 @@ export default function SettingsPage() {
         {settings.quotes.map((quote, index) => (
           <div key={index} className="flex items-center space-x-2">
             <Input
-              value={quote}
-              onChange={(e) => handleQuoteChange(index, e.target.value)}
+              value={quote.text}
+              onChange={(e) =>
+                updateQuote(index, { ...quote, text: e.target.value })
+              }
               className="flex-1"
               placeholder={`Quote ${index + 1}`}
+            />
+            <Input
+              value={quote.author}
+              onChange={(e) =>
+                updateQuote(index, { ...quote, author: e.target.value })
+              }
+              className="flex-1"
+              placeholder={`Author ${index + 1}`}
             />
             <Button
               variant="ghost"
@@ -144,7 +150,7 @@ export default function SettingsPage() {
         <SidebarTrigger className="-ml-1" />
         <h1 className="text-lg font-semibold font-century">Settings</h1>
       </header>
-      
+
       <div className="flex-1 space-y-6 p-8 pt-6">
         <div>
           <h1 className="text-3xl font-semibold">Site Settings</h1>
@@ -184,9 +190,7 @@ export default function SettingsPage() {
               <AddFontDialog />
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {renderFonts()}
-          </CardContent>
+          <CardContent className="space-y-4">{renderFonts()}</CardContent>
         </Card>
 
         {/* Quotes Section */}
@@ -197,9 +201,7 @@ export default function SettingsPage() {
               <AddQuoteDialog />
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {renderQuotes()}
-          </CardContent>
+          <CardContent className="space-y-4">{renderQuotes()}</CardContent>
         </Card>
 
         {/* Save Button */}

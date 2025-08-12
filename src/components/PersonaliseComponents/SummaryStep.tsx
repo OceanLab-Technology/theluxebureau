@@ -12,7 +12,10 @@ interface FontSetting {
 
 interface SiteSettings {
   fonts: FontSetting[];
-  quotes: string[];
+  quotes: {
+    text: string;
+    author: string;
+  }[];
   api_key: string;
 }
 
@@ -302,12 +305,16 @@ export default function SummaryStep() {
                         </span>
                       </div>
 
-                      <div className="text-center md:w-72 w-56 mx-auto absolute inset-0 flex items-center justify-center md:p-12">
+                      <div className="text-center font-[Monospace] md:w-72 w-56 mx-auto absolute inset-0 flex items-center justify-center md:p-12 flex-col">
                         <span 
-                          className="text-secondary-foreground md:text-[0.45rem] text-[8px]"
-                          style={getMessageStyle()}
+                          className="text-secondary-foreground md:text-[0.45rem] text-[8px] flex flex-col"
                         >
-                          {formData.customMessage || "No custom message"}
+                          {formData.customMessage.split("\n")[0] || "No custom message"}
+                        </span>
+                        <span
+                          className="text-secondary-foreground md:text-[0.45rem] text-[8px] flex flex-col"
+                        >
+                          {formData.customMessage.split("\n")[1] || ""}
                         </span>
                       </div>
                     </div>

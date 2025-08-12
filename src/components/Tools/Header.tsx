@@ -93,7 +93,7 @@ export default function Header() {
     <motion.div
       initial={false}
       animate={{
-        height: extended ? "41.25rem" : (isMobile ? "3.9375rem" : "5.9375rem"),
+        height: extended ? "41.25rem" : isMobile ? "3.9375rem" : "5.9375rem",
         backgroundColor: extended ? "rgba(80, 70, 45, 0.95)" : "#FBF7E5",
       }}
       onMouseLeave={() => setExtended(false)}
@@ -103,7 +103,7 @@ export default function Header() {
       }`}
     >
       <div className="relative md:py-8.5 flex items-center justify-between px-6">
-        <div className="flex items-center gap-x-1 md:gap-x-36">
+        <div className="flex items-center gap-x-1 md:gap-x-20 lg:gap-x-36">
           <div className="flex items-center space-x-2">
             <div className="md:hidden flex items-center space-x-2">
               {!mobileMenuOpen ? (
@@ -130,7 +130,7 @@ export default function Header() {
             </Link>
           </div>
 
-          <nav className="hidden md:flex items-center space-x-32 lg:space-x-56">
+          <nav className="hidden md:flex items-center md:space-x-20 space-x-32 lg:space-x-56">
             {links.map((link) => {
               const isProtectedRoute = link.href === "/account";
 
@@ -244,7 +244,10 @@ export default function Header() {
           className="px-6 pt-8 h-full relative"
         >
           <div className="flex items-start">
-            <div className="flex-shrink-0" style={{ width: "425px" }}></div>
+            <div
+              className="flex-shrink-0 md:w-[365px] lg:w-[425px]"
+              style={{ width: "" }}
+            ></div>
 
             <div className="flex items-start space-x-16 lg:space-x-10">
               <div className="flex flex-col items-start space-y-3">
