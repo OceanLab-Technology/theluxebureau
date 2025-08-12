@@ -105,7 +105,7 @@ export function Footer() {
                   placeholder={footerData.newsletter.placeholder}
                   className="border-0 bg-transparent px-0 py-3 text-stone-200 focus:border-stone-600 text-sm focus:ring-0 outline-none rounded-none focus-visible:ring-0 placeholder:text-stone-300 font-[Marfa]"
                 />
-                <button className="px-6 py-2 text-white text-sm font-medium transition-colors font-[Marfa]">
+                <button className="px-6 md:hidden lg:block py-2 text-white md:text-sm text-sm font-medium transition-colors font-[Marfa]">
                   {footerData.newsletter.buttonText}
                 </button>
               </div>
