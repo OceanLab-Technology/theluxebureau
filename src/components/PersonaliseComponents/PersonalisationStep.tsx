@@ -18,7 +18,10 @@ interface FontSetting {
 
 interface SiteSettings {
   fonts: FontSetting[];
-  quotes: string[];
+  quotes: {
+    text: string;
+    author: string;
+  }[];
   api_key: string;
 }
 
@@ -66,9 +69,12 @@ export default function PersonalizationStep() {
   // Load the selected font if available
   useEffect(() => {
     if (siteSettings?.quotes?.length && !formData.selectedQuote) {
+      const firstQuote = siteSettings.quotes[0];
+      const authorName = typeof firstQuote === 'string' ? firstQuote : firstQuote.author || "Unknown Author";
+      const quoteText = getQuoteByAuthor(authorName);
       updateFormData({
-        selectedQuote: siteSettings.quotes[0],
-        customMessage: siteSettings.quotes[0],
+        selectedQuote: authorName,
+        customMessage: quoteText,
       });
     }
   }, [siteSettings, formData.selectedQuote, updateFormData]);
@@ -114,9 +120,34 @@ export default function PersonalizationStep() {
     fetchSettings();
   }, []);
 
-  const quotes = siteSettings?.quotes.length
-    ? [...siteSettings.quotes, "Write my own"]
+  // Create array of author names for the select dropdown
+  const quoteAuthors = siteSettings?.quotes.length
+    ? [
+        ...siteSettings.quotes.map(quote => 
+          typeof quote === 'string' ? quote : quote.author || "Unknown Author"
+        ), 
+        "Write my own"
+      ]
     : ["Write my own"];
+
+  // Helper function to get quote text by author
+  const getQuoteByAuthor = (authorName: string) => {
+    if (authorName === "Write my own" || !siteSettings?.quotes.length) {
+      return "";
+    }
+    
+    const quote = siteSettings.quotes.find(q => 
+      typeof q === 'string' ? q === authorName : q.author === authorName
+    );
+    
+    if (typeof quote === 'string') {
+      return quote;
+    } else if (quote) {
+      return `${quote.text}\n— ${quote.author}`;
+    }
+    
+    return "";
+  };
 
   // const getMessageStyle = () => {
   //   return {
@@ -197,17 +228,18 @@ export default function PersonalizationStep() {
           </label>
           <Select
             value={formData.selectedQuote}
-            onValueChange={(value) => {
+            onValueChange={(authorName) => {
+              const quoteText = getQuoteByAuthor(authorName);
               updateFormData({
-                selectedQuote: value,
+                selectedQuote: authorName,
                 customMessage:
-                  value === "Write my own"
+                  authorName === "Write my own"
                     ? formData.customMessage || ""
-                    : value,
+                    : quoteText,
               });
 
               // Focus on textarea when "Write my own" is selected
-              if (value === "Write my own") {
+              if (authorName === "Write my own") {
                 setTimeout(() => {
                   textareaRef.current?.focus();
                 }, 100);
@@ -218,9 +250,9 @@ export default function PersonalizationStep() {
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              {quotes.map((quote, index) => (
-                <SelectItem key={index} value={quote}>
-                  {quote.length > 50 ? `${quote.substring(0, 50)}...` : quote}
+              {quoteAuthors.map((author, index) => (
+                <SelectItem key={index} value={author}>
+                  {author}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -266,13 +298,13 @@ export default function PersonalizationStep() {
                     selectedQuote:
                       newMessage.length > 0
                         ? "Write my own"
-                        : siteSettings?.quotes?.[0] || "Write my own",
+                        : quoteAuthors[0] || "Write my own",
                   });
                 }}
                 placeholder="Your message will appear here..."
-                className={`w-full ${formData.customMessage.length > 150 ? "h-[70%]" : ""
-                  } text-center md:text-[0.065rem] text-[8px] bg-transparent border-none outline-none resize-none`}
-                style={getMessageStyle()}
+                className={`w-full font-[Monospace] ${formData.customMessage.length > 150 ? "h-[70%]" : ""
+                  } text-center md:text-[0.65rem] text-[8px] bg-transparent border-none outline-none resize-none`}
+                // style={getMessageStyle()}
                 rows={4}
               />
             </div>

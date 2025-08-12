@@ -129,7 +129,10 @@ export interface Profile {
 export interface SiteSetting {
   id?: string;
   fonts: FontSetting[];
-  quotes: string[];
+  quotes: {
+    text: string;
+    author: string;
+  }[];
   api_key?: string;
   created_at?: string;
   updated_at?: string;
