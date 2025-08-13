@@ -85,14 +85,7 @@ export async function POST(request: Request) {
       // Add dtaa in client
       // ✅ Add/Update customer after order success
       if (orderData?.id) {
-        const customerName = session.customer_details?.name || "Unknown";
-        const customerEmail = session.customer_details?.email || null;
-        const customerPhone = session.customer_details?.phone || null;
-        const customerAddress = session.customer_details?.address
-          ? `${session.customer_details.address.line1 || ""}, ${session.customer_details.address.city || ""}, ${session.customer_details.address.country || ""}`
-          : null;
-
-        // Find total order amount
+        const customerEmail = session.customer_details?.email;
         const orderTotal = session.amount_total ? session.amount_total / 100 : 0;
 
         // Check if customer exists
