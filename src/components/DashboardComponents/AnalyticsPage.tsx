@@ -1,83 +1,84 @@
 "use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { SidebarTrigger } from "@/components/ui/sidebar"
-import { Separator } from "@/components/ui/separator"
-import { 
-  BarChart3, 
-  TrendingUp, 
-  TrendingDown, 
-  DollarSign, 
-  Users, 
-  ShoppingCart,
-  Eye,
-  Calendar
-} from "lucide-react"
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+// import { SidebarTrigger } from "@/components/ui/sidebar"
+// import { Separator } from "@/components/ui/separator"
+// import {
+//   BarChart3,
+//   TrendingUp,
+//   TrendingDown,
+//   DollarSign,
+//   Users,
+//   ShoppingCart,
+//   Eye,
+//   Calendar
+// } from "lucide-react"
 
-const metrics = [
-  {
-    title: "Revenue",
-    value: "€45,231.89",
-    change: "+20.1%",
-    changeType: "increase" as const,
-    period: "from last month",
-    icon: DollarSign,
-  },
-  {
-    title: "Orders",
-    value: "2,350",
-    change: "+180.1%",
-    changeType: "increase" as const,
-    period: "from last month",
-    icon: ShoppingCart,
-  },
-  {
-    title: "Customers",
-    value: "12,234",
-    change: "+19%",
-    changeType: "increase" as const,
-    period: "from last month",
-    icon: Users,
-  },
-  {
-    title: "Conversion Rate",
-    value: "3.2%",
-    change: "-4.3%",
-    changeType: "decrease" as const,
-    period: "from last month",
-    icon: BarChart3,
-  },
-]
+// const metrics = [
+//   {
+//     title: "Revenue",
+//     value: "€45,231.89",
+//     change: "+20.1%",
+//     changeType: "increase" as const,
+//     period: "from last month",
+//     icon: DollarSign,
+//   },
+//   {
+//     title: "Orders",
+//     value: "2,350",
+//     change: "+180.1%",
+//     changeType: "increase" as const,
+//     period: "from last month",
+//     icon: ShoppingCart,
+//   },
+//   {
+//     title: "Customers",
+//     value: "12,234",
+//     change: "+19%",
+//     changeType: "increase" as const,
+//     period: "from last month",
+//     icon: Users,
+//   },
+//   {
+//     title: "Conversion Rate",
+//     value: "3.2%",
+//     change: "-4.3%",
+//     changeType: "decrease" as const,
+//     period: "from last month",
+//     icon: BarChart3,
+//   },
+// ]
 
-const topProducts = [
-  { name: "Luxury Rose Box", sales: 234, revenue: "€34,860", trend: "up" },
-  { name: "Premium Champagne Gift", sales: 123, revenue: "€36,777", trend: "up" },
-  { name: "Custom Perfume Collection", sales: 98, revenue: "€19,502", trend: "down" },
-  { name: "Handcrafted Jewelry Box", sales: 87, revenue: "€7,743", trend: "up" },
-  { name: "Artisan Chocolate Selection", sales: 156, revenue: "€7,020", trend: "up" },
-]
+// const topProducts = [
+//   { name: "Luxury Rose Box", sales: 234, revenue: "€34,860", trend: "up" },
+//   { name: "Premium Champagne Gift", sales: 123, revenue: "€36,777", trend: "up" },
+//   { name: "Custom Perfume Collection", sales: 98, revenue: "€19,502", trend: "down" },
+//   { name: "Handcrafted Jewelry Box", sales: 87, revenue: "€7,743", trend: "up" },
+//   { name: "Artisan Chocolate Selection", sales: 156, revenue: "€7,020", trend: "up" },
+// ]
 
-const recentActivity = [
-  { action: "New order placed", user: "Sarah Johnson", time: "2 minutes ago" },
-  { action: "Product updated", user: "Admin", time: "15 minutes ago" },
-  { action: "Customer registered", user: "Michael Chen", time: "1 hour ago" },
-  { action: "Payment received", user: "Emma Williams", time: "2 hours ago" },
-  { action: "Inventory updated", user: "Admin", time: "3 hours ago" },
-]
+// const recentActivity = [
+//   { action: "New order placed", user: "Sarah Johnson", time: "2 minutes ago" },
+//   { action: "Product updated", user: "Admin", time: "15 minutes ago" },
+//   { action: "Customer registered", user: "Michael Chen", time: "1 hour ago" },
+//   { action: "Payment received", user: "Emma Williams", time: "2 hours ago" },
+//   { action: "Inventory updated", user: "Admin", time: "3 hours ago" },
+// ]
 
 export function AnalyticsPage() {
   return (
-    <div className="flex flex-col font-century">
-      {/* Header */}
-      <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+    <div className="flex items-center justify-center h-screen font-century">
+      <span className="absolute top-0 right-0 text-xs text-gray-500">
+        Page is not built yet
+      </span>
+
+      {/* <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mr-2 h-4" />
         <h1 className="text-lg font-[200] font-century">Analytics</h1>
       </header>
 
-      {/* Main Content */}
       <div className="flex-1 space-y-4 p-8 pt-6">
-        {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-semibold font-century">Analytics</h2>
@@ -87,7 +88,6 @@ export function AnalyticsPage() {
           </div>
         </div>
 
-        {/* Key Metrics */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {metrics.map((metric) => (
             <Card key={metric.title}>
@@ -115,7 +115,6 @@ export function AnalyticsPage() {
         </div>
 
         <div className="grid gap-4 lg:grid-cols-2">
-          {/* Top Products */}
           <Card>
             <CardHeader>
               <CardTitle>Top Products</CardTitle>
@@ -155,7 +154,6 @@ export function AnalyticsPage() {
             </CardContent>
           </Card>
 
-          {/* Recent Activity */}
           <Card>
             <CardHeader>
               <CardTitle>Recent Activity</CardTitle>
@@ -188,7 +186,6 @@ export function AnalyticsPage() {
           </Card>
         </div>
 
-        {/* Chart Placeholder */}
         <Card>
           <CardHeader>
             <CardTitle>Revenue Overview</CardTitle>
@@ -206,7 +203,7 @@ export function AnalyticsPage() {
             </div>
           </CardContent>
         </Card>
-      </div>
+      </div> */}
     </div>
   )
 }

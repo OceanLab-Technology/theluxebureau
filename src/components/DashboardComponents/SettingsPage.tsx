@@ -160,7 +160,7 @@ export default function SettingsPage() {
         </div>
 
         {/* API Key Section */}
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle>API Configuration</CardTitle>
           </CardHeader>
@@ -180,7 +180,7 @@ export default function SettingsPage() {
               </p>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
 
         {/* Fonts Section */}
         <Card>

@@ -139,6 +139,28 @@ export const useProductAdminStore = create<ProductStore>((set, get) => ({
         selectedProduct: json.data,
       }));
 
+      // Activity log
+      const activityData = {
+        type: "product_updated",
+        entity_type: "product",
+        entity_id: json.data.id,
+        title: `Product updated: ${json.data.name}`,
+        description: `Product "${json.data.name}" has been updated`,
+        metadata: {
+          price: json.data.price,
+          inventory: json.data.inventory,
+          category: json.data.category,
+        },
+        user_id: null,
+      };
+
+      await fetch("/api/activities", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(activityData),
+      });
+
+
       return json.data as Product;
     } catch (err: any) {
       set({ loading: false, error: err.message || "Unknown error" });
@@ -158,6 +180,24 @@ export const useProductAdminStore = create<ProductStore>((set, get) => ({
         products: state.products?.filter((p) => p.id !== id) || null,
         selectedProduct: state.selectedProduct?.id === id ? null : state.selectedProduct,
       }));
+
+      // Activity log
+      const activityData = {
+        type: "product_deleted",
+        entity_type: "product",
+        entity_id: id,
+        title: `Product deleted`,
+        description: `A product with ID "${id}" has been deleted`,
+        metadata: {},
+        user_id: null,
+      };
+
+      await fetch("/api/activities", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(activityData),
+      });
+
     } catch (err: any) {
       set({ loading: false, error: err.message || "Unknown error" });
     }

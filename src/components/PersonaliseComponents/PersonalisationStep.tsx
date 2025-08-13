@@ -180,17 +180,15 @@ export default function PersonalizationStep() {
   return (
     <div className="font-century">
       <p className="text-secondary-foreground font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
-        Our gifts are sent with custom stationery, letter-pressed by hand at the
-        Luxe Bureau atelier. In the header field, please enter your own name,
-        initials, or company to create your custom letterhead. You may choose
-        between two type styles below.
+        Our gifts arrive with custom stationery, letterpressed by hand at the Luxe Bureau atelier, in Noir ink on GF Smith Mohawk White paper.
+      </p>
+      <br />
+      <p className="text-secondary-foreground font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
+        In the header, add your name, initials, or company to create your bespoke letterhead. You may choose from two type styles below.
       </p>
       <br />
       <p className="text-secondary-foreground mb-8 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
-        Your personal message will be typeset and printed in the Luxe Bureau's
-        signature typewriter font. Please type your message directly onto the
-        notecard. For added inspiration, select a quote from the drop down menu
-        to add this to your message.
+        Your personal message will be set in our signature typewriter font. For inspiration, you can select a quote from the dropdown—or compose your own.
       </p>
 
       <div className="flex gap-4 mb-8">
@@ -274,6 +272,7 @@ export default function PersonalizationStep() {
             <div className="text-center mb-10 absolute md:top-5 top-4 left-1/2 transform -translate-x-1/2 w-full z-30">
               <input
                 type="text"
+                readOnly
                 value={formData.headerText || ""}
                 onChange={(e) => updateFormData({ headerText: e.target.value })}
                 placeholder="Enter header text*"
@@ -283,7 +282,7 @@ export default function PersonalizationStep() {
                   position: "relative",
                   zIndex: 50,
                 }}
-                tabIndex={0}
+                tabIndex={-1}
               />
             </div>
 

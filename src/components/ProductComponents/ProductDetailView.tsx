@@ -141,11 +141,10 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               {Array.from({ length: images.length }).map((_, index) => (
                 <motion.span
                   key={index}
-                  className={`h-2 w-2 rounded-full inline-block cursor-pointer ${
-                    selectedImageIndex === index
+                  className={`h-2 w-2 rounded-full inline-block cursor-pointer ${selectedImageIndex === index
                       ? "bg-[#FBD060]"
                       : "bg-background/50"
-                  }`}
+                    }`}
                   onClick={() => handleImageChange(index)}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.9 }}
@@ -163,20 +162,19 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               <motion.button
                 key={index}
                 onClick={() => handleImageChange(index)}
-                className={`md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-full bg-muted/20 overflow-hidden border-2 transition-all ${
-                  selectedImageIndex === index
+                className={`md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-full bg-muted/20 overflow-hidden border-2 transition-all ${selectedImageIndex === index
                     ? "border-yellow-500"
                     : "border-transparent"
-                }`}
+                  }`}
                 animate={
                   selectedImageIndex === index
                     ? {
-                        borderColor: ["#eab308", "#fbbf24", "#eab308"],
-                        transition: { duration: 0.5 },
-                      }
+                      borderColor: ["#eab308", "#fbbf24", "#eab308"],
+                      transition: { duration: 0.5 },
+                    }
                     : {
-                        borderColor: "transparent",
-                      }
+                      borderColor: "transparent",
+                    }
                 }
               >
                 <img
@@ -191,9 +189,10 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
 
         <div className="space-y-6 py-10 lg:px-4 px-6">
           <div className="md:w-96">
-            <div className="small-text gap-2 mb-2 text-stone-600">
+            <div className="small-text gap-2 mb-2 text-stone-600 uppercase">
               <span>{currentProduct.category}</span>
             </div>
+
 
             <h1 className="text-[2rem] leading-none text-secondary-foreground font-medium">
               {currentProduct.name}
@@ -240,49 +239,49 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
           {(currentProduct.why_we_chose_it ||
             currentProduct.about_the_maker ||
             currentProduct.particulars) && (
-            <div className="mt-20">
-              <Accordion type="single" collapsible className="">
-                {currentProduct.why_we_chose_it && (
-                  <AccordionItem value="why-we-chose-it">
-                    <AccordionTrigger className="text-left small-text font-medium uppercase">
-                      Why We Chose It
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <p className="text-muted-foreground leading-relaxed font-[Marfa]">
-                        {currentProduct.why_we_chose_it}
-                      </p>
-                    </AccordionContent>
-                  </AccordionItem>
-                )}
+              <div className="mt-20">
+                <Accordion type="single" collapsible className="">
+                  {currentProduct.why_we_chose_it && (
+                    <AccordionItem value="why-we-chose-it">
+                      <AccordionTrigger className="text-left small-text font-medium uppercase">
+                        Why We Chose It
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <p className="text-muted-foreground leading-relaxed font-[Marfa]">
+                          {currentProduct.why_we_chose_it}
+                        </p>
+                      </AccordionContent>
+                    </AccordionItem>
+                  )}
 
-                {currentProduct.about_the_maker && (
-                  <AccordionItem value="about-the-maker">
-                    <AccordionTrigger className="text-left font-medium uppercase small-text">
-                      About the Maker
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <p className="text-muted-foreground leading-relaxed font-[Marfa]">
-                        {currentProduct.about_the_maker}
-                      </p>
-                    </AccordionContent>
-                  </AccordionItem>
-                )}
+                  {currentProduct.about_the_maker && (
+                    <AccordionItem value="about-the-maker">
+                      <AccordionTrigger className="text-left font-medium uppercase small-text">
+                        About the Maker
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <p className="text-muted-foreground leading-relaxed font-[Marfa]">
+                          {currentProduct.about_the_maker}
+                        </p>
+                      </AccordionContent>
+                    </AccordionItem>
+                  )}
 
-                {currentProduct.particulars && (
-                  <AccordionItem value="particulars">
-                    <AccordionTrigger className="text-left font-medium uppercase small-text">
-                      Particulars
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <p className="text-muted-foreground leading-relaxed font-[Marfa]">
-                        {currentProduct.particulars}
-                      </p>
-                    </AccordionContent>
-                  </AccordionItem>
-                )}
-              </Accordion>
-            </div>
-          )}
+                  {currentProduct.particulars && (
+                    <AccordionItem value="particulars">
+                      <AccordionTrigger className="text-left font-medium uppercase small-text">
+                        Particulars
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <p className="text-muted-foreground leading-relaxed font-[Marfa]">
+                          {currentProduct.particulars}
+                        </p>
+                      </AccordionContent>
+                    </AccordionItem>
+                  )}
+                </Accordion>
+              </div>
+            )}
         </div>
       </div>
       <div className="md:flex hidden justify-end flex-col items-end px-10">
