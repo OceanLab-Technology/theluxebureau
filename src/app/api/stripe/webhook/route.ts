@@ -275,25 +275,29 @@ export async function POST(request: Request) {
         const session = event.data.object as Stripe.Checkout.Session;
         console.log("📄 Session Object:", JSON.stringify(session, null, 2));
 
-        const { error: updateError, data: updateData } = await supabase
-          .from("orders")
-          .update({
-            stripe_payment_intent_id: session.payment_intent as string,
-            stripe_customer_id: (session.customer as string) || null,
-            stripe_payment_status: session.payment_status,
-            stripe_payment_method: session.payment_method_types?.[0] || null,
-            status: "Active",
-            payment_status: "completed",
-            updated_at: new Date().toISOString(),
-          })
-          .eq("stripe_session_id", session.id)
-          .select();
+        // const { error: updateError, data: updateData } = await supabase
+        //   .from("orders")
+        //   .update({
+        //     stripe_payment_intent_id: session.payment_intent as string,
+        //     stripe_customer_id: (session.customer as string) || null,
+        //     stripe_payment_status: session.payment_status,
+        //     stripe_payment_method: session.payment_method_types?.[0] || null,
+        //     status: "Active",
+        //     payment_status: "completed",
+        //     updated_at: new Date().toISOString(),
+        //   })
+        //   .eq("stripe_session_id", session.id)
+        //   .select();
 
-        if (updateError) {
-          console.error("❌ Order Update Error:", updateError);
-        } else {
-          console.log("✅ Order Updated:", updateData);
-        }
+        // if (updateError) {
+        //   console.error("❌ Order Update Error:", updateError);
+        // } else {
+        //   console.log("✅ Order Updated:", updateData);
+        // }
+
+        const { data, error } = await supabase.from("orders").select("*").limit(1);
+        console.log("📦 Orders:", data, error);
+
 
         if (session.metadata?.userId) {
           console.log("🛒 Clearing cart for userId:", session.metadata.userId);
