@@ -45,7 +45,7 @@ const footerData = {
 
 export function Footer() {
   return (
-    <footer className="relative mt-auto min-h-[400px]">
+    <footer className="relative mt-auto min-h-[400px] mt-0">
       <div className="absolute inset-0">
         <Image
           src={footerData.background.src}

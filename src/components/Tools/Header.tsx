@@ -93,12 +93,13 @@ export default function Header() {
     <motion.div
       initial={false}
       animate={{
-        height: extended ? "41.25rem" : isMobile ? "3.9375rem" : "5.9375rem",
+        // height: extended ? "41.25rem" : (isMobile ? "3.9375rem" : "5.9375rem"),
+        height: extended ? "41.25rem" : undefined,
         backgroundColor: extended ? "rgba(80, 70, 45, 0.95)" : "#FBF7E5",
       }}
       onMouseLeave={() => setExtended(false)}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className={`font-century fixed top-0 left-0 right-0 z-[99999] md:h-[5.9375rem] md:py-0 py-5 w-full overflow-hidden text-background bg-background ${
+      className={`font-century fixed top-0 left-0 right-0 z-[99999] h-[3.9375rem] md:h-[5.9375rem] md:py-0 py-5 w-full overflow-hidden text-background bg-background ${
         extended ? "backdrop-blur-sm" : ""
       }`}
     >
@@ -228,7 +229,13 @@ export default function Header() {
             </svg>
 
             <div>
-              <CartSheet className="text-secondary-foreground" />
+              <CartSheet 
+              className={`${
+                extended
+                  ? "text-background hover:text-[#FBD060]"
+                  : "text-stone-700 hover:text-stone-900"
+                }`}
+              />
             </div>
           </div>
         </div>

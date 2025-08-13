@@ -43,7 +43,7 @@ function ProductsContent() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">
       <div className="mx-auto px-4 md:py-40 py-8">
         <ProductFilters
           onFilterChange={handleFilterChange}

@@ -82,8 +82,8 @@ export function CartContainer({ onClose }: CartContainerProps) {
         </div>
 
         <div className="space-y-6 overflow-y-auto font-century h-[calc(100vh-22rem)] hide-scrollbar">
-          {enrichedCartItems.map((item) => (
-            <CartItem key={item.id} item={item} loading={cartLoading} />
+          {enrichedCartItems.map((item, index) => (
+            <CartItem key={item.id} item={item} index={index} loading={cartLoading} lastIndex={cartItems.length - 1} />
           ))}
         </div>
       </div>

@@ -25,12 +25,22 @@ import {
 interface CartItemProps {
   item: CartItemType & { product?: Product };
   loading?: boolean;
+  index: number;
+  lastIndex: number;
 }
 
-export function CartItem({ item, loading }: CartItemProps) {
+export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
   const { updateCartItem, removeFromCart } = useMainStore();
   const [quantity, setQuantity] = useState(item.quantity);
   const [isUpdating, setIsUpdating] = useState(false);
+
+    const borderClass =
+    index === 0
+      ? "border-t border-b" // first item: top + bottom
+      : index === lastIndex
+      ? "border-b"           // last item: bottom only
+      : "border-b";          // middle: bottom only
+
 
   const { product } = item;
 
@@ -109,7 +119,7 @@ export function CartItem({ item, loading }: CartItemProps) {
   };
 
   return (
-    <div className="flex items-start space-x-6 md:py-6 py-4 border-y border-secondary-foreground/50">
+    <div className={`flex items-start space-x-6 md:py-6 py-4 border-secondary-foreground/50 ${borderClass}`}>
       <div className="flex-shrink-0">
         <div className="w-32 h-32 relative overflow-hidden bg-stone-100">
           {product.image_1 || product.image ? (

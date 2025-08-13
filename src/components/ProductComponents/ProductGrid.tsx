@@ -212,7 +212,7 @@ export function ProductGrid({
         </AnimatePresence>
 
         <motion.div
-        className="h-[15.75rem] w-full px-10 bg-[rgba(80,70,45,0.19)] flex items-center md:justify-end justify-center"
+        className="h-[15.75rem] w-screen px-10 bg-[rgba(80,70,45,0.19)] flex items-center md:justify-end justify-center"
           initial={{ opacity: 0, filter: "blur(5px)" }}
           animate={{ opacity: 1, filter: "blur(0px)" }}
           transition={{ delay: 0.6, duration: 0.5 }}
