@@ -101,47 +101,17 @@ export async function POST(request: NextRequest) {
       personalization: body.personalization,
     };
 
-    // const { data, error } = await supabase
-    //   .from('orders')
-    //   .insert(orderData)
-    //   .select()
-    //   .single();
-
-    // if (error) throw error;
-    
-    const { data: order, error: orderError } = await supabase
+    const { data, error } = await supabase
       .from('orders')
       .insert(orderData)
       .select()
       .single();
 
-    if (orderError) throw orderError;
-
-
-    // add to activity
-    const activityData = {
-      type: 'order_created', // activity type
-      entity_type: 'order',
-      entity_id: order.id, // use order id from the previous insert
-      title: `Order created for ${order.customer_name}`,
-      description: `Order #${order.id} created with total amount $${order.total_amount}`,
-      metadata: {
-        customer_email: order.customer_email,
-        delivery_date: order.delivery_date,
-        status: order.status,
-      },
-      user_id: body.user_id || null, // optional if logged in
-    };
-
-    const { error: activityError } = await supabase
-      .from('activities')
-      .insert(activityData);
-
-    if (activityError) throw activityError;
+    if (error) throw error;
 
     return NextResponse.json({
       success: true,
-      data: order,
+      data: data,
       message: 'Order created successfully'
     });
   } catch (error) {
