@@ -133,6 +133,9 @@ export async function POST(request: Request) {
         console.error("Payment Failed Update Error:", failError);
       }
     }
+    else{
+      console.log(event);
+    }
 
     return new Response("Webhook received", { status: 200 });
   } catch (err: any) {

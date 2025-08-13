@@ -81,12 +81,39 @@ export const useProductAdminStore = create<ProductStore>((set, get) => ({
       });
       const json = await res.json();
 
-      if (!res.ok || !json.success) throw new Error(json.error || "Failed to create product");
+      if (!res.ok || !json.success)
+        throw new Error(json.error || "Failed to create product");
 
       set((state) => ({
         loading: false,
-        products: state.products ? [json.data, ...state.products] : [json.data],
+        products: state.products
+          ? [json.data, ...state.products]
+          : [json.data],
       }));
+
+      const activityData = {
+        type: "product_created",
+        entity_type: "product",
+        entity_id: json.data.id,
+        title: `Product created: ${json.data.name}`,
+        description: `Product "${json.data.name}" has been created in category "${json.data.category}"`,
+        metadata: {
+          price: json.data.price,
+          inventory: json.data.inventory,
+          category: json.data.category,
+        },
+        user_id: null,
+      };
+
+      const activityRes = await fetch("/api/activities", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(activityData),
+      });
+
+      if (!activityRes.ok) {
+        console.error("Failed to create activity:", activityRes.statusText);
+      }
     } catch (err: any) {
       set({ loading: false, error: err.message || "Unknown error" });
     }
