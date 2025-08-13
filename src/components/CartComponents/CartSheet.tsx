@@ -49,6 +49,24 @@ export function CartSheet({ className, children, fill }: CartSheetProps) {
                 />
               )}
             </div>
+            
+            <div
+              className="md:hidden relative flex items-center md:scale-115 justify-center cursor-pointer"
+              onClick={handleCartClick}
+            >
+              {cartItemCount > 0 ? (
+                <img src="/cart_full.svg" alt="Cart Icon" className="h-5 w-5" />
+              ) : (
+                <img
+                  src="/cart_empty.svg"
+                  alt="Empty Cart Icon"
+                  className="h-5 w-5"
+                />
+              )}
+            </div>
+
+
+
             {/* <div className="md:hidden relative flex items-center md:scale-115 justify-center cursor-pointer">
               <svg
                 onClick={handleCartClick}
@@ -82,7 +100,11 @@ export function CartSheet({ className, children, fill }: CartSheetProps) {
                 </svg>
                 )}
                 </div> */}
-            <div className="md:hidden relative flex items-center md:scale-115 justify-center cursor-pointer">
+          
+          
+          
+          
+            {/* <div className="md:hidden relative flex items-center md:scale-115 justify-center cursor-pointer">
               <svg
                 onClick={handleCartClick}
                 width="14"
@@ -96,7 +118,7 @@ export function CartSheet({ className, children, fill }: CartSheetProps) {
                   fill={cartItemCount > 0 ? (fill || "#1e1204") : (fill || "#1e1204")}
                 />
               </svg>
-            </div>
+            </div> */}
 
           </div>
         </SheetTrigger>

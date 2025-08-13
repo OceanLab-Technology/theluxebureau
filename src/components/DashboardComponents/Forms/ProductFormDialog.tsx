@@ -433,7 +433,7 @@ export function ProductFormDialog() {
             <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader className="space-y-4">
                     <DialogTitle className="text-2xl font-bold">Add New Product</DialogTitle>
-                    
+
                     {/* Progress Bar */}
                     <div className="w-full flex items-center gap-2">
                         {STEPS.map((s, i) => (
@@ -484,16 +484,16 @@ export function ProductFormDialog() {
                     {step === 1 && (
                         <div className="space-y-6">
                             <div className="border-2 border-dashed rounded-lg p-8 text-center">
-                                <Input 
-                                    type="file" 
-                                    multiple 
-                                    accept="image/*" 
+                                <Input
+                                    type="file"
+                                    multiple
+                                    accept="image/*"
                                     onChange={handleImageChange}
                                     className="hidden"
                                     id="image-upload"
                                 />
-                                <Label 
-                                    htmlFor="image-upload" 
+                                <Label
+                                    htmlFor="image-upload"
                                     className="flex flex-col items-center gap-2 cursor-pointer"
                                 >
                                     <Upload className="h-8 w-8 text-muted-foreground" />
@@ -553,7 +553,7 @@ export function ProductFormDialog() {
                         </div>
                     )}
 
-                    {step === 3 && (
+                    {/* {step === 3 && (
                         <div className="space-y-4 p-6 bg-muted rounded-lg">
                             <h3 className="font-medium">Review Your Product</h3>
                             <p className="text-sm text-muted-foreground">
@@ -564,13 +564,86 @@ export function ProductFormDialog() {
                                 <span className="text-muted-foreground">{images.length} uploaded</span>
                             </div>
                         </div>
+                    )} */}
+
+                    {step === 3 && (
+                        <div className="space-y-4 p-6 bg-muted rounded-lg">
+                            <h3 className="font-medium text-lg">Review Your Product</h3>
+                            <p className="text-sm text-muted-foreground">
+                                Please review all the information you've entered. Click "Create Product" when you're ready to submit.
+                            </p>
+
+                            <div className="space-y-3 text-sm">
+                                <div>
+                                    <span className="font-medium">Product Title:</span> {String(form.getValues("name") ?? "")}
+                                </div>
+                                <div>
+                                    <span className="font-medium">URL Slug:</span> {String(form.getValues("slug") ?? "")}
+                                </div>
+                                <div>
+                                    <span className="font-medium">Description:</span> {String(form.getValues("description") ?? "")}
+                                </div>
+                                <div className="grid grid-cols-3 gap-4">
+                                    <div>
+                                        <span className="font-medium">Price (€):</span> {String(form.getValues("price") ?? "")}
+                                    </div>
+                                    <div>
+                                        <span className="font-medium">Inventory:</span> {String(form.getValues("inventory") ?? "")}
+                                    </div>
+                                    <div>
+                                        <span className="font-medium">Category:</span> {String(form.getValues("category") ?? "")}
+                                    </div>
+                                </div>
+                                {form.getValues("title") && (
+                                    <div>
+                                        <span className="font-medium">Title:</span> {String(form.getValues("title") ?? "")}
+                                    </div>
+                                )}
+                                {form.getValues("why_we_chose_it") && (
+                                    <div>
+                                        <span className="font-medium">Why We Chose It:</span> {String(form.getValues("why_we_chose_it") ?? "")}
+                                    </div>
+                                )}
+                                {form.getValues("about_the_maker") && (
+                                    <div>
+                                        <span className="font-medium">About the Maker:</span> {String(form.getValues("about_the_maker") ?? "")}
+                                    </div>
+                                )}
+                                {form.getValues("particulars") && (
+                                    <div>
+                                        <span className="font-medium">Particulars:</span> {String(form.getValues("particulars") ?? "")}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="space-y-2">
+                                <span className="font-medium text-sm">Uploaded Images:</span>
+                                {images.length > 0 ? (
+                                    <div className="grid grid-cols-5 gap-4">
+                                        {images.map((img, i) => (
+                                            <div key={i} className="aspect-square overflow-hidden rounded-lg border">
+                                                <img
+                                                    src={URL.createObjectURL(img)}
+                                                    alt={`preview-${i}`}
+                                                    className="object-cover w-full h-full"
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-muted-foreground text-sm">No images uploaded</p>
+                                )}
+                            </div>
+                        </div>
                     )}
 
+
+
                     <div className="flex justify-between items-center gap-4 pt-4">
-                        <Button 
+                        <Button
                             type="button"
-                            variant="outline" 
-                            onClick={prevStep} 
+                            variant="outline"
+                            onClick={prevStep}
                             disabled={step === 0}
                         >
                             Back

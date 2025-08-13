@@ -47,6 +47,9 @@ export async function POST(request: Request) {
         console.error("Order Update Error:", updateError);
       }
 
+      console.log(
+        `Order ${orderData?.id}`
+      )
       // ✅ Decrease product inventory based on order_items table
       if (orderData?.id) {
         const { data: orderItems, error: itemsError } = await supabase

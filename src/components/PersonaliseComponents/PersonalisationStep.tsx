@@ -272,7 +272,7 @@ export default function PersonalizationStep() {
             <div className="text-center mb-10 absolute md:top-5 top-4 left-1/2 transform -translate-x-1/2 w-full z-30">
               <input
                 type="text"
-                readOnly
+                // readOnly
                 value={formData.headerText || ""}
                 onChange={(e) => updateFormData({ headerText: e.target.value })}
                 placeholder="Enter header text*"
@@ -282,7 +282,8 @@ export default function PersonalizationStep() {
                   position: "relative",
                   zIndex: 50,
                 }}
-                tabIndex={-1}
+                // tabIndex={-1}
+                tabIndex={50}
               />
             </div>
 

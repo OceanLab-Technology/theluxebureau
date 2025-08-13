@@ -11,18 +11,19 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { 
-  ArrowLeft, 
-  Calendar, 
-  User, 
-  MapPin, 
-  Package, 
+import {
+  ArrowLeft,
+  Calendar,
+  User,
+  MapPin,
+  Package,
   Settings,
   CreditCard,
-  ShoppingBag 
+  ShoppingBag
 } from "lucide-react";
 import { useOrderDetailsStore } from "@/store/admin/orderStore";
 import { useRouter } from "next/navigation";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 interface OrderDetailsPageProps {
   orderId: string;
@@ -119,7 +120,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
             />
           </div>
           <div className="flex-1 min-w-0">
-            <h4 className="font-medium text-sm truncate">{item.products?.name}</h4>
+            <h4 className="font-medium text-sm whitespace-normal break-words">{item.products?.name}</h4>
             <p className="text-xs text-muted-foreground">{item.products?.category}</p>
             <div className="flex justify-between items-center mt-2">
               <span className="text-xs">Qty: {item.quantity}</span>
@@ -136,7 +137,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
                   <span className="text-muted-foreground capitalize">
                     {key.replace(/([A-Z])/g, ' $1').trim()}:
                   </span>
-                  <span className="font-medium max-w-32 truncate">
+                  <span className="font-medium max-w-32 whitespace-normal break-words">
                     {String(value)}
                   </span>
                 </div>
@@ -296,23 +297,6 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
           </Card>
         </div>
 
-        {/* Order Items */}
-        {order.orderItems && order.orderItems.length > 0 && (
-          <Card>
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <ShoppingBag className="h-5 w-5" />
-                <CardTitle>Order Items ({order.orderItems.length})</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {order.orderItems.map((item, index) => renderOrderItemCard(item, index))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
         {/* Editable Order Info */}
         <Card>
           <CardHeader>
@@ -330,13 +314,32 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
                 onChange={(e) => handleFieldChange("deliveryDate", e.target.value)}
               />
             </div>
-            <div className="space-y-1.5">
+            {/* <div className="space-y-1.5">
               <Label>Status</Label>
               <Input
                 value={formData.status}
                 onChange={(e) => handleFieldChange("status", e.target.value)}
               />
+            </div> */}
+            <div className="space-y-1.5">
+              <Label>Status</Label>
+              <Select
+                value={formData.status}
+                onValueChange={(value) => handleFieldChange("status", value)}
+              >
+                <SelectTrigger className="w-[200px]">
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="New">New</SelectItem>
+                  <SelectItem value="Active">Active</SelectItem>
+                  <SelectItem value="Shipped">Shipped</SelectItem>
+                  <SelectItem value="Complete">Complete</SelectItem>
+                  <SelectItem value="Cancelled">Cancelled</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
+
             <div className="space-y-1.5">
               <Label>Total ($)</Label>
               <Input
@@ -356,6 +359,23 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
             </div>
           </CardContent>
         </Card>
+
+        {/* Order Items */}
+        {order.orderItems && order.orderItems.length > 0 && (
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <ShoppingBag className="h-5 w-5" />
+                <CardTitle>Order Items ({order.orderItems.length})</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {order.orderItems.map((item, index) => renderOrderItemCard(item, index))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         <div className="flex justify-end gap-2">
           <Button onClick={handleSave} disabled={!hasChanges}>

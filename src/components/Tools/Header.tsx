@@ -99,9 +99,8 @@ export default function Header() {
       }}
       onMouseLeave={() => setExtended(false)}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className={`font-century fixed top-0 left-0 right-0 z-[99999] h-[3.9375rem] md:h-[5.9375rem] md:py-0 py-5 w-full overflow-hidden text-background bg-background ${
-        extended ? "backdrop-blur-sm" : ""
-      }`}
+      className={`font-century fixed top-0 left-0 right-0 z-[99999] h-[3.9375rem] md:h-[5.9375rem] md:py-0 py-5 w-full overflow-hidden text-background bg-background ${extended ? "backdrop-blur-sm" : ""
+        }`}
     >
       <div className="relative md:py-8.5 flex items-center justify-between px-6">
         <div className="flex items-center gap-x-1 md:gap-x-20 lg:gap-x-36">
@@ -123,9 +122,8 @@ export default function Header() {
             </div>
             <Link
               href="/"
-              className={`md:relative absolute left-1/2 -translate-x-1/2 cursor-pointer md:w-auto md:scale-100 scale-55 md:h-auto flex-shrink-0 ${
-                extended ? "text-background" : "text-stone-600"
-              }`}
+              className={`md:relative absolute left-1/2 -translate-x-1/2 cursor-pointer md:w-auto md:scale-100 scale-55 md:h-auto flex-shrink-0 ${extended ? "text-background" : "text-stone-600"
+                }`}
             >
               <Logo fill={extended ? "#FBF7E5" : "#50462D"} />
             </Link>
@@ -152,11 +150,10 @@ export default function Header() {
                       setExtended(false);
                     }}
                     onMouseEnter={() => setExtended(true)}
-                    className={`text-[15px] leading-[18px] font-schoolbook-cond font-[400]  cursor-pointer ${
-                      extended
-                        ? "text-background hover:text-[#FBD060]"
-                        : "text-stone-700 hover:text-stone-900"
-                    }`}
+                    className={`text-[15px] leading-[18px] font-schoolbook-cond font-[400]  cursor-pointer ${extended
+                      ? "text-background hover:text-[#FBD060]"
+                      : "text-stone-700 hover:text-stone-900"
+                      }`}
                   >
                     {link.label}
                   </button>
@@ -171,11 +168,10 @@ export default function Header() {
                   onMouseEnter={() => setExtended(true)}
                   key={link.href}
                   href={link.href}
-                  className={`text-[15px] leading-[18px] font-schoolbook-cond font-[400]  ${
-                    extended
-                      ? "text-background hover:text-[#FBD060]"
-                      : "text-stone-700 hover:text-stone-900"
-                  }`}
+                  className={`text-[15px] leading-[18px] font-schoolbook-cond font-[400]  ${extended
+                    ? "text-background hover:text-[#FBD060]"
+                    : "text-stone-700 hover:text-stone-900"
+                    }`}
                 >
                   {link.label}
                 </Link>
@@ -187,14 +183,13 @@ export default function Header() {
         <div className="flex items-center space-x-2 mr-2">
           <div className="hidden md:block">
             <CartSheet
-              className={`${
-                extended
-                  ? "text-background hover:text-[#FBD060]"
-                  : "text-stone-700 hover:text-stone-900"
-              }`}
+              className={`${extended
+                ? "text-background hover:text-[#FBD060]"
+                : "text-stone-700 hover:text-stone-900"
+                }`}
             />
           </div>
-          <div className="md:hidden flex gap-4">
+          <div className="md:hidden flex gap-2 justify-center items-center">
             <svg
               onClick={(e) => {
                 if (
@@ -205,8 +200,8 @@ export default function Header() {
                 setMobileMenuOpen(false);
               }}
               width="15"
-              height="17"
-              viewBox="0 0 15 17"
+              height="15"
+              viewBox="0 0 15 15"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -228,13 +223,12 @@ export default function Header() {
               </defs>
             </svg>
 
-            <div>
-              <CartSheet 
-              className={`${
-                extended
+            <div className="pl-2 flex justify-center items-center">
+              <CartSheet
+                className={`${extended
                   ? "text-background hover:text-[#FBD060]"
                   : "text-stone-700 hover:text-stone-900"
-                }`}
+                  }`}
               />
             </div>
           </div>
@@ -347,7 +341,13 @@ export default function Header() {
                   alt=""
                 />
                 <div>
-                  <CartSheet fill="#fbf7e5" />
+                  {/* <CartSheet /> */}
+                  <CartSheet
+                    className={`${extended
+                      ? "text-background hover:text-[#FBD060]"
+                      : "text-stone-700 hover:text-stone-900"
+                      }`}
+                  />
                 </div>
               </div>
             </div>
@@ -409,9 +409,9 @@ export default function Header() {
                     className="block text-[#FBD060] font-[100] font-century text-[1rem] uppercase hover:text-background transition-colors"
                     {...(item.href.startsWith("http")
                       ? {
-                          target: "_blank",
-                          rel: "noopener noreferrer",
-                        }
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                      }
                       : {})}
                   >
                     {item.label}
