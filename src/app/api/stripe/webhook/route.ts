@@ -42,7 +42,7 @@ export async function POST(request: Request) {
         .eq("stripe_session_id", session.id)
         .select("id") // fetch the order ID for inventory updates
         .single();
-        
+
       if (updateError) {
         console.error("Order Update Error:", updateError);
       }
@@ -79,6 +79,41 @@ export async function POST(request: Request) {
               );
             }
           }
+        }
+      }
+
+      // Add dtaa in client
+      // ✅ Add/Update customer after order success
+      if (orderData?.id) {
+        const customerName = session.customer_details?.name || "Unknown";
+        const customerEmail = session.customer_details?.email || null;
+        const customerPhone = session.customer_details?.phone || null;
+        const customerAddress = session.customer_details?.address
+          ? `${session.customer_details.address.line1 || ""}, ${session.customer_details.address.city || ""}, ${session.customer_details.address.country || ""}`
+          : null;
+
+        // Find total order amount
+        const orderTotal = session.amount_total ? session.amount_total / 100 : 0;
+
+        // Check if customer exists
+        const { data: existingCustomer } = await supabase
+          .from("customers")
+          .select("*")
+          .eq("email", customerEmail)
+          .single();
+
+        if (existingCustomer) {
+          // ✅ Update existing customer
+          await supabase
+            .from("customers")
+            .update({
+              total_spent: (existingCustomer.total_spent || 0) + orderTotal,
+              order_count: (existingCustomer.order_count || 0) + 1,
+              status: "Active",
+              last_order_date: new Date().toISOString().split("T")[0],
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", existingCustomer.id);
         }
       }
 
