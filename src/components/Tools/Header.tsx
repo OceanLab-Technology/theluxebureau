@@ -121,7 +121,7 @@ export default function Header() {
               )}
             </div>
             <Link
-              href="/"
+              href="https://www.theluxebureau.com/home-full"
               className={`md:relative absolute left-1/2 -translate-x-1/2 cursor-pointer md:w-auto md:scale-100 scale-55 md:h-auto flex-shrink-0 ${extended ? "text-background" : "text-stone-600"
                 }`}
             >
