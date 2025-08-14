@@ -68,14 +68,14 @@ export default function Header() {
   ];
 
   const aboutLinks = [
-    { label: "About Us", href: "/about" },
-    { label: "The Campaign", href: "/campaign" },
+    { label: "About Us", href: "https://www.theluxebureau.com/about-draft" },
+    { label: "The Campaign", href: "https://www.theluxebureau.com/campaign-draft" },
   ];
 
   const socialLinks = [
-    { label: "Contact", href: "/contact" },
-    { label: "Instagram", href: "https://instagram.com" },
-    { label: "LinkedIn", href: "https://linkedin.com" },
+    { label: "Contact", href: "https://www.theluxebureau.com/contact" },
+    { label: "Instagram", href: "https://www.instagram.com/theluxebureau/" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/company/the-luxebureau" },
   ];
 
   useEffect(() => {

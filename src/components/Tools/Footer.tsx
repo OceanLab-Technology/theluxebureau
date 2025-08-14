@@ -5,16 +5,16 @@ const footerData = {
   discover: {
     title: "Discover",
     links: [
-      { label: "Shop", href: "/shop" },
-      { label: "About", href: "/about" },
-      { label: "Instagram", href: "/instagram" },
+      { label: "Shop", href: "/products" },
+      { label: "About", href: "https://www.theluxebureau.com/about-draft/" },
+      { label: "Instagram", href: "https://www.instagram.com/theluxebureau/" },
     ],
   },
   concierge: {
     title: "Concierge",
     links: [
       { label: "Shipping & Returns", href: "/shipping" },
-      { label: "Contact", href: "/contact" },
+      { label: "Contact", href: "https://www.theluxebureau.com/contact" },
       { label: "FAQs", href: "/faqs" },
     ],
   },
