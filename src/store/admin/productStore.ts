@@ -18,6 +18,7 @@ export type Product = {
   why_we_chose_it?: string;
   about_the_maker?: string;
   particulars?: string;
+  least_inventory_trigger?: number;
 };
 
 type ProductUpdate = Partial<Product> | FormData;
@@ -25,11 +26,13 @@ type ProductUpdate = Partial<Product> | FormData;
 type ProductStore = {
   products: Product[] | null;
   selectedProduct: Product | null;
+  categories: string[];
   loading: boolean;
   error: string | null;
 
   fetchProducts: () => Promise<void>;
   fetchProductById: (id: string) => Promise<void>;
+  fetchCategories: () => Promise<void>;
   createProduct: (data: FormData) => Promise<void>;
   updateProduct: (id: string, updates: ProductUpdate) => Promise<Product | null>;
   deleteProduct: (id: string) => Promise<void>;
@@ -38,6 +41,7 @@ type ProductStore = {
 export const useProductAdminStore = create<ProductStore>((set, get) => ({
   products: null,
   selectedProduct: null,
+  categories: [],
   loading: false,
   error: null,
 
@@ -56,6 +60,20 @@ export const useProductAdminStore = create<ProductStore>((set, get) => ({
     } catch (err: any) {
       set({ loading: false, error: err.message || "Unknown error" });
     }
+  },
+
+  fetchCategories: async () => {
+    const state = get();
+    if (!state.products) {
+      await state.fetchProducts();
+    }
+    
+    const products = get().products || [];
+    const uniqueCategories = Array.from(new Set(
+      products.map(product => product.category).filter(Boolean)
+    )).sort();
+    
+    set({ categories: uniqueCategories });
   },
 
   fetchProductById: async (id) => {

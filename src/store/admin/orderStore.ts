@@ -38,17 +38,20 @@ type Pagination = {
 type OrdersState = {
   orders: Order[];
   loading: boolean;
+  updatingOrderId: string | null;
   pagination: Pagination | null;
   fetchOrders: (
     filters?: Record<string, string>,
     page?: number,
     limit?: number
   ) => Promise<void>;
+  updateOrderStatus: (orderId: string, newStatus: string) => Promise<boolean>;
 };
 
-export const useOrdersStore = create<OrdersState>((set) => ({
+export const useOrdersStore = create<OrdersState>((set, get) => ({
   orders: [],
   loading: true,
+  updatingOrderId: null,
   pagination: null,
 
   fetchOrders: async (filters: Record<string, string> = {}, page = 1, limit = 10) => {
@@ -85,6 +88,41 @@ export const useOrdersStore = create<OrdersState>((set) => ({
     } catch (e) {
       console.error("Failed to fetch orders:", e);
       set({ loading: false });
+    }
+  },
+
+  updateOrderStatus: async (orderId: string, newStatus: string) => {
+    set({ updatingOrderId: orderId });
+    try {
+      const response = await fetch(`/api/orders/${orderId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update order status");
+      }
+
+      const currentOrders = get().orders;
+      const updatedOrders = currentOrders.map(order => 
+        order.id === orderId 
+          ? { ...order, status: newStatus }
+          : order
+      );
+
+      set({ 
+        orders: updatedOrders,
+        updatingOrderId: null 
+      });
+
+      return true;
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      set({ updatingOrderId: null });
+      return false;
     }
   },
 }));
