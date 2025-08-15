@@ -17,8 +17,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useProductAdminStore } from "@/store/admin/productStore";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ProductFormDialog } from "./Forms/ProductFormDialog";
-import Link from "next/link";
+import { ProductFormSheet } from "./Forms/ProductFormSheet";
 
 const getStatusColor = (inventory: number) => {
   if (inventory === 0) {
@@ -31,12 +30,12 @@ const getStatusColor = (inventory: number) => {
 };
 
 export function ProductsPage() {
-  const { products, loading, fetchProducts } =
-    useProductAdminStore();
+  const { products, loading, fetchProducts } = useProductAdminStore();
+  const [editingProduct, setEditingProduct] = useState<string | null>(null);
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [fetchProducts]);
 
   const renderSkeletonRow = () =>
     Array.from({ length: 5 }).map((_, i) => (
@@ -86,7 +85,7 @@ export function ProductsPage() {
               Manage your product catalog and inventory
             </p>
           </div>
-          <ProductFormDialog />
+          <ProductFormSheet />
         </div>
 
         {/* Product Table */}
@@ -131,10 +130,7 @@ export function ProductsPage() {
                         </TableCell>
                         <TableCell>{product.inventory}</TableCell>
                         <TableCell>
-                          <Badge
-                            className={getStatusColor(product.inventory)}
-                            variant="secondary"
-                          >
+                          <Badge variant="default">
                             {product.inventory === 0
                               ? "Out of Stock"
                               : product.inventory < 10
@@ -144,11 +140,23 @@ export function ProductsPage() {
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-2">
-                            <Link href={`/admin/products/${product.id}`}>
-                              <Button variant="ghost" size="sm">
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                            </Link>
+                            <ProductFormSheet
+                              isEdit={true}
+                              productId={product.id}
+                              open={editingProduct === product.id}
+                              onOpenChange={(open) => {
+                                if (!open) setEditingProduct(null);
+                              }}
+                              trigger={
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  onClick={() => setEditingProduct(product.id)}
+                                >
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                              }
+                            />
                           </div>
                         </TableCell>
                       </TableRow>
