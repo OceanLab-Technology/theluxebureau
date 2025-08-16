@@ -33,8 +33,8 @@ export async function GET(request: NextRequest) {
             { data: customersThis },
             { data: customersLast },
         ] = await Promise.all([
-            supabase.from('orders').select('*').gte('created_at', startThis).lte('created_at', endThis),
-            supabase.from('orders').select('*').gte('created_at', startLast).lte('created_at', endLast),
+            supabase.from('orders').select('*').gte('created_at', startThis).lte('created_at', endThis).eq('payment_status', 'completed'),
+            supabase.from('orders').select('*').gte('created_at', startLast).lte('created_at', endLast).eq('payment_status', 'completed'),
             supabase.from('users').select('*').gte('created_at', startThis).lte('created_at', endThis),
             supabase.from('users').select('*').gte('created_at', startLast).lte('created_at', endLast),
         ]);

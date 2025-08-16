@@ -708,7 +708,6 @@ export function AnalyticsPage() {
                       <p className="text-sm font-medium text-muted-foreground">Previous Period</p>
                       <p className="text-2xl font-bold">{formatCurrency(data?.revenueGrowth.previous_period_revenue || 0)}</p>
                     </div>
-                    <Calendar className="h-8 w-8 text-muted-foreground" />
                   </div>
                   
                   <div className={`flex items-center justify-between p-4 rounded-lg ${
