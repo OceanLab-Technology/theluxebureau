@@ -197,7 +197,7 @@ export function CustomersPage() {
                               updateCustomer(customer.id, { status: newStatus })
                             }
                           >
-                            <SelectTrigger className="w-[120px]">
+                            <SelectTrigger className="w-[120px] h-8">
                               <SelectValue placeholder="Select status" />
                             </SelectTrigger>
                             <SelectContent>

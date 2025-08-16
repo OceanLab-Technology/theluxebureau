@@ -137,6 +137,14 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
+
+    // pagination params
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("limit") || "10", 10);
+    const offset = (page - 1) * limit;
+
+
+
     const preset = searchParams.get("preset") || "last30days";
     const customStart = searchParams.get("startDate");
     const customEnd = searchParams.get("endDate");
@@ -212,13 +220,13 @@ export async function GET(request: NextRequest) {
         // Category revenue aggregation
         const category = product.category || "Uncategorized";
         const existingCategory = categoryRevenueMap.get(category);
-        
+
         // Track unique products per category
         if (!categoryProductsSet.has(category)) {
           categoryProductsSet.set(category, new Set());
         }
         categoryProductsSet.get(category)!.add(product.id);
-        
+
         if (existingCategory) {
           existingCategory.total_revenue += itemRevenue;
           existingCategory.total_quantity += item.quantity;
@@ -236,10 +244,18 @@ export async function GET(request: NextRequest) {
 
     // Convert maps to arrays and sort
     const productSalesArray = Array.from(productSalesMap.values());
-    const mostSellingProducts = productSalesArray.sort(
+    // const mostSellingProducts = productSalesArray.sort(
+    //   (a, b) => b.total_quantity - a.total_quantity
+    // );
+    // const leastSellingProducts = productSalesArray.sort(
+    //   (a, b) => a.total_quantity - b.total_quantity
+    // );
+
+    const mostSellingProducts = [...productSalesArray].sort(
       (a, b) => b.total_quantity - a.total_quantity
     );
-    const leastSellingProducts = productSalesArray.sort(
+
+    const leastSellingProducts = [...productSalesArray].sort(
       (a, b) => a.total_quantity - b.total_quantity
     );
 
@@ -371,10 +387,33 @@ export async function GET(request: NextRequest) {
       comparisonData,
     };
 
-    return NextResponse.json({
+    const paginatedMostSelling = mostSellingProducts.slice(offset, offset + limit);
+    const paginatedLeastSelling = leastSellingProducts.slice(offset, offset + limit);
+    const paginatedRevenueByProduct = revenueByProduct.slice(offset, offset + limit);
+
+
+
+    // return NextResponse.json({
+    //   success: true,
+    //   data: analyticsData,
+    // });
+        return NextResponse.json({
       success: true,
-      data: analyticsData,
+      data: {
+        ...analyticsData,
+        mostSellingProducts: paginatedMostSelling,
+        leastSellingProducts: paginatedLeastSelling,
+        revenueByProduct: paginatedRevenueByProduct,
+      },
+      pagination: {
+        page,
+        limit,
+        totalMostSelling: mostSellingProducts.length,
+        totalLeastSelling: leastSellingProducts.length,
+        totalRevenueByProduct: revenueByProduct.length,
+      },
     });
+
   } catch (error) {
     return handleError(error);
   }

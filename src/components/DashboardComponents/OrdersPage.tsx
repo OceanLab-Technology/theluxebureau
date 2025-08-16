@@ -92,7 +92,7 @@ export function OrdersPage() {
       <div className="flex-1 space-y-4 p-8 pt-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-semibold font-century">ORDERS</h2>
+            <h2 className="text-3xl font-semibold font-century">Orders</h2>
             <p className="text-muted-foreground">
               Manage and track customer orders
             </p>
@@ -100,6 +100,7 @@ export function OrdersPage() {
           <div className="flex items-center gap-2">
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[180px] bg-foreground text-background font-century">
+              {/* <SelectTrigger className="bg-foreground w-[145px] text-sm text-background font-century"> */}
                 <Filter className="mr-2 h-4 w-4 text-background" />
                 <SelectValue placeholder="Filter orders" />
               </SelectTrigger>
@@ -197,7 +198,7 @@ export function OrdersPage() {
                             }
                             disabled={updatingOrderId === order.id}
                           >
-                            <SelectTrigger className="border-stone-300 hover:bg-secondary bg-transparent py-0 focus:ring-0">
+                            <SelectTrigger className="w-[130px] h-6 text-[15px] border-stone-300 hover:bg-secondary bg-transparent py-0 focus:ring-0">
                               <div className="flex items-center gap-2">
                                 {updatingOrderId === order.id ? (
                                   <>
