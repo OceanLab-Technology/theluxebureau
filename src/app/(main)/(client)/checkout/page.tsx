@@ -13,29 +13,51 @@ import Link from "next/link";
 import Script from "next/script";
 
 export default function CheckoutPage() {
-  const { cartItems, products, fetchCartItems, fetchProducts, cartLoading, isAuthenticated, checkAuthStatus } =
-    useMainStore();
+  const {
+    cartItems,
+    products,
+    fetchCartItems,
+    fetchProducts,
+    cartLoading,
+    isAuthenticated,
+    checkAuthStatus,
+  } = useMainStore();
   const { items: guestItems } = useGuestCartStore();
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     const initCheckout = async () => {
-      await checkAuthStatus();
-      await fetchCartItems();
-      if (products.length === 0) {
-        await fetchProducts();
+      if (isInitialized) return;
+
+      try {
+        if (isAuthenticated === null) {
+          await checkAuthStatus();
+        }
+
+        if (cartItems.length === 0 && guestItems.length === 0) {
+          await fetchCartItems();
+        }
+
+        if (products.length === 0) {
+          await fetchProducts();
+        }
+
+        setIsInitialized(true);
+      } catch (error) {
+        console.error("Failed to initialize checkout:", error);
       }
     };
-    
+
     initCheckout();
-  }, [checkAuthStatus, fetchCartItems, fetchProducts, products.length]);
+  }, [isInitialized]); // Only depend on isInitialized
 
   useEffect(() => {
-    // If user is not authenticated, show login modal
-    if (isAuthenticated === false) {
+    // If user is not authenticated and we've finished initialization, show login modal
+    if (isAuthenticated === false && isInitialized) {
       setShowLoginModal(true);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, isInitialized]);
 
   const checkoutItems: Product[] = useMemo(() => {
     if (isAuthenticated) {
@@ -109,7 +131,11 @@ export default function CheckoutPage() {
           <div className="grid lg:grid-cols-2 gap-12 grid-cols-1">
             <div className="flex flex-col md:space-y-4 space-y-10">
               {checkoutItems.map((product, index) => (
-                <DetailProductCard key={product.id} product={product} index={index} />
+                <DetailProductCard
+                  key={product.id}
+                  product={product}
+                  index={index}
+                />
               ))}
             </div>
 
@@ -178,11 +204,14 @@ export default function CheckoutPage() {
                   <CheckoutContainer items={checkoutItems} />
                 ) : (
                   <div className="p-6 bg-muted/20 rounded-lg text-center">
-                    <h3 className="text-lg font-semibold mb-2">Login Required</h3>
+                    <h3 className="text-lg font-semibold mb-2">
+                      Login Required
+                    </h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Please login to continue with your purchase. Your cart items will be saved.
+                      Please login to continue with your purchase. Your cart
+                      items will be saved.
                     </p>
-                    <Button 
+                    <Button
                       onClick={() => setShowLoginModal(true)}
                       className="w-full"
                       variant="box_yellow"
