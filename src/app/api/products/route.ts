@@ -51,6 +51,7 @@ export const POST = withAdminAuth(
     
       const description = formData.get('description') as string || null;
       const title = formData.get('title') as string || null;
+      const packaging = formData.get('packaging') as string || null;
       const why_we_chose_it = formData.get('why_we_chose_it') as string || null;
       const about_the_maker = formData.get('about_the_maker') as string || null;
       const particulars = formData.get('particulars') as string || null;
@@ -77,6 +78,7 @@ export const POST = withAdminAuth(
           category, 
           description, 
           title, 
+          packaging,
           why_we_chose_it, 
           about_the_maker, 
           particulars, 

@@ -102,9 +102,11 @@ export interface Product {
   image_3?: string;
   image_4?: string;
   image_5?: string;
+  packaging?: string; // URL of selected packaging
   why_we_chose_it?: string;
   about_the_maker?: string;
   particulars?: string;
+  least_inventory_trigger?: number;
   created_at?: string;
   updated_at?: string;
   // Computed fields for frontend compatibility
@@ -133,6 +135,7 @@ export interface SiteSetting {
     text: string;
     author: string;
   }[];
+  packaging: PackagingSetting[];
   api_key?: string;
   created_at?: string;
   updated_at?: string;
@@ -141,6 +144,13 @@ export interface SiteSetting {
 export interface FontSetting {
   name: string;
   url: string;
+}
+
+export interface PackagingSetting {
+  id: string;
+  title: string;
+  image_url: string;
+  created_at?: string;
 }
 
 export interface TeamInvitation {

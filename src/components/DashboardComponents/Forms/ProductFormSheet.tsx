@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -28,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useProductAdminStore } from "@/store/admin/productStore";
+import { useSiteSettingsStore } from "@/store/admin/siteSettingsStore";
 import {
   Upload,
   X,
@@ -48,6 +47,7 @@ const productSchema = z.object({
   title: z.string().optional(),
   slug: z.string().min(1, "Slug is required"),
   category: z.string().min(1, "Category is required"),
+  packaging: z.string().optional(),
   why_we_chose_it: z.string().min(1, "Why we chose it is required"),
   about_the_maker: z.string().min(1, "About the maker is required"),
   particulars: z.string().min(1, "Particulars are required"),
@@ -77,7 +77,7 @@ export function ProductFormSheet({
 }: ProductFormSheetProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("form");
-  const [images, setImages] = useState<File[]>([]);
+  const [images, setImages] = useState<(File | string)[]>([]);
   const [customCategory, setCustomCategory] = useState("");
   const [showCustomCategory, setShowCustomCategory] = useState(false);
 
@@ -95,6 +95,12 @@ export function ProductFormSheet({
     loading,
   } = useProductAdminStore();
 
+  const { 
+    settings: siteSettings, 
+    fetchSettings 
+  } = useSiteSettingsStore();
+
+  
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: {
@@ -105,6 +111,7 @@ export function ProductFormSheet({
       title: "",
       slug: "",
       category: "",
+      packaging: "",
       why_we_chose_it: "",
       about_the_maker: "",
       particulars: "",
@@ -117,6 +124,7 @@ export function ProductFormSheet({
   useEffect(() => {
     if (open) {
       fetchCategories();
+      fetchSettings();
       if (isEdit && productId) {
         fetchProductById(productId);
       } else {
@@ -129,6 +137,7 @@ export function ProductFormSheet({
           title: "",
           slug: "",
           category: "",
+          packaging: "",
           why_we_chose_it: "",
           about_the_maker: "",
           particulars: "",
@@ -137,7 +146,7 @@ export function ProductFormSheet({
         setImages([]);
       }
     }
-  }, [open, isEdit, productId, fetchCategories, fetchProductById, form]);
+  }, [open, isEdit, productId, fetchCategories, fetchSettings, fetchProductById, form]);
 
   useEffect(() => {
     if (isEdit && selectedProduct) {
@@ -149,11 +158,19 @@ export function ProductFormSheet({
         title: selectedProduct.title || "",
         slug: selectedProduct.slug || "",
         category: selectedProduct.category || "",
+        packaging: selectedProduct.packaging || "",
         why_we_chose_it: selectedProduct.why_we_chose_it || "",
         about_the_maker: selectedProduct.about_the_maker || "",
         particulars: selectedProduct.particulars || "",
         least_inventory_trigger: selectedProduct.least_inventory_trigger || 5,
       });
+      setImages([
+        selectedProduct.image_1,
+        selectedProduct.image_2,
+        selectedProduct.image_3,
+        selectedProduct.image_4,
+        selectedProduct.image_5,
+      ].filter((img): img is string => Boolean(img)));
     }
   }, [isEdit, selectedProduct, form]);
 
@@ -244,15 +261,7 @@ export function ProductFormSheet({
     const formData = form.getValues();
     const previewImages =
       images.length > 0
-        ? images.map((img) => URL.createObjectURL(img))
-        : isEdit && selectedProduct
-        ? [
-            selectedProduct.image_1,
-            selectedProduct.image_2,
-            selectedProduct.image_3,
-            selectedProduct.image_4,
-            selectedProduct.image_5,
-          ].filter((img): img is string => Boolean(img))
+        ? images.map((img) => typeof img === 'string' ? img : URL.createObjectURL(img))
         : [];
 
     return (
@@ -337,6 +346,31 @@ export function ProductFormSheet({
                 </div>
               )}
             </div>
+
+            {formData.packaging && (
+              <div>
+                <Label className="small-text text-muted-foreground">Packaging</Label>
+                {(() => {
+                  const selectedPackaging = siteSettings.packaging?.find(
+                    (pkg) => pkg.image_url === formData.packaging
+                  );
+                  return selectedPackaging ? (
+                    <div className="flex items-center gap-3 mt-1">
+                      <img
+                        src={selectedPackaging.image_url}
+                        alt={selectedPackaging.title}
+                        className="w-8 h-8 object-cover rounded"
+                      />
+                      <span className="text-sm">
+                        {selectedPackaging.title}
+                      </span>
+                    </div>
+                  ) : (
+                    <p className="text-sm">Custom packaging selected</p>
+                  );
+                })()}
+              </div>
+            )}
 
             {(formData.why_we_chose_it ||
               formData.about_the_maker ||
@@ -593,6 +627,59 @@ export function ProductFormSheet({
                     </p>
                   )}
                 </div>
+
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-1">
+                    Packaging (Optional)
+                  </Label>
+                  <Select
+                    onValueChange={(value) => form.setValue("packaging", value === "none" ? "" : value)}
+                    value={form.getValues("packaging") || "none"}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select packaging option" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">No packaging</SelectItem>
+                      {siteSettings.packaging?.map((pkg) => (
+                        <SelectItem key={pkg.id} value={pkg.image_url}>
+                          <div className="flex items-center gap-2">
+                            <img
+                              src={pkg.image_url}
+                              alt={pkg.title}
+                              className="w-6 h-6 object-cover rounded"
+                            />
+                            {pkg.title}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {form.getValues("packaging") && (
+                    <div className="mt-2">
+                      <Label className="text-sm text-muted-foreground">Selected packaging preview:</Label>
+                      <div className="mt-1 p-2 border rounded-lg bg-muted/10">
+                        {(() => {
+                          const selectedPackaging = siteSettings.packaging?.find(
+                            (pkg) => pkg.image_url === form.getValues("packaging")
+                          );
+                          return selectedPackaging ? (
+                            <div className="flex items-center gap-3">
+                              <img
+                                src={selectedPackaging.image_url}
+                                alt={selectedPackaging.title}
+                                className="w-12 h-12 object-cover rounded"
+                              />
+                              <span className="text-sm font-medium">
+                                {selectedPackaging.title}
+                              </span>
+                            </div>
+                          ) : null;
+                        })()}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="space-y-6">
@@ -631,7 +718,7 @@ export function ProductFormSheet({
                         <div key={i} className="relative group">
                           <div className="aspect-square overflow-hidden rounded-lg border bg-muted/20">
                             <Image
-                              src={URL.createObjectURL(img)}
+                              src={typeof img === 'string' ? img : URL.createObjectURL(img)}
                               alt={`Preview ${i + 1}`}
                               width={200}
                               height={200}

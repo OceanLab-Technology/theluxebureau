@@ -4,6 +4,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { usePersonaliseStore } from "@/store/personaliseStore";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
+import { useMainStore } from "@/store/mainStore";
 
 interface FontSetting {
   name: string;
@@ -22,6 +23,7 @@ interface SiteSettings {
 export default function SummaryStep() {
   const { formData, selectedProduct } = usePersonaliseStore();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const { currentProduct } = useMainStore();
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const [fontLoaded, setFontLoaded] = useState(false);
 
@@ -297,7 +299,7 @@ export default function SummaryStep() {
                   >
                     <div className="max-w-xs w-full absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-1/2">
                       <div className="text-center mb-10 absolute md:top-3 top-2 left-1/2 transform -translate-x-1/2 w-full z-30">
-                        <span 
+                        <span
                           className="text-center md:text-[0.70rem] text-[10px]"
                           style={getHeaderStyle()}
                         >
@@ -306,14 +308,11 @@ export default function SummaryStep() {
                       </div>
 
                       <div className="text-center font-[Monospace] md:w-72 w-56 mx-auto absolute inset-0 flex items-center justify-center md:p-12 flex-col">
-                        <span 
-                          className="text-secondary-foreground md:text-[0.45rem] text-[8px] flex flex-col"
-                        >
-                          {formData.customMessage.split("\n")[0] || "No custom message"}
+                        <span className="text-secondary-foreground md:text-[0.45rem] text-[8px] flex flex-col">
+                          {formData.customMessage.split("\n")[0] ||
+                            "No custom message"}
                         </span>
-                        <span
-                          className="text-secondary-foreground md:text-[0.45rem] text-[8px] flex flex-col"
-                        >
+                        <span className="text-secondary-foreground md:text-[0.45rem] text-[8px] flex flex-col">
                           {formData.customMessage.split("\n")[1] || ""}
                         </span>
                       </div>
@@ -323,7 +322,7 @@ export default function SummaryStep() {
 
                 <div className="h-[34vh] md:w-[50%] w-full rounded-none flex items-center justify-center flex-shrink-0">
                   <img
-                    src="/Bag.png"
+                    src={currentProduct?.packaging!}
                     alt=""
                     className="h-full w-full object-cover"
                   />

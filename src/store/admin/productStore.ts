@@ -15,6 +15,7 @@ export type Product = {
   image_5?: string;
   slug?: string;
   category: string;
+  packaging?: string;
   why_we_chose_it?: string;
   about_the_maker?: string;
   particulars?: string;
