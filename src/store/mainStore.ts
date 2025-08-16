@@ -28,17 +28,25 @@ interface MainStore {
 
   // Cart actions - now handles both authenticated and guest carts
   fetchCartItems: () => Promise<void>;
-  addToCart: (productId: string, quantity: number, customData?: Record<string, any>) => Promise<void>;
-  updateCartItem: (itemId: string, quantity: number, customData?: Record<string, any>) => Promise<void>;
+  addToCart: (
+    productId: string,
+    quantity: number,
+    customData?: Record<string, any>
+  ) => Promise<void>;
+  updateCartItem: (
+    itemId: string,
+    quantity: number,
+    customData?: Record<string, any>
+  ) => Promise<void>;
   removeFromCart: (itemId: string) => Promise<void>;
   clearCart: () => Promise<void>;
   calculateCartTotal: () => void;
-  
+
   // Authentication helpers
   checkAuthStatus: () => Promise<boolean>;
   handleLoginSuccess: () => Promise<void>;
   handleLogout: () => void;
-  
+
   // Global reset method
   resetStore: () => void;
 }
@@ -61,6 +69,14 @@ export const useMainStore = create<MainStore>()(
       isAuthenticated: null,
 
       fetchProducts: async (params = {}) => {
+        const currentState = get();
+        if (
+          currentState.loading ||
+          (currentState.products.length > 0 && Object.keys(params).length === 0)
+        ) {
+          return;
+        }
+
         try {
           set({ loading: true, error: null });
 
@@ -117,24 +133,28 @@ export const useMainStore = create<MainStore>()(
       },
 
       fetchCartItems: async () => {
+        const currentState = get();
+        if (currentState.cartLoading) {
+          return;
+        }
+
         try {
           set({ cartLoading: true, cartError: null });
+          const isAuth = currentState.isAuthenticated;
 
-          // Check if user is authenticated
-          const isAuth = get().isAuthenticated;
-          
           if (isAuth === null) {
-            // Check authentication status first
             await get().checkAuthStatus();
           }
 
           if (get().isAuthenticated) {
             // Fetch from API for authenticated users
-            const response = await fetch('/api/cart');
+            const response = await fetch("/api/cart");
             const apiResponse: ApiResponse<CartItem[]> = await response.json();
 
             if (!response.ok) {
-              throw new Error(apiResponse.error || "Failed to fetch cart items");
+              throw new Error(
+                apiResponse.error || "Failed to fetch cart items"
+              );
             }
 
             const cartItems = apiResponse.data || [];
@@ -147,11 +167,11 @@ export const useMainStore = create<MainStore>()(
             // Use guest cart for non-authenticated users
             const guestStore = useGuestCartStore.getState();
             const guestItems = guestStore.items;
-            
+
             // Convert guest items to cart item format for display
-            const cartItems: CartItem[] = guestItems.map(item => ({
+            const cartItems: CartItem[] = guestItems.map((item) => ({
               id: item.id,
-              user_id: 'guest',
+              user_id: "guest",
               product_id: item.product_id,
               quantity: item.quantity,
               custom_data: item.custom_data || {},
@@ -170,22 +190,27 @@ export const useMainStore = create<MainStore>()(
           get().calculateCartTotal();
         } catch (error) {
           set({
-            cartError: error instanceof Error ? error.message : "Failed to fetch cart",
+            cartError:
+              error instanceof Error ? error.message : "Failed to fetch cart",
             cartLoading: false,
           });
         }
       },
 
-      addToCart: async (productId: string, quantity: number, customData?: Record<string, any>) => {
+      addToCart: async (
+        productId: string,
+        quantity: number,
+        customData?: Record<string, any>
+      ) => {
         try {
           set({ cartLoading: true, cartError: null });
 
           if (get().isAuthenticated) {
             // Add to authenticated user's cart via API
-            const response = await fetch('/api/cart', {
-              method: 'POST',
+            const response = await fetch("/api/cart", {
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
               body: JSON.stringify({
                 product_id: productId,
@@ -197,38 +222,110 @@ export const useMainStore = create<MainStore>()(
             const apiResponse: ApiResponse<CartItem> = await response.json();
 
             if (!response.ok) {
-              throw new Error(apiResponse.error || "Failed to add item to cart");
+              throw new Error(
+                apiResponse.error || "Failed to add item to cart"
+              );
             }
 
-            // Refresh cart items
-            await get().fetchCartItems();
+            // Optimistically update the cart items with the new item
+            const newCartItem = apiResponse.data;
+            if (!newCartItem) {
+              throw new Error("Failed to get cart item data");
+            }
+
+            const currentCartItems = get().cartItems;
+
+            // Check if item already exists in cart
+            const existingItemIndex = currentCartItems.findIndex(
+              (item) =>
+                item.product_id === productId &&
+                JSON.stringify(item.custom_data) === JSON.stringify(customData)
+            );
+
+            let updatedCartItems: CartItem[];
+            if (existingItemIndex >= 0) {
+              // Update existing item quantity
+              updatedCartItems = currentCartItems.map((item, index) =>
+                index === existingItemIndex
+                  ? { ...item, quantity: item.quantity + quantity }
+                  : item
+              );
+            } else {
+              // Add new item
+              updatedCartItems = [...currentCartItems, newCartItem];
+            }
+
+            set({
+              cartItems: updatedCartItems,
+              cartLoading: false,
+            });
+
+            // Calculate totals immediately
+            get().calculateCartTotal();
           } else {
             // Add to guest cart
             const guestStore = useGuestCartStore.getState();
             guestStore.addItem(productId, quantity, customData);
-            
-            // Update local cart display
-            await get().fetchCartItems();
+
+            // Update local cart display immediately
+            const guestItems = guestStore.items;
+            const cartItems: CartItem[] = guestItems.map((item) => ({
+              id: item.id,
+              user_id: "guest",
+              product_id: item.product_id,
+              quantity: item.quantity,
+              custom_data: item.custom_data || {},
+              created_at: item.added_at,
+              updated_at: item.added_at,
+            }));
+
+            set({
+              cartItems,
+              cartLoading: false,
+            });
+
+            // Calculate totals immediately
+            get().calculateCartTotal();
           }
         } catch (error) {
           set({
-            cartError: error instanceof Error ? error.message : "Failed to add to cart",
+            cartError:
+              error instanceof Error ? error.message : "Failed to add to cart",
             cartLoading: false,
           });
           throw error; // Re-throw so AddToCartButton can handle it
         }
       },
 
-      updateCartItem: async (itemId: string, quantity: number, customData?: Record<string, any>) => {
+      updateCartItem: async (
+        itemId: string,
+        quantity: number,
+        customData?: Record<string, any>
+      ) => {
         try {
-          set({ cartLoading: true, cartError: null });
+          // Optimistically update the UI first
+          const currentCartItems = get().cartItems;
+          const optimisticCartItems = currentCartItems.map((item) =>
+            item.id === itemId
+              ? { ...item, quantity, custom_data: customData }
+              : item
+          );
+
+          set({
+            cartItems: optimisticCartItems,
+            cartLoading: true,
+            cartError: null,
+          });
+
+          // Calculate totals immediately
+          get().calculateCartTotal();
 
           if (get().isAuthenticated) {
             // Update authenticated user's cart via API
             const response = await fetch(`/api/cart/${itemId}`, {
-              method: 'PUT',
+              method: "PUT",
               headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
               body: JSON.stringify({
                 quantity,
@@ -239,27 +336,28 @@ export const useMainStore = create<MainStore>()(
             const apiResponse: ApiResponse<CartItem> = await response.json();
 
             if (!response.ok) {
-              throw new Error(apiResponse.error || "Failed to update cart item");
+              // Revert optimistic update on error
+              set({ cartItems: currentCartItems });
+              get().calculateCartTotal();
+              throw new Error(
+                apiResponse.error || "Failed to update cart item"
+              );
             }
 
-            // Update local state optimistically
-            const cartItems = get().cartItems.map(item =>
-              item.id === itemId ? { ...item, quantity, custom_data: customData } : item
-            );
-
-            set({ cartItems, cartLoading: false });
-            get().calculateCartTotal();
+            set({ cartLoading: false });
           } else {
             // Update guest cart
             const guestStore = useGuestCartStore.getState();
             guestStore.updateItem(itemId, quantity, customData);
-            
-            // Update local cart display
-            await get().fetchCartItems();
+
+            set({ cartLoading: false });
           }
         } catch (error) {
           set({
-            cartError: error instanceof Error ? error.message : "Failed to update cart item",
+            cartError:
+              error instanceof Error
+                ? error.message
+                : "Failed to update cart item",
             cartLoading: false,
           });
         }
@@ -267,36 +365,53 @@ export const useMainStore = create<MainStore>()(
 
       removeFromCart: async (itemId: string) => {
         try {
-          set({ cartLoading: true, cartError: null });
+          // Optimistically update the UI first
+          const currentCartItems = get().cartItems;
+          const optimisticCartItems = currentCartItems.filter(
+            (item) => item.id !== itemId
+          );
+
+          set({
+            cartItems: optimisticCartItems,
+            cartLoading: true,
+            cartError: null,
+          });
+
+          // Calculate totals immediately
+          get().calculateCartTotal();
+          toast.success(`Item removed from cart`);
 
           if (get().isAuthenticated) {
             // Remove from authenticated user's cart via API
             const response = await fetch(`/api/cart/${itemId}`, {
-              method: 'DELETE',
+              method: "DELETE",
             });
 
             const apiResponse: ApiResponse<void> = await response.json();
 
             if (!response.ok) {
-              throw new Error(apiResponse.error || "Failed to remove item from cart");
+              // Revert optimistic update on error
+              set({ cartItems: currentCartItems });
+              get().calculateCartTotal();
+              throw new Error(
+                apiResponse.error || "Failed to remove item from cart"
+              );
             }
 
-            const cartItems = get().cartItems.filter(item => item.id !== itemId);
-            set({ cartItems, cartLoading: false });
-            toast.success(`Item removed from cart`);
-            get().calculateCartTotal();
+            set({ cartLoading: false });
           } else {
             // Remove from guest cart
             const guestStore = useGuestCartStore.getState();
             guestStore.removeItem(itemId);
-            
-            // Update local cart display
-            await get().fetchCartItems();
-            toast.success(`Item removed from cart`);
+
+            set({ cartLoading: false });
           }
         } catch (error) {
           set({
-            cartError: error instanceof Error ? error.message : "Failed to remove from cart",
+            cartError:
+              error instanceof Error
+                ? error.message
+                : "Failed to remove from cart",
             cartLoading: false,
           });
         }
@@ -308,8 +423,8 @@ export const useMainStore = create<MainStore>()(
 
           if (get().isAuthenticated) {
             // Clear authenticated user's cart via API
-            const response = await fetch('/api/cart', {
-              method: 'DELETE',
+            const response = await fetch("/api/cart", {
+              method: "DELETE",
             });
 
             const apiResponse: ApiResponse<void> = await response.json();
@@ -331,7 +446,8 @@ export const useMainStore = create<MainStore>()(
           });
         } catch (error) {
           set({
-            cartError: error instanceof Error ? error.message : "Failed to clear cart",
+            cartError:
+              error instanceof Error ? error.message : "Failed to clear cart",
             cartLoading: false,
           });
         }
@@ -342,8 +458,8 @@ export const useMainStore = create<MainStore>()(
         let total = 0;
         let itemCount = 0;
 
-        cartItems.forEach(item => {
-          const product = products.find(p => p.id === item.product_id);
+        cartItems.forEach((item) => {
+          const product = products.find((p) => p.id === item.product_id);
           if (product && product.price) {
             total += product.price * item.quantity;
           }
@@ -354,11 +470,21 @@ export const useMainStore = create<MainStore>()(
       },
 
       checkAuthStatus: async () => {
+        const currentState = get();
+
+        // If we already know the auth status, don't check again
+        if (currentState.isAuthenticated !== null) {
+          return currentState.isAuthenticated;
+        }
+
         try {
           const supabase = createClient();
-          const { data: { user } } = await supabase.auth.getUser();
-          set({ isAuthenticated: !!user });
-          return !!user;
+          const {
+            data: { user },
+          } = await supabase.auth.getUser();
+          const isAuth = !!user;
+          set({ isAuthenticated: isAuth });
+          return isAuth;
         } catch (error) {
           set({ isAuthenticated: false });
           return false;
@@ -367,19 +493,19 @@ export const useMainStore = create<MainStore>()(
 
       handleLoginSuccess: async () => {
         set({ isAuthenticated: true });
-        
+
         // Migrate guest cart to user cart
         const guestStore = useGuestCartStore.getState();
         const guestItems = guestStore.items;
-        
+
         if (guestItems.length > 0) {
           try {
             // Migrate each guest cart item to user cart
             for (const item of guestItems) {
-              await fetch('/api/cart', {
-                method: 'POST',
+              await fetch("/api/cart", {
+                method: "POST",
                 headers: {
-                  'Content-Type': 'application/json',
+                  "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                   product_id: item.product_id,
@@ -388,30 +514,30 @@ export const useMainStore = create<MainStore>()(
                 }),
               });
             }
-            
+
             // Clear guest cart after successful migration
             guestStore.clearCart();
             guestStore.mergeWithUserCart([]);
-            
-            toast.success('Cart items migrated successfully!');
+
+            toast.success("Cart items migrated successfully!");
           } catch (error) {
-            console.error('Failed to migrate cart items:', error);
-            toast.error('Failed to migrate cart items');
+            console.error("Failed to migrate cart items:", error);
+            toast.error("Failed to migrate cart items");
           }
         }
-        
+
         // Fetch updated cart
         await get().fetchCartItems();
       },
 
       handleLogout: () => {
-        set({ 
+        set({
           isAuthenticated: false,
           cartItems: [],
           cartTotal: 0,
           cartItemCount: 0,
         });
-        
+
         // Reset guest cart store to guest mode
         const guestStore = useGuestCartStore.getState();
         guestStore.clearCart();
@@ -435,7 +561,7 @@ export const useMainStore = create<MainStore>()(
       },
     }),
     {
-      name: 'main-store',
+      name: "main-store",
       partialize: (state) => ({
         cartItems: state.cartItems,
         cartTotal: state.cartTotal,

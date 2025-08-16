@@ -49,15 +49,19 @@ export const POST = withAdminAuth(
       const inventory = parseInt(formData.get('inventory') as string);
       const category = formData.get('category') as string;
     
-      const description = formData.get('category') as string || null;
+      const description = formData.get('description') as string || null;
       const title = formData.get('title') as string || null;
+      const packaging = formData.get('packaging') as string || null;
       const why_we_chose_it = formData.get('why_we_chose_it') as string || null;
       const about_the_maker = formData.get('about_the_maker') as string || null;
       const particulars = formData.get('particulars') as string || null;
-      const slug = formData.get('category') as string;
+      const slug = formData.get('slug') as string;
+      const least_inventory_trigger = formData.get('least_inventory_trigger') 
+        ? parseInt(formData.get('least_inventory_trigger') as string) 
+        : null;
 
 
-      if (!name || isNaN(price) || isNaN(inventory) || !category) {
+      if (!name || isNaN(price) || isNaN(inventory) || !category || !slug) {
         return NextResponse.json(
           { success: false, error: 'Missing required fields' },
           { status: 400 }
@@ -67,7 +71,20 @@ export const POST = withAdminAuth(
       // 1. Insert product without images
       const { data: created, error: insertErr } = await supabase
         .from('products')
-        .insert({ name, price, inventory, category, description, title, why_we_chose_it, about_the_maker, particulars, slug })
+        .insert({ 
+          name, 
+          price, 
+          inventory, 
+          category, 
+          description, 
+          title, 
+          packaging,
+          why_we_chose_it, 
+          about_the_maker, 
+          particulars, 
+          slug,
+          least_inventory_trigger
+        })
         .select()
         .single();
 

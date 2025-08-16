@@ -1,26 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { handleError } from "../utils";
-import { SiteSetting, FontSetting, ApiResponse } from "../types";
+import {
+  SiteSetting,
+  FontSetting,
+} from "../types";
 
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient();
-    
+
     const { data, error } = await supabase
       .from("site_settings")
       .select("*")
       .single();
 
-    if (error && error.code !== 'PGRST116') {
+    if (error && error.code !== "PGRST116") {
       throw error;
     }
 
-    const settings: SiteSetting = data || {
-      fonts: [],
-      quotes: [],
-      api_key: null
-    };
+    const settings: SiteSetting = data;
 
     return NextResponse.json({
       success: true,
@@ -59,6 +58,100 @@ export async function POST(request: NextRequest) {
     }
 
     const formData = await request.formData();
+    const type = formData.get("type") as string;
+
+    if (type === "packaging") {
+      const title = formData.get("title") as string;
+      const imageFile = formData.get("imageFile") as File;
+
+      if (!title || !imageFile) {
+        return NextResponse.json(
+          { success: false, error: "Title and image file are required" },
+          { status: 400 }
+        );
+      }
+
+      const packagingId = `${Date.now()}-${title.replace(/\s+/g, "-")}`;
+      const fileName = `${packagingId}-${imageFile.name.replace(/\s+/g, "-")}`;
+
+      const { error: uploadErr } = await supabase.storage
+        .from("packaging")
+        .upload(fileName, imageFile, { upsert: true });
+
+      if (uploadErr) {
+        console.log("Packaging upload error:", uploadErr);
+        return NextResponse.json(
+          { success: false, error: "Failed to upload packaging image" },
+          { status: 500 }
+        );
+      }
+
+      const { data: publicUrlData } = supabase.storage
+        .from("packaging")
+        .getPublicUrl(fileName);
+
+      if (!publicUrlData?.publicUrl) {
+        return NextResponse.json(
+          { success: false, error: "Failed to get public URL for packaging" },
+          { status: 500 }
+        );
+      }
+
+      const { data: currentSettings } = await supabase
+        .from("site_settings")
+        .select("*")
+        .single();
+
+      const newPackaging = {
+        id: packagingId,
+        title: title,
+        image_url: publicUrlData.publicUrl,
+        created_at: new Date().toISOString(),
+      };
+
+      const packaging = currentSettings?.packaging || [];
+      packaging.push(newPackaging);
+
+      const updateData = {
+        packaging: packaging,
+        updated_at: new Date().toISOString(),
+      };
+
+      if (currentSettings) {
+        const { data, error } = await supabase
+          .from("site_settings")
+          .update(updateData)
+          .eq("id", currentSettings.id)
+          .select()
+          .single();
+
+        if (error) throw error;
+        return NextResponse.json({
+          success: true,
+          data: data,
+          message: "Packaging uploaded and added successfully",
+        });
+      } else {
+        const { data, error } = await supabase
+          .from("site_settings")
+          .insert({
+            ...updateData,
+            fonts: [],
+            quotes: [],
+            api_key: null,
+          })
+          .select()
+          .single();
+
+        if (error) throw error;
+        return NextResponse.json({
+          success: true,
+          data: data,
+          message: "Packaging uploaded and settings created successfully",
+        });
+      }
+    }
+
     const fontName = formData.get("fontName") as string;
     const fontFile = formData.get("fontFile") as File;
 
@@ -99,14 +192,16 @@ export async function POST(request: NextRequest) {
 
     const newFont: FontSetting = {
       name: fontName,
-      url: publicUrlData.publicUrl
+      url: publicUrlData.publicUrl,
     };
 
     const fonts = currentSettings?.fonts || [];
-    const existingFontIndex = fonts.findIndex((font: FontSetting) => font.name === fontName);
-    
+    const existingFontIndex = fonts.findIndex(
+      (font: FontSetting) => font.name === fontName
+    );
+
     if (existingFontIndex >= 0) {
-      fonts[existingFontIndex] = newFont; 
+      fonts[existingFontIndex] = newFont;
     } else {
       fonts.push(newFont);
     }
@@ -136,7 +231,7 @@ export async function POST(request: NextRequest) {
         .insert({
           ...updateData,
           quotes: [],
-          api_key: null
+          api_key: null,
         })
         .select()
         .single();
@@ -148,7 +243,6 @@ export async function POST(request: NextRequest) {
         message: "Font uploaded and settings created successfully",
       });
     }
-
   } catch (error) {
     return handleError(error);
   }
@@ -183,7 +277,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { fonts, quotes, api_key } = body;
+    const { fonts, quotes, packaging, api_key } = body;
 
     // Get current settings
     const { data: currentSettings } = await supabase
@@ -197,6 +291,7 @@ export async function PUT(request: NextRequest) {
 
     if (fonts !== undefined) updateData.fonts = fonts;
     if (quotes !== undefined) updateData.quotes = quotes;
+    if (packaging !== undefined) updateData.packaging = packaging;
     if (api_key !== undefined) updateData.api_key = api_key;
 
     if (currentSettings) {
@@ -219,6 +314,7 @@ export async function PUT(request: NextRequest) {
         .insert({
           fonts: fonts || [],
           quotes: quotes || [],
+          packaging: packaging || [],
           api_key: api_key || null,
         })
         .select()
@@ -268,10 +364,14 @@ export async function DELETE(request: NextRequest) {
     const type = searchParams.get("type");
     const fontName = searchParams.get("fontName");
     const quoteIndex = searchParams.get("quoteIndex");
+    const packagingId = searchParams.get("packagingId");
 
     if (!type) {
       return NextResponse.json(
-        { success: false, error: "Delete type is required (font or quote)" },
+        {
+          success: false,
+          error: "Delete type is required (font, quote, or packaging)",
+        },
         { status: 400 }
       );
     }
@@ -290,13 +390,15 @@ export async function DELETE(request: NextRequest) {
     }
 
     if (type === "font" && fontName) {
-      const fonts = (currentSettings.fonts || []).filter((font: FontSetting) => font.name !== fontName);
-      
+      const fonts = (currentSettings.fonts || []).filter(
+        (font: FontSetting) => font.name !== fontName
+      );
+
       const { data, error } = await supabase
         .from("site_settings")
-        .update({ 
+        .update({
           fonts: fonts,
-          updated_at: new Date().toISOString() 
+          updated_at: new Date().toISOString(),
         })
         .eq("id", currentSettings.id)
         .select()
@@ -313,12 +415,12 @@ export async function DELETE(request: NextRequest) {
       const index = parseInt(quoteIndex);
       if (index >= 0 && index < quotes.length) {
         quotes.splice(index, 1);
-        
+
         const { data, error } = await supabase
           .from("site_settings")
-          .update({ 
+          .update({
             quotes: quotes,
-            updated_at: new Date().toISOString() 
+            updated_at: new Date().toISOString(),
           })
           .eq("id", currentSettings.id)
           .select()
@@ -331,6 +433,27 @@ export async function DELETE(request: NextRequest) {
           message: "Quote deleted successfully",
         });
       }
+    } else if (type === "packaging" && packagingId) {
+      const packaging = (currentSettings.packaging || []).filter(
+        (pkg: any) => pkg.id !== packagingId
+      );
+
+      const { data, error } = await supabase
+        .from("site_settings")
+        .update({
+          packaging: packaging,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", currentSettings.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return NextResponse.json({
+        success: true,
+        data: data,
+        message: "Packaging deleted successfully",
+      });
     }
 
     return NextResponse.json(

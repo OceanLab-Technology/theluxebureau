@@ -51,7 +51,7 @@ export const PUT = withAdminAuth(
 
         const fields = [
           "name", "price", "inventory", "category", "description",
-          "title", "why_we_chose_it", "about_the_maker", "particulars", "slug"
+          "title", "packaging", "why_we_chose_it", "about_the_maker", "particulars", "slug", "least_inventory_trigger"
         ];
 
         for (const key of fields) {
@@ -60,14 +60,15 @@ export const PUT = withAdminAuth(
         }
 
         for (let i = 1; i <= 5; i++) {
-          const file = formData.get(`image_${i}`) as File | null;
-          if (file) {
-            const fileName = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
+          const fileOrUrl = formData.get(`image_${i}`);
+          
+          if (fileOrUrl instanceof File && fileOrUrl.size > 0) {
+            const fileName = `${Date.now()}-${fileOrUrl.name.replace(/\s+/g, "-")}`;
             const filePath = `${id}/${fileName}`;
 
             const { error: uploadErr } = await supabase.storage
               .from("product-images")
-              .upload(filePath, file, { upsert: true });
+              .upload(filePath, fileOrUrl, { upsert: true });
 
             if (uploadErr) continue;
 
@@ -78,7 +79,11 @@ export const PUT = withAdminAuth(
             if (publicUrlData?.publicUrl) {
               updates[`image_${i}`] = publicUrlData.publicUrl;
             }
+          } else if (typeof fileOrUrl === 'string' && fileOrUrl.trim() !== '') {
+            // It's an existing URL, keep it as is
+            updates[`image_${i}`] = fileOrUrl;
           }
+          // If fileOrUrl is null, empty string, or empty File, the field will be left unchanged
         }
 
         const { data: updated, error: updateErr } = await supabase

@@ -6,13 +6,20 @@ type FontSetting = {
   url: string;
 };
 
+type PackagingSetting = {
+  id: string;
+  title: string;
+  image_url: string;
+  created_at?: string;
+};
+
 type SiteSettings = {
   fonts: FontSetting[];
   quotes: {
     text: string;
     author: string;
   }[];
-  api_key: string;
+  packaging: PackagingSetting[];
 };
 
 type SiteSettingsStore = {
@@ -26,6 +33,8 @@ type SiteSettingsStore = {
   deleteQuote: (index: number) => Promise<void>;
   uploadFont: (fontName: string, fontFile: File) => Promise<void>;
   deleteFont: (fontName: string) => Promise<void>;
+  uploadPackaging: (title: string, imageFile: File) => Promise<void>;
+  deletePackaging: (packagingId: string) => Promise<void>;
   saveSettings: () => Promise<void>;
   hasChanges: boolean;
 };
@@ -33,7 +42,7 @@ type SiteSettingsStore = {
 const defaultSettings: SiteSettings = {
   fonts: [],
   quotes: [],
-  api_key: "",
+  packaging: [],
 };
 
 export const useSiteSettingsStore = create<SiteSettingsStore>((set, get) => ({
@@ -52,7 +61,7 @@ export const useSiteSettingsStore = create<SiteSettingsStore>((set, get) => ({
       const settings: SiteSettings = {
         fonts: json.data.fonts || [],
         quotes: json.data.quotes || [],
-        api_key: json.data.api_key || "",
+        packaging: json.data.packaging
       };
 
       set({ settings, original: settings, hasChanges: false });
@@ -144,6 +153,47 @@ export const useSiteSettingsStore = create<SiteSettingsStore>((set, get) => ({
       await get().fetchSettings();
     } catch (err) {
       toast.error("Failed to delete font");
+    }
+  },
+
+  uploadPackaging: async (title: string, imageFile: File) => {
+    set({ loading: true });
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("imageFile", imageFile);
+      formData.append("type", "packaging");
+
+      const res = await fetch("/api/settings", {
+        method: "POST",
+        body: formData,
+      });
+
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error);
+
+      toast.success("Packaging uploaded successfully");
+      await get().fetchSettings();
+    } catch (err) {
+      toast.error("Failed to upload packaging");
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  deletePackaging: async (packagingId: string) => {
+    try {
+      const res = await fetch(`/api/settings?type=packaging&packagingId=${packagingId}`, {
+        method: "DELETE",
+      });
+
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error);
+
+      toast.success("Packaging deleted");
+      await get().fetchSettings();
+    } catch (err) {
+      toast.error("Failed to delete packaging");
     }
   },
 

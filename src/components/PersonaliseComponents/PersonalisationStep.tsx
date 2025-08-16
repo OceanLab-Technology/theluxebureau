@@ -304,7 +304,7 @@ export default function PersonalizationStep() {
                 placeholder="Your message will appear here..."
                 className={`w-full font-[Monospace] ${formData.customMessage.length > 150 ? "h-[70%]" : ""
                   } text-center md:text-[0.65rem] text-[8px] bg-transparent border-none outline-none resize-none`}
-                style={getMessageStyle()}
+                // style={getMessageStyle()}
                 rows={4}
               />
             </div>
