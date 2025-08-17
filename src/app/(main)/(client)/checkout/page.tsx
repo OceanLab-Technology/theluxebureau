@@ -13,34 +13,59 @@ import Link from "next/link";
 import Script from "next/script";
 
 export default function CheckoutPage() {
-  const { cartItems, products, fetchCartItems, fetchProducts, cartLoading, isAuthenticated, checkAuthStatus } =
-    useMainStore();
+  const { 
+    cartItems, 
+    products, 
+    fetchCartItems, 
+    fetchProducts, 
+    cartLoading, 
+    isAuthenticated, 
+    checkAuthStatus 
+  } = useMainStore();
   const { items: guestItems } = useGuestCartStore();
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
+    if (isInitialized) return;
+    
     const initCheckout = async () => {
-      await checkAuthStatus();
-      await fetchCartItems();
-      if (products.length === 0) {
-        await fetchProducts();
+      try {
+        await checkAuthStatus();
+        await fetchCartItems();
+        // Only fetch products if we don't have any products yet
+        if (products.length === 0) {
+          await fetchProducts();
+        }
+        setIsInitialized(true);
+      } catch (error) {
+        console.error('Failed to initialize checkout:', error);
+        setIsInitialized(true); // Still set to true to prevent infinite loading
       }
     };
 
     initCheckout();
-  }, []);
-  // }, [checkAuthStatus, fetchCartItems, fetchProducts, products.length]);
+  }, []); //only run once on mount
 
   useEffect(() => {
-    // If user is not authenticated, show login modal
-    if (isAuthenticated === false) {
+   
+    if (isInitialized && isAuthenticated === false) {
       setShowLoginModal(true);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, isInitialized]);
+
+
+  useEffect(() => {
+    if (isInitialized && products.length === 0) {
+      fetchProducts();
+    }
+  }, [isInitialized, products.length, fetchProducts]);
 
   const checkoutItems: Product[] = useMemo(() => {
+    if (!isInitialized) return [];
+    
     if (isAuthenticated) {
-      // Use authenticated user's cart
+      
       return cartItems
         .map((cartItem) => {
           const product = products.find((p) => p.id === cartItem.product_id);
@@ -56,7 +81,7 @@ export default function CheckoutPage() {
         })
         .filter(Boolean) as Product[];
     } else {
-      // Use guest cart items
+     
       return guestItems
         .map((guestItem) => {
           const product = products.find((p) => p.id === guestItem.product_id);
@@ -72,9 +97,10 @@ export default function CheckoutPage() {
         })
         .filter(Boolean) as Product[];
     }
-  }, [cartItems, guestItems, products, isAuthenticated]);
+  }, [cartItems, guestItems, products, isAuthenticated, isInitialized]);
 
-  if (cartLoading) {
+
+  if (cartLoading || !isInitialized) {
     return <CheckoutPageSkeleton />;
   }
 
@@ -82,7 +108,6 @@ export default function CheckoutPage() {
 
   if (totalItems === 0) {
     return (
-
       <div className="w-full flex items-center justify-center min-h-[70vh] py-20 flex-col text-center">
         <h2 className="text-2xl font-semibold mb-4">Your cart is empty</h2>
         <p className="text-muted-foreground mb-8">
