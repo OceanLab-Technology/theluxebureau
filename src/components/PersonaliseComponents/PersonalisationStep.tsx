@@ -385,7 +385,7 @@ export default function PersonalizationStep() {
 
     return {
       ...baseStyle,
-      fontFamily: "serif",
+      fontFamily: "Garamond",
     };
   };
 
@@ -399,14 +399,24 @@ export default function PersonalizationStep() {
   };
 
   // Default values on mount
+  // useEffect(() => {
+  //   if (!formData.headerText) {
+  //     updateFormData({
+  //       headerText: "Header",
+  //       selectedFont: "default",
+  //     });
+  //   }
+  // }, []);
+
   useEffect(() => {
     if (!formData.headerText) {
       updateFormData({
         headerText: "Header",
-        selectedFont: "default",
+        selectedFont: "",   // no default font
       });
     }
   }, []);
+
 
   // Load selected font for header
   useEffect(() => {
@@ -498,6 +508,59 @@ export default function PersonalizationStep() {
           </Select>
         </div>
 
+        {/* Header Font Selector */}
+        {/* <div className="w-40 font-[Marfa]">
+          <label className="text-[1rem] font-[300] tracking-[0.01875] text-secondary-foreground mb-1 block">
+            Header type style*
+          </label>
+          <Select
+            value={formData.selectedFont || "Select Font"}
+            onValueChange={(value) => updateFormData({ selectedFont: value })}
+            disabled={loading}
+          >
+            <SelectTrigger className="w-[150px] h-6 md:w-[200px] text-[15px] border-stone-300 hover:bg-secondary bg-transparent py-0 focus:ring-0">
+              <SelectValue
+                placeholder={loading ? "Loading fonts..." : "Select font"}
+              />
+            </SelectTrigger>
+            <SelectContent>
+              {siteSettings?.fonts.map((font) => (
+                <SelectItem key={font.name} value={font.name}>
+                  {font.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div> */}
+        {/* Header Font Selector */}
+        {/* <div className="w-40 font-[Marfa]">
+          <label className="text-[1rem] font-[300] tracking-[0.01875] text-secondary-foreground mb-1 block">
+            Header type style*
+          </label>
+          <Select
+            value={formData.selectedFont || ""}
+            onValueChange={(value) => updateFormData({ selectedFont: value })}
+            disabled={loading}
+          >
+            <SelectTrigger className="w-[150px] h-6 md:w-[200px] text-[15px] border-stone-300 hover:bg-secondary bg-transparent py-0 focus:ring-0">
+              <SelectValue placeholder={loading ? "Loading fonts..." : "Select a font"} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="" disabled className="text-black">
+                Select a font
+              </SelectItem>
+
+              {siteSettings?.fonts.map((font) => (
+                <SelectItem key={font.name} value={font.name}>
+                  {font.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div> */}
+
+
+
         {/* Quote Selector */}
         <div className="w-40 font-[Marfa]">
           <label className="text-[1rem] font-[300] tracking-[0.01875] text-secondary-foreground mb-1 block">
@@ -560,7 +623,7 @@ export default function PersonalizationStep() {
                 readOnly
                 value={formData.customMessage || ""}
                 placeholder="Select a quote"
-                className="w-full font-[Monospace] text-center md:text-[0.65rem] text-[8px] bg-transparent border-none outline-none resize-none scrollbar-hide pointer-events-auto focus:outline-none"
+                className="w-full text-center md:text-[0.65rem] text-[8px] bg-transparent border-none outline-none resize-none scrollbar-hide pointer-events-auto focus:outline-none"
                 style={getQuoteStyle()}
                 rows={4}
               />
