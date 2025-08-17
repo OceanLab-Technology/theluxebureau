@@ -17,14 +17,14 @@ function Skeleton({ className = "" }: { className?: string }) {
 
 function CustomersTableSkeleton({ rows = 5 }) {
   return Array.from({ length: rows }).map((_, i) => (
-    <TableRow key={i}>
-      <TableCell><Skeleton className="h-4 w-32" /></TableCell>
-      <TableCell><Skeleton className="h-4 w-32" /></TableCell>
-      <TableCell><Skeleton className="h-4 w-8" /></TableCell>
-      <TableCell><Skeleton className="h-4 w-12" /></TableCell>
-      <TableCell><Skeleton className="h-4 w-16" /></TableCell>
-      <TableCell><Skeleton className="h-4 w-16 rounded-full" /></TableCell>
-      <TableCell className="text-right"><Skeleton className="h-6 w-6 rounded-md" /></TableCell>
+    <TableRow>
+      <TableCell><Skeleton className="h-4 w-40" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-40" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-40" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-40" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-40" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-40" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-40" /></TableCell>
     </TableRow>
   ));
 }
@@ -115,36 +115,41 @@ export function CustomersPage() {
           </div>
         )}
 
-        {/* Customers Table */}
         <Card>
           <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Customer</TableHead>
-                  <TableHead>Contact</TableHead>
-                  <TableHead>Orders</TableHead>
-                  <TableHead>Total Spent</TableHead>
-                  <TableHead>Join Date</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
-                  <CustomersTableSkeleton />
-                ) : (
-                  customers?.length ? customers.map(customer => (
+            {loading ? (
+              <CustomersTableSkeleton />
+            ) : customers?.length ? (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Customer</TableHead>
+                    <TableHead>Contact</TableHead>
+                    <TableHead>Orders</TableHead>
+                    <TableHead>Total Spent</TableHead>
+                    <TableHead>Join Date</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {customers.map((customer) => (
                     <TableRow key={customer.id}>
                       <TableCell className="font-medium">{customer.name}</TableCell>
                       <TableCell>
                         <div className="space-y-1 text-sm">
-                          <div className="flex items-center gap-2"><Mail className="h-3 w-3" /> {customer.email}</div>
-                          <div className="flex items-center gap-2 text-muted-foreground"><Phone className="h-3 w-3" /> {customer.phone}</div>
+                          <div className="flex items-center gap-2">
+                            <Mail className="h-3 w-3" /> {customer.email}
+                          </div>
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            <Phone className="h-3 w-3" /> {customer.phone}
+                          </div>
                         </div>
                       </TableCell>
                       <TableCell>{customer.totalOrders}</TableCell>
-                      <TableCell>€{customer.totalSpent.toFixed?.(2) ?? customer.totalSpent}</TableCell>
+                      <TableCell>
+                        €{customer.totalSpent.toFixed?.(2) ?? customer.totalSpent}
+                      </TableCell>
                       <TableCell>{customer.joinDate}</TableCell>
                       <TableCell>
                         <Select
@@ -173,21 +178,26 @@ export function CustomersPage() {
                       </TableCell>
                       <TableCell className="text-right">
                         <Link href={`/admin/customers/${customer.id}`}>
-                          <Button variant="ghost" size="sm"><Edit className="h-4 w-4" /></Button>
+                          <Button variant="ghost" size="sm">
+                            <Edit className="h-4 w-4" />
+                          </Button>
                         </Link>
                       </TableCell>
                     </TableRow>
-                  )) : (
-                    <TableRow>
-                      <TableCell colSpan={7} className="text-center py-4 text-muted-foreground">
-                        No customers found.
-                      </TableCell>
-                    </TableRow>
-                  )
-                )}
-              </TableBody>
-
-            </Table>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-4 text-muted-foreground">
+                      No customers found.
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            )}
           </CardContent>
         </Card>
 

@@ -92,7 +92,7 @@ export function AddToCartButton({
         >
           {isLoading ? "Adding..." : isAdded ? (
             <>
-              <Check className="mr-2 h-4 w-4" />
+              {/* <Check className="mr-2 h-4 w-4" /> */}
               Added to Cart
             </>
           ) : "Add to Cart"}
