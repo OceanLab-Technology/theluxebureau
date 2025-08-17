@@ -233,6 +233,7 @@ type CustomerStore = {
   limit: number
   total: number
   totalPages: number
+  totalCustomers: number 
 
   // Methods
   fetchCustomers: (page?: number, limit?: number) => Promise<void>
@@ -258,6 +259,7 @@ export const useCustomerAdminStore = create<CustomerStore>((set, get) => ({
   limit: 10,
   total: 0,
   totalPages: 0,
+  totalCustomers: 0, 
 
   fetchCustomers: async (pageParam, limitParam) => {
     const state = get()
@@ -293,6 +295,7 @@ export const useCustomerAdminStore = create<CustomerStore>((set, get) => ({
         limit,
         total: json.pagination.total,
         totalPages: json.pagination.totalPages,
+        totalCustomers: json.pagination.total
       })
     } catch (err: any) {
       set({ loading: false, error: err.message || "Unknown error" })

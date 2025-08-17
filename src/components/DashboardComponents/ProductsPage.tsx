@@ -336,7 +336,7 @@ export function ProductsPage() {
                         <Badge variant="default">
                           {product.inventory === 0
                             ? "Out of Stock"
-                            : product.inventory < 10
+                            : product.inventory < product.threshold
                               ? "Low Stock"
                               : "In Stock"}
                         </Badge>

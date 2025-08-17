@@ -33,14 +33,15 @@ interface MainStore {
   removeFromCart: (itemId: string) => Promise<void>;
   clearCart: () => Promise<void>;
   calculateCartTotal: () => void;
-  
+
   // Authentication helpers
   checkAuthStatus: () => Promise<boolean>;
   handleLoginSuccess: () => Promise<void>;
   handleLogout: () => void;
-  
+
   // Global reset method
   resetStore: () => void;
+  cartInitialized: boolean;
 }
 
 export const useMainStore = create<MainStore>()(
@@ -59,6 +60,8 @@ export const useMainStore = create<MainStore>()(
       cartTotal: 0,
       cartItemCount: 0,
       isAuthenticated: null,
+      cartInitialized: false, // <-- new
+
 
       fetchProducts: async (params = {}) => {
         try {
@@ -68,9 +71,8 @@ export const useMainStore = create<MainStore>()(
           if (params.category) searchParams.append("category", params.category);
           if (params.name) searchParams.append("name", params.name);
 
-          const url = `/api/products${
-            searchParams.toString() ? `?${searchParams.toString()}` : ""
-          }`;
+          const url = `/api/products${searchParams.toString() ? `?${searchParams.toString()}` : ""
+            }`;
           const response = await fetch(url);
           const apiResponse: ApiResponse<Product[]> = await response.json();
 
@@ -122,7 +124,7 @@ export const useMainStore = create<MainStore>()(
 
           // Check if user is authenticated
           const isAuth = get().isAuthenticated;
-          
+
           if (isAuth === null) {
             // Check authentication status first
             await get().checkAuthStatus();
@@ -147,7 +149,7 @@ export const useMainStore = create<MainStore>()(
             // Use guest cart for non-authenticated users
             const guestStore = useGuestCartStore.getState();
             const guestItems = guestStore.items;
-            
+
             // Convert guest items to cart item format for display
             const cartItems: CartItem[] = guestItems.map(item => ({
               id: item.id,
@@ -176,7 +178,58 @@ export const useMainStore = create<MainStore>()(
         }
       },
 
+      // fetchCartItems: async (force = false) => {
+      //   if (get().cartInitialized && !force) return;
+
+      //   try {
+      //     set({ cartLoading: true, cartError: null });
+
+      //     if (get().isAuthenticated === null) {
+      //       await get().checkAuthStatus();
+      //     }
+
+      //     let cartItems: CartItem[] = [];
+
+      //     if (get().isAuthenticated) {
+      //       const response = await fetch('/api/cart');
+      //       const apiResponse: ApiResponse<CartItem[]> = await response.json();
+      //       if (!response.ok) throw new Error(apiResponse.error || 'Failed to fetch cart items');
+      //       cartItems = apiResponse.data || [];
+      //     } else {
+      //       const guestStore = useGuestCartStore.getState();
+      //       const guestItems = guestStore.items;
+
+      //       cartItems = guestItems.map(item => ({
+      //         id: item.id,
+      //         user_id: 'guest',
+      //         product_id: item.product_id,
+      //         quantity: item.quantity,
+      //         custom_data: item.custom_data || {},
+      //         created_at: item.added_at,
+      //         updated_at: item.added_at,
+      //       }));
+      //     }
+
+      //     set({
+      //       cartItems,
+      //       cartLoading: false,
+      //       cartError: null,
+      //       cartInitialized: true, // mark initialized
+      //     });
+
+      //     get().calculateCartTotal();
+      //   } catch (error) {
+      //     set({
+      //       cartError: error instanceof Error ? error.message : 'Failed to fetch cart',
+      //       cartLoading: false,
+      //     });
+      //   }
+      // },
+
+
       addToCart: async (productId: string, quantity: number, customData?: Record<string, any>) => {
+
+        const guestStore = useGuestCartStore.getState();
         try {
           set({ cartLoading: true, cartError: null });
 
@@ -206,7 +259,7 @@ export const useMainStore = create<MainStore>()(
             // Add to guest cart
             const guestStore = useGuestCartStore.getState();
             guestStore.addItem(productId, quantity, customData);
-            
+
             // Update local cart display
             await get().fetchCartItems();
           }
@@ -218,6 +271,33 @@ export const useMainStore = create<MainStore>()(
           throw error; // Re-throw so AddToCartButton can handle it
         }
       },
+
+      // addToCart: async (productId: string, quantity: number, customData?: Record<string, any>) => {
+      //   try {
+      //     set({ cartLoading: true, cartError: null });
+
+      //     if (get().isAuthenticated) {
+      //       const response = await fetch('/api/cart', {
+      //         method: 'POST',
+      //         headers: { 'Content-Type': 'application/json' },
+      //         body: JSON.stringify({ product_id: productId, quantity, custom_data: customData }),
+      //       });
+
+      //       const apiResponse: ApiResponse<CartItem> = await response.json();
+      //       if (!response.ok) throw new Error(apiResponse.error || 'Failed to add item to cart');
+
+      //       await get().fetchCartItems(true); // force refresh
+      //     } else {
+      //       const guestStore = useGuestCartStore.getState();
+      //       guestStore.addItem(productId, quantity, customData);
+      //       await get().fetchCartItems(true); // refresh local cart
+      //     }
+      //   } catch (error) {
+      //     set({ cartError: error instanceof Error ? error.message : 'Failed to add to cart', cartLoading: false });
+      //     throw error;
+      //   }
+      // },
+
 
       updateCartItem: async (itemId: string, quantity: number, customData?: Record<string, any>) => {
         try {
@@ -253,7 +333,7 @@ export const useMainStore = create<MainStore>()(
             // Update guest cart
             const guestStore = useGuestCartStore.getState();
             guestStore.updateItem(itemId, quantity, customData);
-            
+
             // Update local cart display
             await get().fetchCartItems();
           }
@@ -289,7 +369,7 @@ export const useMainStore = create<MainStore>()(
             // Remove from guest cart
             const guestStore = useGuestCartStore.getState();
             guestStore.removeItem(itemId);
-            
+
             // Update local cart display
             await get().fetchCartItems();
             toast.success(`Item removed from cart`);
@@ -367,11 +447,11 @@ export const useMainStore = create<MainStore>()(
 
       handleLoginSuccess: async () => {
         set({ isAuthenticated: true });
-        
+
         // Migrate guest cart to user cart
         const guestStore = useGuestCartStore.getState();
         const guestItems = guestStore.items;
-        
+
         if (guestItems.length > 0) {
           try {
             // Migrate each guest cart item to user cart
@@ -388,30 +468,30 @@ export const useMainStore = create<MainStore>()(
                 }),
               });
             }
-            
+
             // Clear guest cart after successful migration
             guestStore.clearCart();
             guestStore.mergeWithUserCart([]);
-            
+
             toast.success('Cart items migrated successfully!');
           } catch (error) {
             console.error('Failed to migrate cart items:', error);
             toast.error('Failed to migrate cart items');
           }
         }
-        
+
         // Fetch updated cart
         await get().fetchCartItems();
       },
 
       handleLogout: () => {
-        set({ 
+        set({
           isAuthenticated: false,
           cartItems: [],
           cartTotal: 0,
           cartItemCount: 0,
         });
-        
+
         // Reset guest cart store to guest mode
         const guestStore = useGuestCartStore.getState();
         guestStore.clearCart();
@@ -441,6 +521,7 @@ export const useMainStore = create<MainStore>()(
         cartTotal: state.cartTotal,
         cartItemCount: state.cartItemCount,
         isAuthenticated: state.isAuthenticated,
+        cartInitialized: state.cartInitialized, // persist it
       }),
     }
   )

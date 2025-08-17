@@ -471,7 +471,7 @@ export default function PersonalizationStep() {
         Your personal message will be set in our signature typewriter font. For inspiration, you can select a quote from the dropdown.
       </p>
 
-      <div className="flex gap-4 mb-8">
+      <div className="flex md:gap-12 gap-4 mb-8">
         {/* Header Font Selector */}
         <div className="w-40 font-[Marfa]">
           <label className="text-[1rem] font-[300] tracking-[0.01875] text-secondary-foreground mb-1 block">
@@ -482,7 +482,7 @@ export default function PersonalizationStep() {
             onValueChange={(value) => updateFormData({ selectedFont: value })}
             disabled={loading}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-[150px] h-6 md:w-[200px] text-[15px] border-stone-300 hover:bg-secondary bg-transparent py-0 focus:ring-0">
               <SelectValue
                 placeholder={loading ? "Loading fonts..." : "Select font"}
               />
@@ -513,7 +513,7 @@ export default function PersonalizationStep() {
               });
             }}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-[150px] h-6 md:w-[200px] text-[15px] border-stone-300 hover:bg-secondary bg-transparent py-0 focus:ring-0">
               <SelectValue placeholder="Select a quote" />
             </SelectTrigger>
             <SelectContent>
@@ -539,7 +539,7 @@ export default function PersonalizationStep() {
           }}
         >
           <div className="max-w-sm w-full h-3.5/7 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 absolute inset-0">
-            <div className="text-center mb-10 absolute md:top-5 top-4 left-1/2 transform -translate-x-1/2 w-full z-30">
+            <div className="text-center mb-10 absolute md:top-4 top-4 left-1/2 transform -translate-x-1/2 w-full z-30">
               <input
                 type="text"
                 value={formData.headerText || ""}
@@ -555,7 +555,7 @@ export default function PersonalizationStep() {
               />
             </div>
 
-            <div className="text-center md:w-96 mx-auto absolute inset-0 flex items-center justify-center md:mt-10 mt-4 px-8">
+            <div className="text-center md:w-96 mx-auto absolute inset-0 flex items-center justify-center md:mt-2 mt-4 px-8">
               <textarea
                 readOnly
                 value={formData.customMessage || ""}

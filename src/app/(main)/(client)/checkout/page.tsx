@@ -28,7 +28,8 @@ export default function CheckoutPage() {
     };
 
     initCheckout();
-  }, [checkAuthStatus, fetchCartItems, fetchProducts, products.length]);
+  }, []);
+  // }, [checkAuthStatus, fetchCartItems, fetchProducts, products.length]);
 
   useEffect(() => {
     // If user is not authenticated, show login modal

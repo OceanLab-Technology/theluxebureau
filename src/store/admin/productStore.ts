@@ -20,6 +20,7 @@ export type Product = {
   about_the_maker?: string;
   particulars?: string;
   least_inventory_trigger?: number;
+  threshold: number;
 };
 
 type ProductUpdate = Partial<Product> | FormData;
@@ -54,7 +55,7 @@ export const useProductAdminStore = create<ProductStore>((set, get) => ({
   totalPages: 1,
 
 
-  fetchProducts: async (page = 1, limit = 5) => {
+  fetchProducts: async (page = 1, limit = 10) => {
     set({ loading: true, error: null });
     try {
       const res = await fetch(`/api/products?page=${page}&limit=${limit}`);

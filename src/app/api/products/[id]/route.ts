@@ -52,7 +52,7 @@ export const PUT = withAdminAuth(
         const fields = [
           "name", "price", "inventory", "category", "description",
           "title", "packaging", "why_we_chose_it", "about_the_maker",
-          "particulars", "slug", "least_inventory_trigger"
+          "particulars", "slug", "threshold",
         ];
 
         for (const key of fields) {

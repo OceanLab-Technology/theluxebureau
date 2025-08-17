@@ -48,11 +48,7 @@ const productSchema = z.object({
   why_we_chose_it: z.string().min(1, "Why we chose it is required"),
   about_the_maker: z.string().min(1, "About the maker is required"),
   particulars: z.string().min(1, "Particulars are required"),
-  least_inventory_trigger: z
-    .number()
-    .int()
-    .min(0, "Must be at least 0")
-    .optional(),
+  threshold: z.number().min(0, "Threshold must be at least 0"),
 });
 
 type ProductFormValues = z.infer<typeof productSchema>;
@@ -112,7 +108,7 @@ export function ProductFormSheet({
       why_we_chose_it: "",
       about_the_maker: "",
       particulars: "",
-      least_inventory_trigger: 5,
+      threshold: 0
     },
   });
 
@@ -138,7 +134,7 @@ export function ProductFormSheet({
           why_we_chose_it: "",
           about_the_maker: "",
           particulars: "",
-          least_inventory_trigger: 5,
+          threshold: 0
         });
         setImages([]);
       }
@@ -166,7 +162,7 @@ export function ProductFormSheet({
         why_we_chose_it: selectedProduct.why_we_chose_it || "",
         about_the_maker: selectedProduct.about_the_maker || "",
         particulars: selectedProduct.particulars || "",
-        least_inventory_trigger: selectedProduct.least_inventory_trigger || 5,
+        threshold: selectedProduct.threshold || 0
       });
       setImages([
         selectedProduct.image_1,
@@ -230,9 +226,6 @@ export function ProductFormSheet({
       return prev.filter((_, i) => i !== index);
     });
   };
-
-
-
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
@@ -359,11 +352,11 @@ export function ProductFormSheet({
                 <Label className="small-text text-muted-foreground">Stock</Label>
                 <p className="">{formData.inventory || 0} units</p>
               </div>
-              {formData.least_inventory_trigger && (
+              {formData.threshold && (
                 <div>
                   <Label className="small-text text-muted-foreground">Low Stock Alert</Label>
                   <p className="font-medium">
-                    {formData.least_inventory_trigger} units
+                    {formData.threshold} units
                   </p>
                 </div>
               )}
@@ -587,13 +580,16 @@ export function ProductFormSheet({
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="least_inventory_trigger">
+                  <Label htmlFor="threshold">
                     Low Stock Alert Threshold <span className="text-red-500">*</span>
                   </Label>
                   <Input
-                    id="least_inventory_trigger"
+                    id="threshold"
                     type="number"
-                    {...form.register("least_inventory_trigger", { valueAsNumber: true })}
+                    {...form.register("threshold", {
+                      valueAsNumber: true,
+                      setValueAs: v => v === "" ? 0 : Number(v)
+                    })}
                     placeholder="5"
                   />
                 </div>
