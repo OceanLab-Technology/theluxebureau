@@ -95,12 +95,12 @@ export function ProductFormSheet({
     loading,
   } = useProductAdminStore();
 
-  const { 
-    settings: siteSettings, 
-    fetchSettings 
+  const {
+    settings: siteSettings,
+    fetchSettings
   } = useSiteSettingsStore();
 
-  
+
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: {
@@ -189,16 +189,6 @@ export function ProductFormSheet({
     }
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const files = Array.from(e.target.files).slice(0, 5);
-    setImages(files);
-  };
-
-  const removeImage = (index: number) => {
-    setImages(images.filter((_, i) => i !== index));
-  };
-
   const handleCategorySelect = (value: string) => {
     if (value === "custom") {
       setShowCustomCategory(true);
@@ -217,6 +207,27 @@ export function ProductFormSheet({
       setCustomCategory("");
     }
   };
+
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+
+    const selectedFiles = Array.from(e.target.files);
+
+    setImages((prev) => {
+      const combined = [...prev, ...selectedFiles];
+      return combined.slice(0, 5); // max 5 images
+    });
+
+    // Reset input so same file can be selected again
+    e.target.value = "";
+  };
+
+  const removeImage = (index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
@@ -247,7 +258,7 @@ export function ProductFormSheet({
 
       // Refresh the products list
       await fetchProducts();
-      
+
       form.reset();
       setImages([]);
       setOpen(false);
@@ -375,37 +386,37 @@ export function ProductFormSheet({
             {(formData.why_we_chose_it ||
               formData.about_the_maker ||
               formData.particulars) && (
-              <div className="space-y-4">
-                {formData.why_we_chose_it && (
-                  <div>
-                    <h4 className="small-text text-muted-foreground">Why We Chose It</h4>
-                    <p className="text-sm leading-relaxed">
-                      {formData.why_we_chose_it}
-                    </p>
-                  </div>
-                )}
-
-                {formData.about_the_maker && (
-                  <div>
-                    <h4 className="small-text text-muted-foreground">About the Maker</h4>
-                    <p className="text-sm leading-relaxed">
-                      {formData.about_the_maker}
-                    </p>
-                  </div>
-                )}
-
-                {formData.particulars && (
-                  <div>
-                    <h4 className="small-text text-muted-foreground">Particulars</h4>
-                    <div className="text-sm">
-                      {formData.particulars.split("\n").map((line, index) => (
-                        <p key={index}>{line}</p>
-                      ))}
+                <div className="space-y-4">
+                  {formData.why_we_chose_it && (
+                    <div>
+                      <h4 className="small-text text-muted-foreground">Why We Chose It</h4>
+                      <p className="text-sm leading-relaxed">
+                        {formData.why_we_chose_it}
+                      </p>
                     </div>
-                  </div>
-                )}
-              </div>
-            )}
+                  )}
+
+                  {formData.about_the_maker && (
+                    <div>
+                      <h4 className="small-text text-muted-foreground">About the Maker</h4>
+                      <p className="text-sm leading-relaxed">
+                        {formData.about_the_maker}
+                      </p>
+                    </div>
+                  )}
+
+                  {formData.particulars && (
+                    <div>
+                      <h4 className="small-text text-muted-foreground">Particulars</h4>
+                      <div className="text-sm">
+                        {formData.particulars.split("\n").map((line, index) => (
+                          <p key={index}>{line}</p>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
           </div>
         </div>
       </div>
@@ -426,7 +437,16 @@ export function ProductFormSheet({
           </Button>
         </SheetTrigger>
       )}
-      <SheetContent side="bottom" className="h-[95vh] overflow-y-auto px-4 lg:mx-30 mx-4 rounded-t-3xl hide-scrollbar">
+      {/* <SheetContent side="bottom" className="h-[80vh] w-[60vw] max-w-full mx-auto overflow-y-auto px-6 py-6 lg:mx-30 mx-4 rounded-t-xl"> */}
+      <SheetContent
+        side="bottom"
+        className="h-[90vh] w-[70vw] max-w-full px-6 py-6 rounded-t-xl overflow-y-auto"
+        style={{
+          left: "50%",
+          transform: "translateX(-50%)"
+        }}
+      >
+
         <SheetHeader className="space-y-4 pb-6">
           <div className="flex items-center gap-2">
             <Package className="h-6 w-6" />
@@ -491,135 +511,110 @@ export function ProductFormSheet({
                     )}
                   </div>
                 </div>
+              </div>
 
+              <div className="space-y-2">
+                <Label
+                  htmlFor="description"
+                  className="flex items-center gap-1"
+                >
+                  Description <span className="text-red-500">*</span>
+                </Label>
+                <Textarea
+                  id="description"
+                  {...form.register("description")}
+                  rows={4}
+                  placeholder="Describe your product..."
+                />
+                {form.formState.errors.description && (
+                  <p className="text-sm text-red-500 flex items-center gap-1">
+                    <AlertCircle className="h-3 w-3" />
+                    {form.formState.errors.description.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
-                  <Label
-                    htmlFor="description"
-                    className="flex items-center gap-1"
-                  >
-                    Description <span className="text-red-500">*</span>
+                  <Label htmlFor="price" className="flex items-center gap-1">
+                    Price (€) <span className="text-red-500">*</span>
                   </Label>
-                  <Textarea
-                    id="description"
-                    {...form.register("description")}
-                    rows={4}
-                    placeholder="Describe your product..."
+                  <Input
+                    id="price"
+                    type="number"
+                    step="0.01"
+                    {...form.register("price", { valueAsNumber: true })}
+                    placeholder="0.00"
                   />
-                  {form.formState.errors.description && (
+                  {form.formState.errors.price && (
                     <p className="text-sm text-red-500 flex items-center gap-1">
                       <AlertCircle className="h-3 w-3" />
-                      {form.formState.errors.description.message}
+                      {form.formState.errors.price.message}
                     </p>
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="price" className="flex items-center gap-1">
-                      Price (€) <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="price"
-                      type="number"
-                      step="0.01"
-                      {...form.register("price", { valueAsNumber: true })}
-                      placeholder="0.00"
-                    />
-                    {form.formState.errors.price && (
-                      <p className="text-sm text-red-500 flex items-center gap-1">
-                        <AlertCircle className="h-3 w-3" />
-                        {form.formState.errors.price.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="inventory"
-                      className="flex items-center gap-1"
-                    >
-                      Inventory <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="inventory"
-                      type="number"
-                      {...form.register("inventory", { valueAsNumber: true })}
-                      placeholder="0"
-                    />
-                    {form.formState.errors.inventory && (
-                      <p className="text-sm text-red-500 flex items-center gap-1">
-                        <AlertCircle className="h-3 w-3" />
-                        {form.formState.errors.inventory.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="least_inventory_trigger">
-                      Low Stock Alert Threshold
-                    </Label>
-                    <Input
-                      id="least_inventory_trigger"
-                      type="number"
-                      {...form.register("least_inventory_trigger", { valueAsNumber: true })}
-                      placeholder="5"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="inventory"
+                    className="flex items-center gap-1"
+                  >
+                    Inventory <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="inventory"
+                    type="number"
+                    {...form.register("inventory", { valueAsNumber: true })}
+                    placeholder="0"
+                  />
+                  {form.formState.errors.inventory && (
+                    <p className="text-sm text-red-500 flex items-center gap-1">
+                      <AlertCircle className="h-3 w-3" />
+                      {form.formState.errors.inventory.message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="least_inventory_trigger">
+                    Low Stock Alert Threshold <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="least_inventory_trigger"
+                    type="number"
+                    {...form.register("least_inventory_trigger", { valueAsNumber: true })}
+                    placeholder="5"
+                  />
+                </div>
+              </div>
+
+
+              {/* // Category & Packaging */}
+              <div className="flex gap-6 items-start">
+                {/* Category */}
+                <div className="flex-1 space-y-2">
                   <Label className="flex items-center gap-1">
                     Category <span className="text-red-500">*</span>
                   </Label>
-                  {!showCustomCategory ? (
-                    <Select
-                      onValueChange={handleCategorySelect}
-                      value={form.getValues("category")}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a category or add new" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {categories.map((category) => (
+
+                  <Select
+                    onValueChange={handleCategorySelect}
+                    value={form.getValues("category")}
+                  >
+                    <SelectTrigger className="w-full h-10 text-[15px]">
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {["Literature", "Drinks & Spirits", "Floral", "Home"].map(
+                        (category) => (
                           <SelectItem key={category} value={category}>
                             {category}
                           </SelectItem>
-                        ))}
-                        <SelectItem value="custom">
-                          <Plus className="h-4 w-4 mr-2" />
-                          Add New Category
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  ) : (
-                    <div className="flex gap-2">
-                      <Input
-                        value={customCategory}
-                        onChange={(e) => setCustomCategory(e.target.value)}
-                        placeholder="Enter new category name"
-                        onKeyPress={(e) =>
-                          e.key === "Enter" && handleCustomCategoryAdd()
-                        }
-                      />
-                      <Button
-                        type="button"
-                        onClick={handleCustomCategoryAdd}
-                        disabled={!customCategory.trim()}
-                      >
-                        <Check className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => {
-                          setShowCustomCategory(false);
-                          setCustomCategory("");
-                        }}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  )}
+                        )
+                      )}
+                    </SelectContent>
+                  </Select>
+
                   {form.formState.errors.category && (
                     <p className="text-sm text-red-500 flex items-center gap-1">
                       <AlertCircle className="h-3 w-3" />
@@ -628,19 +623,25 @@ export function ProductFormSheet({
                   )}
                 </div>
 
-                <div className="space-y-2">
+                {/* Packaging */}
+                <div className="flex-1 space-y-2">
                   <Label className="flex items-center gap-1">
-                    Packaging (Optional)
+                    Packaging <span className="text-red-500">*</span>
                   </Label>
+
                   <Select
-                    onValueChange={(value) => form.setValue("packaging", value === "none" ? "" : value)}
-                    value={form.getValues("packaging") || "none"}
+                    onValueChange={(value) =>
+                      form.setValue("packaging", value === "none" ? "" : value)
+                    }
+                    value={form.getValues("packaging") || ""}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full h-10 text-[15px]">
                       <SelectValue placeholder="Select packaging option" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="none">No packaging</SelectItem>
+                      {!form.getValues("packaging") && (
+                        <SelectItem value="none">No packaging</SelectItem>
+                      )}
                       {siteSettings.packaging?.map((pkg) => (
                         <SelectItem key={pkg.id} value={pkg.image_url}>
                           <div className="flex items-center gap-2">
@@ -655,25 +656,31 @@ export function ProductFormSheet({
                       ))}
                     </SelectContent>
                   </Select>
+
                   {form.getValues("packaging") && (
                     <div className="mt-2">
-                      <Label className="text-sm text-muted-foreground">Selected packaging preview:</Label>
-                      <div className="mt-1 p-2 border rounded-lg bg-muted/10">
+                      <Label className="text-sm text-muted-foreground">
+                        Selected packaging:
+                      </Label>
+                      <div className="mt-1 p-2 border rounded-lg bg-muted/10 flex items-center gap-3">
                         {(() => {
                           const selectedPackaging = siteSettings.packaging?.find(
                             (pkg) => pkg.image_url === form.getValues("packaging")
                           );
                           return selectedPackaging ? (
-                            <div className="flex items-center gap-3">
+                            <>
                               <img
                                 src={selectedPackaging.image_url}
                                 alt={selectedPackaging.title}
-                                className="w-12 h-12 object-cover rounded"
+                                className="w-16 h-16 object-cover rounded-lg border"
                               />
-                              <span className="text-sm font-medium">
-                                {selectedPackaging.title}
-                              </span>
-                            </div>
+                              <div>
+                                <p className="font-medium text-sm">{selectedPackaging.title}</p>
+                                <p className="text-xs text-muted-foreground">
+                                  ID: {selectedPackaging.id}
+                                </p>
+                              </div>
+                            </>
                           ) : null;
                         })()}
                       </div>
@@ -682,10 +689,11 @@ export function ProductFormSheet({
                 </div>
               </div>
 
+
+              {/* Product Images */}
               <div className="space-y-6">
                 <h3 className="small-text font-medium">
-                  Product Images{" "}
-                  {!isEdit && <span className="text-red-500">*</span>}
+                  Product Images {!isEdit && <span className="text-red-500">*</span>}
                 </h3>
 
                 <div className="space-y-4">
@@ -718,7 +726,7 @@ export function ProductFormSheet({
                         <div key={i} className="relative group">
                           <div className="aspect-square overflow-hidden rounded-lg border bg-muted/20">
                             <Image
-                              src={typeof img === 'string' ? img : URL.createObjectURL(img)}
+                              src={typeof img === "string" ? img : URL.createObjectURL(img)}
                               alt={`Preview ${i + 1}`}
                               width={200}
                               height={200}
@@ -748,21 +756,14 @@ export function ProductFormSheet({
                 </div>
               </div>
 
+
+              {/* // Additional Information */}
               <div className="space-y-6">
                 <h3 className="small-text font-medium">
                   Additional Information
                 </h3>
 
                 <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="title">Title (Optional)</Label>
-                    <Input
-                      id="title"
-                      {...form.register("title")}
-                      placeholder="Optional product title"
-                    />
-                  </div>
-
                   <div className="space-y-2">
                     <Label
                       htmlFor="why_we_chose_it"
@@ -818,9 +819,9 @@ export function ProductFormSheet({
                       rows={4}
                       placeholder="• Size: &#10;• Materials: &#10;• Care instructions: &#10;• What's included: "
                     />
-                    <p className="text-xs text-muted-foreground">
+                    {/* <p className="text-xs text-muted-foreground">
                       Use bullet points or line breaks to list product details
-                    </p>
+                    </p> */}
                     {form.formState.errors.particulars && (
                       <p className="text-sm text-red-500 flex items-center gap-1">
                         <AlertCircle className="h-3 w-3" />

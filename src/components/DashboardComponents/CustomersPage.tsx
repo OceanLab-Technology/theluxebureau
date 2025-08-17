@@ -6,39 +6,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Mail, Phone, Edit, UserPlus, Users } from "lucide-react";
+import { Mail, Phone, Edit, UserPlus, Users, Loader2 } from "lucide-react";
 import { useCustomerAdminStore } from "@/store/admin/customerStore";
 import { CustomerFormDialog } from "./Forms/CustomerFormDialog";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
-
-const getStatusColor = (status: string) => {
-  switch (status.toLowerCase()) {
-    case "active": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400";
-    case "inactive": return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
-    case "vip": return "bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400";
-    default: return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400";
-  }
-};
+import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
 
 function Skeleton({ className = "" }: { className?: string }) {
-  return <div aria-busy="true" className={`animate-pulse bg-muted rounded-md ${className}`} />;
+  return <div className={`animate-pulse bg-muted rounded-md ${className}`} />;
 }
 
 function CustomersTableSkeleton({ rows = 5 }) {
   return Array.from({ length: rows }).map((_, i) => (
     <TableRow key={i}>
-      <TableCell>
-        <div className="space-y-1">
-          <Skeleton className="h-4 w-32" />
-          <Skeleton className="h-3 w-24" />
-        </div>
-      </TableCell>
-      <TableCell>
-        <div className="space-y-1">
-          <Skeleton className="h-3 w-28" />
-          <Skeleton className="h-3 w-24" />
-        </div>
-      </TableCell>
+      <TableCell><Skeleton className="h-4 w-32" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-32" /></TableCell>
       <TableCell><Skeleton className="h-4 w-8" /></TableCell>
       <TableCell><Skeleton className="h-4 w-12" /></TableCell>
       <TableCell><Skeleton className="h-4 w-16" /></TableCell>
@@ -51,14 +32,10 @@ function CustomersTableSkeleton({ rows = 5 }) {
 function SummarySkeleton() {
   return (
     <div className="grid gap-4 md:grid-cols-4">
-      {[1, 2, 3, 4].map(i => (
+      {[1, 2, 3, 4].map((i) => (
         <Card key={i} className="animate-pulse">
-          <CardHeader className="pb-2">
-            <Skeleton className="h-4 w-32" />
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="h-8 w-24" />
-          </CardContent>
+          <CardHeader className="pb-2"><Skeleton className="h-4 w-32" /></CardHeader>
+          <CardContent><Skeleton className="h-8 w-24" /></CardContent>
         </Card>
       ))}
     </div>
@@ -66,14 +43,26 @@ function SummarySkeleton() {
 }
 
 export function CustomersPage() {
-  const { customers, totalCustomers, page, totalPages, loading, fetchCustomers, setPage, updateCustomer } =
-    useCustomerAdminStore();
+  const {
+    customers,
+    totalCustomers,
+    page,
+    totalPages,
+    loading,
+    fetchCustomers,
+    setPage,
+    updateCustomer,
+    updatingCustomerId,
+  } = useCustomerAdminStore();
+
   const [rowsPerPage] = useState(10);
 
-  useEffect(() => { fetchCustomers(page); }, [page, fetchCustomers]);
+  useEffect(() => {
+    fetchCustomers(page);
+  }, [page, fetchCustomers]);
 
-  const handleStatusChange = (customerId: string, newStatus: string) => {
-    updateCustomer(customerId, { status: newStatus });
+  const handleStatusChange = async (customerId: string, newStatus: string) => {
+    await updateCustomer(customerId, { status: newStatus });
   };
 
   return (
@@ -142,14 +131,12 @@ export function CustomersPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {loading ? <CustomersTableSkeleton /> : (
+                {loading ? (
+                  <CustomersTableSkeleton />
+                ) : (
                   customers?.length ? customers.map(customer => (
                     <TableRow key={customer.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <div className="font-medium">{customer.name}</div>
-                        </div>
-                      </TableCell>
+                      <TableCell className="font-medium">{customer.name}</TableCell>
                       <TableCell>
                         <div className="space-y-1 text-sm">
                           <div className="flex items-center gap-2"><Mail className="h-3 w-3" /> {customer.email}</div>
@@ -160,9 +147,22 @@ export function CustomersPage() {
                       <TableCell>€{customer.totalSpent.toFixed?.(2) ?? customer.totalSpent}</TableCell>
                       <TableCell>{customer.joinDate}</TableCell>
                       <TableCell>
-                        <Select value={customer.status} onValueChange={newStatus => handleStatusChange(customer.id, newStatus)}>
+                        <Select
+                          value={customer.status}
+                          onValueChange={(newStatus) => handleStatusChange(customer.id, newStatus)}
+                          disabled={updatingCustomerId === customer.id}
+                        >
                           <SelectTrigger className="w-[130px] h-6 text-[15px] border-stone-300 hover:bg-secondary bg-transparent py-0 focus:ring-0">
-                            <SelectValue placeholder="Select status" />
+                            <div className="flex items-center gap-2">
+                              {updatingCustomerId === customer.id ? (
+                                <>
+                                  <Loader2 className="h-3 w-3 animate-spin" />
+                                  <span className="opacity-70">{customer.status}</span>
+                                </>
+                              ) : (
+                                <span>{customer.status}</span>
+                              )}
+                            </div>
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="Active">Active</SelectItem>
@@ -186,6 +186,7 @@ export function CustomersPage() {
                   )
                 )}
               </TableBody>
+
             </Table>
           </CardContent>
         </Card>
@@ -197,9 +198,9 @@ export function CustomersPage() {
               Showing {(page - 1) * rowsPerPage + 1} to {Math.min(page * rowsPerPage, totalCustomers || 0)} of {totalCustomers || 0} entries
             </div>
             <div className="flex items-center gap-4">
-              <Button variant="outline" disabled={page <= 1} onClick={() => { setPage(page - 1); window.scrollTo({ top: 0, behavior: "smooth" }); }}>Previous</Button>
+              <Button variant="outline" disabled={page <= 1} onClick={() => setPage(page - 1)}>Previous</Button>
               <span className="text-sm">Page {page} of {totalPages}</span>
-              <Button variant="outline" disabled={page >= totalPages} onClick={() => { setPage(page + 1); window.scrollTo({ top: 0, behavior: "smooth" }); }}>Next</Button>
+              <Button variant="outline" disabled={page >= totalPages} onClick={() => setPage(page + 1)}>Next</Button>
             </div>
           </div>
         )}
