@@ -131,12 +131,12 @@ export function OrdersPage() {
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle>New Orders</CardTitle>
+                  <CardTitle>Active Orders</CardTitle>
                   <ShoppingCart className="h-4 w-4 text-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
-                    {orders.filter((o) => o.status === "New").length}
+                    {orders.filter((o) => o.status === "Active").length}
                   </div>
                 </CardContent>
               </Card>

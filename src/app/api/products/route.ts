@@ -4,34 +4,41 @@ import { withAdminAuth, handleError, buildFilters } from '../utils';
 import { Product, ApiResponse } from '../types';
 
 // List all products with optional filtering
+
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient();
     const { searchParams } = new URL(request.url);
-    
-    const allowedFilters = ['category', 'name', 'slug'];
+
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("limit") || "5", 10);
+    const offset = (page - 1) * limit;
+
+    const allowedFilters = ["category", "name", "slug"];
     const filters = buildFilters(searchParams, allowedFilters);
-    
+
     let query = supabase
-      .from('products')
-      .select('id, name, description, price, inventory, category, image_1, image_2')
-      .order('created_at', { ascending: false });
-    
+      .from("products")
+      .select("id, name, description, price, inventory, category, image_1, image_2", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(offset, offset + limit - 1);
+
     Object.entries(filters).forEach(([key, value]) => {
-      if (key === 'name') {
-        query = query.ilike('name', `%${value}%`);
-      } else {
-        query = query.eq(key, value);
-      }
+      if (key === "name") query = query.ilike("name", `%${value}%`);
+      else query = query.eq(key, value);
     });
-    
-    const { data, error } = await query;
-    
+
+    const { data, error, count } = await query;
+
     if (error) throw error;
-    
+
     return NextResponse.json({
       success: true,
-      data: data
+      data,
+      total: count || 0,
+      page,
+      limit,
+      totalPages: Math.ceil((count || 0) / limit),
     });
   } catch (error) {
     return handleError(error);

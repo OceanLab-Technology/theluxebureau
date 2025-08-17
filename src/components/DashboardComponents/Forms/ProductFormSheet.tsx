@@ -24,7 +24,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useProductAdminStore } from "@/store/admin/productStore";
 import { useSiteSettingsStore } from "@/store/admin/siteSettingsStore";
 import {
@@ -32,10 +31,8 @@ import {
   X,
   Plus,
   Package,
-  Eye,
   ImageIcon,
   AlertCircle,
-  Check,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -80,9 +77,9 @@ export function ProductFormSheet({
   const [images, setImages] = useState<(File | string)[]>([]);
   const [customCategory, setCustomCategory] = useState("");
   const [showCustomCategory, setShowCustomCategory] = useState(false);
-
   const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
   const setOpen = controlledOnOpenChange || setInternalOpen;
+  const [removedImages, setRemovedImages] = useState<string[]>([]);
 
   const {
     createProduct,
@@ -149,6 +146,13 @@ export function ProductFormSheet({
   }, [open, isEdit, productId, fetchCategories, fetchSettings, fetchProductById, form]);
 
   useEffect(() => {
+    if (!open) {
+      setRemovedImages([]);
+    }
+  }, [open]);
+
+
+  useEffect(() => {
     if (isEdit && selectedProduct) {
       form.reset({
         name: selectedProduct.name || "",
@@ -200,14 +204,6 @@ export function ProductFormSheet({
     }
   };
 
-  const handleCustomCategoryAdd = () => {
-    if (customCategory.trim()) {
-      form.setValue("category", customCategory.trim());
-      setShowCustomCategory(false);
-      setCustomCategory("");
-    }
-  };
-
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -224,14 +220,23 @@ export function ProductFormSheet({
   };
 
   const removeImage = (index: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
+    setImages((prev) => {
+      const removed = prev[index];
+      // Only add to removedImages if it’s an existing image (string)
+      if (typeof removed === "string") {
+        setRemovedImages((prevRemoved) => [...prevRemoved, removed]);
+      }
+      // Remove from images array
+      return prev.filter((_, i) => i !== index);
+    });
   };
+
 
 
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
-      if (images.length === 0 && !isEdit) {
+      if (!isEdit && images.length === 0) {
         toast.error("Please upload at least one image");
         return;
       }
@@ -243,10 +248,17 @@ export function ProductFormSheet({
         }
       });
 
-      // Add images
-      images.forEach((file, i) => {
-        formData.append(`image_${i + 1}`, file);
+      // Append only new images (File objects)
+      images.forEach((fileOrUrl, i) => {
+        if (fileOrUrl instanceof File) {
+          formData.append(`image_${i + 1}`, fileOrUrl);
+        }
       });
+
+      // Append removed image URLs for deletion
+      if (isEdit && removedImages.length > 0) {
+        removedImages.forEach((url) => formData.append("removedImages[]", url));
+      }
 
       if (isEdit && productId) {
         await updateProduct(productId, formData);
@@ -256,11 +268,10 @@ export function ProductFormSheet({
         toast.success("Product created successfully");
       }
 
-      // Refresh the products list
       await fetchProducts();
-
       form.reset();
       setImages([]);
+      setRemovedImages([]);
       setOpen(false);
       setActiveTab("form");
     } catch (err: any) {
