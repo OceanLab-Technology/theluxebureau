@@ -393,8 +393,8 @@ export default function PersonalizationStep() {
   const getQuoteStyle = (): React.CSSProperties => {
     return {
       fontSize: "12px",
-      color: "#57534e",
-      fontFamily: "monospace", // fixed font for quotes
+      color: "#141313ff",
+      fontFamily: "Courier", // fixed font for quotes
     };
   };
 
