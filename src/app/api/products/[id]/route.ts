@@ -12,15 +12,15 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
     const supabase = await createClient();
-    
+
     const { data, error } = await supabase
       .from('products')
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error) throw error;
-    
+
     return NextResponse.json({
       success: true,
       data: data
@@ -35,10 +35,9 @@ export const PUT = withAdminAuth(
     const supabase = await createClient();
 
     try {
-      // ✅ Extract ID from URL manually
+      // Extract product ID from URL
       const url = new URL(req.url);
-      const id = url.pathname.split("/").pop(); // Assumes /api/products/[id]
-
+      const id = url.pathname.split("/").pop();
       if (!id) {
         return NextResponse.json({ success: false, error: "Missing product ID" }, { status: 400 });
       }
@@ -49,9 +48,11 @@ export const PUT = withAdminAuth(
         const formData = await req.formData();
         const updates: Record<string, any> = {};
 
+        // Standard fields
         const fields = [
           "name", "price", "inventory", "category", "description",
-          "title", "why_we_chose_it", "about_the_maker", "particulars", "slug"
+          "title", "packaging", "why_we_chose_it", "about_the_maker",
+          "particulars", "slug", "least_inventory_trigger"
         ];
 
         for (const key of fields) {
@@ -59,28 +60,55 @@ export const PUT = withAdminAuth(
           if (value !== null) updates[key] = value;
         }
 
+        // 1. Fetch existing product
+        const { data: product, error: fetchError } = await supabase
+          .from("products")
+          .select("*")
+          .eq("id", id)
+          .single();
+
+        if (fetchError || !product) {
+          return NextResponse.json({ success: false, error: "Product not found" }, { status: 404 });
+        }
+
+        // 2. Handle removed images
+        const removedImages = formData.getAll("removedImages[]") as string[];
+        for (const url of removedImages) {
+          if (!url) continue;
+
+          const parts = url.split("/");
+          const key = parts.slice(parts.length - 2).join("/"); // productId/filename
+          await supabase.storage.from("product-images").remove([key]);
+
+          // Clear DB fields corresponding to removed images
+          for (let i = 1; i <= 5; i++) {
+            if (product[`image_${i}` as keyof typeof product] === url) {
+              updates[`image_${i}`] = null;
+            }
+          }
+        }
+
+        // 3. Handle new image uploads
         for (let i = 1; i <= 5; i++) {
-          const file = formData.get(`image_${i}`) as File | null;
-          if (file) {
-            const fileName = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
+          const fileOrUrl = formData.get(`image_${i}`);
+          if (fileOrUrl instanceof File && fileOrUrl.size > 0) {
+            const fileName = `${Date.now()}-${fileOrUrl.name.replace(/\s+/g, "-")}`;
             const filePath = `${id}/${fileName}`;
 
             const { error: uploadErr } = await supabase.storage
               .from("product-images")
-              .upload(filePath, file, { upsert: true });
-
+              .upload(filePath, fileOrUrl, { upsert: true });
             if (uploadErr) continue;
 
             const { data: publicUrlData } = supabase.storage
               .from("product-images")
               .getPublicUrl(filePath);
 
-            if (publicUrlData?.publicUrl) {
-              updates[`image_${i}`] = publicUrlData.publicUrl;
-            }
+            if (publicUrlData?.publicUrl) updates[`image_${i}`] = publicUrlData.publicUrl;
           }
         }
 
+        // 4. Apply updates
         const { data: updated, error: updateErr } = await supabase
           .from("products")
           .update(updates)
@@ -95,7 +123,6 @@ export const PUT = withAdminAuth(
 
       // Handle JSON payload
       const json = await req.json();
-
       const { data: updated, error: updateErr } = await supabase
         .from("products")
         .update(json)
@@ -106,15 +133,13 @@ export const PUT = withAdminAuth(
       if (updateErr) throw updateErr;
 
       return NextResponse.json({ success: true, data: updated });
-    } catch (err) {
-      console.error(err);
-      return NextResponse.json(
-        { success: false, error: "Failed to update product" },
-        { status: 500 }
-      );
+    } catch (err: any) {
+      console.error("Product update error:", err);
+      return NextResponse.json({ success: false, error: "Failed to update product" }, { status: 500 });
     }
   }
 );
+
 
 // DELETE /api/products/[id]
 export const DELETE = withAdminAuth(

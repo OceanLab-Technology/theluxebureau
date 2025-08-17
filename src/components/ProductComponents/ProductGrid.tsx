@@ -115,15 +115,9 @@ export function ProductGrid({
   }, [selectedCategory, searchQuery, fetchProducts]);
 
   const filteredProducts = products.filter((product) => {
-    const matchesPrice =
-      product.price >= priceRange[0] && product.price <= priceRange[1];
     const productAvailability = product.inventory > 0 ? "in-stock" : "sold-out";
-    const matchesAvailability =
-      !availability ||
-      (availability === "in-stock" && productAvailability === "in-stock") ||
-      (availability === "sold-out" && productAvailability === "sold-out");
-
-    return matchesPrice && matchesAvailability;
+    const matchesAvailability = productAvailability === (availability || "in-stock");
+    return matchesAvailability;
   });
 
   if (loading && products.length === 0) {
@@ -132,7 +126,7 @@ export function ProductGrid({
 
   if (filteredProducts.length === 0) {
     return (
-      <div className="text-center py-20">
+      <div className="w-full flex items-center justify-center min-h-[50vh] py-20 flex-col text-center">
         <h3 className="text-[2rem] font-[400] mb-4">No products found</h3>
         <p className="text-muted">
           Try adjusting your filters or search terms.
@@ -175,14 +169,14 @@ export function ProductGrid({
             {selectedCategory === ""
               ? "Refined pieces that bring comfort, character, and an everyday reminder of your quiet generosity."
               : selectedCategory === "Literature"
-              ? "The Luxe offers a curated selection of literature, from timeless classics to contemporary masterpieces, each chosen for its enduring impact and literary significance."
-              : selectedCategory === "Drinks & Spirits"
-              ? "Thoughtfully curated and artfully presented, our selection of wines and spirits transforms exceptional bottles into extraordinary gestures"
-              : selectedCategory === "Floral"
-              ? "Explore our exquisite floral arrangements, where each bloom is handpicked to create stunning displays that bring beauty and elegance to any occasion."
-              : selectedCategory === "Home"
-              ? "Discover our curated collection of home decor, where each piece is chosen for its unique design and ability to transform your living space into a haven of style and comfort."
-              : ""}
+                ? "The Luxe offers a curated selection of literature, from timeless classics to contemporary masterpieces, each chosen for its enduring impact and literary significance."
+                : selectedCategory === "Drinks & Spirits"
+                  ? "Thoughtfully curated and artfully presented, our selection of wines and spirits transforms exceptional bottles into extraordinary gestures"
+                  : selectedCategory === "Floral"
+                    ? "Explore our exquisite floral arrangements, where each bloom is handpicked to create stunning displays that bring beauty and elegance to any occasion."
+                    : selectedCategory === "Home"
+                      ? "Discover our curated collection of home decor, where each piece is chosen for its unique design and ability to transform your living space into a haven of style and comfort."
+                      : ""}
           </motion.p>
         </motion.div>
 
@@ -212,16 +206,15 @@ export function ProductGrid({
         </AnimatePresence>
 
         <motion.div
-        className="h-[15.75rem] w-screen px-10 bg-[rgba(80,70,45,0.19)] flex items-center md:justify-end justify-center"
+          className="h-[15.75rem] w-screen px-10 bg-[rgba(80,70,45,0.19)] flex items-center md:justify-end justify-center"
           initial={{ opacity: 0, filter: "blur(5px)" }}
           animate={{ opacity: 1, filter: "blur(0px)" }}
           transition={{ delay: 0.6, duration: 0.5 }}
         >
           <div className="text-foreground">
             <motion.h2
-              className={`text-[1rem] font-medium uppercase text-secondary-foreground transition-opacity duration-200 ${
-                isTransitioning ? "animate-pulse" : ""
-              }`}
+              className={`text-[1rem] font-medium uppercase text-secondary-foreground transition-opacity duration-200 ${isTransitioning ? "animate-pulse" : ""
+                }`}
               animate={isTransitioning ? { opacity: [1, 0.5, 1] } : {}}
               transition={{
                 duration: 0.3,
@@ -231,9 +224,8 @@ export function ProductGrid({
               Next Section
             </motion.h2>
             <motion.div
-              className={`flex items-center gap-2 text-[2rem] font-[100] cursor-pointer hover:text-[#FBD060] transition-all duration-200 transform hover:scale-105 ${
-                isTransitioning ? "opacity-70" : "opacity-100"
-              }`}
+              className={`flex items-center gap-2 text-[2rem] font-[100] cursor-pointer hover:text-[#FBD060] transition-all duration-200 transform hover:scale-105 ${isTransitioning ? "opacity-70" : "opacity-100"
+                }`}
               onClick={handleNextCategory}
               whileHover={{ opacity: 0.8 }}
               whileTap={{ opacity: 0.6 }}

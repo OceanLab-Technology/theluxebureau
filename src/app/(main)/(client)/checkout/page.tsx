@@ -26,7 +26,7 @@ export default function CheckoutPage() {
         await fetchProducts();
       }
     };
-    
+
     initCheckout();
   }, [checkAuthStatus, fetchCartItems, fetchProducts, products.length]);
 
@@ -81,16 +81,15 @@ export default function CheckoutPage() {
 
   if (totalItems === 0) {
     return (
-      <div className="min-h-screen font-century">
-        <div className="max-w-4xl mx-auto p-16 text-center">
-          <h2 className="text-2xl font-semibold mb-4">Your cart is empty</h2>
-          <p className="text-muted-foreground mb-8">
-            Add some items to your cart before checking out.
-          </p>
-          <Button asChild>
-            <Link href="/products">Continue Shopping</Link>
-          </Button>
-        </div>
+
+      <div className="w-full flex items-center justify-center min-h-[70vh] py-20 flex-col text-center">
+        <h2 className="text-2xl font-semibold mb-4">Your cart is empty</h2>
+        <p className="text-muted-foreground mb-8">
+          Add some items to your cart before checking out.
+        </p>
+        <Button asChild>
+          <Link href="/products">Continue Shopping</Link>
+        </Button>
       </div>
     );
   }
@@ -182,7 +181,7 @@ export default function CheckoutPage() {
                     <p className="text-sm text-muted-foreground mb-4">
                       Please login to continue with your purchase. Your cart items will be saved.
                     </p>
-                    <Button 
+                    <Button
                       onClick={() => setShowLoginModal(true)}
                       className="w-full"
                       variant="box_yellow"

@@ -15,9 +15,11 @@ export type Product = {
   image_5?: string;
   slug?: string;
   category: string;
+  packaging?: string;
   why_we_chose_it?: string;
   about_the_maker?: string;
   particulars?: string;
+  least_inventory_trigger?: number;
 };
 
 type ProductUpdate = Partial<Product> | FormData;
@@ -25,11 +27,17 @@ type ProductUpdate = Partial<Product> | FormData;
 type ProductStore = {
   products: Product[] | null;
   selectedProduct: Product | null;
+  categories: string[];
   loading: boolean;
   error: string | null;
+  total: number;
+  page: number;
+  totalPages: number;
 
-  fetchProducts: () => Promise<void>;
+
+  fetchProducts: (page?: number, limit?: number) => Promise<void>;
   fetchProductById: (id: string) => Promise<void>;
+  fetchCategories: () => Promise<void>;
   createProduct: (data: FormData) => Promise<void>;
   updateProduct: (id: string, updates: ProductUpdate) => Promise<Product | null>;
   deleteProduct: (id: string) => Promise<void>;
@@ -38,24 +46,47 @@ type ProductStore = {
 export const useProductAdminStore = create<ProductStore>((set, get) => ({
   products: null,
   selectedProduct: null,
+  categories: [],
   loading: false,
   error: null,
+  total: 0,
+  page: 1,
+  totalPages: 1,
 
-  fetchProducts: async () => {
+
+  fetchProducts: async (page = 1, limit = 5) => {
     set({ loading: true, error: null });
     try {
-      const res = await fetch(`/api/products`);
+      const res = await fetch(`/api/products?page=${page}&limit=${limit}`);
       const json = await res.json();
 
       if (!res.ok || !json.success) throw new Error(json.error || "Failed to fetch products");
 
       set({
         products: json.data,
+        page: json.page,
+        total: json.total,
+        totalPages: json.totalPages,
         loading: false,
       });
     } catch (err: any) {
       set({ loading: false, error: err.message || "Unknown error" });
     }
+  },
+
+
+  fetchCategories: async () => {
+    const state = get();
+    if (!state.products) {
+      await state.fetchProducts();
+    }
+
+    const products = get().products || [];
+    const uniqueCategories = Array.from(new Set(
+      products.map(product => product.category).filter(Boolean)
+    )).sort();
+
+    set({ categories: uniqueCategories });
   },
 
   fetchProductById: async (id) => {
@@ -119,11 +150,12 @@ export const useProductAdminStore = create<ProductStore>((set, get) => ({
     }
   },
 
-  updateProduct: async (id, updates) => {
+  updateProduct: async (id: string, updates: FormData | Partial<Product>) => {
     set({ loading: true, error: null });
 
     try {
       const isForm = updates instanceof FormData;
+
       const res = await fetch(`/api/products/${id}`, {
         method: "PUT",
         headers: isForm ? undefined : { "Content-Type": "application/json" },
@@ -133,6 +165,7 @@ export const useProductAdminStore = create<ProductStore>((set, get) => ({
       const json = await res.json();
       if (!res.ok || !json.success) throw new Error(json.error || "Failed to update product");
 
+      // Update local store
       set((state) => ({
         loading: false,
         products: state.products?.map((p) => (p.id === id ? json.data : p)) || null,
@@ -159,7 +192,6 @@ export const useProductAdminStore = create<ProductStore>((set, get) => ({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(activityData),
       });
-
 
       return json.data as Product;
     } catch (err: any) {

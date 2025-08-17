@@ -4,34 +4,41 @@ import { withAdminAuth, handleError, buildFilters } from '../utils';
 import { Product, ApiResponse } from '../types';
 
 // List all products with optional filtering
+
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient();
     const { searchParams } = new URL(request.url);
-    
-    const allowedFilters = ['category', 'name', 'slug'];
+
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("limit") || "5", 10);
+    const offset = (page - 1) * limit;
+
+    const allowedFilters = ["category", "name", "slug"];
     const filters = buildFilters(searchParams, allowedFilters);
-    
+
     let query = supabase
-      .from('products')
-      .select('id, name, description, price, inventory, category, image_1, image_2')
-      .order('created_at', { ascending: false });
-    
+      .from("products")
+      .select("id, name, description, price, inventory, category, image_1, image_2", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(offset, offset + limit - 1);
+
     Object.entries(filters).forEach(([key, value]) => {
-      if (key === 'name') {
-        query = query.ilike('name', `%${value}%`);
-      } else {
-        query = query.eq(key, value);
-      }
+      if (key === "name") query = query.ilike("name", `%${value}%`);
+      else query = query.eq(key, value);
     });
-    
-    const { data, error } = await query;
-    
+
+    const { data, error, count } = await query;
+
     if (error) throw error;
-    
+
     return NextResponse.json({
       success: true,
-      data: data
+      data,
+      total: count || 0,
+      page,
+      limit,
+      totalPages: Math.ceil((count || 0) / limit),
     });
   } catch (error) {
     return handleError(error);
@@ -49,15 +56,19 @@ export const POST = withAdminAuth(
       const inventory = parseInt(formData.get('inventory') as string);
       const category = formData.get('category') as string;
     
-      const description = formData.get('category') as string || null;
+      const description = formData.get('description') as string || null;
       const title = formData.get('title') as string || null;
+      const packaging = formData.get('packaging') as string || null;
       const why_we_chose_it = formData.get('why_we_chose_it') as string || null;
       const about_the_maker = formData.get('about_the_maker') as string || null;
       const particulars = formData.get('particulars') as string || null;
-      const slug = formData.get('category') as string;
+      const slug = formData.get('slug') as string;
+      const least_inventory_trigger = formData.get('least_inventory_trigger') 
+        ? parseInt(formData.get('least_inventory_trigger') as string) 
+        : null;
 
 
-      if (!name || isNaN(price) || isNaN(inventory) || !category) {
+      if (!name || isNaN(price) || isNaN(inventory) || !category || !slug) {
         return NextResponse.json(
           { success: false, error: 'Missing required fields' },
           { status: 400 }
@@ -67,7 +78,20 @@ export const POST = withAdminAuth(
       // 1. Insert product without images
       const { data: created, error: insertErr } = await supabase
         .from('products')
-        .insert({ name, price, inventory, category, description, title, why_we_chose_it, about_the_maker, particulars, slug })
+        .insert({ 
+          name, 
+          price, 
+          inventory, 
+          category, 
+          description, 
+          title, 
+          packaging,
+          why_we_chose_it, 
+          about_the_maker, 
+          particulars, 
+          slug,
+          least_inventory_trigger
+        })
         .select()
         .single();
 

@@ -21,18 +21,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Filter, Edit, Euro, ShoppingCart } from "lucide-react";
+import {
+  Filter,
+  Edit,
+  Euro,
+  ShoppingCart,
+  ChevronDown,
+  Loader2,
+} from "lucide-react";
 import { useOrdersStore } from "@/store/admin/orderStore";
+import { toast } from "sonner";
 
 const getStatusColor = (status: string) => {
   switch (status.toLowerCase()) {
     case "new":
       return "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary";
-    case "processing":
+    case "active":
       return "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400";
     case "shipped":
       return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-400";
-    case "delivered":
+    case "complete":
       return "bg-violet-100 text-violet-800 dark:bg-violet-900/20 dark:text-violet-400";
     case "cancelled":
       return "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive";
@@ -45,7 +53,7 @@ export function OrdersPage() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [page, setPage] = useState(1);
 
-  const { orders, loading, fetchOrders, pagination } = useOrdersStore();
+  const { orders, loading, updatingOrderId, fetchOrders, updateOrderStatus, pagination } = useOrdersStore();
 
   useEffect(() => {
     const filters: Record<string, string> = {};
@@ -54,15 +62,28 @@ export function OrdersPage() {
     fetchOrders(filters, page);
   }, [statusFilter, page]);
 
-  const totalRevenue = orders.reduce((acc, order) => {
-    const rawTotal = order.total ?? "0";
-    const num = parseFloat(rawTotal.replace(/[^\d.-]/g, ""));
-    return acc + (isNaN(num) ? 0 : num);
-  }, 0);
+  const handleStatusUpdate = async (orderId: string, newStatus: string) => {
+    const success = await updateOrderStatus(orderId, newStatus);
+    if (success) {
+      toast.success(`Order status updated to ${newStatus}`);
+    } else {
+      toast.error("Failed to update order status");
+    }
+  };
+
+  const totalRevenue = orders
+    .filter((order) => order.paymentStatus === "completed")
+    .map((order) => {
+      order.status === "cancelled" && (order.total = "0");
+      if (!order.total) return 0;
+      const rawTotal = order.total ?? "0";
+      const num = parseFloat(rawTotal.replace(/[^\d.-]/g, ""));
+      return isNaN(num) ? 0 : num;
+    })
+    .reduce((acc, curr) => acc + curr, 0);
 
   return (
     <div className="flex flex-col font-century">
-      {/* 🔘 Header */}
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <SidebarTrigger className="-ml-1" />
         <h1 className="text-lg font-semibold font-century">Orders</h1>
@@ -71,30 +92,29 @@ export function OrdersPage() {
       <div className="flex-1 space-y-4 p-8 pt-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-semibold font-century">ORDERS</h2>
+            <h2 className="text-3xl font-semibold font-century">Orders</h2>
             <p className="text-muted-foreground">
               Manage and track customer orders
             </p>
           </div>
           <div className="flex items-center gap-2">
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[180px] bg-foreground text-background font-century">
+              <SelectTrigger className="bg-foreground w-[145px] text-sm text-background font-century">
                 <Filter className="mr-2 h-4 w-4 text-background" />
                 <SelectValue placeholder="Filter orders" />
               </SelectTrigger>
               <SelectContent className="text-foreground font-century">
                 <SelectItem value="all">All Orders</SelectItem>
-                <SelectItem value="new">New</SelectItem>
-                <SelectItem value="processing">Processing</SelectItem>
-                <SelectItem value="shipped">Shipped</SelectItem>
-                <SelectItem value="delivered">Delivered</SelectItem>
-                <SelectItem value="cancelled">Cancelled</SelectItem>
+                <SelectItem value="New">New</SelectItem>
+                <SelectItem value="Active">Active</SelectItem>
+                <SelectItem value="Shipped">Shipped</SelectItem>
+                <SelectItem value="Complete">Complete</SelectItem>
+                <SelectItem value="Cancelled">Cancelled</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
 
-        {/* 📊 Summary Cards */}
         <div className="flex-1 space-y-4">
           {loading ? (
             <OrdersSummarySkeleton />
@@ -106,22 +126,17 @@ export function OrdersPage() {
                   <ShoppingCart className="h-4 w-4 text-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">
-                    {orders.length}
-                  </div>
+                  <div className="text-2xl font-bold">{orders.length}</div>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle>New Orders</CardTitle>
+                  <CardTitle>Active Orders</CardTitle>
                   <ShoppingCart className="h-4 w-4 text-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
-                    {
-                      orders.filter((o) => o.status.toLowerCase() === "new")
-                        .length
-                    }
+                    {orders.filter((o) => o.status === "Active").length}
                   </div>
                 </CardContent>
               </Card>
@@ -140,7 +155,6 @@ export function OrdersPage() {
           )}
         </div>
 
-        {/* 📋 Orders Table */}
         <Card>
           <CardContent className="p-0">
             {loading ? (
@@ -168,26 +182,48 @@ export function OrdersPage() {
                         <TableCell>{order.customerName || "-"}</TableCell>
                         <TableCell>{order.recipientName || "-"}</TableCell>
                         <TableCell>
-                          {order.deliveryDate ? 
-                            new Date(order.deliveryDate).toLocaleDateString() : 
-                            "-"
-                          }
+                          {order.deliveryDate
+                            ? new Date(order.deliveryDate).toLocaleDateString()
+                            : "-"}
                         </TableCell>
                         <TableCell className="font-medium">
-                          ${order.total || "0.00"}
+                          €{order.total || "0.00"}
                         </TableCell>
                         <TableCell>
-                          <Badge
-                            className={getStatusColor(order.status)}
-                            variant="secondary"
+                          <Select
+                            value={order.status}
+                            onValueChange={(newStatus) =>
+                              handleStatusUpdate(order.id!, newStatus)
+                            }
+                            disabled={updatingOrderId === order.id}
                           >
-                            {order.status}
-                          </Badge>
+                            <SelectTrigger className="w-[130px] h-6 text-[15px] border-stone-300 hover:bg-secondary bg-transparent py-0 focus:ring-0">
+                              <div className="flex items-center gap-2">
+                                {updatingOrderId === order.id ? (
+                                  <>
+                                    <Loader2 className="h-3 w-3 animate-spin" />
+                                    <span>{order.status}</span>
+                                  </>
+                                ) : (
+                                  order.status
+                                )}
+                              </div>
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="New">New</SelectItem>
+                              <SelectItem value="Active">Active</SelectItem>
+                              <SelectItem value="Shipped">Shipped</SelectItem>
+                              <SelectItem value="Complete">Complete</SelectItem>
+                              <SelectItem value="Cancelled">
+                                Cancelled
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
                         </TableCell>
                         <TableCell className="text-right">
                           <Link href={`/admin/orders/${order.id}`}>
                             <Button variant="ghost" size="sm">
-                              <Edit className="h-4 w-4" />  
+                              <Edit className="h-4 w-4" />
                             </Button>
                           </Link>
                         </TableCell>

@@ -242,6 +242,9 @@ type CustomerStore = {
   deleteCustomer: (id: string) => Promise<void>
   setPage: (page: number) => void
   setLimit: (limit: number) => void
+
+
+  updatingCustomerId: string | null
 }
 
 export const useCustomerAdminStore = create<CustomerStore>((set, get) => ({
@@ -249,6 +252,7 @@ export const useCustomerAdminStore = create<CustomerStore>((set, get) => ({
   customer: null,
   loading: false,
   error: null,
+  updatingCustomerId: null,
 
   page: 1,
   limit: 10,
@@ -347,28 +351,56 @@ export const useCustomerAdminStore = create<CustomerStore>((set, get) => ({
     }
   },
 
+  //   updateCustomer: async (id, data) => {
+  //   set({ updatingCustomerId: id, error: null })
+  //   try {
+  //     const res = await fetch(`/api/customers/${id}`, {
+  //       method: "PUT",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(data),
+  //     })
+  //     const json = await res.json()
+
+  //     if (!res.ok || !json.success) throw new Error(json.error || "Failed to update customer")
+
+  //     // update the customer list locally without refetching everything (optional)
+  //     set((state) => ({
+  //       customers: state.customers?.map(c => c.id === id ? { ...c, ...data } : c) || null
+  //     }))
+
+  //     await get().fetchCustomer(id)
+  //   } catch (err: any) {
+  //     set({ error: err.message || "Unknown error" })
+  //   } finally {
+  //     set({ updatingCustomerId: null })
+  //   }
+  // },
+
   updateCustomer: async (id, data) => {
-    set({ loading: true, error: null })
+    set({ updatingCustomerId: id, error: null })
     try {
       const res = await fetch(`/api/customers/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       })
-
       const json = await res.json()
 
-      if (!res.ok || !json.success) {
-        throw new Error(json.error || "Failed to update customer")
-      }
+      if (!res.ok || !json.success) throw new Error(json.error || "Failed to update customer")
 
-      await get().fetchCustomers()
-      await get().fetchCustomer(id)
-      set({ loading: false })
+      // Update the customer locally without refetching all
+      set((state) => ({
+        customers: state.customers?.map(c => c.id === id ? { ...c, ...data } : c) || null
+      }))
+
+      await get().fetchCustomer(id) // update single customer detail if needed
     } catch (err: any) {
-      set({ loading: false, error: err.message || "Unknown error" })
+      set({ error: err.message || "Unknown error" })
+    } finally {
+      set({ updatingCustomerId: null })
     }
   },
+
 
   deleteCustomer: async (id) => {
     set({ loading: true, error: null })

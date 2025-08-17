@@ -113,6 +113,8 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-6 overflow-hidden pt-8 font-century">
         <div className="space-y-4">
           <div className="lg:w-full lg:h-[60%] relative h-[30.5rem] bg-muted/20 overflow-hidden">
+          {/* !!! Most important line for adjusting height and width of images */}
+            {/* <div className="relative aspect-auto overflow-hidden w-[100%] h-[100%] md:w-[100%] md:h-[59.1875rem] cursor-pointer"> */}
             <AnimatePresence mode="wait">
               <motion.img
                 key={selectedImageIndex}

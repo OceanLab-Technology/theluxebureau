@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useSiteSettingsStore } from "@/store/admin/siteSettingsStore";
 import { AddFontDialog } from "@/components/DashboardComponents/Forms/AddFontDialog";
 import { AddQuoteDialog } from "@/components/DashboardComponents/Forms/AddQuoteDialog";
+import { AddPackagingDialog } from "@/components/DashboardComponents/Forms/AddPackagingDialog";
 import { Trash2, Eye } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
@@ -21,24 +22,14 @@ export default function SettingsPage() {
     updateQuote,
     deleteQuote,
     deleteFont,
+    deletePackaging,
     saveSettings,
     hasChanges,
   } = useSiteSettingsStore();
 
-  const [localApiKey, setLocalApiKey] = useState(settings.api_key);
-
   useEffect(() => {
     fetchSettings();
   }, []);
-
-  useEffect(() => {
-    setLocalApiKey(settings.api_key);
-  }, [settings.api_key]);
-
-  const handleApiKeyChange = (value: string) => {
-    setLocalApiKey(value);
-    updateApiKey(value);
-  };
 
   const renderFonts = () => {
     if (loading) {
@@ -144,6 +135,56 @@ export default function SettingsPage() {
     );
   };
 
+  const renderPackaging = () => {
+    if (loading) {
+      return (
+        <div className="space-y-2">
+          {[...Array(2)].map((_, i) => (
+            <Skeleton key={i} className="h-20 w-full rounded-md" />
+          ))}
+        </div>
+      );
+    }
+
+    if (settings.packaging.length === 0) {
+      return (
+        <p className="text-muted-foreground text-sm">
+          No packaging options uploaded yet. Upload your first packaging option above.
+        </p>
+      );
+    }
+
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {settings.packaging.map((pkg) => (
+          <div
+            key={pkg.id}
+            className="relative group border rounded-lg overflow-hidden"
+          >
+            <div className="aspect-video bg-muted/20">
+              <img
+                src={pkg.image_url}
+                alt={pkg.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="p-3">
+              <h4 className="font-medium text-sm">{pkg.title}</h4>
+            </div>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => deletePackaging(pkg.id)}
+              className="absolute top-2 right-2 h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="flex flex-col font-century">
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
@@ -202,6 +243,17 @@ export default function SettingsPage() {
             </div>
           </CardHeader>
           <CardContent className="space-y-4">{renderQuotes()}</CardContent>
+        </Card>
+
+        {/* Packaging Section */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle>Product Packaging</CardTitle>
+              <AddPackagingDialog />
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">{renderPackaging()}</CardContent>
         </Card>
 
         {/* Save Button */}
