@@ -18,7 +18,7 @@ export function CartSummary({ onClose }: CartSummaryProps) {
   const { navigateWithAuth, showLoginModal, handleCloseModal, featureName } = useAuthenticatedNavigation();
   
   const handleCheckout = () => {
-    if (onClose) {
+    if (onClose && user) {
       onClose();
     }
     navigateWithAuth("/checkout", "proceed to checkout");
