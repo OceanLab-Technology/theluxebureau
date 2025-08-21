@@ -9,6 +9,7 @@ import { useMainStore } from "@/store/mainStore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 export function LoginForm({
   className,
@@ -19,11 +20,12 @@ export function LoginForm({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [redirectTo, setRedirectTo] = useState("/products");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const { handleLoginSuccess } = useMainStore();
   const router = useRouter();
 
   useEffect(() => {
-    // Safely get search params on client side
+   
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
       const redirect = urlParams.get('redirect');
@@ -96,15 +98,25 @@ export function LoginForm({
               >
                 PASSWORD
               </Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
-                placeholder="*************************"
-                required
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={isPasswordVisible ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                  placeholder="*************************"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setIsPasswordVisible((v) => !v)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-700"
+                  tabIndex={-1}
+                >
+                  {isPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
             </div>
 
             <div className="mb-8 w-full">

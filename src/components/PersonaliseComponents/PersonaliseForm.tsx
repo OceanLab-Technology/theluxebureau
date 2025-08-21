@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from "react";
@@ -217,6 +218,7 @@ export default function PersonaliseForm({
       console.error("Failed to add personalised item to cart:", error);
     }
   };
+
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
@@ -239,9 +241,31 @@ export default function PersonaliseForm({
     return "NEXT";
   };
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown, true);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown, true);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    const handleGlobalClose = () => {
+      if (onCloseSheet) onCloseSheet();
+    };
+    window.addEventListener("globalClose", handleGlobalClose);
+    return () => {
+      window.removeEventListener("globalClose", handleGlobalClose);
+    };
+  }, [onCloseSheet]);
+
   const handleStepClick = (stepId: number) => {
     if (stepId < currentStep) {
-      // Go back to the clicked step
       for (let i = currentStep; i > stepId; i--) {
         prevStep();
       }
@@ -264,18 +288,18 @@ export default function PersonaliseForm({
         </div>
         <div className="grid grid-cols-4 justify-around uppercase text-stone-600 font-century">
           {steps.map((s) => (
-            <button
+            <div
               key={s.id}
-              type="button"
-              disabled={s.id >= currentStep}
+              className={`text-[0.93rem] tracking-wider small-text cursor-pointer ${
+                currentStep === s.id
+                  ? "text-secondary-foreground"
+                  : "text-stone-500"
+              }`}
               onClick={() => handleStepClick(s.id)}
-              className={`text-[0.93rem] tracking-wider small-text cursor-pointer transition-colors
-                ${currentStep === s.id ? "text-secondary-foreground" : "text-stone-500"}
-                ${s.id < currentStep ? "hover:text-secondary-foreground" : "cursor-default opacity-60"}
-              `}
+              style={{ pointerEvents: s.id < currentStep ? "auto" : "none" }}
             >
               {s.label}
-            </button>
+            </div>
           ))}
         </div>
         <div className="mt-2 w-full bg-stone-500">
