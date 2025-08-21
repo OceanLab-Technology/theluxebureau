@@ -20,28 +20,29 @@ export function EmptyCart({ onClose }: EmptyCartProps) {
   };
 
   return (
-    <div className="max-w-md mx-auto flex justify-center items-center h-[calc(100vh-4rem)]">
-      <div className="pt-6">
-        <div className="text-center space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-2xl font-bold text-stone-900">
-              Your cart is empty
-            </h2>
-            <p className="text-stone-600">
-              Looks like you haven't added any items to your cart yet. Start
-              exploring our products and add some items you love.
-            </p>
-          </div>
-          <div className="space-y-3">
-            <Button onClick={handleStartShopping} className="w-full" size="lg">
-              {onClose ? "Continue Shopping" : "Start Shopping"}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+    <div className=" min-h-[calc(100vh-4rem)] flex items-center justify-center p-6">
+      <div className="max-w-md w-full text-center space-y-6">
+        {/* Header */}
+        <div className="space-y-4">
+          <h2 className="text-[#40362c] font-century text-3xl font-[500] leading-tight">
+            Your cart is empty
+          </h2>
+          
+          <p className="text-[oklch(54.45%_0.0296_76.5643)] font-century text-[16px] font-[400] leading-6">
+            Looks like you haven't added any items to your cart yet.
+            <br />
+            Start exploring our products and add something you love.
+          </p>
+        </div>
 
-            <div className="text-sm text-stone-500">
-              Or browse our featured products below
-            </div>
-          </div>
+        {/* Continue Shopping Button */}
+        <div className="pt-4">
+          <button
+            onClick={handleStartShopping}
+            className="w-full bg-[#E8B851] text-[#6B5B3F] font-schoolbook-cond text-[14px] uppercase tracking-[0.1em] py-4 px-8 rounded-none border-none hover:bg-[#D4A441] transition-colors duration-200 font-[400]"
+          >
+            CONTINUE SHOPPING &gt;
+          </button>
         </div>
       </div>
     </div>

@@ -137,7 +137,7 @@ export default function DeliveryDetailsStep() {
 
         <div className="pt-4 flex md:items-center items-start md:flex-row flex-col pb-1 justify-between border-b border-stone-500">
           <p className="text-stone-700 text-sm mb-3">
-            Would you like shipping updates via SMS?
+            Would you like delivery updates via SMS?
           </p>
           <div className="flex md:gap-6 gap-4">
             <label className="flex items-center space-x-2 cursor-pointer">

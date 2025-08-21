@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMainStore } from "@/store/mainStore";
 import { CartItem as CartItemType } from "@/app/api/types";
 import { Product } from "@/app/api/types";
@@ -34,13 +34,12 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
   const [quantity, setQuantity] = useState(item.quantity);
   const [isUpdating, setIsUpdating] = useState(false);
 
-    const borderClass =
+  const borderClass =
     index === 0
       ? "border-t border-b" // first item: top + bottom
       : index === lastIndex
-      ? "border-b"           // last item: bottom only
-      : "border-b";          // middle: bottom only
-
+      ? "border-b" // last item: bottom only
+      : "border-b"; // middle: bottom only
 
   const { product } = item;
 
@@ -50,18 +49,18 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
 
   const convertToPersonaliseData = (customData: any): personaliseFormData => {
     return {
-      yourName: customData?.yourName || '',
-      recipientName: customData?.recipientName || '',
-      recipientAddress: customData?.recipientAddress || '',
-      recipientCity: customData?.recipientCity || '',
-      recipientEmail: customData?.recipientEmail || '',
-      deliveryDate: customData?.deliveryDate || '',
-      preferredDeliveryTime: customData?.preferredDeliveryTime || '',
-      selectedFont: customData?.selectedFont || 'default',
-      headerText: customData?.headerText || 'Header',
-      selectedQuote: customData?.selectedQuote || '',
-      customMessage: customData?.customMessage || '',
-      smsUpdates: customData?.smsUpdates || 'none',
+      yourName: customData?.yourName || "",
+      recipientName: customData?.recipientName || "",
+      recipientAddress: customData?.recipientAddress || "",
+      recipientCity: customData?.recipientCity || "",
+      recipientEmail: customData?.recipientEmail || "",
+      deliveryDate: customData?.deliveryDate || "",
+      preferredDeliveryTime: customData?.preferredDeliveryTime || "",
+      selectedFont: customData?.selectedFont || "default",
+      headerText: customData?.headerText || "Header",
+      selectedQuote: customData?.selectedQuote || "",
+      customMessage: customData?.customMessage || "",
+      smsUpdates: customData?.smsUpdates || "none",
     };
   };
 
@@ -117,6 +116,8 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
       handleQuantityChange(newQuantity);
     }
   };
+
+  const isDesktop = useIsDesktop();
 
   return (
     <div className={`flex items-start space-x-6 md:py-6 py-4 border-secondary-foreground/50 ${borderClass}`}>
@@ -225,20 +226,24 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
                     REMOVE
                   </button>
                 </AlertDialogTrigger>
-                <AlertDialogContent>
+                <AlertDialogContent className="bg-[#F5F1E8] border-none">
                   <AlertDialogHeader>
-                    <AlertDialogTitle className="text-xl font-century font-[100]">
+                    <AlertDialogTitle className="text-[#8B7355] font-century text-2xl font-[400]">
                       Remove Item
                     </AlertDialogTitle>
-                    <AlertDialogDescription className="text-lg leading-6">
-                      Are you sure you want to remove "{product.name}" from your
-                      cart?
+                    <AlertDialogDescription className="text-[oklch(54.45%_0.0296_76.5643)] font-century text-lg font-[400] leading-6 mb-2">
+                      Are you sure you want to remove "{product.name}" from your cart?
                     </AlertDialogDescription>
                   </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleRemoveItem}>
-                      Remove
+                  <AlertDialogFooter className="flex gap-4 mt-8">
+                    <AlertDialogCancel className="bg-[#6B5B3F] text-white font-schoolbook-cond text-sm uppercase tracking-[0.1em] rounded-none border-none hover:bg-[#5A4A33]">
+                      CANCEL
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleRemoveItem}
+                      className="bg-[#E8B851] text-[#6B5B3F] font-schoolbook-cond text-sm uppercase tracking-[0.1em] rounded-none border-none hover:bg-[#D4A441]"
+                    >
+                      REMOVE
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -303,22 +308,53 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
               REMOVE
             </button>
           </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle className="text-2xl">
-                Remove Item
-              </AlertDialogTitle>
-              <AlertDialogDescription className="text-lg leading-6">
-                Are you sure you want to remove "{product.name}" from your cart?
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleRemoveItem}>
-                Remove
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
+          {isDesktop ? (
+            // Desktop dialog
+            <AlertDialogContent className="bg-[#F5F1E8] border-none">
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-[#40362c] font-century text-2xl font-[500]">
+                  Remove Item
+                </AlertDialogTitle>
+                <AlertDialogDescription className="text-[oklch(54.45%_0.0296_76.5643)] font-century text-[15px] font-[400] leading-6 mb-2">
+                  Are you sure you want to remove "{product.name}" from your cart?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter className="flex gap-4 mt-4 justify-center">
+                <AlertDialogCancel className="bg-[#6B5B3F] text-[oklch(98.53%_0.0069_88.6416)] font-schoolbook-cond text-[10px] uppercase tracking-[0.1em] rounded-[6px] sborder-none hover:bg-[#5A4A33] w-full md:w-28">
+                  CANCEL
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleRemoveItem}
+                  className="bg-[#E8B851] text-[#6B5B3F] font-schoolbook-cond text-[10px] uppercase tracking-[0.1em] rounded-[6px]  border-none hover:bg-[#D4A441] w-full md:w-28"
+                >
+                  REMOVE
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          ) : (
+            // Mobile dialog
+            <AlertDialogContent className="bg-[#F5F1E8] border-none">
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-[#40362c] font-century text-2xl font-[500]">
+                  Remove Item
+                </AlertDialogTitle>
+                <AlertDialogDescription className="text-[oklch(54.45%_0.0296_76.5643)] font-century text-[15px] font-[400] leading-6 mb-2">
+                  Are you sure you want to remove "{product.name}" from your cart?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter className="flex gap-4 mt-4 justify-center">
+                <AlertDialogCancel className="bg-[#6B5B3F] text-[oklch(98.53%_0.0069_88.6416)] font-schoolbook-cond text-[10px] uppercase tracking-[0.1em] rounded-[6px] sborder-none hover:bg-[#5A4A33] w-full md:w-28">
+                  CANCEL
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleRemoveItem}
+                  className="bg-[#E8B851] text-[#6B5B3F] font-schoolbook-cond text-[10px] uppercase tracking-[0.1em] rounded-[6px]  border-none hover:bg-[#D4A441] w-full md:w-28"
+                >
+                  REMOVE
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          )}
         </AlertDialog>
       </div>
 
@@ -327,4 +363,19 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
       )}
     </div>
   );
+}
+
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    function handleResize() {
+      setIsDesktop(window.innerWidth >= 768);
+    }
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return isDesktop;
 }

@@ -178,7 +178,7 @@ export default function CheckoutPage() {
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Shipping</span>
+                      <span> DELIVERY </span>
                       <span>Free</span>
                     </div>
                     <div className="flex justify-between font-semibold border-t pt-2 mt-2">

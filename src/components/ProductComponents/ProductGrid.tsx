@@ -144,7 +144,7 @@ export function ProductGrid({
         exit="out"
         variants={pageVariants}
         transition={pageTransition}
-        className="space-y-8 font-century"
+        className="space-y-8 w-full font-century"
       >
         <motion.div
           className="md:px-6 px-6 mb-15"
@@ -180,33 +180,29 @@ export function ProductGrid({
           </motion.p>
         </motion.div>
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`${selectedCategory}-products`}
-            variants={gridVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            className="grid grid-cols-2 gap-2 md:px-6 px-4 md:w-[90%]"
-          >
-            {filteredProducts.map((product, index) => (
-              <motion.div
-                key={product.id}
-                variants={cardVariants}
-                initial="hidden"
-                animate="visible"
-                exit="hidden"
-                custom={index}
-                transition={{ delay: index * 0.1 }}
-              >
-                <ProductCard product={product} />
-              </motion.div>
-            ))}
-          </motion.div>
+              <AnimatePresence mode="wait">
+             <motion.div
+  key={`${selectedCategory}-products`}
+  variants={gridVariants}
+  initial="hidden"
+  animate="visible"
+  exit="exit"
+  className="grid grid-cols-2 md:grid-cols-3 gap-y-[12px] md:gap-y-[6px] gap-x-[12px] md:gap-x-1 px-2 md:px-0 w-full max-w-full"
+>
+  {filteredProducts.map((product, idx) => (
+    <motion.div
+      key={product.id}
+      variants={cardVariants}
+      className={`flex ${idx === 0 ? "md:ml-3" : ""} ${idx === filteredProducts.length - 1 ? "md:mr-3" : ""}`}
+    >
+      <ProductCard product={product} />
+    </motion.div>
+  ))}
+</motion.div>
         </AnimatePresence>
 
-        <motion.div
-          className="h-[15.75rem] w-screen px-10 bg-[rgba(80,70,45,0.19)] flex items-center md:justify-end justify-center"
+       <motion.div
+          className="h-[15.75rem] w-full px-10 bg-[rgba(80,70,45,0.19)] flex items-center md:justify-end justify-center"
           initial={{ opacity: 0, filter: "blur(5px)" }}
           animate={{ opacity: 1, filter: "blur(0px)" }}
           transition={{ delay: 0.6, duration: 0.5 }}
@@ -255,7 +251,7 @@ export function ProductGrid({
 
         {loading && products.length > 0 && (
           <motion.div
-            className="grid grid-cols-2 md:gap-6 gap-3 md:px-10 px-4"
+            className="grid grid-cols-3 md:gap-6 gap-3 md:px-10 px-4"
             initial={{ opacity: 0, filter: "blur(5px)" }}
             animate={{ opacity: 1, filter: "blur(0px)" }}
             exit={{ opacity: 0, filter: "blur(5px)" }}
@@ -268,7 +264,7 @@ export function ProductGrid({
                 animate={{ opacity: 1, filter: "blur(0px)" }}
                 transition={{ delay: index * 0.1 }}
               >
-                <div className="md:h-130 h-66 bg-muted/20 rounded"></div>
+                <div className="md:h-90 h-86 bg-muted/20 rounded"></div>
                 <div className="h-4 bg-muted/20 rounded w-3/4"></div>
                 <div className="h-4 bg-muted/20 rounded w-16"></div>
               </motion.div>

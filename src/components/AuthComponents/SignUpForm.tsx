@@ -109,7 +109,7 @@ export function SignUpForm({
                 htmlFor="shipping-address"
                 className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
               >
-                SHIPPING ADDRESS
+                 DELIVERY ADDRESS
               </Label>
               <Input
                 id="shipping-address"
@@ -135,7 +135,7 @@ export function SignUpForm({
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
-                placeholder="+1 222 333 4444"
+                placeholder="+44 222 333 4444"
                 required
               />
             </div>

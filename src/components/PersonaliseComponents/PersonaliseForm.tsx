@@ -239,6 +239,15 @@ export default function PersonaliseForm({
     return "NEXT";
   };
 
+  const handleStepClick = (stepId: number) => {
+    if (stepId < currentStep) {
+      // Go back to the clicked step
+      for (let i = currentStep; i > stepId; i--) {
+        prevStep();
+      }
+    }
+  };
+
   return (
     <section className="flex flex-col min-h-[calc(100vh-2rem)] md:pt-20 pt-15">
       <div className="mb-6 md:mb-10">
@@ -255,16 +264,18 @@ export default function PersonaliseForm({
         </div>
         <div className="grid grid-cols-4 justify-around uppercase text-stone-600 font-century">
           {steps.map((s) => (
-            <div
+            <button
               key={s.id}
-              className={`text-[0.93rem] tracking-wider small-text cursor-pointer ${
-                currentStep === s.id
-                  ? "text-secondary-foreground"
-                  : "text-stone-500"
-              }`}
+              type="button"
+              disabled={s.id >= currentStep}
+              onClick={() => handleStepClick(s.id)}
+              className={`text-[0.93rem] tracking-wider small-text cursor-pointer transition-colors
+                ${currentStep === s.id ? "text-secondary-foreground" : "text-stone-500"}
+                ${s.id < currentStep ? "hover:text-secondary-foreground" : "cursor-default opacity-60"}
+              `}
             >
               {s.label}
-            </div>
+            </button>
           ))}
         </div>
         <div className="mt-2 w-full bg-stone-500">

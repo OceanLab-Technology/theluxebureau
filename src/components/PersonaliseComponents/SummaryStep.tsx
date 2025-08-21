@@ -176,7 +176,7 @@ export default function SummaryStep() {
 
         <div className="flex md:items-center items-start md:flex-row flex-col gap-2 border-b border-b-stone-400 justify-between border-mutedftext-muted pb-1">
           <p className="text-stone-700 text-[0.93rem]">
-            Would you like shipping updates via SMS?
+            Would you like  delivery updates via SMS?
           </p>
           <div className="flex md:gap-6 gap-4">
             <label className="flex items-center space-x-2 cursor-pointer">
