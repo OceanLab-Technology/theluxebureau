@@ -389,12 +389,11 @@ export default function PersonalizationStep() {
     };
   };
 
-  // Fixed style for quotes (doesn't change with dropdown font)
   const getQuoteStyle = (): React.CSSProperties => {
     return {
       fontSize: "12px",
       color: "#57534e",
-      fontFamily: "monospace", // fixed font for quotes
+      fontFamily: "monospace", 
     };
   };
 
@@ -449,7 +448,7 @@ export default function PersonalizationStep() {
     fetchSettings();
   }, []);
 
-  // Helper function to get quote text by author
+
   const getQuoteByAuthor = (authorName: string) => {
     if (!siteSettings?.quotes?.length || authorName === "select") return "";
 
@@ -458,19 +457,18 @@ export default function PersonalizationStep() {
   };
 
   return (
-    <div className="font-century">
-      <p className="text-secondary-foreground font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
-        Our gifts arrive with custom stationery, letterpressed by hand at the Luxe Bureau atelier, in Noir ink on GF Smith Mohawk White paper.
-      </p>
+    <div className="font-century mt-4">
+  <div className="max-w-2xl w-full">
+    <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-1 break-words">
+      Our gifts are sent with custom stationery, letter-pressed by hand at the Luxe Bureau atelier. In the header field, please enter your own name, initials, or company to create your custom letterhead. You may choose between two type styles below.
+    </p>
+    <br/>
+    <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-4 break-words">
+      Your personal message will be typeset and printed in the Luxe Bureau's signature typewriter font. Please type your message directly onto the notecard. For added inspiration, select a quote from the drop down menu to add this to your message.
+    </p>
+  </div>
       <br />
-      <p className="text-secondary-foreground font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
-        In the header, add your name, initials, or company to create your bespoke letterhead. You may choose from two type styles below.
-      </p>
-      <br />
-      <p className="text-secondary-foreground mb-8 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
-        Your personal message will be set in our signature typewriter font. For inspiration, you can select a quote from the dropdown.
-      </p>
-
+    
       <div className="flex md:gap-12 gap-4 mb-8">
         {/* Header Font Selector */}
         <div className="w-40 font-[Marfa]">
