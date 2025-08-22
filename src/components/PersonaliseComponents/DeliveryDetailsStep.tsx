@@ -51,6 +51,31 @@ export default function DeliveryDetailsStep() {
     updateFormData({ smsUpdates: value });
   };
 
+     
+const formatDateWithOrdinal = (date:any) => {
+  const dayName = format(date, "EEEE");
+  const day = format(date, "d");
+  const month = format(date, "MMMM");
+  const year = format(date, "yyyy");
+  
+
+  const getOrdinalSuffix = (day :any) => {
+    const dayNum = parseInt(day);
+    if (dayNum >= 11 && dayNum <= 13) return "th";
+    switch (dayNum % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
+  };
+  
+  const ordinalSuffix = getOrdinalSuffix(day);
+  
+  return { dayName, day, ordinalSuffix, month, year };
+};
+
+
   return (
     <div className="">
       <p className="text-secondary-foreground font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
@@ -93,10 +118,10 @@ export default function DeliveryDetailsStep() {
           />
         </div>
 
-     
+
          <div className="flex flex-col mt-6 md:flex-row md:items-center md:justify-between">
           <label htmlFor="delivery-date" className="text-stone-700 text-[0.9375rem] font-[300] mb-2 md:mb-0">
-            Delivery date
+            Preferred delivery date*
           </label>
           <Popover>
             <PopoverTrigger asChild>
@@ -107,9 +132,20 @@ export default function DeliveryDetailsStep() {
                   !date && "text-stone-500"
                 )}
               >
-                {date
-                  ? format(date, "EEEE, do MMMM yyyy") 
-                  : <span></span>}
+                {date ? (
+                  <span className="flex items-baseline">
+                    {(() => {
+                      const { dayName, day, ordinalSuffix, month, year } = formatDateWithOrdinal(date);
+                      return (
+                        <>
+                        {dayName}, {day} <sup className="text-xs">{ordinalSuffix}</sup>{" "} {" "}  {month} {" "} {year}
+                        </>
+                      );
+                    })()}
+                  </span>
+                ) : (
+                  <span></span>
+                )}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -138,6 +174,7 @@ export default function DeliveryDetailsStep() {
           </Popover>
         </div>
 
+
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <label htmlFor="delivery-time" className="text-stone-700 text-[0.9375rem] font-[300] mb-2 md:mb-0">
             Preferred delivery time*
@@ -160,26 +197,18 @@ export default function DeliveryDetailsStep() {
           </Select>
         </div>
 
-        
-
-         {/* New Section: Would you like shipping updates to be sent by text message or email? */}
-        <div className="pt-4 flex flex-col md:flex-row md:items-center items-start pb-1 justify-between transition-all duration-300">
-          <p className="text-stone-700 text-sm mb-3 md:mb-0 md:w-[45%] w-full leading-tight md:leading-normal">
+      <div className="pt-4 flex flex-col md:flex-row md:items-center items-start pb-1 justify-between transition-all duration-300">
+          <p className="text-stone-700 text-sm mb-3 md:mb-0 md:w-[36%] w-full leading-tight md:leading-normal">
             Would you like shipping updates to be sent by text message or email?
           </p>
-          <div className="flex flex-row gap-8 justify-center md:w-1/2 w-full transition-all duration-150">
+          <div className="flex flex-row gap-16 -ml-2 md:gap-18 justify-center md:w-[52%] w-full transition-all duration-150">
             <label className="flex items-center gap-3 cursor-pointer justify-center w-full">
               <span
                 className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
                   formData.shippingUpdateMethod === "text"
                     ? "text-[#50462D]"
                     : "text-[#50462d]/50"
-                }`}
-                style={{
-                  fontWeight: 300,
-                  fontStyle: "light",
-                  letterSpacing: "2%",
-                }}
+                } font-light tracking-[0.02em]`}
               >
                 Text Message
               </span>
@@ -189,28 +218,27 @@ export default function DeliveryDetailsStep() {
                 value="text"
                 checked={formData.shippingUpdateMethod === "text"}
                 onChange={() => updateFormData({ shippingUpdateMethod: "text" })}
-                className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
+                className={`w-5 h-5 flex-shrink-0 border  md:mr-6 border-stone-300 appearance-none rounded-full focus:outline-none
                   ${formData.shippingUpdateMethod === "text"
                     ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
                     : "bg-[#50462d]/50"}
                 `}
               />
             </label>
-            <label className="flex items-center gap-3 cursor-pointer justify-center w-full">
+
+
+            {/* email  */}
+            <label className="flex items-center gap-3 -mr-14 md:-mr-11 cursor-pointer justify-center w-full">
               <span
                 className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
                   formData.shippingUpdateMethod === "email"
                     ? "text-[#50462D]"
                     : "text-[#50462d]/50"
-                }`}
-                style={{
-                  fontWeight: 300,
-                  fontStyle: "light",
-                  letterSpacing: "2%",
-                }}
+                } font-light tracking-[0.02em]`}
               >
                 Email
               </span>
+
               <input
                 type="radio"
                 name="shipping-update-method"
@@ -223,6 +251,8 @@ export default function DeliveryDetailsStep() {
                     : "bg-[#50462d]/50"}
                 `}
               />
+
+
             </label>
           </div>
         </div>
@@ -230,22 +260,17 @@ export default function DeliveryDetailsStep() {
 
         {/* Existing SMS section */}
         <div className="pt-4 flex flex-col md:flex-row md:items-center items-start pb-1 justify-between transition-all duration-300">
-          <p className="text-stone-700 text-sm mb-3 md:mb-0">
+          <p className="text-stone-700 text-sm mb-3 md:mb-0 md:w-[36%] w-full leading-tight md:leading-normal">
             Would you like shipping updates via SMS?
           </p>
-          <div className="flex flex-row gap-8 justify-center md:w-1/2 w-full transition-all duration-150">
+          <div className="flex flex-row gap-8 justify-center md:w-[52%] w-full transition-all duration-150">
             <label className="flex items-center gap-3 cursor-pointer justify-center w-full">
               <span
                 className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
                   formData.smsUpdates === "send-to-me"
                     ? "text-[#50462D]"
                     : "text-[#50462d]/50"
-                }`}
-                style={{
-                  fontWeight: 300,
-                  fontStyle: "light",
-                  letterSpacing: "2%",
-                }}
+                } font-light tracking-[0.02em]`}
               >
                 Send to me
               </span>
@@ -272,12 +297,7 @@ export default function DeliveryDetailsStep() {
                   formData.smsUpdates === "send-to-recipient"
                     ? "text-[#50462D]"
                     : "text-[#50462d]/50"
-                }`}
-                style={{
-                  fontWeight: 300,
-                  fontStyle: "light",
-                  letterSpacing: "2%",
-                }}
+                } font-light tracking-[0.02em]`}
               >
                 Send to recipient
               </span>
@@ -298,8 +318,6 @@ export default function DeliveryDetailsStep() {
             
           </div>
         </div>
-
-
       </form>
     </div>
   );

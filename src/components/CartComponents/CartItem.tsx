@@ -32,10 +32,10 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const borderClass =
     index === 0
-      ? "border-t border-b" // first item: top + bottom
+      ? "border-t border-b" 
       : index === lastIndex
-      ? "border-b" // last item: bottom only
-      : "border-b"; // middle: bottom only
+      ? "border-b" 
+      : "border-b"; 
   const { product } = item;
   if (!product) {
     return null;

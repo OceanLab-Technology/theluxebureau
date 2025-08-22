@@ -12,9 +12,9 @@ export function EmptyCart({ onClose }: EmptyCartProps) {
 
   const handleStartShopping = () => {
     if (onClose) {
-      onClose(); // Close the sheet instead of navigating
+      onClose(); // 
     } else {
-      router.push("/products"); // Navigate if not in sheet (legacy behavior)
+      router.push("/products"); // 
     }
   };
 

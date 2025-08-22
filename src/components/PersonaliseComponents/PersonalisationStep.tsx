@@ -494,13 +494,13 @@ export default function PersonalizationStep() {
             onValueChange={(value) => updateFormData({ selectedFont: value })}
             disabled={loading}
           >
-            <SelectTrigger className="w-[150px] h-6 md:w-[200px] text-[15px] border-stone-300 hover:bg-secondary bg-transparent py-0 focus:ring-0">
+            <SelectTrigger className="w-[150px] h-6 md:w-[200px] text-[15px] border-stone-300 hover:bg-secondary bg-transparent  rounded-[0.3rem] py-0 focus:ring-0">
               <SelectValue
                 placeholder={loading ? "Loading fonts..." : "Select font"}
               />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="default">Default Font</SelectItem>
+            <SelectContent className="rounded-[0.3rem]">
+              <SelectItem  value="default">Default Font</SelectItem>
               {siteSettings?.fonts.map((font) => (
                 <SelectItem key={font.name} value={font.name}>
                   {font.name}
@@ -565,7 +565,7 @@ export default function PersonalizationStep() {
 
         {/* Quote Selector */}
         <div className="w-40 font-[Marfa]">
-          <label className="text-[1rem] font-[300] tracking-[0.01875] text-secondary-foreground mb-1 block">
+          <label className="text-[1rem] font-[300] tracking-[0.01875] text-secondary-foreground mb-1  block">
             Quotes*
           </label>
           <Select
@@ -578,10 +578,10 @@ export default function PersonalizationStep() {
               });
             }}
           >
-            <SelectTrigger className="w-[150px] h-6 md:w-[200px] text-[15px] border-stone-300 hover:bg-secondary bg-transparent py-0 focus:ring-0">
+            <SelectTrigger className="w-[150px] h-6 md:w-[200px] text-[15px] border-stone-300 hover:bg-secondary bg-transparent rounded-[0.3rem] py-0 focus:ring-0">
               <SelectValue placeholder="Select a quote" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className=" rounded-[0.3rem]">
               <SelectItem value="select">Select a quote</SelectItem>
               {siteSettings?.quotes.map((quote, index) => (
                 <SelectItem key={index} value={quote.author}>

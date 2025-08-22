@@ -143,10 +143,10 @@ export default function SummaryStep() {
       
       <div className="flex flex-col gap-6 mt-8">
         <div className="flex items-center gap-8">
-          <label className="font-[ABC Marfa] text-[15px] text-[#50462d]/60 font-light min-w-[160px]">
+          <label className="font-[ABC Marfa] text-[15px]  text-[#50462d]/60 font-light min-w-[160px]">
             Your name
           </label>
-          <p className="font-[ABC Marfa] text-[15px] text-[#3a2f1a] font-[120%]">
+          <p className="font-[ABC Marfa] text-[15px] tracking-[0.04rem]  text-[#3a2f1a] font-[120%]">
             {formData.yourName || "Not provided"}
           </p>
         </div>
@@ -154,7 +154,7 @@ export default function SummaryStep() {
           <label className="font-[ABC Marfa] text-[15px] text-[#50462d]/60 font-light min-w-[160px]">
             Recipients name
           </label>
-          <p className="font-[ABC Marfa] text-[15px] text-[#3a2f1a] font-[120%]">
+          <p className="font-[ABC Marfa] text-[15px] tracking-[0.04rem]  text-[#3a2f1a] font-[120%]">
             {formData.recipientName || "Not provided"}
           </p>
         </div>
@@ -162,7 +162,7 @@ export default function SummaryStep() {
           <label className="font-[ABC Marfa] text-[15px] text-[#50462d]/60 font-light min-w-[160px]">
             Recipients address
           </label>
-          <p className="font-[ABC Marfa] text-[15px] text-[#3a2f1a] font-[120%]">
+          <p className="font-[ABC Marfa] text-[15px] tracking-[0.04rem]  text-[#3a2f1a] font-[120%]">
             {formData.recipientAddress || "Not provided"}
           </p>
         </div>
@@ -189,7 +189,7 @@ export default function SummaryStep() {
           <label className="font-[ABC Marfa] text-[15px] text-[#50462d]/60 font-light min-w-[160px]">
             Personal Message
           </label>
-          <div className="font-[ABC Marfa] text-[15px] text-[#3a2f1a] font-[120%] whitespace-pre-line">
+          <div className="font-[ABC Marfa]  tracking-[0.04rem]  text-[15px] text-[#3a2f1a] font-[120%] whitespace-pre-line">
             {formData.customMessage || "No personal message"}
           </div>
         </div>
