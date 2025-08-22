@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from "react";
@@ -264,10 +263,51 @@ export default function PersonaliseForm({
     };
   }, [onCloseSheet]);
 
+  
+  const isStepAccessible = (stepId: number) => {
+    // Check if all steps 
+    for (let i = 1; i < stepId; i++) {
+      if (!isStepValid(i)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleStepClick = (stepId: number) => {
+    // backward nav
     if (stepId < currentStep) {
       for (let i = currentStep; i > stepId; i--) {
         prevStep();
+      }
+      return;
+    }
+
+    //do nothing
+    if (stepId === currentStep) {
+      return;
+    }
+
+  
+    if (stepId > currentStep) {
+      if (!isStepAccessible(stepId)) {
+        
+        switch (stepId) {
+          case 2:
+            toast.error("Please complete recipient details first.");
+            break;
+          case 3:
+            toast.error("Please complete recipient details and personalization first.");
+            break;
+          case 4:
+            toast.error("Please complete all previous steps first.");
+            break;
+        }
+        return;
+      }
+
+      for (let i = currentStep; i < stepId; i++) {
+        nextStep();
       }
     }
   };
@@ -296,7 +336,6 @@ export default function PersonaliseForm({
                   : "text-stone-500"
               }`}
               onClick={() => handleStepClick(s.id)}
-              style={{ pointerEvents: s.id < currentStep ? "auto" : "none" }}
             >
               {s.label}
             </div>

@@ -58,7 +58,7 @@ export function PersonalisedAddToCartButton({
           </>
         ) : (
           <>
-            <span className="hidden md:inline">Add to Cart</span>
+            <span className="hidden md:inline">Add to Bag</span>
             <span className="md:hidden">Add Gift</span>
           </>
         )}

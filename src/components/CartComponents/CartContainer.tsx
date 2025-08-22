@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo } from "react";
+
 import { useMainStore } from "@/store/mainStore";
 import { CartItem } from "./CartItem";
 import { CartSummary } from "./CartSummary";

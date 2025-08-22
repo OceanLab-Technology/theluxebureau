@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -20,26 +19,25 @@ export function EmptyCart({ onClose }: EmptyCartProps) {
   };
 
   return (
-    <div className=" min-h-[calc(100vh-4rem)] flex items-center justify-center p-6">
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-6">
       <div className="max-w-md w-full text-center space-y-6">
         {/* Header */}
-        <div className="space-y-4">
-          <h2 className="text-[#40362c] font-century text-3xl font-[500] leading-tight">
+        <div className="space-y-6">
+          <h2 className="text-[#50462D] text-[34px] font-normal leading-[40px]" style={{ fontFamily: 'Century Old Style Std' }}>
             Your cart is empty
           </h2>
           
-          <p className="text-[oklch(54.45%_0.0296_76.5643)] font-century text-[16px] font-[400] leading-6">
+          <p className="text-[#50462D] text-[18px] font-normal leading-[22px]" style={{ fontFamily: 'Century Old Style Std' }}>
             Looks like you haven't added any items to your cart yet.
-            <br />
             Start exploring our products and add something you love.
           </p>
         </div>
-
+        
         {/* Continue Shopping Button */}
         <div className="pt-4">
           <button
             onClick={handleStartShopping}
-            className="w-full bg-[#E8B851] text-[#6B5B3F] font-schoolbook-cond text-[14px] uppercase tracking-[0.1em] py-4 px-8 rounded-none border-none hover:bg-[#D4A441] transition-colors duration-200 font-[400]"
+            className="bg-[#FBD060] text-[#1E1204] font-[SchoolBook] font-[400] text-[12px] leading-[120%]  tracking-[0.15em] uppercase text-center pt-[18px] pr-[32px] pb-[18px] pl-[32px] gap-[10px] rounded-[6px] hover:opacity-90 transition-opacity duration-200"
           >
             CONTINUE SHOPPING &gt;
           </button>

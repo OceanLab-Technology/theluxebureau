@@ -67,7 +67,7 @@ export default function RecipientDetailsStep() {
 
           <label htmlFor="phone" className="text-stone-700 text-[0.9375rem] font-[300]">
             Recipient's phone number
-            <br />(only used for delivery issues)*
+            {/* <br />(only used for delivery issues)* */}
           </label>
           <div className="flex flex-col">
             <Input
@@ -81,13 +81,13 @@ export default function RecipientDetailsStep() {
               placeholder=""
             />
             {touched.phone && !isValidPhone(formData.recipientPhone) && (
-              <span className="text-red-500 text-xs mt-1">Enter a valid phone number</span>
+              <span className="text-#50462D  font-semibold text-xs mt-1">Enter a valid phone number</span>
             )}
           </div>
 
           <label htmlFor="email" className="text-stone-700 text-[0.9375rem] font-[300]">
             Recipient's e-mail
-            <br />(only used for delivery issues)*
+            {/* <br />(only used for delivery issues)* */}
           </label>
           <div className="flex flex-col">
             <Input
@@ -101,7 +101,7 @@ export default function RecipientDetailsStep() {
               placeholder=""
             />
             {touched.email && !isValidEmail(formData.recipientEmail) && (
-              <span className="text-red-500 text-xs mt-1">Enter a valid email address</span>
+              <span className="text-#50462D  font-semibold text-xs mt-1">Enter a valid email address</span>
             )}
           </div>
 
@@ -218,7 +218,7 @@ export default function RecipientDetailsStep() {
               placeholder=""
             />
             {touched.phone && !isValidPhone(formData.recipientPhone) && (
-              <span className="text-red-500 text-xs">Enter a valid phone number</span>
+              <span className="text-#50462D  font-semibold text-xs">Enter a valid phone number</span>
             )}
           </div>
 
@@ -238,7 +238,7 @@ export default function RecipientDetailsStep() {
               placeholder=""
             />
             {touched.email && !isValidEmail(formData.recipientEmail) && (
-              <span className="text-red-500 text-xs">Enter a valid email address</span>
+              <span className="text-#50462D  font-semibold text-xs">Enter a valid email address</span>
             )}
           </div>
 

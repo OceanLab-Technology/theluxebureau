@@ -15,6 +15,7 @@ export interface personaliseFormData {
   selectedQuote: string
   customMessage: string
   smsUpdates: 'send-to-me' | 'send-to-recipient'
+  shippingUpdateMethod: "text" | "email" 
 }
 
 interface PersonaliseState {
@@ -44,7 +45,8 @@ const initialFormData: personaliseFormData = {
   selectedQuote: '',
   customMessage: '',
   selectedFont: 'default',
-  smsUpdates: 'send-to-me'
+  smsUpdates: 'send-to-me',
+  shippingUpdateMethod: "text"
 }
 
 // Helper validation functions

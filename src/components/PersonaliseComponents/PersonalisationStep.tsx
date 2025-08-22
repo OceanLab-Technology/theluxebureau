@@ -470,11 +470,15 @@ export default function PersonalizationStep() {
     <div className="font-century mt-4">
   <div className="max-w-2xl w-full">
     <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-1 break-words">
-      Our gifts are sent with custom stationery, letter-pressed by hand at the Luxe Bureau atelier. In the header field, please enter your own name, initials, or company to create your custom letterhead. You may choose between two type styles below.
+      Our gifts arrive with custom stationery, letterpressed by hand at the Luxe Bureau atelier, in Noir ink on GF Smith Mohawk White card.
     </p>
-    <br/>
-    <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-4 break-words">
-      Your personal message will be typeset and printed in the Luxe Bureau's signature typewriter font. Please type your message directly onto the notecard. For added inspiration, select a quote from the drop down menu to add this to your message.
+
+    <p className="text-secondary-foreground  mt-4 font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-4 break-words">
+     Please click on the card below to personalise your message. In the header, add your name, initials, or company to create your bespoke letterhead. You may choose from two type styles below.
+    </p>
+
+     <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-1 break-words">
+      Your personal message will be set in our signature typewriter font. For inspiration, you can select a quote from the dropdown.
     </p>
   </div>
       <br />

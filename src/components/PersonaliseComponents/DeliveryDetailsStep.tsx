@@ -53,7 +53,7 @@ export default function DeliveryDetailsStep() {
 
   return (
     <div className="">
-      <p className="text-secondary-foreground  font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
+      <p className="text-secondary-foreground font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
         Our gifts are sent by zero-emission, nominated-day delivery.
       </p>
       <p className="text-secondary-foreground mb-4 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
@@ -74,14 +74,12 @@ export default function DeliveryDetailsStep() {
               handleInputChange("recipientName", e.target.value)
             }
             placeholder=""
-            className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-[0.9375rem] font-[300] tracking-[0.01875] w-full md:w-[30rem] transition-all duration-300"
+            className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-[0.9375rem] font-[300] tracking-[0.01875] w-full md:w-[30rem] transition-all duration-300"
           />
         </div>
-
-     
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <label htmlFor="address" className="text-stone-700 text-[0.9375rem] font-[300] mb-2 md:mb-0">
-            Recipient's Address*
+             Recipient's Details*
           </label>
           <Input
             id="address"
@@ -91,7 +89,7 @@ export default function DeliveryDetailsStep() {
               handleInputChange("recipientAddress", e.target.value)
             }
             placeholder=""
-            className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-[0.9375rem] font-[300] tracking-[0.01875] w-full md:w-[30rem] transition-all duration-300"
+            className="border-0 border-b border-stone-500 bg-transparent px-0 py-0.5 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-[0.9375rem] font-[300] tracking-[0.01875] w-full md:w-[30rem] transition-all duration-300"
           />
         </div>
 
@@ -105,12 +103,13 @@ export default function DeliveryDetailsStep() {
               <Button
                 variant="ghost"
                 className={cn(
-                  "w-full md:w-[30rem] justify-start text-left font-[Marfa] border-0 bg-transparent px-0 py-2 sm:py-3 text-stone-800 hover:bg-transparent border-b border-stone-500 focus:border-stone-600 rounded-none shadow-none text-[15px] tracking-[0.02em] font-[300] h-auto transition-all duration-300",
+                  "w-full md:w-[30rem] justify-start mt-1 text-left font-[Marfa] border-0 bg-transparent px-0 py-1 text-stone-800 hover:bg-transparent border-b border-stone-500 focus:border-stone-600 rounded-none shadow-none text-[15px] tracking-[0.02em] font-[300] h-auto transition-all duration-300",
                   !date && "text-stone-500"
                 )}
-             
               >
-                {date ? format(date, "PPP") : <span></span>}
+                {date
+                  ? format(date, "EEEE, do MMMM yyyy") 
+                  : <span></span>}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -147,7 +146,7 @@ export default function DeliveryDetailsStep() {
             onValueChange={handleTimeSelect}
             value={formData.preferredDeliveryTime}
           >
-            <SelectTrigger className="w-full md:w-[30rem] border-0 bg-transparent px-0 py-2 sm:py-3 text-stone-800 border-b border-stone-500 focus:border-stone-600 rounded-none shadow-none text-sm h-auto transition-all duration-300">
+            <SelectTrigger className="w-full md:w-[30rem] border-0 bg-transparent px-0 py-1 text-stone-800 border-b border-stone-500 focus:border-stone-600 rounded-none shadow-none text-sm h-auto transition-all duration-300">
               <SelectValue
                 placeholder=""
                 className="text-stone-500"
@@ -161,6 +160,75 @@ export default function DeliveryDetailsStep() {
           </Select>
         </div>
 
+        
+
+         {/* New Section: Would you like shipping updates to be sent by text message or email? */}
+        <div className="pt-4 flex flex-col md:flex-row md:items-center items-start pb-1 justify-between transition-all duration-300">
+          <p className="text-stone-700 text-sm mb-3 md:mb-0 md:w-[45%] w-full leading-tight md:leading-normal">
+            Would you like shipping updates to be sent by text message or email?
+          </p>
+          <div className="flex flex-row gap-8 justify-center md:w-1/2 w-full transition-all duration-150">
+            <label className="flex items-center gap-3 cursor-pointer justify-center w-full">
+              <span
+                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
+                  formData.shippingUpdateMethod === "text"
+                    ? "text-[#50462D]"
+                    : "text-[#50462d]/50"
+                }`}
+                style={{
+                  fontWeight: 300,
+                  fontStyle: "light",
+                  letterSpacing: "2%",
+                }}
+              >
+                Text Message
+              </span>
+              <input
+                type="radio"
+                name="shipping-update-method"
+                value="text"
+                checked={formData.shippingUpdateMethod === "text"}
+                onChange={() => updateFormData({ shippingUpdateMethod: "text" })}
+                className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
+                  ${formData.shippingUpdateMethod === "text"
+                    ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
+                    : "bg-[#50462d]/50"}
+                `}
+              />
+            </label>
+            <label className="flex items-center gap-3 cursor-pointer justify-center w-full">
+              <span
+                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
+                  formData.shippingUpdateMethod === "email"
+                    ? "text-[#50462D]"
+                    : "text-[#50462d]/50"
+                }`}
+                style={{
+                  fontWeight: 300,
+                  fontStyle: "light",
+                  letterSpacing: "2%",
+                }}
+              >
+                Email
+              </span>
+              <input
+                type="radio"
+                name="shipping-update-method"
+                value="email"
+                checked={formData.shippingUpdateMethod === "email"}
+                onChange={() => updateFormData({ shippingUpdateMethod: "email" })}
+                className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
+                  ${formData.shippingUpdateMethod === "email"
+                    ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
+                    : "bg-[#50462d]/50"}
+                `}
+              />
+            </label>
+          </div>
+        </div>
+
+
+        {/* Existing SMS section */}
         <div className="pt-4 flex flex-col md:flex-row md:items-center items-start pb-1 justify-between transition-all duration-300">
           <p className="text-stone-700 text-sm mb-3 md:mb-0">
             Would you like shipping updates via SMS?
@@ -181,6 +249,8 @@ export default function DeliveryDetailsStep() {
               >
                 Send to me
               </span>
+
+
               <input
                 type="radio"
                 name="sms-updates"
@@ -193,6 +263,8 @@ export default function DeliveryDetailsStep() {
                     : "bg-[#50462d]/50"}
                 `}
               />
+
+
             </label>
             <label className="flex items-center gap-3 cursor-pointer justify-center w-full">
               <span
@@ -222,8 +294,12 @@ export default function DeliveryDetailsStep() {
                 `}
               />
             </label>
+
+            
           </div>
         </div>
+
+
       </form>
     </div>
   );
