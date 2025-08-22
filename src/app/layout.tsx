@@ -29,7 +29,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "theluxebureau",
+  title: {
+    default: "theluxebureau",
+    template: "theluxebureau"
+  },
   description: "the luxe bureau",
   icons: {
     icon: "/Profile_Favicon.png",

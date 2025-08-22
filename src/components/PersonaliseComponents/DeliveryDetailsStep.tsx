@@ -64,7 +64,7 @@ export default function DeliveryDetailsStep() {
       
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <label htmlFor="recipient-name" className="text-stone-700 text-[0.9375rem] font-[300] mb-2 md:mb-0">
-            Recipients name*
+            Recipient's name*
           </label>
           <Input
             id="recipient-name"
@@ -81,7 +81,7 @@ export default function DeliveryDetailsStep() {
      
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <label htmlFor="address" className="text-stone-700 text-[0.9375rem] font-[300] mb-2 md:mb-0">
-            Recipients Address*
+            Recipient's Address*
           </label>
           <Input
             id="address"
@@ -96,18 +96,19 @@ export default function DeliveryDetailsStep() {
         </div>
 
      
-        <div className="flex flex-col mt-6 md:flex-row md:items-center md:justify-between">
+         <div className="flex flex-col mt-6 md:flex-row md:items-center md:justify-between">
           <label htmlFor="delivery-date" className="text-stone-700 text-[0.9375rem] font-[300] mb-2 md:mb-0">
-            Delivery 
+            Delivery date
           </label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 variant="ghost"
                 className={cn(
-                  "w-full md:w-[30rem] justify-start text-left font-normal border-0 bg-transparent px-0 py-2 sm:py-3 text-stone-800 hover:bg-transparent border-b border-stone-500 focus:border-stone-600 rounded-none shadow-none text-sm h-auto transition-all duration-300",
+                  "w-full md:w-[30rem] justify-start text-left font-[Marfa] border-0 bg-transparent px-0 py-2 sm:py-3 text-stone-800 hover:bg-transparent border-b border-stone-500 focus:border-stone-600 rounded-none shadow-none text-[15px] tracking-[0.02em] font-[300] h-auto transition-all duration-300",
                   !date && "text-stone-500"
                 )}
+             
               >
                 {date ? format(date, "PPP") : <span></span>}
               </Button>
@@ -124,6 +125,15 @@ export default function DeliveryDetailsStep() {
                   date < new Date() || date < new Date("1900-01-01")
                 }
                 initialFocus
+                classNames={{
+                  day_selected: "bg-[#50462D] text-white hover:bg-[#50462D] hover:text-white focus:bg-[#50462D] !border-0",
+                  caption: "font-[Marfa] text-[15px] tracking-[0.02em] font-[300]",
+                  nav_button_previous: "text-[#50462D]",
+                  nav_button_next: "text-[#50462D]",
+                  head_cell: "font-[Marfa] text-[15px] tracking-[0.02em] font-[300]",
+                  cell: "font-[Marfa] text-[15px] tracking-[0.02em] font-[300]",
+                  table: "w-full border-collapse",
+                }}
               />
             </PopoverContent>
           </Popover>
@@ -155,50 +165,62 @@ export default function DeliveryDetailsStep() {
           <p className="text-stone-700 text-sm mb-3 md:mb-0">
             Would you like shipping updates via SMS?
           </p>
-          <div className="flex flex-row gap-6 justify-center md:w-1/2 w-full transition-all duration-150">
-            <label className="flex flex-row items-center cursor-pointer justify-center w-full">
-              <span className={`text-sm mr-4 md:mr-6 ${formData.smsUpdates === "send-to-me" ? "text-[#40362c] font-bold" : "text-[#9ca3af]"}`}>
+          <div className="flex flex-row gap-8 justify-center md:w-1/2 w-full transition-all duration-150">
+            <label className="flex items-center gap-3 cursor-pointer justify-center w-full">
+              <span
+                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
+                  formData.smsUpdates === "send-to-me"
+                    ? "text-[#50462D]"
+                    : "text-[#50462d]/50"
+                }`}
+                style={{
+                  fontWeight: 300,
+                  fontStyle: "light",
+                  letterSpacing: "2%",
+                }}
+              >
                 Send to me
               </span>
-              <div className="relative">
-                <input
-                  type="radio"
-                  name="sms-updates"
-                  value="send-to-me"
-                  checked={formData.smsUpdates === "send-to-me"}
-                  onChange={() => handleSMSChange("send-to-me")}
-                  className="sr-only"
-                />
-                <div
-                  className={`w-4 h-4 rounded-full border-2 ${
-                    formData.smsUpdates === "send-to-me"
-                      ? "bg-[#40362c] border-[#40362c]"
-                      : "bg-[#9ca3af] border-[#9ca3af]"
-                  }`}
-                />
-              </div>
+              <input
+                type="radio"
+                name="sms-updates"
+                value="send-to-me"
+                checked={formData.smsUpdates === "send-to-me"}
+                onChange={() => handleSMSChange("send-to-me")}
+                className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
+                  ${formData.smsUpdates === "send-to-me"
+                    ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
+                    : "bg-[#50462d]/50"}
+                `}
+              />
             </label>
-            <label className="flex flex-row items-center cursor-pointer justify-center w-full">
-              <span className={`text-sm mr-4 md:mr-8 ${formData.smsUpdates === "send-to-recipient" ? "text-[#40362c] font-bold" : "text-[#9ca3af]"}`}>
+            <label className="flex items-center gap-3 cursor-pointer justify-center w-full">
+              <span
+                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
+                  formData.smsUpdates === "send-to-recipient"
+                    ? "text-[#50462D]"
+                    : "text-[#50462d]/50"
+                }`}
+                style={{
+                  fontWeight: 300,
+                  fontStyle: "light",
+                  letterSpacing: "2%",
+                }}
+              >
                 Send to recipient
               </span>
-              <div className="relative">
-                <input
-                  type="radio"
-                  name="sms-updates"
-                  value="send-to-recipient"
-                  checked={formData.smsUpdates === "send-to-recipient"}
-                  onChange={() => handleSMSChange("send-to-recipient")}
-                  className="sr-only"
-                />
-                <div
-                  className={`w-4 h-4 rounded-full border-2 ${
-                    formData.smsUpdates === "send-to-recipient"
-                      ? "bg-[#40362c] border-[#40362c]"
-                      : "bg-[#9ca3af] border-[#9ca3af]"
-                  }`}
-                />
-              </div>
+              <input
+                type="radio"
+                name="sms-updates"
+                value="send-to-recipient"
+                checked={formData.smsUpdates === "send-to-recipient"}
+                onChange={() => handleSMSChange("send-to-recipient")}
+                className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
+                  ${formData.smsUpdates === "send-to-recipient"
+                    ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
+                    : "bg-[#50462d]/50"}
+                `}
+              />
             </label>
           </div>
         </div>

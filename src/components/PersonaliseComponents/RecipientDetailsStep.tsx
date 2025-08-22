@@ -66,7 +66,7 @@ export default function RecipientDetailsStep() {
           </div>
 
           <label htmlFor="phone" className="text-stone-700 text-[0.9375rem] font-[300]">
-            Recipients phone number
+            Recipient's phone number
             <br />(only used for delivery issues)*
           </label>
           <div className="flex flex-col">
@@ -86,7 +86,7 @@ export default function RecipientDetailsStep() {
           </div>
 
           <label htmlFor="email" className="text-stone-700 text-[0.9375rem] font-[300]">
-            Recipients e-mail
+            Recipient's e-mail
             <br />(only used for delivery issues)*
           </label>
           <div className="flex flex-col">
@@ -108,36 +108,62 @@ export default function RecipientDetailsStep() {
           <label className="text-stone-700 text-[0.9375rem] font-[300]">
             Would you like shipping updates via SMS?
           </label>
-          <div className="flex gap-16 justify-end w-full">
-            <label className="flex items-center gap-2 cursor-pointer">
+          <div className="flex gap-16 justify-end mr-4 w-[95%]">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <span
+                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
+                  formData.smsUpdates === "send-to-me"
+                    ? "text-[#50462D]"
+                    : "text-[#50462d]/50"
+                }`}
+                style={{
+                  fontWeight: 300,
+                  fontStyle: "light",
+                  letterSpacing: "2%",
+                }}
+              >
+                Send to me
+              </span>
               <input
                 type="radio"
                 name="smsUpdates"
                 value="send-to-me"
                 checked={formData.smsUpdates === "send-to-me"}
                 onChange={(e) => handleSmsUpdatesChange(e.target.value as 'send-to-me')}
-                className={`w-4 h-4 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
-                  ${formData.smsUpdates === "send-to-me" ? "bg-[#40362c] checked:bg-[#40362c] checked:border-[#40362c]" : "bg-[#9ca3af]"}
+                className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
+                  ${formData.smsUpdates === "send-to-me"
+                    ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
+                    : "bg-[#50462d]/50"}
                 `}
               />
-              <span className={`text-[0.9375rem] font-[300] ${formData.smsUpdates === "send-to-me" ? "text-[#40362c]" : "text-[#9ca3af]"}`}>
-                Send to me
-              </span>
             </label>
-            <label className="flex items-center gap-2 cursor-pointer">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <span
+                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
+                  formData.smsUpdates === "send-to-recipient"
+                    ? "text-[#50462D]"
+                    : "text-[#50462d]/50"
+                }`}
+                style={{
+                  fontWeight: 300,
+                  fontStyle: "light",
+                  letterSpacing: "2%",
+                }}
+              >
+                Send to recipient
+              </span>
               <input
                 type="radio"
                 name="smsUpdates"
                 value="send-to-recipient"
                 checked={formData.smsUpdates === "send-to-recipient"}
                 onChange={(e) => handleSmsUpdatesChange(e.target.value as 'send-to-recipient')}
-                className={`w-4 h-4 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
-                  ${formData.smsUpdates === "send-to-recipient" ? "bg-[#40362c] checked:bg-[#40362c] checked:border-[#40362c]" : "bg-[#9ca3af]"}
+                className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
+                  ${formData.smsUpdates === "send-to-recipient"
+                    ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
+                    : "bg-[#50462d]/50"}
                 `}
               />
-              <span className={`text-[0.9375rem] font-[300] ${formData.smsUpdates === "send-to-recipient" ? "text-[#40362c]" : "text-[#9ca3af]"}`}>
-                Send to recipient
-              </span>
             </label>
           </div>
         </div>
@@ -179,7 +205,7 @@ export default function RecipientDetailsStep() {
       
           <div className="flex flex-col space-y-1">
             <label htmlFor="phone-mobile" className="text-stone-700 text-[0.9375rem] font-[300]">
-              Recipients phone number (only used for delivery issues)*
+              Recipient's phone number (only used for delivery issues)*
             </label>
             <Input
               id="phone-mobile"
@@ -188,7 +214,7 @@ export default function RecipientDetailsStep() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleInputChange("recipientPhone", e.target.value)
               }
-              className="border-0 border-b border-stone-500 px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none"
+              className="border-0 border-b border-stone-500 bg-transparent px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
               placeholder=""
             />
             {touched.phone && !isValidPhone(formData.recipientPhone) && (
@@ -199,7 +225,7 @@ export default function RecipientDetailsStep() {
        
           <div className="flex flex-col space-y-1">
             <label htmlFor="email-mobile" className="text-stone-700 text-[0.9375rem] font-[300]">
-              Recipients e-mail (only used for delivery issues)*
+              Recipient's e-mail (only used for delivery issues)*
             </label>
             <Input
               id="email-mobile"
@@ -208,7 +234,7 @@ export default function RecipientDetailsStep() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleInputChange("recipientEmail", e.target.value)
               }
-              className="border-0 border-b border-stone-500 px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none"
+              className="border-0 border-b border-stone-500 bg-transparent px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
               placeholder=""
             />
             {touched.email && !isValidEmail(formData.recipientEmail) && (
@@ -218,52 +244,66 @@ export default function RecipientDetailsStep() {
 
 
           <label className="text-stone-700 text-[0.9375rem] font-[300]">
-  Would you like shipping updates via SMS?
-</label>
-<div className="flex gap-16 justify-end w-full">
-   <label className="flex items-center gap-2 cursor-pointer">
-    <input
-      type="radio"
-      name="smsUpdates"
-      value="send-to-me"
-      checked={formData.smsUpdates === "send-to-me"}
-      onChange={(e) => handleSmsUpdatesChange(e.target.value as 'send-to-me')}
-      className={`w-4 h-4 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
-        ${formData.smsUpdates === "send-to-me" ? "bg-[#40362c] checked:bg-[#40362c] checked:border-[#40362c]" : "bg-[#9ca3af]"}
-      `}
-    />
-    <span className={`text-[0.9375rem] font-[300] ${formData.smsUpdates === "send-to-me" ? "text-[#40362c]" : "text-[#9ca3af]"}`}>
-      Send to me
-    </span>
-  </label>
-  <label className="flex items-center gap-2 cursor-pointer">
-    <input
-      type="radio"
-      name="smsUpdates"
-      value="send-to-recipient"
-      checked={formData.smsUpdates === "send-to-recipient"}
-      onChange={(e) => handleSmsUpdatesChange(e.target.value as 'send-to-recipient')}
-      className={`w-4 h-4 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
-        ${formData.smsUpdates === "send-to-recipient" ? "bg-[#40362c] checked:bg-[#40362c] checked:border-[#40362c]" : "bg-[#9ca3af]"}
-      `}
-    />
-    <span className={`text-[0.9375rem] font-[300] ${formData.smsUpdates === "send-to-recipient" ? "text-[#40362c]" : "text-[#9ca3af]"}`}>
-      Send to recipient
-    </span>
-  </label>
-</div>
+            Would you like shipping updates via SMS?
+          </label>
+          <div className="flex gap-8 mt-1 justify-start w-full">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <span className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
+                formData.smsUpdates === "send-to-me"
+                  ? "text-[#50462D]"
+                  : "text-[#50462d]/50"
+              }`}
+                style={{
+                  fontWeight: 300,
+                  fontStyle: "light",
+                  letterSpacing: "2%",
+                }}
+              >
+                Send to me
+              </span>
+              <input
+                type="radio"
+                name="smsUpdates"
+                value="send-to-me"
+                checked={formData.smsUpdates === "send-to-me"}
+                onChange={(e) => handleSmsUpdatesChange(e.target.value as 'send-to-me')}
+                className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
+                  ${formData.smsUpdates === "send-to-me"
+                    ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
+                    : "bg-[#50462d]/50"}
+                `}
+              />
+            </label>
+            <label className="flex items-center gap-3 cursor-pointer">
+              <span className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
+                formData.smsUpdates === "send-to-recipient"
+                  ? "text-[#50462D]"
+                  : "text-[#50462d]/50"
+              }`}
+                style={{
+                  fontWeight: 300,
+                  fontStyle: "light",
+                  letterSpacing: "2%",
+                }}
+              >
+                Send to recipient
+              </span>
+              <input
+                type="radio"
+                name="smsUpdates"
+                value="send-to-recipient"
+                checked={formData.smsUpdates === "send-to-recipient"}
+                onChange={(e) => handleSmsUpdatesChange(e.target.value as 'send-to-recipient')}
+                className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
+                  ${formData.smsUpdates === "send-to-recipient"
+                    ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
+                    : "bg-[#50462d]/50"}
+                `}
+              />
+            </label>
+          </div>
         </div>
       </form>
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-

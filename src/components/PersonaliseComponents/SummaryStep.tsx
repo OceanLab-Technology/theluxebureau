@@ -22,6 +22,7 @@ export default function SummaryStep() {
   const { currentProduct } = useMainStore();
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const [fontLoaded, setFontLoaded] = useState(false);
+  const [showBackArrow, setShowBackArrow] = useState(false);
   const selectedFont = siteSettings?.fonts.find(
     (font) => font.name === formData.selectedFont
   );
@@ -99,6 +100,25 @@ export default function SummaryStep() {
     };
     fetchSettings();
   }, []);
+
+  // Track scroll position to show/hide back arrow
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scrollContainerRef.current) {
+        setShowBackArrow(scrollContainerRef.current.scrollLeft > 10);
+      }
+    };
+    const ref = scrollContainerRef.current;
+    if (ref) {
+      ref.addEventListener("scroll", handleScroll);
+    }
+    return () => {
+      if (ref) {
+        ref.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
+
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({ left: -288, behavior: "smooth" });
@@ -149,22 +169,33 @@ export default function SummaryStep() {
             {formData.deliveryDate || "Not selected"}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+         <div className="flex items-center gap-2">
           <label className="text-muted font-[300] text-[0.93rem] tracking-[0.01875rem]">
             Delivery Time
           </label>
           <p className="text-secondary-foreground">
-            {formData.preferredDeliveryTime || "Not selected"}
+            {formData.preferredDeliveryTime === "8am-1pm" ? "10:00 – 13:00" : 
+             formData.preferredDeliveryTime === "1pm-6pm" ? "13:00 – 16:00" : 
+             formData.preferredDeliveryTime === "6pm-11pm" ? "16:00 – 18:00" : 
+             formData.preferredDeliveryTime || "Not selected"}
           </p>
         </div>
 
-       <div className=" flex flex-col md:flex-row md:items-center items-start pb-1 justify-between transition-all duration-300">
-          <p className="text-stone-700 text-sl mb-3 md:mb-0">
+        {/* SMS UI */}
+        <div className=" flex flex-col md:flex-row md:items-center items-start pb-1 justify-between transition-all duration-300">
+          <p className="text-[#50462D] text-[15px] font-[ABC Marfa] font-light tracking-[0.02em] mb-3 md:mb-0">
             Would you like shipping updates via SMS?
           </p>
           <div className="flex flex-row gap-6 justify-center md:w-1/2 w-full transition-all duration-150">
             <label className="flex flex-row items-center cursor-pointer justify-center w-full">
-              <span className={`text-sm mr-4 md:mr-6 ${formData.smsUpdates === "send-to-me" ? "text-[#40362c] font-bold" : "text-[#9ca3af]"}`}>
+              <span
+                className={`font-[ABC Marfa] font-light text-[15px] tracking-[0.02em] mr-4 md:mr-6
+                  ${formData.smsUpdates === "send-to-me"
+                    ? "text-[#50462D]"
+                    : "text-[#50462d]/50"}
+                `}
+                style={{ fontWeight: 300, letterSpacing: "2%" }}
+              >
                 Send to me
               </span>
               <div className="relative">
@@ -177,16 +208,23 @@ export default function SummaryStep() {
                   className="sr-only"
                 />
                 <div
-                  className={`w-4 h-4 rounded-full border-2 ${
+                  className={`w-4 h-4 rounded-full ${
                     formData.smsUpdates === "send-to-me"
-                      ? "bg-[#40362c] border-[#40362c]"
-                      : "bg-[#9ca3af] border-[#9ca3af]"
+                      ? "bg-[#50462D]"
+                      : "bg-[#50462d]/50"
                   }`}
                 />
               </div>
             </label>
             <label className="flex flex-row items-center cursor-pointer justify-center w-full">
-              <span className={`text-sm mr-4 md:mr-8 ${formData.smsUpdates === "send-to-recipient" ? "text-[#40362c] font-bold" : "text-[#9ca3af]"}`}>
+              <span
+                className={`font-[ABC Marfa] font-light text-[15px] tracking-[0.02em] mr-4 md:mr-8
+                  ${formData.smsUpdates === "send-to-recipient"
+                    ? "text-[#50462D]"
+                    : "text-[#50462d]/50"}
+                `}
+                style={{ fontWeight: 300, letterSpacing: "2%" }}
+              >
                 Send to recipient
               </span>
               <div className="relative">
@@ -199,31 +237,37 @@ export default function SummaryStep() {
                   className="sr-only"
                 />
                 <div
-                  className={`w-4 h-4 rounded-full border-2 ${
+                  className={`w-4 h-4 rounded-full ${
                     formData.smsUpdates === "send-to-recipient"
-                      ? "bg-[#40362c] border-[#40362c]"
-                      : "bg-[#9ca3af] border-[#9ca3af]"
+                      ? "bg-[#50462D]"
+                      : "bg-[#50462d]/50"
                   }`}
                 />
               </div>
             </label>
           </div>
         </div>
+
+
         <div className="mt-8">
           <div className="relative ">
-            {/* <button
-              onClick={scrollLeft}
-              className="absolute left-2 cursor-pointer top-1/2 -translate-y-1/2 z-10"
-              aria-label="Scroll left"
-            >
-              <img src="/arrow.svg" className="rotate-180" alt="" />
-            </button> */}
+            {showBackArrow && (
+              <button
+                onClick={scrollLeft}
+                className="absolute left-2 cursor-pointer top-1/2 -translate-y-1/2 z-10"
+                aria-label="Scroll left"
+                style={{ width: 32, height: 32 }}
+              >
+                <img src="/arrow.svg" className="rotate-180 w-8 h-8" alt="" />
+              </button>
+            )}
             <button
               onClick={scrollRight}
-              className="absolute right-2 scale-130 top-1/2 -translate-y-1/2 z-10 cursor-pointer"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 cursor-pointer"
               aria-label="Scroll right"
+              style={{ width: 32, height: 32 }}
             >
-              <img src="/arrow.svg" alt="" />
+              <img src="/arrow.svg" className="w-8 h-8" alt="" />
             </button>
             <div
               ref={scrollContainerRef}
@@ -279,6 +323,7 @@ export default function SummaryStep() {
             </div>
           </div>
         </div>
+       
       </div>
     </div>
   );

@@ -25,7 +25,7 @@ export function CartSheet({ className, children, fill }: CartSheetProps) {
   }, [checkAuthStatus, fetchCartItems]);
 
   const handleCartClick = () => {
-    setIsOpen(true);
+    setIsOpen(prev => !prev);
   };
 
   const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
