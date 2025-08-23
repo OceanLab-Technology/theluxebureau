@@ -205,7 +205,7 @@ export default function RecipientDetailsStep() {
       
           <div className="flex flex-col space-y-1">
             <label htmlFor="phone-mobile" className="text-stone-700 text-[0.9375rem] font-[300]">
-              Recipient's phone number (only used for delivery issues)*
+              Recipient's phone number*
             </label>
             <Input
               id="phone-mobile"
@@ -225,7 +225,7 @@ export default function RecipientDetailsStep() {
        
           <div className="flex flex-col space-y-1">
             <label htmlFor="email-mobile" className="text-stone-700 text-[0.9375rem] font-[300]">
-              Recipient's e-mail (only used for delivery issues)*
+              Recipient's e-mail*
             </label>
             <Input
               id="email-mobile"

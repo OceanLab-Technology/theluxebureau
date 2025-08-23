@@ -137,40 +137,40 @@ export default function SummaryStep() {
 
   return (
     <div>
-      <p className="text-secondary-foreground mb-12 mt-8 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem]" style={{ fontFamily: 'ABC Marfa' }}>
+      <p className="text-secondary-foreground mb-12 mt-8 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-[marfa]">
         Please review your gift details below. Press back to make changes.
       </p>
 
-      <div className="flex flex-col gap-6 mt-8" style={{ fontFamily: 'ABC Marfa' }}>
+      <div className="flex flex-col gap-6 mt-8 font-[marfa]">
         <div className="flex items-center gap-8">
-          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px]" style={{ fontFamily: 'ABC Marfa' }}>
+          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
             Your name
           </label>
-          <p className="text-[15px] tracking-[0.04rem] text-[#3a2f1a] font-[120%]" style={{ fontFamily: 'ABC Marfa' }}>
+          <p className="text-[15px] tracking-[0.04rem] text-[#3a2f1a] font-[120%] font-[marfa]">
             {formData.yourName || "Not provided"}
           </p>
         </div>
         <div className="flex items-center gap-8">
-          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px]" style={{ fontFamily: 'ABC Marfa' }}>
+          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
             Recipients name
           </label>
-          <p className="text-[15px] tracking-[0.04rem] text-[#3a2f1a] font-[120%]" style={{ fontFamily: 'ABC Marfa' }}>
+          <p className="text-[15px] tracking-[0.04rem] text-[#3a2f1a] font-[120%] font-[marfa]">
             {formData.recipientName || "Not provided"}
           </p>
         </div>
         <div className="flex items-center gap-8">
-          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px]" style={{ fontFamily: 'ABC Marfa' }}>
+          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
             Recipients address
           </label>
-          <p className="text-[15px] tracking-[0.04rem] text-[#3a2f1a] font-[120%]" style={{ fontFamily: 'ABC Marfa' }}>
+          <p className="text-[15px] tracking-[0.04rem] text-[#3a2f1a] font-[120%] font-[marfa]">
             {formData.recipientAddress || "Not provided"}
           </p>
         </div>
         <div className="flex items-center gap-8">
-          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px]" style={{ fontFamily: 'ABC Marfa' }}>
+          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
             Delivery Date
           </label>
-          <p className="text-[15px] text-[#3a2f1a] font-[120%]" style={{ fontFamily: 'ABC Marfa' }}>
+          <p className="text-[15px] text-[#3a2f1a] font-[120%] font-[marfa]">
             {formData.deliveryDate
               ? (() => {
                   const date = new Date(formData.deliveryDate);
@@ -201,23 +201,23 @@ export default function SummaryStep() {
           </p>
         </div>
         <div className="flex items-center gap-8">
-          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px]" style={{ fontFamily: 'ABC Marfa' }}>
+          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
             Delivery Time
           </label>
-          <p className="text-[15px] text-[#3a2f1a] font-[120%]" style={{ fontFamily: 'ABC Marfa' }}>
+          <p className="text-[15px] text-[#3a2f1a] font-[120%] font-[marfa]">
             {formData.preferredDeliveryTime === "10am-1pm" && "10:00 – 13:00"}
             {formData.preferredDeliveryTime === "1pm-4pm" && "13:00 – 16:00"}
             {formData.preferredDeliveryTime === "4pm-6pm" && "16:00 – 18:00"}
             {!["10am-1pm", "1pm-4pm", "4pm-6pm"].includes(formData.preferredDeliveryTime) && (
-              <span style={{ fontFamily: 'ABC Marfa' }}>{formData.preferredDeliveryTime || "Not selected"}</span>
+              <span className="font-[marfa]">{formData.preferredDeliveryTime || "Not selected"}</span>
             )}
           </p>
         </div>
         <div className="flex items-start gap-8">
-          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px]" style={{ fontFamily: 'ABC Marfa' }}>
+          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
             Personal Message
           </label>
-          <div className="tracking-[0.04rem] text-[15px] text-[#3a2f1a] font-[120%] whitespace-pre-line" style={{ fontFamily: 'ABC Marfa' }}>
+          <div className="tracking-[0.04rem] text-[15px] text-[#3a2f1a] font-[120%] whitespace-pre-line font-[marfa]">
             {formData.customMessage || "No personal message"}
           </div>
         </div>
