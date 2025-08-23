@@ -28,6 +28,7 @@ import {
   ShoppingCart,
   ChevronDown,
   Loader2,
+  PoundSterling,
 } from "lucide-react";
 import { useOrdersStore } from "@/store/admin/orderStore";
 import { toast } from "sonner";
@@ -143,11 +144,11 @@ export function OrdersPage() {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle>Total Revenue</CardTitle>
-                  <Euro className="h-4 w-4 text-foreground" />
+                  <PoundSterling className="h-4 w-4 text-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
-                    €{totalRevenue.toFixed(2)}
+                    £{totalRevenue.toFixed(2)}
                   </div>
                 </CardContent>
               </Card>
@@ -181,13 +182,33 @@ export function OrdersPage() {
                         </TableCell>
                         <TableCell>{order.customerName || "-"}</TableCell>
                         <TableCell>{order.recipientName || "-"}</TableCell>
-                        <TableCell>
-                          {order.deliveryDate
-                            ? new Date(order.deliveryDate).toLocaleDateString()
-                            : "-"}
+                       <TableCell>
+                          {order.deliveryDate ? (() => {
+                            const date = new Date(order.deliveryDate);
+                            const dayName = date.toLocaleDateString("en-GB", { weekday: "long" });
+                            const day = date.getDate();
+                            const month = date.toLocaleDateString("en-GB", { month: "long" });
+                            const year = date.getFullYear();
+                            const getOrdinalSuffix = (d: number) => {
+                              if (d >= 11 && d <= 13) return "th";
+                              switch (d % 10) {
+                                case 1: return "st";
+                                case 2: return "nd";
+                                case 3: return "rd";
+                                default: return "th";
+                              }
+                            };
+                            const ordinalSuffix = getOrdinalSuffix(day);
+                            return (
+                              <>
+                                {dayName} {day}
+                                <sup className="text-xs">{ordinalSuffix}</sup> {month} {year}
+                              </>
+                            );
+                          })() : "-"}
                         </TableCell>
                         <TableCell className="font-medium">
-                          €{order.total || "0.00"}
+                          £{order.total || "0.00"}
                         </TableCell>
                         <TableCell>
                           <Select

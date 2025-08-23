@@ -218,7 +218,6 @@ export default function AccountPage({ user }: AccountPageProps) {
             Welcome back, {userName}
           </h1>
 
-          {/* Desktop view - shows both sections */}
           <div className="hidden md:block">
             <div className="mb-16">
               <h2 className="text-lg font-medium mb-6 border-b border-stone-300 small-text">
@@ -391,7 +390,7 @@ export default function AccountPage({ user }: AccountPageProps) {
 
                   <div className="border border-stone-300 p-4 md:p-6">
                     <Label className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500">
-                      DELIVERY ADDRESS
+                      BILLING ADDRESS
                     </Label>
                     <Input
                       value={profile.shippingAddress}

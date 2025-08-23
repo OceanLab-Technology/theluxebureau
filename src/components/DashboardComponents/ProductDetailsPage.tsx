@@ -304,7 +304,7 @@ function ProductDetailsPage({ productId }: ProductDetailsPageProps) {
           <CardContent className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
             {renderInput("Name", "name")}
             {renderInput("Category", "category")}
-            {renderInput("Price (€)", "price", "number")}
+            {renderInput("Price (£)", "price", "number")}
             {renderInput("Inventory", "inventory", "number")}
             {renderInput("Slug", "slug")}
             {renderInput("Description", "description")}

@@ -165,7 +165,7 @@ export function CustomerDetailsPage({ customerId }: { customerId: string }) {
             {renderField("email", "Email")}
             {renderField("phone", "Phone")}
             {renderField("address", "Address")}
-            {renderField("totalSpent", "Total Spent (€)", "number")}
+            {renderField("totalSpent", "Total Spent (£)", "number")}
             {renderField("totalOrders", "Total Orders", "number")}
             {renderField("joinDate", "Join Date")}
           </CardContent>

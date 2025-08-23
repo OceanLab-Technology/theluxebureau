@@ -416,7 +416,7 @@ export default function CheckoutPage() {
                 {isAuthenticated ? (
                   <CheckoutContainer items={checkoutItems} />
                 ) : (
-                  <div className="p-6 bg-muted/20 rounded-lg text-center">
+                  <div className="p-6 bg-muted/20 rounded-[5px] text-center">
                     <h3 className="text-lg font-semibold mb-2">Login Required</h3>
                     <p className="text-sm text-muted-foreground mb-4">
                       Please login to continue with your purchase. Your cart items will be saved.

@@ -26,6 +26,7 @@ type Order = {
   notes?: string;
   createdAt?: string;
   updatedAt?: string;
+
 };
 
 type Pagination = {
@@ -148,6 +149,7 @@ interface OrderDetails {
     placedAt: string;
     paymentStatus: string;
     updatedAt: string;
+    preferredDeliveryTime?: string; 
   };
   orderItems: Array<{
     id: string;
