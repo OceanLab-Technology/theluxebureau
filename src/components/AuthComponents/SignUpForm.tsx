@@ -1,3 +1,350 @@
+// "use client";
+
+// import { cn } from "@/lib/utils";
+// import { createClient } from "@/lib/supabase/client";
+// import { Button } from "@/components/ui/button";
+// import { Input } from "@/components/ui/input";
+// import { Label } from "@/components/ui/label";
+// import { useMainStore } from "@/store/mainStore";
+// import { useRouter } from "next/navigation";
+// import { useState } from "react";
+// import Link from "next/link";
+// import { Eye, EyeOff } from "lucide-react";
+
+// export function SignUpForm({
+//   className,
+//   ...props
+// }: React.ComponentPropsWithoutRef<"div">) {
+//   const [name, setName] = useState("");
+//   const [email, setEmail] = useState("");
+//   const [shippingAddress, setShippingAddress] = useState("");
+//   const [phoneNumber, setPhoneNumber] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [repeatPassword, setRepeatPassword] = useState("");
+//   const [error, setError] = useState<string | null>(null);
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+//   const [isRepeatPasswordVisible, setIsRepeatPasswordVisible] = useState(false);
+
+//   // Validation warnings
+//   const [emailWarning, setEmailWarning] = useState("");
+//   const [phoneWarning, setPhoneWarning] = useState("");
+//   const [passwordWarning, setPasswordWarning] = useState("");
+//   const [repeatPasswordWarning, setRepeatPasswordWarning] = useState("");
+
+//   const { handleLoginSuccess } = useMainStore();
+//   const router = useRouter();
+
+//   // Email validation
+//   const validateEmail = (value: string) => {
+//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//     setEmailWarning(emailRegex.test(value) ? "" : "Please enter a valid email address.");
+//   };
+
+//   // Phone validation
+//   const validatePhone = (value: string) => {
+//     const phoneRegex = /^\+?\d{10,15}$/;
+//     setPhoneWarning(value && !phoneRegex.test(value) ? "Please enter a valid phone number." : "");
+//   };
+
+//   // Password validation
+//   const validatePassword = (value: string) => {
+//     setPasswordWarning(value.length < 8 ? "Password must be at least 8 characters." : "");
+//   };
+
+//   // Repeat password validation
+//   const validateRepeatPassword = (value: string) => {
+//     setRepeatPasswordWarning(value !== password ? "Passwords do not match." : "");
+//   };
+
+//   const handleSignUp = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     const supabase = createClient();
+//     setIsLoading(true);
+//     setError(null);
+
+//     if (password !== repeatPassword) {
+//       setError("Passwords do not match");
+//       setIsLoading(false);
+//       return;
+//     }
+
+//     try {
+//       const { error } = await supabase.auth.signUp({
+//         email,
+//         password,
+//         options: {
+//           data: {
+//             full_name: name,
+//             shipping_address: shippingAddress,
+//             phone_number: phoneNumber,
+//           },
+//         },
+//       });
+//       if (error) throw error;
+
+//       await handleLoginSuccess();
+//       router.push("/auth/sign-up-success");
+//     } catch (error: unknown) {
+//       setError(error instanceof Error ? error.message : "An error occurred");
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className={cn("w-full px-4 sm:px-10 md:pt-0 pt-10 font-century", className)} {...props}>
+//       <h1 className="text-[1rem] font-light mb-4 tracking-wide md:py-20 small-text">SIGN UP</h1>
+//       <div className="mb-8">
+//         <form onSubmit={handleSignUp}>
+//           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+//             <div className="border border-stone-700 p-4 sm:p-8">
+//               <Label
+//                 htmlFor="name"
+//                 className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
+//               >
+//                 NAME
+//               </Label>
+//               <Input
+//                 id="name"
+//                 type="text"
+//                 value={name}
+//                 onChange={(e) => setName(e.target.value)}
+//                 className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+//                 placeholder="Mary Oliver"
+//                 required
+//               />
+//             </div>
+
+//             {/* <div className="border border-stone-700 p-4 sm:p-8">
+//               <Label
+//                 htmlFor="email"
+//                 className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
+//               >
+//                 EMAIL ADDRESS
+//               </Label>
+//               <Input
+//                 id="email"
+//                 type="email"
+//                 value={email}
+//                 onChange={(e) => {
+//                   setEmail(e.target.value);
+//                   validateEmail(e.target.value);
+//                 }}
+//                 className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+//                 placeholder=" mary.oliver@example.com"
+//                 required
+//               />
+//               {emailWarning && (
+//                 <p className="text-[#50462D] text-xs mt-2">{emailWarning}</p>
+//               )}
+//             </div> */}
+//             <div className="border border-stone-700 p-4 sm:p-8 relative">
+//               <Label
+//                 htmlFor="email"
+//                 className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
+//               >
+//                 EMAIL ADDRESS
+//               </Label>
+//               <Input
+//                 id="email"
+//                 type="email"
+//                 value={email}
+//                 onChange={(e) => {
+//                   setEmail(e.target.value);
+//                   validateEmail(e.target.value);
+//                 }}
+//                 className="border-none bg-transparent px-0 py-2 sm:py-3 sm:pb-6 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+//                 placeholder="mary.oliver@example.com"
+//                 required
+//               />
+
+//               {emailWarning && (
+//                 <p className="absolute left-4 text-[#50462D] text-xs pl-0 bottom-1 sm:pl-4 sm:bottom-4">
+//                   {emailWarning}
+//                 </p>
+//               )}
+//             </div>
+
+
+//             <div className="border border-stone-700 p-4 sm:p-8">
+//               <Label
+//                 htmlFor="shipping-address"
+//                 className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
+//               >
+//                 BILLING ADDRESS
+//               </Label>
+//               <Input
+//                 id="shipping-address"
+//                 type="text"
+//                 value={shippingAddress}
+//                 onChange={(e) => setShippingAddress(e.target.value)}
+//                 className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+//                 placeholder="206 Batran's Street, 39, 2044 Ontario..."
+//                 required
+//               />
+//             </div>
+
+//             <div className="border border-stone-700 p-4 sm:p-8">
+//               <Label
+//                 htmlFor="phone"
+//                 className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
+//               >
+//                 PHONE NUMBER
+//               </Label>
+//               <Input
+//                 id="phone"
+//                 type="tel"
+//                 value={phoneNumber}
+//                 onChange={(e) => {
+//                   setPhoneNumber(e.target.value);
+//                   validatePhone(e.target.value);
+//                 }}
+//                 className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+//                 placeholder="+44 0777 888 999"
+//                 required
+//               />
+//               {phoneWarning && (
+//                 <p className="text-[#50462D] text-xs mt-2">{phoneWarning}</p>
+//               )}
+//             </div>
+
+//             <div className="border border-stone-700 p-4 sm:p-8">
+//               <Label
+//                 htmlFor="password"
+//                 className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
+//               >
+//                 PASSWORD
+//               </Label>
+//               <div className="relative">
+//                 <Input
+//                   id="password"
+//                   type={isPasswordVisible ? "text" : "password"}
+//                   value={password}
+//                   onChange={(e) => {
+//                     setPassword(e.target.value);
+//                     validatePassword(e.target.value);
+//                     validateRepeatPassword(repeatPassword);
+//                   }}
+//                   className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+//                   placeholder="*************************"
+//                   required
+//                 />
+//                 <button
+//                   type="button"
+//                   onClick={() => setIsPasswordVisible((v) => !v)}
+//                   className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-700"
+//                   tabIndex={-1}
+//                 >
+//                   {isPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
+//                 </button>
+//               </div>
+//               {passwordWarning && (
+//                 // <p className="text-[#50462D] text-xs mt-2">{passwordWarning}</p>
+//                 <p
+//                   className="text-[#50462D] text-xs mt-2 min-h-[1rem] transition-opacity duration-200"
+//                   style={{ opacity: passwordWarning ? 1 : 0 }}
+//                 >
+//                   {passwordWarning}
+//                 </p>
+
+//               )}
+//             </div>
+
+//             <div className="border border-stone-700 p-4 sm:p-8">
+//               <Label
+//                 htmlFor="repeat-password"
+//                 className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
+//               >
+//                 REPEAT PASSWORD
+//               </Label>
+//               <div className="relative">
+//                 <Input
+//                   id="repeat-password"
+//                   type={isRepeatPasswordVisible ? "text" : "password"}
+//                   value={repeatPassword}
+//                   onChange={(e) => {
+//                     setRepeatPassword(e.target.value);
+//                     validateRepeatPassword(e.target.value);
+//                   }}
+//                   className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+//                   placeholder="*************************"
+//                   required
+//                 />
+//                 <button
+//                   type="button"
+//                   onClick={() => setIsRepeatPasswordVisible((v) => !v)}
+//                   className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-700"
+//                   tabIndex={-1}
+//                 >
+//                   {isRepeatPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
+//                 </button>
+//               </div>
+//               {repeatPasswordWarning && (
+//                 <p className="text-[#50462D] text-xs">{repeatPasswordWarning}</p>
+//               )}
+//             </div>
+//           </div>
+
+//           <div className="mb-8 w-1/2">
+//             <Button
+//               type="submit"
+//               disabled={isLoading}
+//               className="w-full rounded-none px-6 sm:px-12 py-2 sm:py-3 bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider uppercase transition-colors text-sm sm:text-base"
+//             >
+//               {isLoading ? "Creating Account..." : "SIGN UP"}
+//             </Button>
+//           </div>
+
+//           {error && (
+//             <div className="mb-6">
+//               <p className="text-red-500 text-sm">{error}</p>
+//             </div>
+//           )}
+
+//           <div className="sm:text-left">
+//             <Link href="/auth/login">
+//               <p className="text-sm text-stone-500 hover:text-stone-700">
+//                 Already have an account?{" "}
+//                 <span className="text-black font-medium">
+//                   Log In
+//                 </span>
+//               </p>
+//             </Link>
+//           </div>
+
+//         </form>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+// // 1) Reusable hint component
+// function FieldHint({
+//   msg,
+//   id,
+//   className = "",
+// }: { msg?: string; id?: string; className?: string }) {
+//   // Reserve space (min-h) and fade in/out without changing layout
+//   return (
+//     <p
+//       id={id}
+//       aria-live="polite"
+//       className={cn(
+//         "text-[#50462D] text-xs mt-2 leading-5 min-h-[1.25rem] transition-opacity duration-200",
+//         msg ? "opacity-100" : "opacity-0",
+//         className
+//       )}
+//     >
+//       {msg || " " /* non-breaking space keeps height even when empty */}
+//     </p>
+//   );
+// }
+
+
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -11,6 +358,45 @@ import { useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 
+const baseInput =
+  "border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base";
+
+const inputWithHint = cn(baseInput); // adds desktop-only bottom padding for overlayed hint
+
+function Field({
+  id,
+  label,
+  children,
+  warning,
+}: {
+  id: string;
+  label: string;
+  children: React.ReactNode;
+  warning?: string;
+}) {
+  return (
+    <div className="border border-stone-700 p-4 sm:p-8 relative">
+      <Label
+        htmlFor={id}
+        className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
+      >
+        {label}
+      </Label>
+
+      {children}
+
+      {warning && (
+        <p
+          className="absolute left-4 text-[#50462D] text-xs pl-0 bottom-1 sm:pl-4 sm:bottom-4"
+          aria-live="polite"
+        >
+          {warning}
+        </p>
+      )}
+    </div>
+  );
+}
+
 export function SignUpForm({
   className,
   ...props
@@ -21,12 +407,13 @@ export function SignUpForm({
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isRepeatPasswordVisible, setIsRepeatPasswordVisible] = useState(false);
 
-  // Validation warnings
+  // warnings
   const [emailWarning, setEmailWarning] = useState("");
   const [phoneWarning, setPhoneWarning] = useState("");
   const [passwordWarning, setPasswordWarning] = useState("");
@@ -35,24 +422,21 @@ export function SignUpForm({
   const { handleLoginSuccess } = useMainStore();
   const router = useRouter();
 
-  // Email validation
+  // validators
   const validateEmail = (value: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    setEmailWarning(emailRegex.test(value) ? "" : "Please enter a valid email address.");
+    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    setEmailWarning(ok ? "" : "Please enter a valid email address.");
   };
 
-  // Phone validation
   const validatePhone = (value: string) => {
-    const phoneRegex = /^\+?\d{10,15}$/;
-    setPhoneWarning(value && !phoneRegex.test(value) ? "Please enter a valid phone number." : "");
+    const ok = /^\+?\d{4,15}$/.test(value || "");
+    setPhoneWarning(value && !ok ? "Please enter a valid phone number." : "");
   };
 
-  // Password validation
   const validatePassword = (value: string) => {
     setPasswordWarning(value.length < 8 ? "Password must be at least 8 characters." : "");
   };
 
-  // Repeat password validation
   const validateRepeatPassword = (value: string) => {
     setRepeatPasswordWarning(value !== password ? "Passwords do not match." : "");
   };
@@ -63,6 +447,7 @@ export function SignUpForm({
     setIsLoading(true);
     setError(null);
 
+    // final guard
     if (password !== repeatPassword) {
       setError("Passwords do not match");
       setIsLoading(false);
@@ -85,19 +470,31 @@ export function SignUpForm({
 
       await handleLoginSuccess();
       router.push("/auth/sign-up-success");
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setIsLoading(false);
     }
   };
 
+  const submitDisabled =
+    isLoading ||
+    !name ||
+    !email ||
+    !shippingAddress ||
+    !phoneNumber ||
+    !password ||
+    !repeatPassword ||
+    !!(emailWarning || phoneWarning || passwordWarning || repeatPasswordWarning);
+
   return (
     <div className={cn("w-full px-4 sm:px-10 md:pt-0 pt-10 font-century", className)} {...props}>
       <h1 className="text-[1rem] font-light mb-4 tracking-wide md:py-20 small-text">SIGN UP</h1>
+
       <div className="mb-8">
-        <form onSubmit={handleSignUp}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
+        <form onSubmit={handleSignUp} noValidate>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+            {/* Name (no warning overlay needed) */}
             <div className="border border-stone-700 p-4 sm:p-8">
               <Label
                 htmlFor="name"
@@ -107,99 +504,96 @@ export function SignUpForm({
               </Label>
               <Input
                 id="name"
+                name="name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                autoComplete="name"
+                className={baseInput}
                 placeholder="Mary Oliver"
                 required
               />
             </div>
 
-            <div className="border border-stone-700 p-4 sm:p-8">
-              <Label
-                htmlFor="email"
-                className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
-              >
-                EMAIL ADDRESS
-              </Label>
+            {/* Email */}
+            <Field id="email" label="EMAIL ADDRESS" warning={emailWarning}>
               <Input
                 id="email"
+                name="email"
                 type="email"
+                inputMode="email"
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
                   validateEmail(e.target.value);
                 }}
-                className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
-                placeholder=" mary.oliver@example.com"
+                aria-invalid={!!emailWarning}
+                autoComplete="email"
+                className={inputWithHint}
+                placeholder="mary.oliver@example.com"
                 required
               />
-              {emailWarning && (
-                <p className="text-[#50462D] text-xs mt-2">{emailWarning}</p>
-              )}
-            </div>
+            </Field>
 
+            {/* Address (no warning) */}
             <div className="border border-stone-700 p-4 sm:p-8">
               <Label
                 htmlFor="shipping-address"
                 className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
               >
-                 BILLING ADDRESS
+                BILLING ADDRESS
               </Label>
               <Input
                 id="shipping-address"
+                name="shipping-address"
                 type="text"
                 value={shippingAddress}
                 onChange={(e) => setShippingAddress(e.target.value)}
-                className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                autoComplete="street-address"
+                className={baseInput}
                 placeholder="206 Batran's Street, 39, 2044 Ontario..."
                 required
               />
             </div>
 
-            <div className="border border-stone-700 p-4 sm:p-8">
-              <Label
-                htmlFor="phone"
-                className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
-              >
-                PHONE NUMBER
-              </Label>
+            {/* Phone */}
+            <Field id="phone" label="PHONE NUMBER" warning={phoneWarning}>
               <Input
                 id="phone"
+                name="tel"
                 type="tel"
+                inputMode="tel"
                 value={phoneNumber}
                 onChange={(e) => {
                   setPhoneNumber(e.target.value);
                   validatePhone(e.target.value);
                 }}
-                className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                aria-invalid={!!phoneWarning}
+                autoComplete="tel"
+                className={inputWithHint}
                 placeholder="+44 0777 888 999"
                 required
               />
-              {phoneWarning && (
-                <p className="text-[#50462D] text-xs mt-2">{phoneWarning}</p>
-              )}
-            </div>
+            </Field>
 
-            <div className="border border-stone-700 p-4 sm:p-8">
-              <Label
-                htmlFor="password"
-                className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
-              >
-                PASSWORD
-              </Label>
+            {/* Password */}
+            <Field id="password" label="PASSWORD" warning={passwordWarning}>
               <div className="relative">
                 <Input
                   id="password"
+                  name="new-password"
                   type={isPasswordVisible ? "text" : "password"}
                   value={password}
                   onChange={(e) => {
-                    setPassword(e.target.value);
-                    validatePassword(e.target.value);
+                    const v = e.target.value;
+                    setPassword(v);
+                    validatePassword(v);
+                    // keep repeat validation in sync
                     validateRepeatPassword(repeatPassword);
                   }}
-                  className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                  aria-invalid={!!passwordWarning}
+                  autoComplete="new-password"
+                  className={inputWithHint}
                   placeholder="*************************"
                   required
                 />
@@ -208,32 +602,29 @@ export function SignUpForm({
                   onClick={() => setIsPasswordVisible((v) => !v)}
                   className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-700"
                   tabIndex={-1}
+                  aria-label={isPasswordVisible ? "Hide password" : "Show password"}
                 >
                   {isPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              {passwordWarning && (
-                <p className="text-[#50462D] text-xs mt-2">{passwordWarning}</p>
-              )}
-            </div>
+            </Field>
 
-            <div className="border border-stone-700 p-4 sm:p-8">
-              <Label
-                htmlFor="repeat-password"
-                className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
-              >
-                REPEAT PASSWORD
-              </Label>
+            {/* Repeat Password */}
+            <Field id="repeat-password" label="REPEAT PASSWORD" warning={repeatPasswordWarning}>
               <div className="relative">
                 <Input
                   id="repeat-password"
+                  name="confirm-password"
                   type={isRepeatPasswordVisible ? "text" : "password"}
                   value={repeatPassword}
                   onChange={(e) => {
-                    setRepeatPassword(e.target.value);
-                    validateRepeatPassword(e.target.value);
+                    const v = e.target.value;
+                    setRepeatPassword(v);
+                    validateRepeatPassword(v);
                   }}
-                  className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                  aria-invalid={!!repeatPasswordWarning}
+                  autoComplete="new-password"
+                  className={inputWithHint}
                   placeholder="*************************"
                   required
                 />
@@ -242,21 +633,19 @@ export function SignUpForm({
                   onClick={() => setIsRepeatPasswordVisible((v) => !v)}
                   className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-700"
                   tabIndex={-1}
+                  aria-label={isRepeatPasswordVisible ? "Hide repeat password" : "Show repeat password"}
                 >
                   {isRepeatPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              {repeatPasswordWarning && (
-                <p className="text-[#50462D] text-xs mt-2">{repeatPasswordWarning}</p>
-              )}
-            </div>
+            </Field>
           </div>
 
           <div className="mb-8 w-1/2">
             <Button
               type="submit"
-              disabled={isLoading}
-              className="w-full rounded-none px-6 sm:px-12 py-2 sm:py-3 bg-yellow-400/70 hover:bg-yellow-500 text-stone-700 font-medium tracking-wider uppercase transition-colors text-sm sm:text-base"
+              disabled={submitDisabled}
+              className="w-full rounded-none px-6 sm:px-12 py-2 sm:py-3 bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider uppercase transition-colors text-sm sm:text-base disabled:opacity-60"
             >
               {isLoading ? "Creating Account..." : "SIGN UP"}
             </Button>
@@ -268,16 +657,13 @@ export function SignUpForm({
             </div>
           )}
 
-          <div>
-            <p className="text-sm text-stone-500">
-              Already have an account?{" "}
-              <Link
-                href="/auth/login"
-                className="text-black  font-medium"
-              >
-                Login
-              </Link>
-            </p>
+          <div className="sm:text-left">
+            <Link href="/auth/login">
+              <p className="text-sm text-stone-500 hover:text-stone-700">
+                Already have an account?{" "}
+                <span className="text-black font-medium">Log In</span>
+              </p>
+            </Link>
           </div>
         </form>
       </div>
