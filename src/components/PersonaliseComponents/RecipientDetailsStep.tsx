@@ -22,7 +22,7 @@ export default function RecipientDetailsStep() {
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const isValidPhone = (phone: string) =>
-    /^\+?\d{10,15}$/.test(phone.replace(/\s/g, ""));
+    /^\+?\d{5,15}$/.test(phone.replace(/\s/g, ""));
 
   return (
     <div>
@@ -44,7 +44,7 @@ export default function RecipientDetailsStep() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleInputChange("yourName", e.target.value)
               }
-               className="border-0 border-b border-stone-500 px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="border-0 border-b border-stone-500 px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
               placeholder=""
             />
           </div>
@@ -65,11 +65,14 @@ export default function RecipientDetailsStep() {
             />
           </div>
 
-          <label htmlFor="phone" className="text-stone-700 text-[0.9375rem] font-[300]">
-            Recipient's phone number
-            {/* <br />(only used for delivery issues)* */}
+          <label
+            htmlFor="phone"
+            className="text-stone-700 text-[0.9375rem] font-[300]"
+          >
+            Recipient&apos;s phone number*
           </label>
-          <div className="flex flex-col">
+
+          <div className="relative border-b border-stone-500">
             <Input
               id="phone"
               type="tel"
@@ -77,19 +80,28 @@ export default function RecipientDetailsStep() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleInputChange("recipientPhone", e.target.value)
               }
-              className="border-0 border-b border-stone-500 bg-transparent px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="border-0 bg-transparent px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
               placeholder=""
             />
+
             {touched.phone && !isValidPhone(formData.recipientPhone) && (
-              <span className="text-[#50462D]  font-semibold text-xs mt-1">Enter a valid phone number</span>
+              <span
+                className="absolute left-0 bottom-0 translate-y-full text-[#50462D] text-xs font-normal"
+                aria-live="polite"
+              >
+                Enter a valid phone number
+              </span>
             )}
           </div>
 
-          <label htmlFor="email" className="text-stone-700 text-[0.9375rem] font-[300]">
-            Recipient's e-mail
-            {/* <br />(only used for delivery issues)* */}
+          <label
+            htmlFor="email"
+            className="text-stone-700 text-[0.9375rem] font-[300]"
+          >
+            Recipient&apos;s e-mail
           </label>
-          <div className="flex flex-col">
+
+          <div className="relative border-b border-stone-500">
             <Input
               id="email"
               type="email"
@@ -97,13 +109,20 @@ export default function RecipientDetailsStep() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleInputChange("recipientEmail", e.target.value)
               }
-              className="border-0 border-b border-stone-500 bg-transparent px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="border-0 bg-transparent px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
               placeholder=""
             />
+
             {touched.email && !isValidEmail(formData.recipientEmail) && (
-              <span className="text-[#50462D]  font-semibold text-xs mt-1">Enter a valid email address</span>
+              <span
+                className="absolute left-0 bottom-0 translate-y-full text-[#50462D] text-xs font-normal"
+                aria-live="polite"
+              >
+                Enter a valid email address
+              </span>
             )}
           </div>
+
 
           <label className="text-stone-700 text-[0.9375rem] font-[300]">
             Would you like shipping updates via SMS?
@@ -111,11 +130,10 @@ export default function RecipientDetailsStep() {
           <div className="flex gap-16 justify-end mr-4 w-[95%]">
             <label className="flex items-center gap-3 cursor-pointer">
               <span
-                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
-                  formData.smsUpdates === "send-to-me"
-                    ? "text-[#50462D]"
-                    : "text-[#50462d]/50"
-                }`}
+                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${formData.smsUpdates === "send-to-me"
+                  ? "text-[#50462D]"
+                  : "text-[#50462d]/50"
+                  }`}
                 style={{
                   fontWeight: 300,
                   fontStyle: "light",
@@ -139,11 +157,10 @@ export default function RecipientDetailsStep() {
             </label>
             <label className="flex items-center gap-3 cursor-pointer">
               <span
-                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
-                  formData.smsUpdates === "send-to-recipient"
-                    ? "text-[#50462D]"
-                    : "text-[#50462d]/50"
-                }`}
+                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${formData.smsUpdates === "send-to-recipient"
+                  ? "text-[#50462D]"
+                  : "text-[#50462d]/50"
+                  }`}
                 style={{
                   fontWeight: 300,
                   fontStyle: "light",
@@ -202,7 +219,7 @@ export default function RecipientDetailsStep() {
             />
           </div>
 
-      
+
           <div className="flex flex-col space-y-1">
             <label htmlFor="phone-mobile" className="text-stone-700 text-[0.9375rem] font-[300]">
               Recipient's phone number*
@@ -222,7 +239,7 @@ export default function RecipientDetailsStep() {
             )}
           </div>
 
-       
+
           <div className="flex flex-col space-y-1">
             <label htmlFor="email-mobile" className="text-stone-700 text-[0.9375rem] font-[300]">
               Recipient's e-mail*
@@ -248,11 +265,10 @@ export default function RecipientDetailsStep() {
           </label>
           <div className="flex gap-8 mt-1 justify-start w-full">
             <label className="flex items-center gap-3 cursor-pointer">
-              <span className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
-                formData.smsUpdates === "send-to-me"
-                  ? "text-[#50462D]"
-                  : "text-[#50462d]/50"
-              }`}
+              <span className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${formData.smsUpdates === "send-to-me"
+                ? "text-[#50462D]"
+                : "text-[#50462d]/50"
+                }`}
                 style={{
                   fontWeight: 300,
                   fontStyle: "light",
@@ -275,11 +291,10 @@ export default function RecipientDetailsStep() {
               />
             </label>
             <label className="flex items-center gap-3 cursor-pointer">
-              <span className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
-                formData.smsUpdates === "send-to-recipient"
-                  ? "text-[#50462D]"
-                  : "text-[#50462d]/50"
-              }`}
+              <span className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${formData.smsUpdates === "send-to-recipient"
+                ? "text-[#50462D]"
+                : "text-[#50462d]/50"
+                }`}
                 style={{
                   fontWeight: 300,
                   fontStyle: "light",

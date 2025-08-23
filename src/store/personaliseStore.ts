@@ -54,7 +54,7 @@ const isValidEmail = (email: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
 const isValidPhone = (phone: string) =>
-  /^\+?\d{10,15}$/.test(phone.replace(/\s/g, ""))
+  /^\+?\d{5,15}$/.test(phone.replace(/\s/g, ""))
 
 export const usePersonaliseStore = create<PersonaliseState>()(
   persist(
