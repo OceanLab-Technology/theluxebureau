@@ -1,6 +1,5 @@
 import React from "react";
 import { ProductDetailView } from "@/components/ProductComponents/ProductDetailView";
-import { ProductRecommendations } from "@/components/ProductComponents/ProductRecommendations";
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
