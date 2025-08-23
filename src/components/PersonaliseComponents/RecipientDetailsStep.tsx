@@ -81,7 +81,7 @@ export default function RecipientDetailsStep() {
               placeholder=""
             />
             {touched.phone && !isValidPhone(formData.recipientPhone) && (
-              <span className="text-#50462D  font-semibold text-xs mt-1">Enter a valid phone number</span>
+              <span className="text-[#50462D]  font-semibold text-xs mt-1">Enter a valid phone number</span>
             )}
           </div>
 
@@ -101,7 +101,7 @@ export default function RecipientDetailsStep() {
               placeholder=""
             />
             {touched.email && !isValidEmail(formData.recipientEmail) && (
-              <span className="text-#50462D  font-semibold text-xs mt-1">Enter a valid email address</span>
+              <span className="text-[#50462D]  font-semibold text-xs mt-1">Enter a valid email address</span>
             )}
           </div>
 
@@ -218,7 +218,7 @@ export default function RecipientDetailsStep() {
               placeholder=""
             />
             {touched.phone && !isValidPhone(formData.recipientPhone) && (
-              <span className="text-#50462D  font-semibold text-xs">Enter a valid phone number</span>
+              <span className="text-[#50462D]  font-semibold text-xs">Enter a valid phone number</span>
             )}
           </div>
 
@@ -238,7 +238,7 @@ export default function RecipientDetailsStep() {
               placeholder=""
             />
             {touched.email && !isValidEmail(formData.recipientEmail) && (
-              <span className="text-#50462D  font-semibold text-xs">Enter a valid email address</span>
+              <span className="text-[#50462D]  font-semibold text-xs">Enter a valid email address</span>
             )}
           </div>
 

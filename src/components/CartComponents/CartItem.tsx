@@ -204,7 +204,7 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
                     REMOVE
                   </button>
                 </AlertDialogTrigger>
-                <AlertDialogContent className="bg-[#F5F1E8] border-none">
+                <AlertDialogContent className="bg-[#F5F1E8] rounded-none">
                   <AlertDialogHeader>
                     <AlertDialogTitle className="text-[#50462D] text-[32px] font-normal leading-[40px] tracking-[0.02em] font-['Century_Old_Style_Std']">
                       Remove Item
@@ -214,12 +214,12 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter className="flex gap-4 mt-8">
-                    <AlertDialogCancel className="w-[144px] h-[40px] bg-[#50462D] text-[#FAF7E7] text-[12px] font-normal uppercase px-8 py-[18px] rounded-md border-none hover:opacity-90 tracking-[0.10em] leading-[120%] font-['SchoolBook_Condensed']">
+                    <AlertDialogCancel className="w-[144px] h-[40px] bg-[#50462D] hover:bg-[#3B3215]/80 text-[#FAF7E7] text-[12px] font-normal uppercase px-8 py-[18px] rounded-md border-none transition-colors cursor-pointer tracking-[0.10em] leading-[120%] font-['SchoolBook_Condensed']">
                       CANCEL
                     </AlertDialogCancel>
                     <AlertDialogAction
                       onClick={handleRemoveItem}
-                      className="w-[144px] h-[40px] bg-[#FBD060] text-[#1E1204] text-[12px] font-normal uppercase px-8 py-[18px] rounded-md border-none hover:opacity-90 tracking-[0.10em] leading-[120%] font-['SchoolBook_Condensed']"
+                      className="w-[144px] h-[40px] bg-[#FBD060] hover:bg-[#FDCF5F]/80 text-[#1E1204] text-[12px] font-normal uppercase px-8 py-[18px] rounded-md border-none transition-colors cursor-pointer tracking-[0.10em] leading-[120%] font-['SchoolBook_Condensed']"
                     >
                       REMOVE
                     </AlertDialogAction>
@@ -296,12 +296,12 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter className="flex gap-4 mt-4 justify-center">
-                <AlertDialogCancel className="w-[144px] h-[40px] bg-[#50462D] text-[#FAF7E7] text-[12px] font-normal uppercase px-8 py-[18px] rounded-[6px] border-none hover:opacity-90 tracking-[0.10em] leading-[120%] font-['SchoolBook_Condensed']">
+                <AlertDialogCancel className="w-[144px] h-[40px] bg-[#50462D] hover:bg-[#3B3215]/80 text-[#FAF7E7] text-[12px] font-normal uppercase px-8 py-[18px] rounded-[6px] border-none transition-colors cursor-pointer tracking-[0.10em] leading-[120%] font-['SchoolBook_Condensed']">
                   CANCEL
                 </AlertDialogCancel>
                 <AlertDialogAction
                   onClick={handleRemoveItem}
-                  className="w-[144px] h-[40px] bg-[#FBD060] text-[#1E1204] text-[12px] font-normal uppercase px-8 py-[18px]  rounded-[6px]  border-none hover:opacity-90  tracking-[0.10em] leading-[120%] font-['SchoolBook_Condensed']"
+                  className="w-[144px] h-[40px] bg-[#FBD060] hover:bg-[#FDCF5F]/80 text-[#1E1204] text-[12px] font-normal uppercase px-8 py-[18px]  rounded-[6px]  border-none hover:opacity-90  tracking-[0.10em] leading-[120%] font-['SchoolBook_Condensed']"
                 >
                   REMOVE
                 </AlertDialogAction>

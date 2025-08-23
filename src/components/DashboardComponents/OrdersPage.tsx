@@ -165,6 +165,7 @@ export function OrdersPage() {
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead>Order Date</TableHead>
                       <TableHead>Order ID</TableHead>
                       <TableHead>Customer Name</TableHead>
                       <TableHead>Recipient Name</TableHead>
@@ -177,12 +178,48 @@ export function OrdersPage() {
                   <TableBody>
                     {orders.map((order) => (
                       <TableRow key={order.id}>
+                        <TableCell>
+                          {order.createdAt
+                            ? (() => {
+                                const date = new Date(order.createdAt);
+                                const dayName = date.toLocaleDateString("en-GB", {
+                                  weekday: "long",
+                                });
+                                const day = date.getDate();
+                                const month = date.toLocaleDateString("en-GB", {
+                                  month: "long",
+                                });
+                                const year = date.getFullYear();
+                                const getOrdinalSuffix = (d: number) => {
+                                  if (d >= 11 && d <= 13) return "th";
+                                  switch (d % 10) {
+                                    case 1:
+                                      return "st";
+                                    case 2:
+                                      return "nd";
+                                    case 3:
+                                      return "rd";
+                                    default:
+                                      return "th";
+                                  }
+                                };
+                                const ordinalSuffix = getOrdinalSuffix(day);
+                                return (
+                                  <>
+                                    {dayName} {day}
+                                    <sup className="text-xs">{ordinalSuffix}</sup>{" "}
+                                    {month} {year}
+                                  </>
+                                );
+                              })()
+                            : "-"}
+                        </TableCell>
                         <TableCell className="font-medium">
                           #{order.id?.slice(-8)}
                         </TableCell>
                         <TableCell>{order.customerName || "-"}</TableCell>
                         <TableCell>{order.recipientName || "-"}</TableCell>
-                       <TableCell>
+                        <TableCell>
                           {order.deliveryDate ? (() => {
                             const date = new Date(order.deliveryDate);
                             const dayName = date.toLocaleDateString("en-GB", { weekday: "long" });

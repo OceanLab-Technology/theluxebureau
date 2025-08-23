@@ -259,7 +259,7 @@ const formatDateWithOrdinal = (date:any) => {
 
 
         {/* Existing SMS section */}
-        <div className="pt-4 flex flex-col md:flex-row md:items-center items-start pb-1 justify-between transition-all duration-300">
+        <div className="pt-1 flex flex-col md:flex-row md:items-center items-start pb-1 justify-between transition-all duration-300">
           <p className="text-stone-700 text-sm mb-3 md:mb-0 md:w-[36%] w-full leading-tight md:leading-normal">
             Would you like shipping updates via SMS?
           </p>

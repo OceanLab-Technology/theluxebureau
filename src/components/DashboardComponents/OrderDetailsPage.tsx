@@ -524,7 +524,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
             <p className="text-xs text-muted-foreground">{item.products?.category}</p>
             <div className="flex justify-between items-center mt-2">
               <span className="text-xs">Qty: {item.quantity}</span>
-              <span className="font-medium text-sm">${item.price_at_purchase?.toFixed(2)}</span>
+              <span className="font-medium text-sm">£{item.price_at_purchase?.toFixed(2)}</span>
             </div>
           </div>
         </div>
@@ -684,12 +684,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
                   {formatTimestamp(order.orderInfo.placedAt)}
                 </p>
               </div>
-              <div>
-                <Label className="text-sm"></Label>
-                <p className="text-sm text-muted-foreground">
-                  {formatTimestamp(order.orderInfo.updatedAt)}
-                </p>
-              </div>
+              
             </CardContent>
           </Card>
         </div>
