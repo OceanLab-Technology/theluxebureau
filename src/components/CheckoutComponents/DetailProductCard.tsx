@@ -14,22 +14,22 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
 }) => {
   return (
     <div key={product.id} className="w-full font-[Marfa]">
-      <h2 className="my-6 small-text pb-2 border-b">
-        Item {String(index + 1).padStart(2, "0")}
+      <h2 className="text-[18px] font-normal font-[SchoolBook] tracking-wide pb-3 border-b border-b-stone-300 mb-8">
+        ITEM {String(index + 1).padStart(2, "0")}
       </h2>
-      <div className={`${isOrder ? "md:flex-row flex-col md:gap-18 gap-4" : "flex-col gap-6"} flex `}>
-        <div className={`flex items-start gap-6`}>
-          <div
-            className={` ${isOrder ? "md:h-full w-full" : ""} bg-muted/20 h-60 md:h-[17.93rem] md:w-[18.62rem] overflow-hidden`}
-          >
-            <img
-              src={product.image_1 || "/placeholder.jpg"}
-              alt={product.name}
-              className="w-full h-full object-cover"
-            />
-          </div>
+      <div className={`${isOrder ? "md:flex-row flex-col md:gap-18 gap-8" : "flex-col gap-8"} flex`}>
+        <div className={`flex items-start gap-10`}>
+         <div
+  className="bg-muted/20 h-60 md:h-[20rem] md:w-[28rem] w-full overflow-hidden "
+>
+  <img
+    src={product.image_1 || "/placeholder.jpg"}
+    alt={product.name}
+    className="w-full h-full object-cover"
+  />
+</div>
           {!isOrder && (
-            <div className="flex flex-col w-full text-[1.5rem] justify-center space-y-1 font-century">
+            <div className="flex flex-col w-[90%] text-[1.5rem] justify-center space-y-8 font-century">
               <h1 className="font-medium">{product.name}</h1>
               <p className="mt-2">
                 for {product.customData?.recipientName || "recipient"}
@@ -37,27 +37,23 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
             </div>
           )}
         </div>
-        <div className="space-y-4 w-full">
+        <div className="space-y-8 mt-8 w-full">
           {product.customData && Object.keys(product.customData).length > 0 && (
-            <div className="md:space-y-6 space-y-3 w-full">
-              <div className="flex items-center gap-2 border-b border-b-stone-300">
-                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+            <div className="md:space-y-8 space-y-8 w-full">
+              <div className="flex flex-row items-center gap-4 md:gap-8">
+                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Your Name
                 </label>
                 <p className="text-stone-600">{product.customData.yourName}</p>
               </div>
-
-              <div className="flex items-center gap-2 border-b border-b-stone-300">
-                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+              <div className="flex flex-row items-center gap-4 md:gap-8">
+                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Recipients Name
                 </label>
-                <p className="text-stone-600">
-                  {product.customData.recipientName}
-                </p>
+                <p className="text-stone-600">{product.customData.recipientName}</p>
               </div>
-
-              <div className="flex items-center gap-2 border-b border-b-stone-300">
-                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+              <div className="flex flex-row items-center gap-4 md:gap-8">
+                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Recipients Address
                 </label>
                 <p className="text-stone-600">
@@ -67,28 +63,61 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
                     : "Not provided"}
                 </p>
               </div>
-
-              <div className="flex items-center gap-2 border-b border-b-stone-300">
-                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+              <div className="flex flex-row items-center gap-4 md:gap-8">
+                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Delivery Date
                 </label>
                 <p className="text-stone-600">
-                  {product.customData.deliveryDate || "Not selected"}
+                  {product.customData.deliveryDate
+                    ? (() => {
+                        const date = new Date(product.customData.deliveryDate);
+                        const dayName = date.toLocaleDateString("en-GB", {
+                          weekday: "long",
+                        });
+                        const day = date.getDate();
+                        const month = date.toLocaleDateString("en-GB", {
+                          month: "long",
+                        });
+                        const year = date.getFullYear();
+                        const getOrdinalSuffix = (d: number) => {
+                          if (d >= 11 && d <= 13) return "th";
+                          switch (d % 10) {
+                            case 1:
+                              return "st";
+                            case 2:
+                              return "nd";
+                            case 3:
+                              return "rd";
+                            default:
+                              return "th";
+                          }
+                        };
+                        const ordinalSuffix = getOrdinalSuffix(day);
+                        return (
+                          <>
+                            {dayName},{" "} {day}
+                            <sup className="text-xs">{ordinalSuffix}</sup>{" "}
+                            {month} {year}
+                          </>
+                        );
+                      })()
+                    : "Not selected"}
                 </p>
               </div>
-
-              <div className="flex items-center gap-2 border-b border-b-stone-300">
-                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+              <div className="flex flex-row items-center gap-4 md:gap-8">
+                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Delivery Time
                 </label>
                 <p className="text-stone-600">
-                  {product.customData.preferredDeliveryTime || "Not selected"}
+                  {product.customData.preferredDeliveryTime === "10am-1pm" && "10:00 – 13:00"}
+                  {product.customData.preferredDeliveryTime === "1pm-4pm" && "13:00 – 16:00"}
+                  {product.customData.preferredDeliveryTime === "4pm-6pm" && "16:00 – 18:00"}
+                  {!["10am-1pm", "1pm-4pm", "4pm-6pm"].includes(product.customData.preferredDeliveryTime) && "Not selected"}
                 </p>
               </div>
-
-              <div className="flex items-center gap-2 border-b border-b-stone-300">
-                <span className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
-                  SMS Updates
+              <div className="flex flex-row items-center gap-4 md:gap-8">
+                <span className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
+                   Delivery Updates
                 </span>
                 <span className="text-stone-600">
                   {product.customData.smsUpdates === "send-to-me"
@@ -98,16 +127,16 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
                     : "none"}
                 </span>
               </div>
-              <div className="flex items-center gap-2 border-b border-b-stone-300">
-                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+              <div className="flex flex-row items-center gap-4 md:gap-8">
+                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Custom Letterhead
                 </label>
                 <p className="text-stone-600">
                   {product.customData.headerText}
                 </p>
               </div>
-              <div className="flex flex-col gap-2 border-b border-b-stone-300">
-                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
+              <div className="flex flex-row items-start gap-4 md:gap-8">
+                <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Personal Message
                 </label>
                 <p className="text-stone-600">

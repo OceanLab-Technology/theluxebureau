@@ -330,7 +330,7 @@ export function ProductsPage() {
                       </TableCell>
                       <TableCell className="font-medium">{product.name}</TableCell>
                       <TableCell>{product.category}</TableCell>
-                      <TableCell className="font-medium">€{product.price}</TableCell>
+                      <TableCell className="font-medium">£{product.price}</TableCell>
                       <TableCell>{product.inventory}</TableCell>
                       <TableCell>
                         <Badge variant="default">

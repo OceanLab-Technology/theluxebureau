@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Infant, Geist, Geist_Mono, PT_Serif } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { GlobalKeyboardHandler } from "@/components/PersonaliseComponents/GlobalKeyboardHandler";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,7 +49,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${ptSerif.variable} ${cormorantInfant.variable} antialiased`}
-      >
+      > <GlobalKeyboardHandler />
         <main className="">{children}</main>
         <Toaster toastOptions={{
           unstyled: true,

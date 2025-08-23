@@ -1,3 +1,5 @@
+
+
 // "use client";
 
 // import { useEffect, useState } from "react";
@@ -391,7 +393,6 @@
 // }
 
 
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -428,6 +429,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
     status: "",
     total: "",
     notes: "",
+    preferredDeliveryTime: "", 
   });
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -442,6 +444,11 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
         status: order.orderInfo.status || "",
         total: order.orderInfo.total || "",
         notes: order.orderInfo.notes || "",
+        preferredDeliveryTime:
+          order.orderInfo.preferredDeliveryTime ||
+          (Array.isArray(order.personalization) && order.personalization.length > 0
+            ? order.personalization[0].preferredDeliveryTime || ""
+            : ""),
       });
       setHasChanges(false);
     }
@@ -478,7 +485,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
     const success = await updateOrderStatus(orderId, newStatus);
     if (success) {
       toast.success(`Order status updated to ${newStatus}`);
-      setFormData((prev) => ({ ...prev, status: newStatus })); // <- update local formData
+      setFormData((prev) => ({ ...prev, status: newStatus })); 
     } else {
       toast.error("Failed to update order status");
     }
@@ -517,7 +524,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
             <p className="text-xs text-muted-foreground">{item.products?.category}</p>
             <div className="flex justify-between items-center mt-2">
               <span className="text-xs">Qty: {item.quantity}</span>
-              <span className="font-medium text-sm">${item.price_at_purchase?.toFixed(2)}</span>
+              <span className="font-medium text-sm">£{item.price_at_purchase?.toFixed(2)}</span>
             </div>
           </div>
         </div>
@@ -641,6 +648,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
               <CreditCard className="h-5 w-5" />
               <CardTitle>Payment & Status</CardTitle>
             </CardHeader>
+
             <CardContent className="space-y-3">
               <div>
                 <Label className="text-sm">Payment Status</Label>
@@ -652,7 +660,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
               </div>
               <div>
                 <Label className="text-sm">Total Amount</Label>
-                <p className="text-lg font-semibold">${order.orderInfo.total}</p>
+               <p className="text-lg font-semibold">£{Number(order.orderInfo.total).toFixed(2)}</p>
               </div>
             </CardContent>
           </Card>
@@ -671,84 +679,98 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
                 </p>
               </div>
               <div>
-                <Label className="text-sm">Placed At</Label>
+                <Label className="text-sm"> Order Placed </Label>
                 <p className="text-sm text-muted-foreground">
                   {formatTimestamp(order.orderInfo.placedAt)}
                 </p>
               </div>
-              <div>
-                <Label className="text-sm">Updated At</Label>
-                <p className="text-sm text-muted-foreground">
-                  {formatTimestamp(order.orderInfo.updatedAt)}
-                </p>
-              </div>
+              
             </CardContent>
           </Card>
         </div>
 
         {/* Editable Order Info */}
-        <Card>
-          <CardHeader className="flex items-center gap-2">
-            <Package className="h-5 w-5" />
-            <CardTitle>Edit Order Information</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-1.5">
-              <Label>Delivery Date</Label>
-              <Input
-                type="date"
-                value={formData.deliveryDate}
-                onChange={(e) => handleFieldChange("deliveryDate", e.target.value)}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label>Status</Label>
-              <Select
-                value={formData.status}
-                onValueChange={(newStatus) =>
-                  handleStatusUpdate(order.id!, newStatus)
-                }
-                disabled={updatingOrderId === order.id}
-              >
-                <SelectTrigger className="w-[130px] h-8 text-[15px] border-stone-300 hover:bg-secondary bg-transparent py-0 focus:ring-0">
-                  <div className="flex items-center gap-2">
-                    {updatingOrderId === order.id ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        <span>{formData.status}</span>
-                      </>
-                    ) : (
-                      <span>{formData.status}</span>
-                    )}
-                  </div>
-                </SelectTrigger>
-                <SelectContent>
-                  {["New", "Active", "Shipped", "Complete", "Cancelled"].map(status => (
-                    <SelectItem key={status} value={status}>{status}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+      <Card>
+  <CardHeader className="flex items-center gap-2">
+    <Package className="h-5 w-5" />
+    <CardTitle>Edit Order Information</CardTitle>
+  </CardHeader>
 
-            </div>
-            <div className="space-y-1.5">
-              <Label>Total ($)</Label>
-              <Input
-                type="number"
-                step="0.01"
-                value={formData.total}
-                onChange={(e) => handleFieldChange("total", e.target.value)}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label>Notes</Label>
-              <Textarea
-                value={formData.notes}
-                onChange={(e) => handleFieldChange("notes", e.target.value)}
-                className="min-h-[80px]"
-              />
-            </div>
-          </CardContent>
-        </Card>
+  <CardContent className="grid gap-4 md:grid-cols-2">
+    <div className="space-y-1.5">
+      <Label>Delivery Date</Label>
+      <Input
+        type="date"
+        value={formData.deliveryDate}
+        onChange={(e) => handleFieldChange("deliveryDate", e.target.value)}
+        className="border rounded-lg"
+      />
+    </div>
+   <div className="space-y-2">
+  <Label>Preferred delivery time</Label>
+  <Select
+    value={formData.preferredDeliveryTime || ""}
+    onValueChange={(value) => handleFieldChange("preferredDeliveryTime", value)}
+  >
+    <SelectTrigger className="border border-stone-300 rounded-md px-2 py-2 w-[22%] text-sm text-stone-800 font-medium">
+      <SelectValue placeholder="Select preferred delivery time" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="10am-1pm">10:00 – 13:00</SelectItem>
+      <SelectItem value="1pm-4pm">13:00 – 16:00</SelectItem>
+      <SelectItem value="4pm-6pm">16:00 – 18:00</SelectItem>
+      <SelectItem value="6pm-11pm">18:00 – 23:00</SelectItem>
+    </SelectContent>
+  </Select>
+</div>
+    <div className="space-y-1.5">
+      <Label>Total (£)</Label>
+      <Input
+        type="number"
+        step="0.01"
+        value={formData.total}
+        onChange={(e) => handleFieldChange("total", e.target.value)}
+      />
+    </div>
+    <div className="space-y-1.5">
+      <Label>Status</Label>
+      <Select
+        value={formData.status}
+        onValueChange={(newStatus) =>
+          handleStatusUpdate(order.id!, newStatus)
+        }
+        disabled={updatingOrderId === order.id}
+      >
+        <SelectTrigger className="w-[130px] h-8 text-[15px] border-stone-300 hover:bg-secondary bg-transparent py-0 focus:ring-0">
+          <div className="flex items-center gap-2">
+            {updatingOrderId === order.id ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>{formData.status}</span>
+              </>
+            ) : (
+              <span>{formData.status}</span>
+            )}
+          </div>
+        </SelectTrigger>
+        <SelectContent>
+          {["New", "Active", "Shipped", "Complete", "Cancelled"].map(status => (
+            <SelectItem key={status} value={status}>{status}</SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+    <div className="space-y-1.5 md:col-span-2">
+      <Label>Notes</Label>
+      <Textarea
+        value={formData.notes}
+        onChange={(e) => handleFieldChange("notes", e.target.value)}
+        className="min-h-[80px]"
+      />
+    </div>
+  </CardContent>
+</Card>
+
 
         {/* Order Items */}
         {order.orderItems && order.orderItems.length > 0 && (

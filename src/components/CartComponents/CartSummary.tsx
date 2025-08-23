@@ -35,7 +35,7 @@ export function CartSummary({ onClose }: CartSummaryProps) {
           <span className="md:text-lg font-medium">SUBTOTAL</span>
 
           <p className="md:text-sm text-xs text-stone-600 mb-6">
-            TAXES AND SHIPPING CALCULATED AT CHECKOUT
+            TAXES AND DELIVERY  CALCULATED AT CHECKOUT
           </p>
           <div className="flex justify-between items-center text-xl font-medium mb-8">
             <span>£{cartTotal.toFixed(2)}</span>

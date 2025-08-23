@@ -217,6 +217,7 @@ export default function PersonaliseForm({
       console.error("Failed to add personalised item to cart:", error);
     }
   };
+
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
@@ -237,6 +238,78 @@ export default function PersonaliseForm({
       return "CHECKOUT";
     }
     return "NEXT";
+  };
+
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown, true);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown, true);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    const handleGlobalClose = () => {
+      if (onCloseSheet) onCloseSheet();
+    };
+    window.addEventListener("globalClose", handleGlobalClose);
+    return () => {
+      window.removeEventListener("globalClose", handleGlobalClose);
+    };
+  }, [onCloseSheet]);
+
+  
+  const isStepAccessible = (stepId: number) => {
+    // Check if all steps 
+    for (let i = 1; i < stepId; i++) {
+      if (!isStepValid(i)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const handleStepClick = (stepId: number) => {
+    // backward nav
+    if (stepId < currentStep) {
+      for (let i = currentStep; i > stepId; i--) {
+        prevStep();
+      }
+      return;
+    }
+
+    //do nothing
+    if (stepId === currentStep) {
+      return;
+    }
+
+  
+    if (stepId > currentStep) {
+      if (!isStepAccessible(stepId)) {
+        
+        switch (stepId) {
+          case 2:
+            toast.error("Please complete recipient details first.");
+            break;
+          case 3:
+            toast.error("Please complete recipient details and personalization first.");
+            break;
+          case 4:
+            toast.error("Please complete all previous steps first.");
+            break;
+        }
+        return;
+      }
+
+      for (let i = currentStep; i < stepId; i++) {
+        nextStep();
+      }
+    }
   };
 
   return (
@@ -262,6 +335,7 @@ export default function PersonaliseForm({
                   ? "text-secondary-foreground"
                   : "text-stone-500"
               }`}
+              onClick={() => handleStepClick(s.id)}
             >
               {s.label}
             </div>
@@ -298,7 +372,7 @@ export default function PersonaliseForm({
               <button
                 onClick={handleBack}
                 disabled={isLoading}
-                className="bg-[#3B3215] hover:bg-[#3B3215]/80 text-stone-400 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm md:py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-[#50462D] hover:bg-[#50462D]/80 text-stone-400 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm md:py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 BACK
               </button>
@@ -332,7 +406,7 @@ export default function PersonaliseForm({
               <button
                 onClick={handleBack}
                 disabled={currentStep === 1}
-                className="bg-[#3B3215] hover:bg-[#3B3215]/80 text-stone-400 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%]"
+                className="bg-[#50462D] hover:bg-[#50462D]/80 text-stone-400 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%]"
               >
                 BACK
               </button>

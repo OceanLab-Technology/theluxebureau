@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -13,35 +12,34 @@ export function EmptyCart({ onClose }: EmptyCartProps) {
 
   const handleStartShopping = () => {
     if (onClose) {
-      onClose(); // Close the sheet instead of navigating
+      onClose();
     } else {
-      router.push("/products"); // Navigate if not in sheet (legacy behavior)
+      router.push("/products");
     }
   };
 
   return (
-    <div className="max-w-md mx-auto flex justify-center items-center h-[calc(100vh-4rem)]">
-      <div className="pt-6">
-        <div className="text-center space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-2xl font-bold text-stone-900">
-              Your cart is empty
-            </h2>
-            <p className="text-stone-600">
-              Looks like you haven't added any items to your cart yet. Start
-              exploring our products and add some items you love.
-            </p>
-          </div>
-          <div className="space-y-3">
-            <Button onClick={handleStartShopping} className="w-full" size="lg">
-              {onClose ? "Continue Shopping" : "Start Shopping"}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-
-            <div className="text-sm text-stone-500">
-              Or browse our featured products below
-            </div>
-          </div>
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-6">
+      <div className="max-w-md w-full text-center space-y-6">
+        {/* Header */}
+        <div className="space-y-6">
+          <h2 className="text-[#50462D] text-[34px] font-normal leading-[40px] font-[Century_Old_Style_Std]">
+            Your cart is empty
+          </h2>
+          <p className="text-[#50462D] text-[18px] font-normal leading-[22px] font-[Century_Old_Style_Std]">
+            Looks like you haven’t added any items to your cart yet.
+            <br />
+            Start exploring our products and add something you love.
+          </p>
+        </div>
+        {/* Continue Shopping Button */}
+        <div className="pt-4">
+          <button
+            onClick={handleStartShopping}
+            className="bg-[#FBD060] text-[#1E1204] font-[SchoolBook] font-[400] text-[12px] leading-[120%] tracking-[0.12em] uppercase text-center py-[18px] px-[32px] gap-[10px] rounded-[6px] hover:opacity-90 transition-opacity duration-200"
+          >
+            CONTINUE SHOPPING &gt;
+          </button>
         </div>
       </div>
     </div>

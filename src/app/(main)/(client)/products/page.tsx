@@ -34,7 +34,7 @@ function ProductsContent() {
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
     const params = new URLSearchParams(searchParams.toString());
-    if (category && category !== "Shop All") {
+    if (category && category !== "") {
       params.set("category", category);
     } else {
       params.delete("category");

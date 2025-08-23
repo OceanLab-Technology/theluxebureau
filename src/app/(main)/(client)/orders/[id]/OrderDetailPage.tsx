@@ -3,8 +3,9 @@
 import React from "react";
 import Link from "next/link";
 import { LogoutButton } from "@/components/AuthComponents/LogoutButton";
-import { DetailProductCard } from "@/components/CheckoutComponents/DetailProductCard";
+
 import { Product } from "@/app/api/types";
+import { NonUnderlineProductCard } from "@/components/CheckoutComponents/NonUnderlineProductCard";
 
 interface User {
   id: string;
@@ -94,23 +95,22 @@ export default function OrderDetailPage({ order, user }: OrderDetailPageProps) {
         </div>
 
         <div className="flex-1 md:py-20 py-6 md:px-10 px-0 col-span-4">
-          <div className="mb-20">
-            <h1 className="text-3xl font-light mb-6 font-century text-secondary-foreground">Order no.{orderNumber}</h1>
+          <div className="mb-6">
+            <h2 className="border-b mb-2 small-text pb-1 text-secondary-foreground font-semibold w-full">
+              ORDER HISTORY
+            </h2>
           </div>
 
           <div className="mb-8">
-            <div className="flex flex-col md:items-start justify-between mb-4 md:mb-6">
-              <h2 className="border-b mb-6 small-text pb-1 text-secondary-foreground font-semibold w-full">
-                ORDER DETAILS
-              </h2>
-              <div className="mb-4 uppercase small-text md:mb-0">
+            <div className="flex flex-col md:items-start justify-between mb-1 md:mb-2">
+              <div className="mb-2 uppercase small-text md:mb-2">
                 <h3 className="mb-1">Order no.{orderNumber}</h3>
                 <h3 className="mb-1">
                   {new Date(order.created_at).toLocaleDateString("en-GB", {
+                    weekday: "long",
                     day: "2-digit",
-                    month: "long",
-                    year: "numeric",
-                  })}
+                    month: "long"
+                  }).toUpperCase()}
                 </h3>
                 <h3 className="">${order.total_amount?.toFixed(2)}</h3>
               </div>
@@ -119,10 +119,10 @@ export default function OrderDetailPage({ order, user }: OrderDetailPageProps) {
             {order.order_items && order.order_items.length > 0 && (
               <div className="mb-6">
                 <div className="relative">
-                  <div className="space-y-16 pb-4">
+                  <div className="space-y-12 pb-4">
                     {order.order_items.map((item, itemIndex) => (
                       <div key={item.id} className="flex-shrink-0">
-                        <DetailProductCard
+                        <NonUnderlineProductCard
                           isOrder={true}
                           product={formattedData[itemIndex]}
                           index={itemIndex}

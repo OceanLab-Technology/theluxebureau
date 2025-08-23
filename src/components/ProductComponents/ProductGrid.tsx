@@ -6,6 +6,7 @@ import { ProductCard } from "./ProductCard";
 import { ProductGridSkeleton } from "./ProductGridSkeleton";
 import { useMainStore } from "@/store/mainStore";
 import { ChevronRight, Loader2 } from "lucide-react";
+import { useSearchParams, useRouter } from "next/navigation";
 
 interface ProductGridProps {
   searchQuery?: string;
@@ -24,6 +25,9 @@ export function ProductGrid({
 }: ProductGridProps) {
   const { products, loading, error, fetchProducts } = useMainStore();
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   const categories = ["Literature", "Drinks & Spirits", "Floral", "Home"];
 
@@ -87,7 +91,7 @@ export function ProductGrid({
   const getNextCategory = () => {
     if (!selectedCategory) return categories[0];
     const currentIndex = categories.indexOf(selectedCategory);
-    return categories[(currentIndex + 1) % categories.length]; // Loop back to first if at end
+    return categories[(currentIndex + 1) % categories.length];
   };
 
   const handleNextCategory = () => {
@@ -105,26 +109,51 @@ export function ProductGrid({
     }
   };
 
+  const handleCategoryChange = (category: string) => {
+    if (category === selectedCategory) return;
+    if (onCategoryChange) {
+      onCategoryChange(category);
+    }
+    const params = new URLSearchParams(searchParams.toString());
+    if (category && category !== "") {
+      params.set("category", category);
+    } else {
+      params.delete("category");
+    }
+    router.push(`/products?${params.toString()}`, { scroll: false });
+  };
+
   useEffect(() => {
     const params: any = {};
 
     if (selectedCategory) params.category = selectedCategory;
     if (searchQuery) params.name = searchQuery;
 
-    fetchProducts(params);
+    fetchProducts(params).finally(() => {
+      setIsInitialLoad(false);
+    });
   }, [selectedCategory, searchQuery, fetchProducts]);
 
-  const filteredProducts = products.filter((product) => {
-    const productAvailability = product.inventory > 0 ? "in-stock" : "sold-out";
-    const matchesAvailability = productAvailability === (availability || "in-stock");
-    return matchesAvailability;
+
+  const normalizeCategory = (category: string) => {
+    return category.toLowerCase().trim().replace(/\s+/g, ' ');
+  };
+
+  const filteredProducts = products.filter(product => {
+    if (!selectedCategory) return true;
+    
+    const productCategory = product.category ? normalizeCategory(product.category) : '';
+    const selectedCat = normalizeCategory(selectedCategory);
+    
+    return productCategory === selectedCat;
   });
 
-  if (loading && products.length === 0) {
+
+  if (loading) {
     return <ProductGridSkeleton />;
   }
 
-  if (filteredProducts.length === 0) {
+  if (!loading && filteredProducts.length === 0) {
     return (
       <div className="w-full flex items-center justify-center min-h-[50vh] py-20 flex-col text-center">
         <h3 className="text-[2rem] font-[400] mb-4">No products found</h3>
@@ -135,6 +164,7 @@ export function ProductGrid({
     );
   }
 
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -144,7 +174,7 @@ export function ProductGrid({
         exit="out"
         variants={pageVariants}
         transition={pageTransition}
-        className="space-y-8 font-century"
+        className="space-y-8 w-full font-century"
       >
         <motion.div
           className="md:px-6 px-6 mb-15"
@@ -187,17 +217,13 @@ export function ProductGrid({
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="grid grid-cols-2 gap-2 md:px-6 px-4 md:w-[90%]"
+            className="grid grid-cols-2 md:grid-cols-3 gap-y-[12px] md:gap-y-[6px] gap-x-[12px] md:gap-x-1 px-2 md:px-0 w-full max-w-full"
           >
-            {filteredProducts.map((product, index) => (
+            {filteredProducts.map((product, idx) => (
               <motion.div
                 key={product.id}
                 variants={cardVariants}
-                initial="hidden"
-                animate="visible"
-                exit="hidden"
-                custom={index}
-                transition={{ delay: index * 0.1 }}
+                className={`flex ${idx === 0 ? "md:ml-3" : ""} ${idx === filteredProducts.length - 1 ? "md:mr-3" : ""}`}
               >
                 <ProductCard product={product} />
               </motion.div>
@@ -206,7 +232,7 @@ export function ProductGrid({
         </AnimatePresence>
 
         <motion.div
-          className="h-[15.75rem] w-screen px-10 bg-[rgba(80,70,45,0.19)] flex items-center md:justify-end justify-center"
+          className="h-[15.75rem] w-full px-10 bg-[rgba(80,70,45,0.19)] flex items-center md:justify-end justify-center"
           initial={{ opacity: 0, filter: "blur(5px)" }}
           animate={{ opacity: 1, filter: "blur(0px)" }}
           transition={{ delay: 0.6, duration: 0.5 }}
@@ -255,7 +281,7 @@ export function ProductGrid({
 
         {loading && products.length > 0 && (
           <motion.div
-            className="grid grid-cols-2 md:gap-6 gap-3 md:px-10 px-4"
+            className="grid grid-cols-3 md:gap-6 gap-3 md:px-10 px-4"
             initial={{ opacity: 0, filter: "blur(5px)" }}
             animate={{ opacity: 1, filter: "blur(0px)" }}
             exit={{ opacity: 0, filter: "blur(5px)" }}
@@ -268,7 +294,7 @@ export function ProductGrid({
                 animate={{ opacity: 1, filter: "blur(0px)" }}
                 transition={{ delay: index * 0.1 }}
               >
-                <div className="md:h-130 h-66 bg-muted/20 rounded"></div>
+                <div className="md:h-90 h-86 bg-muted/20 rounded"></div>
                 <div className="h-4 bg-muted/20 rounded w-3/4"></div>
                 <div className="h-4 bg-muted/20 rounded w-16"></div>
               </motion.div>

@@ -6,7 +6,7 @@ export interface personaliseFormData {
   yourName: string
   recipientName: string
   recipientAddress: string
-  recipientCity: string
+  recipientPhone: string
   recipientEmail: string
   deliveryDate: string
   preferredDeliveryTime: string
@@ -14,7 +14,8 @@ export interface personaliseFormData {
   headerText: string
   selectedQuote: string
   customMessage: string
-  smsUpdates: 'send-to-me' | 'send-to-recipient' | 'none'
+  smsUpdates: 'send-to-me' | 'send-to-recipient'
+  shippingUpdateMethod: "text" | "email" 
 }
 
 interface PersonaliseState {
@@ -36,7 +37,7 @@ const initialFormData: personaliseFormData = {
   yourName: '',
   recipientName: '',
   recipientAddress: '',
-  recipientCity: '',
+  recipientPhone: '',
   recipientEmail: '',
   deliveryDate: '',
   preferredDeliveryTime: '',
@@ -44,8 +45,16 @@ const initialFormData: personaliseFormData = {
   selectedQuote: '',
   customMessage: '',
   selectedFont: 'default',
-  smsUpdates: 'none'
+  smsUpdates: 'send-to-me',
+  shippingUpdateMethod: "text"
 }
+
+// Helper validation functions
+const isValidEmail = (email: string) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+const isValidPhone = (phone: string) =>
+  /^\+?\d{10,15}$/.test(phone.replace(/\s/g, ""))
 
 export const usePersonaliseStore = create<PersonaliseState>()(
   persist(
@@ -53,42 +62,52 @@ export const usePersonaliseStore = create<PersonaliseState>()(
       currentStep: 1,
       formData: initialFormData,
       selectedProduct: null,
+      
       setStep: (step: number) => 
         set({ currentStep: Math.max(1, Math.min(4, step)) }),
+      
       nextStep: () => {
         const { currentStep } = get()
         if (currentStep < 4) {
           set({ currentStep: currentStep + 1 })
         }
       },
+      
       prevStep: () => {
         const { currentStep } = get()
         if (currentStep > 1) {
           set({ currentStep: currentStep - 1 })
         }
       },
+      
       updateFormData: (data: Partial<personaliseFormData>) =>
         set((state) => ({
           formData: { ...state.formData, ...data }
         })),
+      
       setSelectedProduct: (product: Product) =>
         set({ selectedProduct: product }),
+      
       resetCheckout: () =>
         set({ currentStep: 1, formData: initialFormData, selectedProduct: null }),
+      
       loadExistingData: (data: personaliseFormData, product: Product) =>
         set({ currentStep: 1, formData: data, selectedProduct: product }),
+      
       validateStep: (step: number) => {
         const { formData } = get()
         
         switch (step) {
-          case 1: // Recipient Details Step
-            return !!(
-              formData.yourName?.trim() &&
-              formData.recipientName?.trim() &&
-              formData.recipientAddress?.trim() &&
-              formData.recipientCity?.trim() &&
-              formData.recipientEmail?.trim()
-            )
+        case 1: 
+        return !!(
+          formData.yourName?.trim() &&
+          formData.recipientName?.trim() &&
+        
+          formData.recipientPhone?.trim() &&
+          formData.recipientEmail?.trim() &&
+          isValidPhone(formData.recipientPhone) &&
+          isValidEmail(formData.recipientEmail)
+        )
           
           case 2: // Personalization Step
             return !!(
@@ -115,6 +134,7 @@ export const usePersonaliseStore = create<PersonaliseState>()(
             return false
         }
       },
+      
       isStepValid: (step: number) => {
         return get().validateStep(step)
       }

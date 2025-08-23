@@ -333,7 +333,7 @@ export function ProductFormSheet({
               <h1 className="text-3xl font-bold mb-2">
                 {formData.name || "Product Name"}
               </h1>
-              <p className="text-2xl font-semibold">€{formData.price || 0}</p>
+              <p className="text-2xl font-semibold">£{formData.price || 0}</p>
             </div>
 
             {/* Description */}
@@ -541,7 +541,7 @@ export function ProductFormSheet({
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="price" className="flex items-center gap-1">
-                    Price (€) <span className="text-red-500">*</span>
+                    Price (£) <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="price"

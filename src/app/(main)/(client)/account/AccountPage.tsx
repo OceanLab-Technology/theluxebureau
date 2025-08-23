@@ -11,6 +11,7 @@ import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { Eye, EyeOff } from "lucide-react"; 
 
 const OrderSkeleton = () => (
   <div className="mb-8 space-y-10 animate-pulse">
@@ -106,6 +107,8 @@ export default function AccountPage({ user }: AccountPageProps) {
     password: "••••••••••••••••••••",
   });
 
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false); 
+
   // Fetch user's orders
   const fetchOrders = async (page: number = 1) => {
     try {
@@ -166,6 +169,10 @@ export default function AccountPage({ user }: AccountPageProps) {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
+
   const userName = profile.name || user?.email?.split("@")[0] || "User";
 
   return (
@@ -211,7 +218,6 @@ export default function AccountPage({ user }: AccountPageProps) {
             Welcome back, {userName}
           </h1>
 
-          {/* Desktop view - shows both sections */}
           <div className="hidden md:block">
             <div className="mb-16">
               <h2 className="text-lg font-medium mb-6 border-b border-stone-300 small-text">
@@ -384,7 +390,7 @@ export default function AccountPage({ user }: AccountPageProps) {
 
                   <div className="border border-stone-300 p-4 md:p-6">
                     <Label className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500">
-                      SHIPPING ADDRESS
+                      BILLING ADDRESS
                     </Label>
                     <Input
                       value={profile.shippingAddress}
@@ -413,19 +419,28 @@ export default function AccountPage({ user }: AccountPageProps) {
                     />
                   </div>
 
-                  <div className="border border-stone-300 p-4 md:p-6 md:col-span-1">
+                  <div className="border border-stone-300 p-4 md:p-6 md:col-span-1 relative">
                     <Label className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500">
                       PASSWORD
                     </Label>
-                    <Input
-                      type="password"
-                      value={profile.password}
-                      onChange={(e) =>
-                        setProfile({ ...profile, password: e.target.value })
-                      }
-                      className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
-                      placeholder="••••••••••••••••••••"
-                    />
+                    <div className="relative">
+                      <Input
+                        type={isPasswordVisible ? "text" : "password"} 
+                        value={profile.password} 
+                        onChange={(e) =>
+                          setProfile({ ...profile, password: e.target.value })
+                        }
+                        className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
+                        placeholder="••••••••••••••••••••"
+                      />
+                      <button
+                        type="button"
+                        onClick={togglePasswordVisibility} 
+                        className="absolute right-0 top-1/2 transform -translate-y-1/2 text-stone-500 hover:text-stone-700"
+                      >
+                        {isPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
+                      </button>
+                    </div>
                   </div>
                 </div>
 
@@ -641,7 +656,7 @@ export default function AccountPage({ user }: AccountPageProps) {
 
                       <div className="border border-stone-300 p-4 md:p-6">
                         <Label className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500">
-                          SHIPPING ADDRESS
+                          DELIVERY ADDRESS
                         </Label>
                         <Input
                           value={profile.shippingAddress}
@@ -670,20 +685,33 @@ export default function AccountPage({ user }: AccountPageProps) {
                         />
                       </div>
 
-                      <div className="border border-stone-300 p-4 md:p-6 md:col-span-1">
-                        <Label className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500">
-                          PASSWORD
-                        </Label>
+                      
+                    <div className="border border-stone-300 p-4 md:p-6 md:col-span-1 relative">
+                      <Label className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500">
+                        PASSWORD
+                      </Label>
+                      <div className="relative">
                         <Input
-                          type="password"
-                          value={profile.password}
+                          type={isPasswordVisible ? "text" : "password"} 
+                          value={profile.password} 
                           onChange={(e) =>
                             setProfile({ ...profile, password: e.target.value })
                           }
                           className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
                           placeholder="••••••••••••••••••••"
                         />
+                        <button
+                          type="button"
+                          onClick={togglePasswordVisibility} 
+                          className="absolute right-0 top-1/2 transform -translate-y-1/2 text-stone-500 hover:text-stone-700"
+                        >
+                          {isPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
                       </div>
+                    </div>
+
+
+
                     </div>
 
                     <div className="flex justify-end">

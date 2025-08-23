@@ -389,12 +389,11 @@ export default function PersonalizationStep() {
     };
   };
 
-  // Fixed style for quotes (doesn't change with dropdown font)
   const getQuoteStyle = (): React.CSSProperties => {
     return {
       fontSize: "12px",
-      color: "#141313ff",
-      fontFamily: "Courier", // fixed font for quotes
+      color: "#57534e",
+      fontFamily: "monospace", 
     };
   };
 
@@ -459,7 +458,7 @@ export default function PersonalizationStep() {
     fetchSettings();
   }, []);
 
-  // Helper function to get quote text by author
+
   const getQuoteByAuthor = (authorName: string) => {
     if (!siteSettings?.quotes?.length || authorName === "select") return "";
 
@@ -468,19 +467,22 @@ export default function PersonalizationStep() {
   };
 
   return (
-    <div className="font-century">
-      <p className="text-secondary-foreground font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
-        Our gifts arrive with custom stationery, letterpressed by hand at the Luxe Bureau atelier, in Noir ink on GF Smith Mohawk White paper.
-      </p>
-      <br />
-      <p className="text-secondary-foreground font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
-        In the header, add your name, initials, or company to create your bespoke letterhead. You may choose from two type styles below.
-      </p>
-      <br />
-      <p className="text-secondary-foreground mb-8 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
-        Your personal message will be set in our signature typewriter font. For inspiration, you can select a quote from the dropdown.
-      </p>
+    <div className="font-century mt-4">
+  <div className="max-w-2xl w-full">
+    <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-1 break-words">
+      Our gifts arrive with custom stationery, letterpressed by hand at the Luxe Bureau atelier, in Noir ink on GF Smith Mohawk White card.
+    </p>
 
+    <p className="text-secondary-foreground  mt-4 font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-4 break-words">
+     Please click on the card below to personalise your message. In the header, add your name, initials, or company to create your bespoke letterhead. You may choose from two type styles below.
+    </p>
+
+     <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-1 break-words">
+      Your personal message will be set in our signature typewriter font. For inspiration, you can select a quote from the dropdown.
+    </p>
+  </div>
+      <br />
+    
       <div className="flex md:gap-12 gap-4 mb-8">
         {/* Header Font Selector */}
         <div className="w-40 font-[Marfa]">
@@ -492,13 +494,13 @@ export default function PersonalizationStep() {
             onValueChange={(value) => updateFormData({ selectedFont: value })}
             disabled={loading}
           >
-            <SelectTrigger className="w-[150px] h-6 md:w-[200px] text-[15px] border-stone-300 hover:bg-secondary bg-transparent py-0 focus:ring-0">
+            <SelectTrigger className="w-[150px] h-6 md:w-[200px] text-[15px] border-stone-300 hover:bg-secondary bg-transparent  rounded-[0.3rem] py-0 focus:ring-0">
               <SelectValue
                 placeholder={loading ? "Loading fonts..." : "Select font"}
               />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="default">Default Font</SelectItem>
+            <SelectContent className="rounded-[0.3rem]">
+              <SelectItem  value="default">Default Font</SelectItem>
               {siteSettings?.fonts.map((font) => (
                 <SelectItem key={font.name} value={font.name}>
                   {font.name}
@@ -563,7 +565,7 @@ export default function PersonalizationStep() {
 
         {/* Quote Selector */}
         <div className="w-40 font-[Marfa]">
-          <label className="text-[1rem] font-[300] tracking-[0.01875] text-secondary-foreground mb-1 block">
+          <label className="text-[1rem] font-[300] tracking-[0.01875] text-secondary-foreground mb-1  block">
             Quotes*
           </label>
           <Select
@@ -576,10 +578,10 @@ export default function PersonalizationStep() {
               });
             }}
           >
-            <SelectTrigger className="w-[150px] h-6 md:w-[200px] text-[15px] border-stone-300 hover:bg-secondary bg-transparent py-0 focus:ring-0">
+            <SelectTrigger className="w-[150px] h-6 md:w-[200px] text-[15px] border-stone-300 hover:bg-secondary bg-transparent rounded-[0.3rem] py-0 focus:ring-0">
               <SelectValue placeholder="Select a quote" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className=" rounded-[0.3rem]">
               <SelectItem value="select">Select a quote</SelectItem>
               {siteSettings?.quotes.map((quote, index) => (
                 <SelectItem key={index} value={quote.author}>

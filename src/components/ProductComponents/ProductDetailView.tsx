@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,11 +29,14 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [user, setUser] = useState<any>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [isSwiping, setIsSwiping] = useState(false);
   const { currentProduct, detailedProductLoading, fetchProductById } =
     useMainStore();
   const { setSelectedProduct, resetCheckout } = usePersonaliseStore();
   const router = useRouter();
   const supabase = createClient();
+  const imageContainerRef = useRef<HTMLDivElement>(null);
 
   const images = [
     currentProduct?.image_1,
@@ -68,9 +71,19 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
 
   const handleImageChange = (index: number) => {
     if (index !== selectedImageIndex) {
-      setTimeout(() => {
-        setSelectedImageIndex(index);
-      }, 150);
+      setSelectedImageIndex(index);
+    }
+  };
+
+  const handleNextImage = () => {
+    if (selectedImageIndex < images.length - 1) {
+      setSelectedImageIndex(selectedImageIndex + 1);
+    }
+  };
+
+  const handlePrevImage = () => {
+    if (selectedImageIndex > 0) {
+      setSelectedImageIndex(selectedImageIndex - 1);
     }
   };
 
@@ -87,6 +100,56 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
       router.push(`/personalise?productId=${currentProduct.id}`);
     }
   };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+    setIsSwiping(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isSwiping) return;
+    
+    const touchEndX = e.touches[0].clientX;
+    const diff = touchStartX - touchEndX;
+    
+    // Only change image if swipe is significant
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        handleNextImage();
+      } else {
+        handlePrevImage();
+      }
+      setIsSwiping(false);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsSwiping(false);
+  };
+
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    
+    if (e.deltaX > 30) {
+      handleNextImage();
+    } else if (e.deltaX < -30) {
+      handlePrevImage();
+    }
+  };
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') {
+        handleNextImage();
+      } else if (e.key === 'ArrowLeft') {
+        handlePrevImage();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedImageIndex, images.length]);
 
   if (detailedProductLoading) {
     return <ProductDetailSkeleton />;
@@ -112,41 +175,36 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
     <div>
       <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-6 overflow-hidden pt-8 font-century">
         <div className="space-y-4">
-          <div className="lg:w-full lg:h-[60%] relative h-[30.5rem] bg-muted/20 overflow-hidden">
-          {/* !!! Most important line for adjusting height and width of images */}
-            {/* <div className="relative aspect-auto overflow-hidden w-[100%] h-[100%] md:w-[100%] md:h-[59.1875rem] cursor-pointer"> */}
-            <AnimatePresence mode="wait">
+          <div 
+            ref={imageContainerRef}
+            className="lg:w-full lg:h-[60%] relative h-[30.5rem] bg-muted/20 overflow-hidden"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onWheel={handleWheel}
+          >
+            <AnimatePresence mode="wait" initial={false}>
               <motion.img
                 key={selectedImageIndex}
                 src={images[selectedImageIndex] || currentProduct.image_1!}
                 alt={currentProduct.name}
                 className="h-full w-full object-cover object-center"
-                initial={{
-                  opacity: 0,
-                  filter: "blur(10px)",
-                }}
-                animate={{
-                  opacity: 1,
-                  filter: "blur(0px)",
-                }}
-                exit={{
-                  opacity: 0,
-                  filter: "blur(8px)",
-                }}
-                transition={{
-                  duration: 0.4,
-                  ease: "easeInOut",
-                }}
+                initial={{ opacity: 0, x: selectedImageIndex > 0 ? 100 : -100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: selectedImageIndex > 0 ? -100 : 100 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
               />
             </AnimatePresence>
+            
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
               {Array.from({ length: images.length }).map((_, index) => (
                 <motion.span
                   key={index}
-                  className={`h-2 w-2 rounded-full inline-block cursor-pointer ${selectedImageIndex === index
+                  className={`h-2 w-2 rounded-full inline-block cursor-pointer ${
+                    selectedImageIndex === index
                       ? "bg-[#FBD060]"
                       : "bg-background/50"
-                    }`}
+                  }`}
                   onClick={() => handleImageChange(index)}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.9 }}
@@ -164,19 +222,20 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               <motion.button
                 key={index}
                 onClick={() => handleImageChange(index)}
-                className={`md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-full bg-muted/20 overflow-hidden border-2 transition-all ${selectedImageIndex === index
+                className={`md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-full bg-muted/20 overflow-hidden border-2 transition-all ${
+                  selectedImageIndex === index
                     ? "border-yellow-500"
                     : "border-transparent"
-                  }`}
+                }`}
                 animate={
                   selectedImageIndex === index
                     ? {
-                      borderColor: ["#eab308", "#fbbf24", "#eab308"],
-                      transition: { duration: 0.5 },
-                    }
+                        borderColor: ["#eab308", "#fbbf24", "#eab308"],
+                        transition: { duration: 0.5 },
+                      }
                     : {
-                      borderColor: "transparent",
-                    }
+                        borderColor: "transparent",
+                      }
                 }
               >
                 <img
@@ -195,7 +254,6 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               <span>{currentProduct.category}</span>
             </div>
 
-
             <h1 className="text-[2rem] leading-none text-secondary-foreground font-medium">
               {currentProduct.name}
             </h1>
@@ -208,16 +266,6 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
             {currentProduct.description}
           </p>
 
-          {/* <div className="inline-flex">
-            <Button
-              variant="box_yellow"
-              size={"lg"}
-              className="text-[0.75rem] leading-[119.58%] w-[20.812rem] h-[2.5rem] tracking-[0.075rem]"
-              onClick={handlePersonalize}
-            >
-              Personalise
-            </Button>
-          </div> */}
           <PersonaliseSheet
             handleOnClick={() => {
               resetCheckout();
@@ -288,8 +336,8 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
       </div>
       <div className="md:flex hidden justify-end flex-col items-end px-10">
         <p className="text-[1.5rem] w-110 font-century text-right leading-[1.875rem] font-[400] text-secondary-foreground">
-          “The meaning of life is to find your gift. The purpose of life is to
-          give it away.”
+          "The meaning of life is to find your gift. The purpose of life is to
+          give it away."
         </p>
         <span className="small-text pt-2">PABLO PICASSO</span>
       </div>

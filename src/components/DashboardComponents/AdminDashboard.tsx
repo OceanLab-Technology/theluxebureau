@@ -11,7 +11,6 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Euro,
   ShoppingCart,
   Users,
   TrendingUp,
@@ -21,6 +20,7 @@ import {
 import { useEffect, useState } from "react";
 import { useActivityStore } from "@/store/admin/activityStore";
 import { useStatsStore } from "@/store/admin/statsStore";
+import { PoundSterling } from 'lucide-react';
 
 export function AdminDashboard() {
   const [page, setPage] = useState(1);
@@ -40,15 +40,16 @@ export function AdminDashboard() {
 
   const statItems = stats
     ? [
-        {
-          title: "Total Revenue",
-          value: `€${stats.revenue.value.toFixed(2)}`,
-          change: `${
-            stats.revenue.change >= 0 ? "+" : ""
-          }${stats.revenue.change.toFixed(1)}% from last month`,
-          changeType: stats.revenue.change >= 0 ? "increase" : "decrease",
-          icon: Euro,
-        },
+     {
+        title: "Total Revenue",
+        value: `£${stats.revenue.value.toFixed(2)}`,
+        change: `${
+          stats.revenue.change >= 0 ? "+" : ""
+        }${stats.revenue.change.toFixed(1)}% from last month`,
+        changeType: stats.revenue.change >= 0 ? "increase" : "decrease",
+        icon: PoundSterling,
+      },
+        
         {
           title: "Orders",
           value: stats.orders.value.toString(),
@@ -162,8 +163,8 @@ export function AdminDashboard() {
                           {activity.title}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          {activity.description}
-                        </p>
+                              {activity.description.replace(/€/g, "£")}
+                            </p>
                         <div className="text-xs text-muted-foreground">
                           {activity.timestamp
                             ? formatTimestamp(activity.timestamp)

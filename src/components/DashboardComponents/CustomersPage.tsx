@@ -148,9 +148,35 @@ export function CustomersPage() {
                       </TableCell>
                       <TableCell>{customer.totalOrders}</TableCell>
                       <TableCell>
-                        €{customer.totalSpent.toFixed?.(2) ?? customer.totalSpent}
+                        £{customer.totalSpent.toFixed?.(2) ?? customer.totalSpent}
                       </TableCell>
-                      <TableCell>{customer.joinDate}</TableCell>
+                      {/* <TableCell>{customer.joinDate}</TableCell> */}
+                      <TableCell>
+                        {customer.joinDate ? (() => {
+                          const date = new Date(customer.joinDate);
+                          const dayName = date.toLocaleDateString("en-GB", { weekday: "long" });
+                          const day = date.getDate();
+                          const month = date.toLocaleDateString("en-GB", { month: "long" });
+                          const year = date.getFullYear();
+                          const getOrdinalSuffix = (d: number) => {
+                            if (d >= 11 && d <= 13) return "th";
+                            switch (d % 10) {
+                              case 1: return "st";
+                              case 2: return "nd";
+                              case 3: return "rd";
+                              default: return "th";
+                            }
+                          };
+                          const ordinalSuffix = getOrdinalSuffix(day);
+                          return (
+                            <>
+                              {dayName} {day}
+                              <sup className="text-xs">{ordinalSuffix}</sup> {month} {year}
+                            </>
+                          );
+                        })() : "-"}
+                      </TableCell>
+
                       <TableCell>
                         <Select
                           value={customer.status}

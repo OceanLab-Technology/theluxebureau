@@ -69,7 +69,7 @@ export function AnalyticsPage() {
   const [currentTab, setCurrentTab] = useState<"products" | "revenue" | "categories">("products")
 
   const formatCurrency = (amount: number) =>
-    new Intl.NumberFormat("en-US", { style: "currency", currency: "EUR" }).format(amount)
+    new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(amount)
 
   const fetchAnalytics = async () => {
     setLoading(true)
