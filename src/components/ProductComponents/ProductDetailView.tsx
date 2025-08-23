@@ -108,10 +108,10 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isSwiping) return;
-    
+
     const touchEndX = e.touches[0].clientX;
     const diff = touchStartX - touchEndX;
-    
+
     // Only change image if swipe is significant
     if (Math.abs(diff) > 50) {
       if (diff > 0) {
@@ -129,7 +129,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
-    
+
     if (e.deltaX > 30) {
       handleNextImage();
     } else if (e.deltaX < -30) {
@@ -175,7 +175,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
     <div>
       <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-6 overflow-hidden pt-8 font-century">
         <div className="space-y-4">
-          <div 
+          <div
             ref={imageContainerRef}
             className="lg:w-full lg:h-[60%] relative h-[30.5rem] bg-muted/20 overflow-hidden"
             onTouchStart={handleTouchStart}
@@ -195,16 +195,15 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               />
             </AnimatePresence>
-            
+
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
               {Array.from({ length: images.length }).map((_, index) => (
                 <motion.span
                   key={index}
-                  className={`h-2 w-2 rounded-full inline-block cursor-pointer ${
-                    selectedImageIndex === index
+                  className={`h-2 w-2 rounded-full inline-block cursor-pointer ${selectedImageIndex === index
                       ? "bg-[#FBD060]"
                       : "bg-background/50"
-                  }`}
+                    }`}
                   onClick={() => handleImageChange(index)}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.9 }}
@@ -222,20 +221,19 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               <motion.button
                 key={index}
                 onClick={() => handleImageChange(index)}
-                className={`md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-full bg-muted/20 overflow-hidden border-2 transition-all ${
-                  selectedImageIndex === index
+                className={`md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-full bg-muted/20 overflow-hidden border-2 transition-all ${selectedImageIndex === index
                     ? "border-yellow-500"
                     : "border-transparent"
-                }`}
+                  }`}
                 animate={
                   selectedImageIndex === index
                     ? {
-                        borderColor: ["#eab308", "#fbbf24", "#eab308"],
-                        transition: { duration: 0.5 },
-                      }
+                      borderColor: ["#eab308", "#fbbf24", "#eab308"],
+                      transition: { duration: 0.5 },
+                    }
                     : {
-                        borderColor: "transparent",
-                      }
+                      borderColor: "transparent",
+                    }
                 }
               >
                 <img
@@ -323,9 +321,21 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                         Particulars
                       </AccordionTrigger>
                       <AccordionContent>
-                        <p className="text-muted-foreground leading-relaxed font-[Marfa]">
+                        {/* <p className="text-muted-foreground leading-relaxed font-[Marfa]">
                           {currentProduct.particulars}
-                        </p>
+                        </p> */}
+                        <div>
+                          {currentProduct.particulars?.split(",").map((item, idx) => (
+                            <p
+                              key={idx}
+                              className="text-muted-foreground leading-relaxed font-[Marfa] flex"
+                            >
+                              <span className="font-bold mr-2">•</span>
+                              <span>{item.trim()}</span>
+                            </p>
+                          ))}
+                        </div>
+
                       </AccordionContent>
                     </AccordionItem>
                   )}
