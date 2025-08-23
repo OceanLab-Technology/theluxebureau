@@ -37,17 +37,17 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
             </div>
           )}
         </div>
-        <div className="space-y-4 w-full">
+        <div className="space-y-8 mt-4 w-full">
           {product.customData && Object.keys(product.customData).length > 0 && (
             <div className="md:space-y-6 space-y-3 w-full">
-              <div className="flex items-center gap-2 border-b border-b-stone-300">
+              <div className="flex items-center gap-2 border-b border-b-stone-300 pb-1">
                 <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
                   Your Name
                 </label>
                 <p className="text-stone-600">{product.customData.yourName}</p>
               </div>
 
-              <div className="flex items-center gap-2 border-b border-b-stone-300">
+              <div className="flex items-center gap-2 border-b border-b-stone-300 pb-1">
                 <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
                   Recipients Name
                 </label>
@@ -56,7 +56,7 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 border-b border-b-stone-300">
+              <div className="flex items-center gap-2 border-b border-b-stone-300 pb-1">
                 <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
                   Recipients Address
                 </label>
@@ -68,27 +68,63 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 border-b border-b-stone-300">
+              <div className="flex items-center gap-2 border-b border-b-stone-300 pb-1">
                 <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
                   Delivery Date
                 </label>
                 <p className="text-stone-600">
-                  {product.customData.deliveryDate || "Not selected"}
+                  {product.customData.deliveryDate
+                    ? (() => {
+                        const date = new Date(product.customData.deliveryDate);
+                        const dayName = date.toLocaleDateString("en-GB", {
+                          weekday: "long",
+                        });
+                        const day = date.getDate();
+                        const month = date.toLocaleDateString("en-GB", {
+                          month: "long",
+                        });
+                        const year = date.getFullYear();
+                        const getOrdinalSuffix = (d: number) => {
+                          if (d >= 11 && d <= 13) return "th";
+                          switch (d % 10) {
+                            case 1:
+                              return "st";
+                            case 2:
+                              return "nd";
+                            case 3:
+                              return "rd";
+                            default:
+                              return "th";
+                          }
+                        };
+                        const ordinalSuffix = getOrdinalSuffix(day);
+                        return (
+                          <>
+                            {dayName},{" "} {day}
+                            <sup className="text-xs">{ordinalSuffix}</sup>{" "}
+                            {month} {year}
+                          </>
+                        );
+                      })()
+                    : "Not selected"}
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 border-b border-b-stone-300">
+              <div className="flex items-center gap-2 border-b border-b-stone-300 pb-1">
                 <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
                   Delivery Time
                 </label>
                 <p className="text-stone-600">
-                  {product.customData.preferredDeliveryTime || "Not selected"}
+                  {product.customData.preferredDeliveryTime === "10am-1pm" && "10:00 – 13:00"}
+                  {product.customData.preferredDeliveryTime === "1pm-4pm" && "13:00 – 16:00"}
+                  {product.customData.preferredDeliveryTime === "4pm-6pm" && "16:00 – 18:00"}
+                  {!["10am-1pm", "1pm-4pm", "4pm-6pm"].includes(product.customData.preferredDeliveryTime) && "Not selected"}
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 border-b border-b-stone-300">
+              <div className="flex items-center gap-2 border-b border-b-stone-300 pb-1">
                 <span className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
-                  SMS Updates
+                   Delivery Updates
                 </span>
                 <span className="text-stone-600">
                   {product.customData.smsUpdates === "send-to-me"
@@ -98,7 +134,8 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
                     : "none"}
                 </span>
               </div>
-              <div className="flex items-center gap-2 border-b border-b-stone-300">
+
+              <div className="flex items-center gap-2 border-b border-b-stone-300 pb-1">
                 <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
                   Custom Letterhead
                 </label>
@@ -106,7 +143,7 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
                   {product.customData.headerText}
                 </p>
               </div>
-              <div className="flex flex-col gap-2 border-b border-b-stone-300">
+              <div className="flex flex-col gap-2 border-b border-b-stone-300 pb-1">
                 <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider">
                   Personal Message
                 </label>

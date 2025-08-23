@@ -39,21 +39,21 @@ export function LoginRequiredModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-xl font-century rounded-sm">
-        <DialogHeader className="text-center">
-          <DialogTitle className="text-[2rem] font-[400] text-secondary-foreground font-century">
-            Login Required
+      <DialogContent className="sm:max-w-xl font-[Century_Old_Style_Std] rounded-sm">
+        <DialogHeader className="text-center font-[Century_Old_Style_Std]">
+          <DialogTitle className="text-[1.8rem] font-[400] text-secondary-foreground font-[Century_Old_Style_Std]">
+            LOG IN REQUIRED
           </DialogTitle>
-          <DialogDescription className="text-stone-600 mt-2 text-[1rem]">
-            You need to be logged in to {feature}. Please login or create an account to continue.
+          <DialogDescription className="text-stone-600 mt-2 text-[1rem] font-[Century_Old_Style_Std]">
+            Please log in or create an account with us to continue with your purchase.
           </DialogDescription>
         </DialogHeader>
-        
-        <div className="flex flex-col gap-3 mt-6">
+
+        <div className="flex flex-col gap-3 mt-6 font-[Century_Old_Style_Std]">
           <Button
             onClick={handleLogin}
             variant="box_yellow"
-            className="w-full uppercase tracking-wider text-[0.75rem] leading-[119.58%] h-[2.5rem]"
+            className="w-full uppercase  tracking-[0.08em] text-[0.75rem] leading-[119.58%] h-[2.5rem] font-[Century_Old_Style_Std]"
           >
             Login
           </Button>
@@ -61,16 +61,16 @@ export function LoginRequiredModal({
           <Button
             onClick={handleSignUp}
             variant="outline"
-            className="w-full uppercase tracking-wider text-[0.75rem]"
+            className="w-full uppercase tracking-[0.08em]  text-[0.75rem] font-[Century_Old_Style_Std]"
           >
             Create Account
           </Button>
         </div>
         
-        <div className="text-center mt-4">
+        <div className="text-center mt-4 font-[SchoolBook]">
           <button
             onClick={onClose}
-            className="text-sm text-stone-500 hover:text-stone-700 underline-offset-4 hover:underline"
+            className="text-sm text-stone-500 hover:text-stone-700 underline-offset-4 hover:underline  font-[Century_Old_Style_Std]"
           >
             Continue browsing
           </button>

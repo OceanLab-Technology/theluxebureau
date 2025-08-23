@@ -21,11 +21,12 @@ export function LoginForm({
   const [isLoading, setIsLoading] = useState(false);
   const [redirectTo, setRedirectTo] = useState("/products");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [emailWarning, setEmailWarning] = useState("");
+  const [phoneWarning, setPhoneWarning] = useState("");
   const { handleLoginSuccess } = useMainStore();
   const router = useRouter();
 
   useEffect(() => {
-   
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
       const redirect = urlParams.get('redirect');
@@ -34,6 +35,18 @@ export function LoginForm({
       }
     }
   }, []);
+
+  // Email validation
+  const validateEmail = (value: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setEmailWarning(emailRegex.test(value) ? "" : "Please enter a valid email address.");
+  };
+
+  // Phone validation (if you have a phone input, otherwise this will not show)
+  const validatePhone = (value: string) => {
+    const phoneRegex = /^\+?\d{10,15}$/;
+    setPhoneWarning(value && !phoneRegex.test(value) ? "Please enter a valid phone number." : "");
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,10 +61,7 @@ export function LoginForm({
       });
       if (error) throw error;
 
-      // Handle cart migration and authentication state
       await handleLoginSuccess();
-
-      // Use the redirect state
       window.location.replace(redirectTo);
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
@@ -68,7 +78,7 @@ export function LoginForm({
       {...props}
     >
       <h1 className="text-[1rem] font-light mb-4 tracking-wide md:py-20 small-text">
-        LOGIN
+        LOG IN
       </h1>
       <div className="mb-8">
         <form onSubmit={handleLogin}>
@@ -84,11 +94,17 @@ export function LoginForm({
                 id="email"
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
-                placeholder="johndoe@example.com"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  validateEmail(e.target.value);
+                }}
+                className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                placeholder="mary.oliver@example.com"
                 required
               />
+              {emailWarning && (
+                <p className="text-[#50462D] text-xs mt-2">{emailWarning}</p>
+              )}
             </div>
 
             <div className="border border-stone-700 p-4 sm:p-8">
@@ -104,7 +120,7 @@ export function LoginForm({
                   type={isPasswordVisible ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                  className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
                   placeholder="*************************"
                   required
                 />
@@ -139,7 +155,7 @@ export function LoginForm({
           <div className="sm:text-left">
             <Link
               href="/auth/forgot-password"
-              className="text-sm text-stone-500 hover:text-stone-700 underline-offset-4 hover:underline"
+              className="text-sm text-stone-500 hover:text-stone-700 underline-offset-4"
             >
               Forgot your password?
             </Link>
@@ -150,7 +166,7 @@ export function LoginForm({
               Don&apos;t have an account?{" "}
               <Link
                 href="/auth/sign-up"
-                className="text-black hover:underline font-medium"
+                className="text-black font-medium"
               >
                 Sign up
               </Link>

@@ -206,21 +206,20 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-[#F5F1E8] border-none">
                   <AlertDialogHeader>
-                    <AlertDialogTitle className="text-[#50462D] text-[32px] font-normal leading-[40px]" style={{ fontFamily: 'Century Old Style Std', letterSpacing: '2%' }}>
+                    <AlertDialogTitle className="text-[#50462D] text-[32px] font-normal leading-[40px] tracking-[0.02em] font-['Century_Old_Style_Std']">
                       Remove Item
                     </AlertDialogTitle>
-                    <AlertDialogDescription className="text-[#50462D] text-[16px] font-normal leading-[22px]" style={{ fontFamily: 'Century Old Style Std', letterSpacing: '2%' }}>
+                    <AlertDialogDescription className="text-[#50462D] text-[16px] font-normal leading-[22px] tracking-[0.02em] font-['Century_Old_Style_Std']">
                       Are you sure you want to remove "{product.name}" from your cart?
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter className="flex gap-4 mt-8">
-                    <AlertDialogCancel className="w-[144px] h-[40px] bg-[#50462D] text-[#FAF7E7] text-[12px] font-normal uppercase px-8 py-[18px] rounded-md border-none hover:opacity-90" style={{ fontFamily: 'SchoolBook Condensed', letterSpacing: '10%', lineHeight: '120%' }}>
+                    <AlertDialogCancel className="w-[144px] h-[40px] bg-[#50462D] text-[#FAF7E7] text-[12px] font-normal uppercase px-8 py-[18px] rounded-md border-none hover:opacity-90 tracking-[0.10em] leading-[120%] font-['SchoolBook_Condensed']">
                       CANCEL
                     </AlertDialogCancel>
                     <AlertDialogAction
                       onClick={handleRemoveItem}
-                      className="w-[144px] h-[40px] bg-[#FBD060] text-[#1E1204] text-[12px] font-normal uppercase px-8 py-[18px] rounded-md border-none hover:opacity-90"
-                      style={{ fontFamily: 'SchoolBook Condensed', letterSpacing: '10%', lineHeight: '120%' }}
+                      className="w-[144px] h-[40px] bg-[#FBD060] text-[#1E1204] text-[12px] font-normal uppercase px-8 py-[18px] rounded-md border-none hover:opacity-90 tracking-[0.10em] leading-[120%] font-['SchoolBook_Condensed']"
                     >
                       REMOVE
                     </AlertDialogAction>
@@ -285,24 +284,24 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
             </button>
           </AlertDialogTrigger>
           {isDesktop ? (
+
             // Desktop dialog
             <AlertDialogContent className="bg-[#F5F1E8] border-none">
               <AlertDialogHeader>
-                <AlertDialogTitle className="text-[#50462D] text-[32px] font-normal leading-[40px]" style={{ fontFamily: 'Century Old Style Std', letterSpacing: '2%' }}>
+                <AlertDialogTitle className="text-[#50462D] text-[32px] font-normal leading-[40px] tracking-[0.02em] font-['Century_Old_Style_Std']">
                   Remove Item
                 </AlertDialogTitle>
-                <AlertDialogDescription className="text-[#50462D] text-[16px] font-normal leading-[22px]" style={{ fontFamily: 'Century Old Style Std', letterSpacing: '2%' }}>
+                <AlertDialogDescription className="text-[#50462D] text-[16px] font-normal leading-[22px] tracking-[0.02em] font-['Century_Old_Style_Std']">
                   Are you sure you want to remove "{product.name}" from your cart?
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter className="flex gap-4 mt-4 justify-center">
-                <AlertDialogCancel className="w-[144px] h-[40px] bg-[#50462D] text-[#FAF7E7] text-[12px] font-normal uppercase px-8 py-[18px] rounded-[6px] border-none hover:opacity-90 tracking-[0.12em]  " style={{ fontFamily: 'SchoolBook Condensed', letterSpacing: '10%', lineHeight: '120%' }}>
+                <AlertDialogCancel className="w-[144px] h-[40px] bg-[#50462D] text-[#FAF7E7] text-[12px] font-normal uppercase px-8 py-[18px] rounded-[6px] border-none hover:opacity-90 tracking-[0.10em] leading-[120%] font-['SchoolBook_Condensed']">
                   CANCEL
                 </AlertDialogCancel>
                 <AlertDialogAction
                   onClick={handleRemoveItem}
-                  className="w-[144px] h-[40px] bg-[#FBD060] text-[#1E1204] text-[12px] font-normal uppercase px-8 py-[18px]  rounded-[6px]  border-none hover:opacity-90  tracking-[0.12em] "
-                  style={{ fontFamily: 'SchoolBook Condensed', letterSpacing: '10%', lineHeight: '120%' }}
+                  className="w-[144px] h-[40px] bg-[#FBD060] text-[#1E1204] text-[12px] font-normal uppercase px-8 py-[18px]  rounded-[6px]  border-none hover:opacity-90  tracking-[0.10em] leading-[120%] font-['SchoolBook_Condensed']"
                 >
                   REMOVE
                 </AlertDialogAction>
@@ -312,20 +311,20 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
             // Mobile dialog
             <AlertDialogContent className="bg-[#F5F1E8] border-none">
               <AlertDialogHeader>
-                <AlertDialogTitle className="text-[#50462D] text-[32px] font-normal leading-[40px]" style={{ fontFamily: 'Century Old Style Std', letterSpacing: '2%' }}>
+                <AlertDialogTitle className="text-[#50462D] text-[32px] font-normal leading-[40px] tracking-[0.02em] font-['Century_Old_Style_Std']">
                   Remove Item
                 </AlertDialogTitle>
-                <AlertDialogDescription className="text-[#50462D] text-[16px] font-normal leading-[22px]" style={{ fontFamily: 'Century Old Style Std', letterSpacing: '2%' }}>
+                <AlertDialogDescription className="text-[#50462D] text-[16px] font-normal leading-[22px] tracking-[0.02em] font-['Century_Old_Style_Std']">
                   Are you sure you want to remove "{product.name}" from your cart?
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter className="flex flex-row gap-[10px] mt-4 justify-center">
-                <AlertDialogCancel className="bg-[#50462D] text-[#FAF7E7] font-schoolbook-cond font-normal text-[12px] leading-[120%] tracking-[0.1em] uppercase rounded-[2px] border-none px-8 py-[18px] w-[144px] h-[40px] flex items-center justify-center">
+                <AlertDialogCancel className="bg-[#50462D] text-[#FAF7E7] font-schoolbook-cond font-normal text-[12px] leading-[120%] tracking-[0.1em] uppercase rounded-[5px] border-none px-8 py-[18px] w-[144px] h-[40px] flex items-center justify-center">
                   CANCEL
                 </AlertDialogCancel>
                 <AlertDialogAction
                   onClick={handleRemoveItem}
-                  className="bg-[#FBD060] text-[#1E1204] font-schoolbook-cond font-normal text-[12px] leading-[120%] tracking-[0.1em] uppercase rounded-[2px] border-none px-8 py-[18px]  w-[144px] h-[40px] flex items-center justify-center"
+                  className="bg-[#FBD060] text-[#1E1204] font-schoolbook-cond font-normal text-[12px] leading-[120%] tracking-[0.1em] uppercase rounded-[5px] border-none px-8 py-[18px]  w-[144px] h-[40px] flex items-center justify-center"
                 >
                   REMOVE
                 </AlertDialogAction>

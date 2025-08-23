@@ -25,8 +25,37 @@ export function SignUpForm({
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isRepeatPasswordVisible, setIsRepeatPasswordVisible] = useState(false);
+
+  // Validation warnings
+  const [emailWarning, setEmailWarning] = useState("");
+  const [phoneWarning, setPhoneWarning] = useState("");
+  const [passwordWarning, setPasswordWarning] = useState("");
+  const [repeatPasswordWarning, setRepeatPasswordWarning] = useState("");
+
   const { handleLoginSuccess } = useMainStore();
   const router = useRouter();
+
+  // Email validation
+  const validateEmail = (value: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setEmailWarning(emailRegex.test(value) ? "" : "Please enter a valid email address.");
+  };
+
+  // Phone validation
+  const validatePhone = (value: string) => {
+    const phoneRegex = /^\+?\d{10,15}$/;
+    setPhoneWarning(value && !phoneRegex.test(value) ? "Please enter a valid phone number." : "");
+  };
+
+  // Password validation
+  const validatePassword = (value: string) => {
+    setPasswordWarning(value.length < 8 ? "Password must be at least 8 characters." : "");
+  };
+
+  // Repeat password validation
+  const validateRepeatPassword = (value: string) => {
+    setRepeatPasswordWarning(value !== password ? "Passwords do not match." : "");
+  };
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,9 +83,7 @@ export function SignUpForm({
       });
       if (error) throw error;
 
-   
       await handleLoginSuccess();
-      
       router.push("/auth/sign-up-success");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
@@ -83,8 +110,8 @@ export function SignUpForm({
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
-                placeholder="John Doe"
+                className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                placeholder="Mary Oliver"
                 required
               />
             </div>
@@ -100,11 +127,17 @@ export function SignUpForm({
                 id="email"
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
-                placeholder="johndoe@example.com"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  validateEmail(e.target.value);
+                }}
+                className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                placeholder=" mary.oliver@example.com"
                 required
               />
+              {emailWarning && (
+                <p className="text-[#50462D] text-xs mt-2">{emailWarning}</p>
+              )}
             </div>
 
             <div className="border border-stone-700 p-4 sm:p-8">
@@ -112,14 +145,14 @@ export function SignUpForm({
                 htmlFor="shipping-address"
                 className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
               >
-                 DELIVERY ADDRESS
+                 BILLING ADDRESS
               </Label>
               <Input
                 id="shipping-address"
                 type="text"
                 value={shippingAddress}
                 onChange={(e) => setShippingAddress(e.target.value)}
-                className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
                 placeholder="206 Batran's Street, 39, 2044 Ontario..."
                 required
               />
@@ -136,11 +169,17 @@ export function SignUpForm({
                 id="phone"
                 type="tel"
                 value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
-                placeholder="+44 222 333 4444"
+                onChange={(e) => {
+                  setPhoneNumber(e.target.value);
+                  validatePhone(e.target.value);
+                }}
+                className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                placeholder="+44 0777 888 999"
                 required
               />
+              {phoneWarning && (
+                <p className="text-[#50462D] text-xs mt-2">{phoneWarning}</p>
+              )}
             </div>
 
             <div className="border border-stone-700 p-4 sm:p-8">
@@ -155,8 +194,12 @@ export function SignUpForm({
                   id="password"
                   type={isPasswordVisible ? "text" : "password"}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    validatePassword(e.target.value);
+                    validateRepeatPassword(repeatPassword);
+                  }}
+                  className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
                   placeholder="*************************"
                   required
                 />
@@ -169,6 +212,9 @@ export function SignUpForm({
                   {isPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              {passwordWarning && (
+                <p className="text-[#50462D] text-xs mt-2">{passwordWarning}</p>
+              )}
             </div>
 
             <div className="border border-stone-700 p-4 sm:p-8">
@@ -183,8 +229,11 @@ export function SignUpForm({
                   id="repeat-password"
                   type={isRepeatPasswordVisible ? "text" : "password"}
                   value={repeatPassword}
-                  onChange={(e) => setRepeatPassword(e.target.value)}
-                  className="border-0 focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
+                  onChange={(e) => {
+                    setRepeatPassword(e.target.value);
+                    validateRepeatPassword(e.target.value);
+                  }}
+                  className="border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
                   placeholder="*************************"
                   required
                 />
@@ -197,6 +246,9 @@ export function SignUpForm({
                   {isRepeatPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              {repeatPasswordWarning && (
+                <p className="text-[#50462D] text-xs mt-2">{repeatPasswordWarning}</p>
+              )}
             </div>
           </div>
 
@@ -221,7 +273,7 @@ export function SignUpForm({
               Already have an account?{" "}
               <Link
                 href="/auth/login"
-                className="text-black hover:underline font-medium"
+                className="text-black  font-medium"
               >
                 Login
               </Link>

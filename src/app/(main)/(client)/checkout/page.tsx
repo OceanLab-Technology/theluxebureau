@@ -124,7 +124,7 @@
 //                   {checkoutItems.map((item) => (
 //                     <div key={item.id} className="flex justify-between">
 //                       <span className="flex items-center gap-1">
-//                         {item.name} × {(item as any).quantity}
+//                         {item.name} ({(item as any).quantity})
 //                         {(item as any).customData &&
 //                           (item as any).customData.isPersonalized && (
 //                             <span
@@ -134,7 +134,7 @@
 //                           )}
 //                       </span>
 //                       <span>
-//                         $
+//                         £
 //                         {(
 //                           item.price * ((item as any).quantity || 1)
 //                         ).toLocaleString()}
@@ -145,7 +145,7 @@
 //                     <div className="flex justify-between">
 //                       <span>Subtotal</span>
 //                       <span>
-//                         $
+//                         £
 //                         {checkoutItems
 //                           .reduce(
 //                             (sum, item) =>
@@ -156,7 +156,7 @@
 //                       </span>
 //                     </div>
 //                     <div className="flex justify-between">
-//                       <span>Shipping</span>
+//                       <span> DELIVERY </span>
 //                       <span>Free</span>
 //                     </div>
 //                     <div className="flex justify-between font-semibold border-t pt-2 mt-2">
@@ -212,8 +212,6 @@
 
 
 
-
-
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
@@ -249,7 +247,7 @@ export default function CheckoutPage() {
       try {
         await checkAuthStatus();
         await fetchCartItems();
-        // Only fetch products if we don't have any products yet
+        
         if (products.length === 0) {
           await fetchProducts();
         }
@@ -342,7 +340,7 @@ export default function CheckoutPage() {
       <div className="min-h-screen">
         <div className="max-w-[75rem] md:p-10 md:pb-10 md:px-20 lg:px-10 px-4 mx-auto">
           <div className="flex items-center justify-between py-10">
-            <h2 className="text-[2rem] font-medium font-century">Check-out</h2>
+            <h2 className="text-[2rem] font-medium font-century">Check Out</h2>
             {/* <Button variant="link" asChild className="small-text">
               <Link href="/cart">Back to Cart</Link>
             </Button> */}
@@ -356,13 +354,13 @@ export default function CheckoutPage() {
 
             <div className="sticky top-6 self-start">
               <h2 className="my-6 pb-2 border-b small-text">Payment</h2>
-              <div className="mb-6 p-4 bg-muted/20 rounded-lg font-century">
+              <div className="mb-6 p-4 bg-muted/20 rounded-[5px] font-century">
                 <h3 className="font-semibold mb-4">Order Summary</h3>
                 <div className="space-y-2 text-sm">
                   {checkoutItems.map((item) => (
                     <div key={item.id} className="flex justify-between">
                       <span className="flex items-center gap-1">
-                        {item.name} × {(item as any).quantity}
+                        {item.name} ({(item as any).quantity})
                         {(item as any).customData &&
                           (item as any).customData.isPersonalized && (
                             <span
@@ -372,7 +370,7 @@ export default function CheckoutPage() {
                           )}
                       </span>
                       <span>
-                        $
+                        £
                         {(
                           item.price * ((item as any).quantity || 1)
                         ).toLocaleString()}
@@ -380,10 +378,10 @@ export default function CheckoutPage() {
                     </div>
                   ))}
                   <div className="border-t pt-2 mt-2">
-                    <div className="flex justify-between">
+                    <div className="flex mb-1 justify-between">
                       <span>Subtotal</span>
                       <span>
-                        $
+                        £
                         {checkoutItems
                           .reduce(
                             (sum, item) =>
@@ -400,7 +398,7 @@ export default function CheckoutPage() {
                     <div className="flex justify-between font-semibold border-t pt-2 mt-2">
                       <span>Total</span>
                       <span>
-                        $
+                        £
                         {checkoutItems
                           .reduce(
                             (sum, item) =>

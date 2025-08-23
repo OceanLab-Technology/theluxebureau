@@ -190,9 +190,9 @@ const formatDateWithOrdinal = (date:any) => {
               />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="8am-1pm">10:00 – 13:00</SelectItem>
-              <SelectItem value="1pm-6pm">13:00 – 16:00</SelectItem>
-              <SelectItem value="6pm-11pm">16:00 – 18:00</SelectItem>
+              <SelectItem value="10am-1pm">10:00 – 13:00</SelectItem>
+              <SelectItem value="1pm-4pm">13:00 – 16:00</SelectItem>
+              <SelectItem value="4pm-6pm">16:00 – 18:00</SelectItem>
             </SelectContent>
           </Select>
         </div>

@@ -137,59 +137,87 @@ export default function SummaryStep() {
 
   return (
     <div>
-      <p className="text-secondary-foreground font-[ABC Marfa]  mb-12 mt-8 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-century">
+      <p className="text-secondary-foreground mb-12 mt-8 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem]" style={{ fontFamily: 'ABC Marfa' }}>
         Please review your gift details below. Press back to make changes.
       </p>
-      
-      <div className="flex flex-col gap-6 mt-8">
+
+      <div className="flex flex-col gap-6 mt-8" style={{ fontFamily: 'ABC Marfa' }}>
         <div className="flex items-center gap-8">
-          <label className="font-[ABC Marfa] text-[15px]  text-[#50462d]/60 font-light min-w-[160px]">
+          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px]" style={{ fontFamily: 'ABC Marfa' }}>
             Your name
           </label>
-          <p className="font-[ABC Marfa] text-[15px] tracking-[0.04rem]  text-[#3a2f1a] font-[120%]">
+          <p className="text-[15px] tracking-[0.04rem] text-[#3a2f1a] font-[120%]" style={{ fontFamily: 'ABC Marfa' }}>
             {formData.yourName || "Not provided"}
           </p>
         </div>
         <div className="flex items-center gap-8">
-          <label className="font-[ABC Marfa] text-[15px] text-[#50462d]/60 font-light min-w-[160px]">
+          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px]" style={{ fontFamily: 'ABC Marfa' }}>
             Recipients name
           </label>
-          <p className="font-[ABC Marfa] text-[15px] tracking-[0.04rem]  text-[#3a2f1a] font-[120%]">
+          <p className="text-[15px] tracking-[0.04rem] text-[#3a2f1a] font-[120%]" style={{ fontFamily: 'ABC Marfa' }}>
             {formData.recipientName || "Not provided"}
           </p>
         </div>
         <div className="flex items-center gap-8">
-          <label className="font-[ABC Marfa] text-[15px] text-[#50462d]/60 font-light min-w-[160px]">
+          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px]" style={{ fontFamily: 'ABC Marfa' }}>
             Recipients address
           </label>
-          <p className="font-[ABC Marfa] text-[15px] tracking-[0.04rem]  text-[#3a2f1a] font-[120%]">
+          <p className="text-[15px] tracking-[0.04rem] text-[#3a2f1a] font-[120%]" style={{ fontFamily: 'ABC Marfa' }}>
             {formData.recipientAddress || "Not provided"}
           </p>
         </div>
         <div className="flex items-center gap-8">
-          <label className="font-[ABC Marfa] text-[15px] text-[#50462d]/60 font-light min-w-[160px]">
+          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px]" style={{ fontFamily: 'ABC Marfa' }}>
             Delivery Date
           </label>
-          <p className="font-[ABC Marfa] text-[15px] text-[#3a2f1a] font-[120%]">
-            {formData.deliveryDate || "Not selected"}
+          <p className="text-[15px] text-[#3a2f1a] font-[120%]" style={{ fontFamily: 'ABC Marfa' }}>
+            {formData.deliveryDate
+              ? (() => {
+                  const date = new Date(formData.deliveryDate);
+                  const dayName = date.toLocaleDateString("en-GB", { weekday: "long" });
+                  const day = date.getDate();
+                  const month = date.toLocaleDateString("en-GB", { month: "long" });
+                  const year = date.getFullYear();
+                  const getOrdinalSuffix = (d: number) => {
+                    if (d >= 11 && d <= 13) return "th";
+                    switch (d % 10) {
+                      case 1: return "st";
+                      case 2: return "nd";
+                      case 3: return "rd";
+                      default: return "th";
+                    }
+                  };
+                  const ordinalSuffix = getOrdinalSuffix(day);
+                  return (
+                    <>
+                      {dayName},{" "}
+                      {day}
+                      <sup className="text-xs">{ordinalSuffix}</sup>{" "}
+                      {month} {year}
+                    </>
+                  );
+                })()
+              : "Not selected"}
           </p>
         </div>
         <div className="flex items-center gap-8">
-          <label className="font-[ABC Marfa] text-[15px] text-[#50462d]/60 font-light min-w-[160px]">
+          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px]" style={{ fontFamily: 'ABC Marfa' }}>
             Delivery Time
           </label>
-          <p className="font-[ABC Marfa] text-[15px] text-[#3a2f1a] font-[120%]">
-            {formData.preferredDeliveryTime === "8am-1pm" ? "10:00 – 13:00" : 
-             formData.preferredDeliveryTime === "1pm-6pm" ? "13:00 – 16:00" : 
-             formData.preferredDeliveryTime === "6pm-11pm" ? "16:00 – 18:00" : 
-             formData.preferredDeliveryTime || "Not selected"}
+          <p className="text-[15px] text-[#3a2f1a] font-[120%]" style={{ fontFamily: 'ABC Marfa' }}>
+            {formData.preferredDeliveryTime === "10am-1pm" && "10:00 – 13:00"}
+            {formData.preferredDeliveryTime === "1pm-4pm" && "13:00 – 16:00"}
+            {formData.preferredDeliveryTime === "4pm-6pm" && "16:00 – 18:00"}
+            {!["10am-1pm", "1pm-4pm", "4pm-6pm"].includes(formData.preferredDeliveryTime) && (
+              <span style={{ fontFamily: 'ABC Marfa' }}>{formData.preferredDeliveryTime || "Not selected"}</span>
+            )}
           </p>
         </div>
         <div className="flex items-start gap-8">
-          <label className="font-[ABC Marfa] text-[15px] text-[#50462d]/60 font-light min-w-[160px]">
+          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px]" style={{ fontFamily: 'ABC Marfa' }}>
             Personal Message
           </label>
-          <div className="font-[ABC Marfa]  tracking-[0.04rem]  text-[15px] text-[#3a2f1a] font-[120%] whitespace-pre-line">
+          <div className="tracking-[0.04rem] text-[15px] text-[#3a2f1a] font-[120%] whitespace-pre-line" style={{ fontFamily: 'ABC Marfa' }}>
             {formData.customMessage || "No personal message"}
           </div>
         </div>

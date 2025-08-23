@@ -21,13 +21,23 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
     email: "",
     phone: "",
   });
-
+  const [emailWarning, setEmailWarning] = useState("");
+  const [phoneWarning, setPhoneWarning] = useState("");
 
   const handleInputChange = (field: string, value: string) => {
     setCustomerInfo((prev) => ({
       ...prev,
       [field]: value,
     }));
+
+    if (field === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      setEmailWarning(emailRegex.test(value) ? "" : "Please enter a valid email address.");
+    }
+    if (field === "phone") {
+      const phoneRegex = /^\+?\d{10,15}$/;
+      setPhoneWarning(value && !phoneRegex.test(value) ? "Please enter a valid phone number." : "");
+    }
   };
 
   const handleSimpleCheckout = async () => {
@@ -138,6 +148,9 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
               className="border-0 w-full focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
               disabled={loading}
             />
+            {emailWarning && (
+               <p className="text-[#50462D] text-[12px] mt-0.5 font-[Marfa]">{emailWarning}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -151,6 +164,9 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
               className="border-0 w-full focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
               disabled={loading}
             />
+            {phoneWarning && (
+                <p className="text-[#50462D] text-[12px] mt-0.5 font-[Marfa]">{phoneWarning}</p>
+            )}
           </div>
         </div>
 
@@ -168,7 +184,7 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
             !customerInfo.lastName ||
             !customerInfo.email
           }
-          className="w-full bg-[#FBD060] hover:bg-[#F9C74F] text-stone-800 font-medium py-3"
+          className="w-full bg-[#FBD060] hover:bg-[#F9C74F] text-stone-800 font-medium py-3 rounded-[5px]"
         >
           {loading ? (
             <>
@@ -185,7 +201,7 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
             <Lock className="h-3 w-3 mr-1" />
             Secured by Stripe
           </Badge>
-          <p className="text-xs text-stone-500 mt-2">
+          <p className="text-xs font-[ABC Marfa] !font-[ABC Marfa] text-stone-500 mt-2" style={{ fontFamily: "ABC Marfa, sans-serif" }}>
             You will be redirected to Stripe's secure payment page
           </p>
         </div>
