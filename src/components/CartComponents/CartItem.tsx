@@ -205,7 +205,7 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
                   </button>
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-[#F5F1E8] rounded-none">
-                  <AlertDialogHeader>
+                  <AlertDialogHeader className="mb-12">
                     <AlertDialogTitle className="text-[#50462D] text-[32px] font-normal leading-[40px] tracking-[0.02em] font-['Century_Old_Style_Std']">
                       Remove Item
                     </AlertDialogTitle>
@@ -213,13 +213,13 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
                       Are you sure you want to remove "{product.name}" from your cart?
                     </AlertDialogDescription>
                   </AlertDialogHeader>
-                  <AlertDialogFooter className="flex gap-4 mt-8">
-                    <AlertDialogCancel className="w-[144px] h-[40px] bg-[#50462D] hover:bg-[#3B3215]/80 text-[#FAF7E7] text-[12px] font-normal uppercase px-8 py-[18px] rounded-md border-none transition-colors cursor-pointer tracking-[0.10em] leading-[120%] font-['SchoolBook_Condensed']">
+                  <AlertDialogFooter className="flex gap-4 mt-20">
+                    <AlertDialogCancel className="w-[144px] h-[40px] bg-[#50462D] hover:bg-[#50462D]/80 text-[#FAF7E7] hover:text-[#FAF7E7] text-[12px] transition-colors uppercase px-8 py-[18px] rounded-[0.25rem] border-none transition-colors cursor-pointer tracking-[0.10em] leading-[120%] font-schoolbook-cond">
                       CANCEL
                     </AlertDialogCancel>
                     <AlertDialogAction
                       onClick={handleRemoveItem}
-                      className="w-[144px] h-[40px] bg-[#FBD060] hover:bg-[#FDCF5F]/80 text-[#1E1204] text-[12px] font-normal uppercase px-8 py-[18px] rounded-md border-none transition-colors cursor-pointer tracking-[0.10em] leading-[120%] font-['SchoolBook_Condensed']"
+                      className="w-[144px] h-[40px] bg-[#50462D] hover:bg-[#50462D]/80 text-stone-400 text-[12px] transition-colors uppercase px-8 py-[18px] rounded-[0.25rem] border-none transition-colors cursor-pointer tracking-[0.10em] leading-[120%] font-schoolbook-cond"
                     >
                       REMOVE
                     </AlertDialogAction>

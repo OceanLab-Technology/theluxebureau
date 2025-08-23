@@ -26,7 +26,7 @@ export function EmptyCart({ onClose }: EmptyCartProps) {
             Your cart is empty
           </h2>
           <p className="text-[#50462D] text-[14px] leading-[26px] lg:text-[18px] lg:leading-[28px] font-century">
-            Looks like you haven’t added any items to your cart yet.
+            Looks like you haven't added any items to your cart yet.
             <br />
             Start exploring our products and add something you love.
           </p>
