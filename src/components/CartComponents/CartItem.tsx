@@ -45,7 +45,7 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
       yourName: customData?.yourName || "",
       recipientName: customData?.recipientName || "",
       recipientAddress: customData?.recipientAddress || "",
-      recipientCity: customData?.recipientCity || "",
+      recipientPhone: customData?.recipientPhone || "",
       recipientEmail: customData?.recipientEmail || "",
       deliveryDate: customData?.deliveryDate || "",
       preferredDeliveryTime: customData?.preferredDeliveryTime || "",
@@ -54,6 +54,7 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
       selectedQuote: customData?.selectedQuote || "",
       customMessage: customData?.customMessage || "",
       smsUpdates: customData?.smsUpdates || "none",
+      shippingUpdateMethod: customData?.shippingUpdateMethod || "text",
     };
   };
   const handleSaveEdit = async (newData: personaliseFormData) => {
