@@ -1809,9 +1809,14 @@ export default function DeliveryDetailsStep() {
         ? "Weekend delivery unavailable"
         : undefined;
 
+
+  const handleSMSTextOrEmailChange = (value: "text-message" | "email") => {
+    updateFormData({ shippingUpdateMethod: value });
+  };
+
   return (
     <div>
-      <p className="text-secondary-foreground font-century text-[1rem] leading-[1.4] mb-2">
+      <p className="text-secondary-foreground font-century text-[1rem] leading-[1.4]">
         Our gifts are sent by zero-emission, nominated-day delivery.
       </p>
       <p className="text-secondary-foreground font-century text-[1rem] leading-[1.4] mb-8">
@@ -1929,77 +1934,127 @@ export default function DeliveryDetailsStep() {
             </Select>
             {timeHint && <p className="mt-1 text-xs text-stone-500">{timeHint}</p>}
           </div>
+          
 
-          <p className="text-stone-700 text-[0.9375rem] font-[300]">Shipping updates via</p>
-          <div className="flex gap-6">
-            {["text", "email"].map((method) => (
-              <label key={method} className="flex items-center gap-3 cursor-pointer">
-                <span
-                  className={cn(
-                    "font-[Marfa] font-[300] text-[15px]",
-                    formData.shippingUpdateMethod === method
-                      ? "text-[#50462D]"
-                      : "text-[#50462d]/50"
-                  )}
-                >
-                  {method === "text" ? "Text Message" : "Email"}
-                </span>
-                <span
-                  className={cn(
-                    "w-5 h-5 rounded-full border flex items-center justify-center",
-                    formData.shippingUpdateMethod === method
-                      ? "border-[#50462D]"
-                      : "border-stone-400"
-                  )}
-                >
-                  {formData.shippingUpdateMethod === method && (
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#50462D]" />
-                  )}
-                </span>
-                <input
-                  type="radio"
-                  name="shipping-update-method"
-                  value={method}
-                  checked={formData.shippingUpdateMethod === method}
-                  onChange={() => updateFormData({ shippingUpdateMethod: method })}
-                  className="hidden"
-                />
-              </label>
-            ))}
+          <label className="text-stone-700 text-[0.9375rem] font-[300]">
+            Who would you like to receive shipping updates?
+          </label>
+          <div className="flex gap-16 justify-end mr-4 w-[95%]">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <span
+                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${formData.smsUpdates === "send-to-me"
+                  ? "text-[#50462D]"
+                  : "text-[#50462d]/50"
+                  }`}
+                style={{
+                  fontWeight: 300,
+                  fontStyle: "light",
+                  letterSpacing: "2%",
+                }}
+              >
+                Send to me
+              </span>
+              <input
+                type="radio"
+                name="smsUpdates"
+                value="send-to-me"
+                checked={formData.smsUpdates === "send-to-me"}
+                onChange={(e) => handleSMSChange(e.target.value as 'send-to-me')}
+                className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
+                  ${formData.smsUpdates === "send-to-me"
+                    ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
+                    : "bg-[#50462d]/50"}
+                `}
+              />
+            </label>
+            <label className="flex items-center gap-3 cursor-pointer">
+              <span
+                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${formData.smsUpdates === "send-to-recipient"
+                  ? "text-[#50462D]"
+                  : "text-[#50462d]/50"
+                  }`}
+                style={{
+                  fontWeight: 300,
+                  fontStyle: "light",
+                  letterSpacing: "2%",
+                }}
+              >
+                Send to recipient
+              </span>
+              <input
+                type="radio"
+                name="smsUpdates"
+                value="send-to-recipient"
+                checked={formData.smsUpdates === "send-to-recipient"}
+                onChange={(e) => handleSMSChange(e.target.value as 'send-to-recipient')}
+                className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
+                  ${formData.smsUpdates === "send-to-recipient"
+                    ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
+                    : "bg-[#50462d]/50"}
+                `}
+              />
+            </label>
           </div>
 
-          <p className="text-stone-700 text-[0.9375rem] font-[300]">Would you like SMS updates?</p>
-          <div className="flex gap-6">
-            {["send-to-me", "send-to-recipient"].map((opt) => (
-              <label key={opt} className="flex items-center gap-3 cursor-pointer">
-                <span
-                  className={cn(
-                    "font-[Marfa] font-[300] text-[15px]",
-                    formData.smsUpdates === opt ? "text-[#50462D]" : "text-[#50462d]/50"
-                  )}
-                >
-                  {opt === "send-to-me" ? "Send to me" : "Send to recipient"}
-                </span>
-                <span
-                  className={cn(
-                    "w-5 h-5 rounded-full border flex items-center justify-center",
-                    formData.smsUpdates === opt ? "border-[#50462D]" : "border-stone-400"
-                  )}
-                >
-                  {formData.smsUpdates === opt && (
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#50462D]" />
-                  )}
-                </span>
-                <input
-                  type="radio"
-                  name="sms-updates"
-                  value={opt}
-                  checked={formData.smsUpdates === opt}
-                  onChange={() => handleSMSChange(opt as "send-to-me" | "send-to-recipient")}
-                  className="hidden"
-                />
-              </label>
-            ))}
+          
+          <label className="text-stone-700 text-[0.9375rem] font-[300]">
+            Would you like shipping updates to be sent by text message or email?
+          </label>
+          <div className="flex gap-37 justify-end mr-4 w-[95%]">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <span
+                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${formData.shippingUpdateMethod === "text-message"
+                  ? "text-[#50462D]"
+                  : "text-[#50462d]/50"
+                  }`}
+                style={{
+                  fontWeight: 300,
+                  fontStyle: "light",
+                  letterSpacing: "2%",
+                }}
+              >
+                Text Message
+              </span>
+              <input
+                type="radio"
+                name="smsTextOrEmail"
+                value="text-message"
+                checked={formData.shippingUpdateMethod === "text-message"}
+                onChange={(e) => handleSMSTextOrEmailChange(e.target.value as 'text-message')}
+                className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
+                  ${formData.shippingUpdateMethod === "text-message"
+                    ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
+                    : "bg-[#50462d]/50"}
+                `}
+              />
+            </label>
+            <label className="flex items-center gap-3 cursor-pointer">
+              <span
+                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${formData.shippingUpdateMethod === "email"
+                  ? "text-[#50462D]"
+                  : "text-[#50462d]/50"
+                  }`}
+                style={{
+                  fontWeight: 300,
+                  fontStyle: "light",
+                  letterSpacing: "2%",
+                }}
+              >
+                Email
+              </span>
+              <input
+                type="radio"
+                name="smsTextOrEmail"
+                value="email"
+                checked={formData.shippingUpdateMethod === "email"}
+                onChange={(e) => handleSMSTextOrEmailChange(e.target.value as 'email')}
+                className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
+                  ${formData.shippingUpdateMethod === "email"
+                    ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
+                    : "bg-[#50462d]/50"}
+                `}
+              />
+            </label>
           </div>
         </div>
       </form>
