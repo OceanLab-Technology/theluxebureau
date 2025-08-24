@@ -86,7 +86,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     
     // Only update provided fields
     const allowedFields = [
-      'name', 'email', 'phone', 'address', 'status', 'total_spent', 'order_count', 'last_order_date'
+      'name', 'email', 'phone', 'address', 'status', 'total_spent', 'order_count', 'last_order_date', 'notes'
     ];
     
     allowedFields.forEach(field => {

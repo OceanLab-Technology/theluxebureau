@@ -220,6 +220,7 @@ export type Customer = {
   totalSpent: number
   joinDate: string
   status: string
+  notes: string
 }
 
 type CustomerStore = {
@@ -286,6 +287,7 @@ export const useCustomerAdminStore = create<CustomerStore>((set, get) => ({
         totalSpent: cust.total_spent,
         joinDate: new Date(cust.created_at).toISOString().split("T")[0],
         status: cust.status,
+        notes: cust.notes
       }))
 
       set({
@@ -324,6 +326,7 @@ export const useCustomerAdminStore = create<CustomerStore>((set, get) => ({
         totalSpent: cust.total_spent,
         joinDate: new Date(cust.created_at).toISOString().split("T")[0],
         status: cust.status,
+        notes: cust.notes
       }
 
       set({ customer: mapped, loading: false })

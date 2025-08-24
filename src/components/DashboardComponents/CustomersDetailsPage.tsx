@@ -11,6 +11,7 @@ import { ArrowLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCustomerAdminStore } from "@/store/admin/customerStore";
+import { no } from "zod/v4/locales";
 
 export function CustomerDetailsPage({ customerId }: { customerId: string }) {
   const id = customerId;
@@ -29,6 +30,7 @@ export function CustomerDetailsPage({ customerId }: { customerId: string }) {
     totalSpent: "",
     totalOrders: "",
     joinDate: "",
+    notes: "",
   });
 
   const [hasChanges, setHasChanges] = useState(false);
@@ -49,6 +51,7 @@ export function CustomerDetailsPage({ customerId }: { customerId: string }) {
         totalSpent: customer.totalSpent.toFixed(2),
         totalOrders: String(customer.totalOrders),
         joinDate: customer.joinDate || "",
+        notes: customer.notes || "",
       };
 
       setFormData(initialData);
@@ -132,7 +135,7 @@ export function CustomerDetailsPage({ customerId }: { customerId: string }) {
       <Label>{label}</Label>
       <Input
         type={type}
-        value={formData[field]}
+        value={formData[field] == "NULL" ? "" : formData[field]}
         onChange={(e) => handleFieldChange(field, e.target.value)}
       />
     </div>
@@ -168,6 +171,7 @@ export function CustomerDetailsPage({ customerId }: { customerId: string }) {
             {renderField("totalSpent", "Total Spent (£)", "number")}
             {renderField("totalOrders", "Total Orders", "number")}
             {renderField("joinDate", "Join Date")}
+            {renderField("notes", "Notes")}
           </CardContent>
         </Card>
 
