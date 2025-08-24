@@ -473,7 +473,7 @@ export const useMainStore = create<MainStore>()(
             guestStore.clearCart();
             guestStore.mergeWithUserCart([]);
 
-            toast.success('Cart items migrated successfully!');
+            // toast.success('Cart items migrated successfully!');
           } catch (error) {
             console.error('Failed to migrate cart items:', error);
             toast.error('Failed to migrate cart items');
