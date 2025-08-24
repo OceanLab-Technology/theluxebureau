@@ -47,7 +47,7 @@ const menuItems = [
         icon: Package,
       },
       {
-        title: "Customers",
+        title: "Clients",
         url: "/admin/customers",
         icon: Users,
       },

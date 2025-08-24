@@ -44,7 +44,7 @@ export function CustomerFormDialog() {
   const onSubmit = async (data: FormData) => {
     try {
       await createCustomer(data)
-      toast.success("Customer created", {
+      toast.success("Clients created", {
         description: `${data.name} was added successfully.`,
       })
       form.reset()
@@ -60,12 +60,12 @@ export function CustomerFormDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
-          <span className="mr-2">+</span> Add Customer
+          <span className="mr-2">+</span> Add Clients
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New Customer</DialogTitle>
+          <DialogTitle>Create New Clients</DialogTitle>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
           <Input {...form.register("name")} placeholder="Full name" />

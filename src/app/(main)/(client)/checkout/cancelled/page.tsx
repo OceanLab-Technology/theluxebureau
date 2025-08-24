@@ -21,7 +21,7 @@ export default function CheckoutCancelledPage() {
             <Link href="/products">Continue Shopping</Link>
           </Button>
         </div>
-        <p className="text-xs text-stone-500">
+        <p className="text-xs text-stone-500 font-[Marfa]">
           Need help? Email us at support@luxebureau.com
         </p>
       </div>

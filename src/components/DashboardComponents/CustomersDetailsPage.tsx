@@ -94,7 +94,7 @@ export function CustomerDetailsPage({ customerId }: { customerId: string }) {
       <div className="flex flex-col font-century min-h-screen bg-muted/50">
         <header className="flex h-16 items-center gap-2 border-b px-4 bg-background">
           <SidebarTrigger className="-ml-1" />
-          <h1 className="text-lg font-[200]">Customer Details</h1>
+          <h1 className="text-lg font-[200]">Clients Details</h1>
           <Skeleton className="ml-2 h-6 w-20" />
         </header>
 
@@ -142,7 +142,7 @@ export function CustomerDetailsPage({ customerId }: { customerId: string }) {
     <div className="flex flex-col font-century min-h-screen bg-muted/50">
       <header className="flex h-16 items-center gap-2 border-b px-4 bg-background">
         <SidebarTrigger className="-ml-1" />
-        <h1 className="text-lg font-[200]">Customer Details</h1>
+        <h1 className="text-lg font-[200]">Clients Details</h1>
         <Badge variant="outline" className="ml-2">
           {customer.status}
         </Badge>
@@ -152,13 +152,13 @@ export function CustomerDetailsPage({ customerId }: { customerId: string }) {
         <Button asChild variant="ghost" size="sm">
           <Link href="/admin/customers">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Customers
+            Back to Clients
           </Link>
         </Button>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Customer Information</CardTitle>
+            <CardTitle className="text-lg">Clients Information</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-6 sm:grid-cols-2">
             {renderField("name", "Name")}

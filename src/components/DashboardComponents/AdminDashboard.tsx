@@ -60,7 +60,7 @@ export function AdminDashboard() {
           icon: ShoppingCart,
         },
         {
-          title: "Customers",
+          title: "Clients",
           value: stats.customers.value.toString(),
           change: `${
             stats.customers.change >= 0 ? "+" : ""

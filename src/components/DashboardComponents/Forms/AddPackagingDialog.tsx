@@ -81,7 +81,7 @@ export function AddPackagingDialog() {
         <DialogHeader>
           <DialogTitle>Add New Packaging</DialogTitle>
           <DialogDescription>
-            Upload a packaging option that customers can select for their products.
+            Upload a packaging option that clients can select for their products.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">

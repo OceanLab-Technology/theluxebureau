@@ -69,13 +69,13 @@ export function CustomersPage() {
     <div className="flex flex-col font-century">
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <SidebarTrigger className="-ml-1" />
-        <h1 className="text-lg font-semibold">Customers</h1>
+        <h1 className="text-lg font-semibold">Clients</h1>
       </header>
 
       <div className="flex-1 space-y-4 p-8 pt-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-semibold">Customers</h2>
+            <h2 className="text-3xl font-semibold">Clients</h2>
             <p className="text-muted-foreground">Manage your customer relationships and data</p>
           </div>
           <CustomerFormDialog />

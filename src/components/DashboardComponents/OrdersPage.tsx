@@ -95,7 +95,7 @@ export function OrdersPage() {
           <div>
             <h2 className="text-3xl font-semibold font-century">Orders</h2>
             <p className="text-muted-foreground">
-              Manage and track customer orders
+              Manage and track Clients orders
             </p>
           </div>
           <div className="flex items-center gap-2">

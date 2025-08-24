@@ -20,7 +20,7 @@ export default function CheckoutSuccessPage() {
           </Button>
         </div>
         <p className="text-xs text-stone-500 font-[Marfa]">
-          Need help? Email us at founders@luxebureau.com
+          Need help? Email us at support@luxebureau.com
         </p>
       </div>
     </div>

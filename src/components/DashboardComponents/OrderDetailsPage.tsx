@@ -610,7 +610,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
           <Card>
             <CardHeader className="flex items-center gap-2">
               <User className="h-5 w-5" />
-              <CardTitle>Customer Information</CardTitle>
+              <CardTitle>Clients Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div>
