@@ -384,7 +384,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                         setProfile({ ...profile, email: e.target.value })
                       }
                       className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
-                      placeholder="johndoe@example.com"
+                      placeholder="mary.oliver@example.com"
                     />
                   </div>
 
@@ -650,7 +650,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                             setProfile({ ...profile, email: e.target.value })
                           }
                           className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
-                          placeholder="johndoe@example.com"
+                          placeholder="mary.oliver@example.com"
                         />
                       </div>
 
