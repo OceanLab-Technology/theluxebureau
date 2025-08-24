@@ -223,31 +223,32 @@ import { useGuestCartStore } from "@/store/guestCartStore";
 import { Product } from "@/app/api/types";
 import { Button } from "@/components/ui/button";
 import { LoginRequiredModal } from "@/components/ui/login-required-modal";
-import Link from "next/link";
 import Script from "next/script";
+import { useRouter } from "next/navigation";
 
 export default function CheckoutPage() {
-  const { 
-    cartItems, 
-    products, 
-    fetchCartItems, 
-    fetchProducts, 
-    cartLoading, 
-    isAuthenticated, 
-    checkAuthStatus 
+  const {
+    cartItems,
+    products,
+    fetchCartItems,
+    fetchProducts,
+    cartLoading,
+    isAuthenticated,
+    checkAuthStatus
   } = useMainStore();
   const { items: guestItems } = useGuestCartStore();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (isInitialized) return;
-    
+
     const initCheckout = async () => {
       try {
         await checkAuthStatus();
         await fetchCartItems();
-        
+
         if (products.length === 0) {
           await fetchProducts();
         }
@@ -262,7 +263,7 @@ export default function CheckoutPage() {
   }, []); //only run once on mount
 
   useEffect(() => {
-   
+
     if (isInitialized && isAuthenticated === false) {
       setShowLoginModal(true);
     }
@@ -277,9 +278,9 @@ export default function CheckoutPage() {
 
   const checkoutItems: Product[] = useMemo(() => {
     if (!isInitialized) return [];
-    
+
     if (isAuthenticated) {
-      
+
       return cartItems
         .map((cartItem) => {
           const product = products.find((p) => p.id === cartItem.product_id);
@@ -295,7 +296,7 @@ export default function CheckoutPage() {
         })
         .filter(Boolean) as Product[];
     } else {
-     
+
       return guestItems
         .map((guestItem) => {
           const product = products.find((p) => p.id === guestItem.product_id);
@@ -322,18 +323,29 @@ export default function CheckoutPage() {
 
   if (totalItems === 0) {
     return (
-      <div className="w-full flex items-center justify-center min-h-[70vh] py-20 flex-col text-center">
-        <h2 className="text-2xl font-semibold mb-4">Your cart is empty</h2>
-        <p className="text-muted-foreground mb-8">
-          Add some items to your cart before checking out.
-        </p>
-        <Button asChild>
-          <Link href="/products">Continue Shopping</Link>
-        </Button>
-      </div>
-    );
-  }
+      <div className="w-full flex items-center justify-center min-h-[70vh] py-20">
+        <div className="space-y-6 text-left">
+          <h2 className="text-[#50462D] text-[30px] leading-[40px] lg:text-[36px] lg:leading-[48px] font-[400] font-century">
+            Your cart is empty
+          </h2>
+          <p className="text-[#50462D] text-[14px] leading-[26px] lg:text-[18px] lg:leading-[28px] font-century">
+            Looks like you haven&apos;t added any items to your cart yet.
+            <br />
+            Start exploring our products and add something you love.
+          </p>
 
+          <button
+            onClick={() => router.push("/products")}
+            className="bg-[#FBD060] text-[#1E1204] font-schoolbook-cond font-[400] text-[0.70rem] leading-[119.58%] w-[18.812rem] h-[2.25rem] uppercase rounded-[0.25rem] hover:opacity-90 transition-opacity lg:text-[0.75rem] lg:w-[20.812rem] lg:h-[2.5rem]"
+          >
+            CONTINUE SHOPPING &gt;
+          </button>
+        </div>
+      </div>
+
+    );
+
+  }
   return (
     <>
       <Script src="https://js.stripe.com/v3/" />
