@@ -137,7 +137,7 @@ export default function SummaryStep() {
 
   return (
     <div>
-      <p className="text-secondary-foreground mb-12 mt-8 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-[marfa]">
+      <p className="text-secondary-foreground mb-12 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-[marfa]">
         Please review your gift details below. Press back to make changes.
       </p>
 
