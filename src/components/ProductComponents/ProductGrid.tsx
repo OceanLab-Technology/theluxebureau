@@ -14,13 +14,12 @@ interface ProductGridProps {
   priceRange?: [number, number];
   availability?: string;
   onCategoryChange?: (category: string) => void;
+  onClose?: () => void;
 }
 
 export function ProductGrid({
   searchQuery = "",
   selectedCategory = "",
-  priceRange = [0, 5000],
-  availability = "",
   onCategoryChange,
 }: ProductGridProps) {
   const { products, loading, error, fetchProducts } = useMainStore();
@@ -141,10 +140,10 @@ export function ProductGrid({
 
   const filteredProducts = products.filter(product => {
     if (!selectedCategory) return true;
-    
+
     const productCategory = product.category ? normalizeCategory(product.category) : '';
     const selectedCat = normalizeCategory(selectedCategory);
-    
+
     return productCategory === selectedCat;
   });
 
@@ -155,11 +154,29 @@ export function ProductGrid({
 
   if (!loading && filteredProducts.length === 0) {
     return (
-      <div className="w-full flex items-center justify-center min-h-[50vh] py-20 flex-col text-center">
-        <h3 className="text-[2rem] font-[400] mb-4">No products found</h3>
-        <p className="text-muted">
-          Try adjusting your filters or search terms.
-        </p>
+      <div className="w-full flex items-center justify-center min-h-[20vh] p-20 flex-col text-center">
+        <div className="max-w-md w-full space-y-6 pb-20 text-left lg:pl-10 lg:pb-20">
+          {/* Header */}
+          <div className="space-y-4">
+            <h2 className="text-[#50462D] text-[30px] leading-[40px] lg:text-[36px] lg:leading-[48px] font-[400] font-century">
+              No products found
+            </h2>
+            <p className="text-[#50462D] text-[14px] leading-[26px] lg:text-[18px] lg:leading-[28px] font-century">
+              Try adjusting your filters or search terms.
+            </p>
+          </div>
+
+          {/* Continue Shopping Button */}
+          <div className="">
+            <button
+              onClick={() => router.push("/products")}
+              className="bg-[#FBD060] text-[#1E1204] font-schoolbook-cond font-[400] text-[0.70rem] leading-[119.58%] w-[15.812rem] h-[2rem] uppercase rounded-[6px] hover:opacity-90 transition-opacity lg:text-[0.75rem] lg:w-[20.812rem] lg:h-[2.5rem]"
+            >
+
+              CONTINUE SHOPPING &gt;
+            </button>
+          </div>
+        </div>
       </div>
     );
   }

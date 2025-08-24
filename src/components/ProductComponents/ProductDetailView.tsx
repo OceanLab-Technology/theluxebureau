@@ -201,8 +201,8 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                 <motion.span
                   key={index}
                   className={`h-2 w-2 rounded-full inline-block cursor-pointer ${selectedImageIndex === index
-                      ? "bg-[#FBD060]"
-                      : "bg-background/50"
+                    ? "bg-[#FBD060]"
+                    : "bg-background/50"
                     }`}
                   onClick={() => handleImageChange(index)}
                   whileHover={{ scale: 1.2 }}
@@ -222,8 +222,8 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                 key={index}
                 onClick={() => handleImageChange(index)}
                 className={`md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-full bg-muted/20 overflow-hidden border-2 transition-all ${selectedImageIndex === index
-                    ? "border-yellow-500"
-                    : "border-transparent"
+                  ? "border-yellow-500"
+                  : "border-transparent"
                   }`}
                 animate={
                   selectedImageIndex === index
@@ -264,12 +264,26 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
             {currentProduct.description}
           </p>
 
-          <PersonaliseSheet
-            handleOnClick={() => {
-              resetCheckout();
-              setSelectedProduct(currentProduct);
-            }}
-          />
+
+          <div className="md:mt-4">
+            {availability === "sold-out" ? (
+              <Button
+                size={"lg"}
+                disabled
+                variant="box_yellow"
+                className="text-[0.75rem] leading-[119.58%] w-[20.812rem] h-[2.5rem] tracking-[0.075rem] uppercase"
+              >
+                Sold Out
+              </Button>
+            ) : (
+              <PersonaliseSheet
+                handleOnClick={() => {
+                  resetCheckout();
+                  setSelectedProduct(currentProduct);
+                }}
+              />
+            )}
+          </div>
 
           {currentProduct.tags && currentProduct.tags.length > 0 && (
             <div>

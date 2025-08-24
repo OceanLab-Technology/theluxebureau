@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { Product } from "@/app/api/types";
 import { AddToCartButton } from "@/components/CartComponents/AddToCartButton";
+import { Button } from "../ui/button";
 
 interface ProductCardProps {
   product: Product;
@@ -28,29 +29,6 @@ export function ProductCard({ product }: ProductCardProps) {
           <span className="">£{product.price}</span>
         </div>
       </Link>
-
-      {/* <div className="md:mt-4">
-        {availability === "sold-out" ? (
-          <Button
-            size="sm"
-            disabled
-            variant="outline"
-            className="md:px-20"
-          >
-            Sold Out
-          </Button>
-        ) : (
-          <AddToCartButton
-            productId={product.id!}
-            productName={product.name}
-            productImage={product.image_1}
-            productPrice={product.price}
-            size="sm"
-            variant="box_yellow"
-            className="md:px-20"
-          />
-        )}
-      </div> */}
     </div>
   );
 }
