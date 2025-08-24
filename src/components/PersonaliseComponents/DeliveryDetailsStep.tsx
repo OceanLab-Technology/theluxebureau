@@ -1710,9 +1710,9 @@ import { usePersonaliseStore } from "@/store/personaliseStore";
 const LONDON_TZ = "Europe/London";
 
 const TIME_SLOTS = [
-  { value: "10am-1pm", label: "10:00 – 13:00" },
-  { value: "1pm-4pm", label: "13:00 – 16:00" },
-  { value: "4pm-6pm", label: "16:00 – 18:00" },
+  { value: "10am-1pm", label: "10:00 - 13:00" },
+  { value: "1pm-4pm", label: "13:00 - 16:00" },
+  { value: "4pm-6pm", label: "16:00 - 18:00" },
 ] as const;
 
 type SlotValue = typeof TIME_SLOTS[number]["value"];
@@ -1829,7 +1829,7 @@ export default function DeliveryDetailsStep() {
             type="text"
             value={formData.recipientName}
             onChange={(e) => handleInputChange("recipientName", e.target.value)}
-            className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 rounded-none shadow-none text-[0.9375rem] font-[300] w-full"
+            className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 rounded-none shadow-none text-[0.9375rem] font-[300] w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
           />
 
           {/* Address */}
@@ -1841,7 +1841,7 @@ export default function DeliveryDetailsStep() {
             type="text"
             value={formData.recipientAddress}
             onChange={(e) => handleInputChange("recipientAddress", e.target.value)}
-            className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 rounded-none shadow-none text-[0.9375rem] font-[300] w-full"
+            className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 rounded-none shadow-none text-[0.9375rem] font-[300] w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
           />
 
           {/* Delivery date */}
