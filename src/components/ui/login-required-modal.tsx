@@ -39,21 +39,21 @@ export function LoginRequiredModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-xl font-[Century_Old_Style_Std] rounded-sm">
-        <DialogHeader className="text-center font-[Century_Old_Style_Std]">
-          <DialogTitle className="text-[1.8rem] font-[400] text-secondary-foreground font-[Century_Old_Style_Std]">
+      <DialogContent className="sm:max-w-xl font-[Century-Old-Style] rounded-none">
+        <DialogHeader className="text-center font-[Century-Old-Style]">
+          <DialogTitle className="text-[1.8rem] font-[400] text-secondary-foreground font-[Century-Old-Style]">
             LOG IN REQUIRED
           </DialogTitle>
-          <DialogDescription className="text-stone-600 mt-2 text-[1rem] font-[Century_Old_Style_Std]">
+          <DialogDescription className="text-stone-600 mt-2 text-[1rem] font-[Century-Old-Style]">
             Please log in or create an account with us to continue with your purchase.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex flex-col gap-3 mt-6 font-[Century_Old_Style_Std]">
+        <div className="flex flex-col gap-3 mt-6 font-[Century-Old-Style]">
           <Button
             onClick={handleLogin}
             variant="box_yellow"
-            className="w-full uppercase  tracking-[0.08em] text-[0.75rem] leading-[119.58%] h-[2.5rem] font-[Century_Old_Style_Std]"
+            className="w-full uppercase  tracking-[0.08em] text-[0.75rem] leading-[119.58%] h-[2.5rem] font-[font-schoolbook-cond] rounded-[0.25rem]"
           >
             Login
           </Button>
@@ -61,7 +61,7 @@ export function LoginRequiredModal({
           <Button
             onClick={handleSignUp}
             variant="outline"
-            className="w-full uppercase tracking-[0.08em]  text-[0.75rem] font-[Century_Old_Style_Std]"
+            className="w-full uppercase tracking-[0.08em]  text-[0.75rem] font-[font-schoolbook-cond] rounded-[0.25rem]"
           >
             Create Account
           </Button>
@@ -70,7 +70,7 @@ export function LoginRequiredModal({
         <div className="text-center mt-4 font-[SchoolBook]">
           <button
             onClick={onClose}
-            className="text-sm text-stone-500 hover:text-stone-700 underline-offset-4 hover:underline  font-[Century_Old_Style_Std]"
+            className="text-sm text-stone-500 hover:text-stone-700 underline-offset-4 hover:underline  font-[Century-Old-Style]"
           >
             Continue browsing
           </button>
