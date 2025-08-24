@@ -50,7 +50,7 @@ export function PersonalisedAddToCartButton({
         className="bg-[#FDCF5F] uppercase flex items-center justify-center gap-1 hover:bg-[#FDCF5F]/80 text-stone-800 tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm md:py-[1.135rem] py-[.5rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%] disabled:cursor-not-allowed"
       >
         {isLoading ? (
-          <span className="text-xs md:text-sm">Adding...</span>
+          <span className="hidden md:inline">Adding...</span>
         ) : isAdded ? (
           <>
             <span className="hidden md:inline">Added to Bag</span>

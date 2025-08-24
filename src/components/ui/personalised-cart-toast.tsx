@@ -118,10 +118,11 @@ export function PersonalisedCartToast({
           >
             <Button
               variant="outline"
-              onClick={onViewCart}
+              // onClick={onViewCart}
               className="flex-1 text-xs uppercase rounded-none tracking-wider"
             >
               View Cart
+              
             </Button>
             <Button
               onClick={onContinueShopping}
