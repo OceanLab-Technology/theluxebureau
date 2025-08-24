@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { User, Lock } from "lucide-react";
 
 interface LoginRequiredModalProps {
   isOpen: boolean;
@@ -18,10 +17,10 @@ interface LoginRequiredModalProps {
   feature?: string;
 }
 
-export function LoginRequiredModal({ 
-  isOpen, 
-  onClose, 
-  feature = "personalize products" 
+export function LoginRequiredModal({
+  isOpen,
+  onClose,
+  feature = "personalize products"
 }: LoginRequiredModalProps) {
   const router = useRouter();
 
@@ -52,21 +51,20 @@ export function LoginRequiredModal({
         <div className="flex flex-col gap-3 mt-6 font-[Century-Old-Style]">
           <Button
             onClick={handleLogin}
-            variant="box_yellow"
-            className="w-full uppercase  tracking-[0.08em] text-[0.75rem] leading-[119.58%] h-[2.5rem] font-[font-schoolbook-cond] rounded-[0.25rem]"
+            className="w-full uppercase tracking-[0.08em] text-[0.75rem] font-[font-schoolbook-cond] rounded-[0.25rem] bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800 !border-0 !shadow-none focus-visible:ring-0"
           >
             Login
           </Button>
-          
+
           <Button
             onClick={handleSignUp}
             variant="outline"
-            className="w-full uppercase tracking-[0.08em]  text-[0.75rem] font-[font-schoolbook-cond] rounded-[0.25rem]"
+            className="w-full uppercase tracking-[0.08em] text-[0.75rem] font-[font-schoolbook-cond] rounded-[0.25rem]"
           >
             Create Account
           </Button>
         </div>
-        
+
         <div className="text-center mt-4 font-[SchoolBook]">
           <button
             onClick={onClose}

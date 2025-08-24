@@ -160,7 +160,7 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
               type="tel"
               value={customerInfo.phone}
               onChange={(e) => handleInputChange("phone", e.target.value)}
-              placeholder="+44 (555) 123-4567"
+              placeholder=" +44 0777 888 999"
               className="border-0 w-full focus:border-b border-stone-500 bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base"
               disabled={loading}
             />
