@@ -51,7 +51,7 @@ export function PersonalisedCartToast({
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium  uppercase tracking-wider flex items-center gap-2">
               <Check className="w-4 h-4" />
-              Added to Cart
+              Added to Bag
             </span>
             <button
               onClick={onClose}
@@ -121,7 +121,7 @@ export function PersonalisedCartToast({
               onClick={onViewCart}
               className="flex-1 text-xs uppercase rounded-none tracking-wider"
             >
-              View Cart
+              View Bag
             </Button>
             <Button
               onClick={onContinueShopping}

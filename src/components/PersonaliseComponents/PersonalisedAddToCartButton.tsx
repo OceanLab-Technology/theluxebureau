@@ -53,7 +53,7 @@ export function PersonalisedAddToCartButton({
           <span className="text-xs md:text-sm">Adding...</span>
         ) : isAdded ? (
           <>
-            <span className="hidden md:inline">Added to Cart</span>
+            <span className="hidden md:inline">Added to Bag</span>
             <span className="md:hidden">Added</span>
           </>
         ) : (
