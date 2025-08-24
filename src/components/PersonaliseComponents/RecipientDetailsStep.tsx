@@ -26,7 +26,7 @@ export default function RecipientDetailsStep() {
 
   return (
     <div>
-      <p className="text-secondary-foreground mb-12 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1.3rem] font-century">
+      <p className="text-secondary-foreground mb-12 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1.3rem] font-[Century-Old-Style]">
         Please enter the recipient's contact details
       </p>
 

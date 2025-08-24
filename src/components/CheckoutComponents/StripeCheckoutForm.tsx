@@ -71,7 +71,7 @@ export function StripeCheckoutForm({
   };
 
   return (
-    <div className="space-y-6 font-century">
+    <div className="space-y-6 font-[Century-Old-Style]">
       <div className="border-stone-200">
         <div>
           <form onSubmit={handleSubmit} className="space-y-6">

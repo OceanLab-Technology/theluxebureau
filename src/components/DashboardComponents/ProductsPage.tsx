@@ -80,14 +80,14 @@
 //     <div className="flex flex-col">
 //       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
 //         <SidebarTrigger className="-ml-1" />
-//         <h1 className="text-lg font-semibold font-century">Products</h1>
+//         <h1 className="text-lg font-semibold font-[Century-Old-Style]">Products</h1>
 //       </header>
 
 //       <div className="flex-1 space-y-6 p-8 pt-6">
 //         {/* Page Header */}
 //         <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
 //           <div>
-//             <h2 className="text-3xl font-bold tracking-tight font-century">Products</h2>
+//             <h2 className="text-3xl font-bold tracking-tight font-[Century-Old-Style]">Products</h2>
 //             <p className="text-muted-foreground">Manage your product catalog and inventory</p>
 //           </div>
 //           <ProductFormSheet />
@@ -284,14 +284,14 @@ export function ProductsPage() {
     <div className="flex flex-col">
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <SidebarTrigger className="-ml-1" />
-        <h1 className="text-lg font-semibold font-century">Products</h1>
+        <h1 className="text-lg font-semibold font-[Century-Old-Style]">Products</h1>
       </header>
 
       <div className="flex-1 space-y-6 p-8 pt-6">
         {/* Page Header */}
         <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight font-century">Products</h2>
+            <h2 className="text-3xl font-bold tracking-tight font-[Century-Old-Style]">Products</h2>
             <p className="text-muted-foreground">Manage your product catalog and inventory</p>
           </div>
           <ProductFormSheet />

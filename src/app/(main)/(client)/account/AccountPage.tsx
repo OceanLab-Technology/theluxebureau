@@ -179,7 +179,7 @@ export default function AccountPage({ user }: AccountPageProps) {
     <div className="min-h-screen flex flex-col bg-background overflow-hidden">
       <main className="relative grid grid-cols-1 md:grid-cols-5 md:flex-row flex-col md:pl-20 pl-4 min-h-[calc(100vh-64px)]">
         <div className="md:w-64 w-full col-span-1 md:py-35 py-8">
-          <h1 className="block md:hidden text-[2rem] leading-[2.5rem] tracking-[.1rem] font-light mb-6 font-century">
+          <h1 className="block md:hidden text-[2rem] leading-[2.5rem] tracking-[.1rem] font-light mb-6 font-[Century-Old-Style]">
             Welcome back,
             <br />
             {userName}
@@ -214,7 +214,7 @@ export default function AccountPage({ user }: AccountPageProps) {
         </div>
 
         <div className="flex-1 md:py-20 py-6 md:px-10 px-0 col-span-4 ">
-          <h1 className="md:block hidden text-[2.5rem] font-light mb-12 font-century">
+          <h1 className="md:block hidden text-[2.5rem] font-light mb-12 font-[Century-Old-Style]">
             Welcome back, {userName}
           </h1>
 
@@ -368,7 +368,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                       onChange={(e) =>
                         setProfile({ ...profile, name: e.target.value })
                       }
-                      className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
+                      className="border-0 font-[Century-Old-Style] focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
                       placeholder="Mary Oliver"
                     />
                   </div>
@@ -383,7 +383,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                       onChange={(e) =>
                         setProfile({ ...profile, email: e.target.value })
                       }
-                      className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
+                      className="border-0 font-[Century-Old-Style] focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
                       placeholder="mary.oliver@example.com"
                     />
                   </div>
@@ -400,7 +400,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                           shippingAddress: e.target.value,
                         })
                       }
-                      className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
+                      className="border-0 font-[Century-Old-Style] focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
                       placeholder="206 Batran's Street, 39, 2044 Ontario..."
                     />
                   </div>
@@ -414,7 +414,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                       onChange={(e) =>
                         setProfile({ ...profile, phoneNumber: e.target.value })
                       }
-                      className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
+                      className="border-0 font-[Century-Old-Style] focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
                       placeholder=" +44 0777 888 999"
                     />
                   </div>
@@ -430,7 +430,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                         onChange={(e) =>
                           setProfile({ ...profile, password: e.target.value })
                         }
-                        className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
+                        className="border-0 font-[Century-Old-Style] focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
                         placeholder="••••••••••••••••••••"
                       />
                       <button
@@ -634,7 +634,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                           onChange={(e) =>
                             setProfile({ ...profile, name: e.target.value })
                           }
-                          className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
+                          className="border-0 font-[Century-Old-Style] focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
                           placeholder="Mary Oliver"
                         />
                       </div>
@@ -649,7 +649,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                           onChange={(e) =>
                             setProfile({ ...profile, email: e.target.value })
                           }
-                          className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
+                          className="border-0 font-[Century-Old-Style] focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
                           placeholder="mary.oliver@example.com"
                         />
                       </div>
@@ -666,7 +666,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                               shippingAddress: e.target.value,
                             })
                           }
-                          className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
+                          className="border-0 font-[Century-Old-Style] focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
                           placeholder="206 Batran's Street, 39, 2044 Ontario..."
                         />
                       </div>
@@ -680,7 +680,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                           onChange={(e) =>
                             setProfile({ ...profile, phoneNumber: e.target.value })
                           }
-                          className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
+                          className="border-0 font-[Century-Old-Style] focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
                           placeholder=" +44 0777 888 999"
                         />
                       </div>
@@ -697,7 +697,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                           onChange={(e) =>
                             setProfile({ ...profile, password: e.target.value })
                           }
-                          className="border-0 font-century focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
+                          className="border-0 font-[Century-Old-Style] focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
                           placeholder="••••••••••••••••••••"
                         />
                         <button

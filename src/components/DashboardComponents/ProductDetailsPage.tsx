@@ -209,7 +209,7 @@ function ProductDetailsPage({ productId }: ProductDetailsPageProps) {
 
   if (loading || !selectedProduct) {
     return (
-      <div className="flex flex-col font-century min-h-screen bg-muted/50">
+      <div className="flex flex-col font-[Century-Old-Style] min-h-screen bg-muted/50">
         <header className="flex h-16 items-center gap-2 border-b px-4 bg-background">
           <SidebarTrigger className="-ml-1" />
           <h1 className="text-lg font-[200]">Product Details</h1>
@@ -276,7 +276,7 @@ function ProductDetailsPage({ productId }: ProductDetailsPageProps) {
   if (error) return <div className="p-8 text-red-500">Error: {error}</div>;
 
   return (
-    <div className="flex flex-col font-century min-h-screen bg-muted/50">
+    <div className="flex flex-col font-[Century-Old-Style] min-h-screen bg-muted/50">
       <header className="flex h-16 items-center gap-2 border-b px-4 bg-background">
         <SidebarTrigger className="-ml-1" />
         <h1 className="text-lg font-[200]">Product Details</h1>

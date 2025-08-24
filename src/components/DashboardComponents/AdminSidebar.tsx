@@ -83,7 +83,7 @@ export function AdminSidebar() {
       <SidebarHeader className="border-b border-border bg-background">
         <div className="flex items-center justify-between py-[11.5px] px-6">
           <Link href="/" className="flex items-center gap-2">
-            <span className="truncate font-[200] font-century lowercase tracking-widest">
+            <span className="truncate font-[200] font-[Century-Old-Style] lowercase tracking-widest">
               the{" "}
               <span className="uppercase">
                 <span className="italic">LUXE</span> BUREAU
@@ -93,7 +93,7 @@ export function AdminSidebar() {
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="bg-background font-century">
+      <SidebarContent className="bg-background font-[Century-Old-Style]">
         {menuItems.map((group) => (
           <SidebarGroup key={group.title}>
             <SidebarGroupLabel className="text-xs my-6 font-[300] text-muted-foreground">

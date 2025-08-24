@@ -139,14 +139,14 @@ export function AnalyticsPage() {
         {/* Header */}
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 -mx-8 -mt-6 mb-6">
           <SidebarTrigger className="-ml-1" />
-          <h1 className="text-lg font-[200] font-century">Analytics</h1>
+          <h1 className="text-lg font-[200] font-[Century-Old-Style]">Analytics</h1>
         </header>
 
 
         {/* Sub-header */}
         <div className="flex items-center justify-between mt-4">
           <div>
-            <h2 className="text-3xl font-semibold font-century">Analytics Dashboard</h2>
+            <h2 className="text-3xl font-semibold font-[Century-Old-Style]">Analytics Dashboard</h2>
             <p className="text-muted-foreground">Track your business performance and insights</p>
           </div>
           <div className="flex items-center gap-2">
@@ -193,17 +193,17 @@ export function AnalyticsPage() {
   }
 
   return (
-    <div className="flex-1 space-y-4 p-8 pt-6 font-century">
+    <div className="flex-1 space-y-4 p-8 pt-6 font-[Century-Old-Style]">
       {/* Header */}
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 -mx-8 -mt-6 mb-6">
         <SidebarTrigger className="-ml-1" />
-        <h1 className="text-lg font-[200] font-century">Analytics</h1>
+        <h1 className="text-lg font-[200] font-[Century-Old-Style]">Analytics</h1>
       </header>
 
       {/* Filters */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-semibold font-century">Analytics Dashboard</h2>
+          <h2 className="text-3xl font-semibold font-[Century-Old-Style]">Analytics Dashboard</h2>
           <p className="text-muted-foreground">Track your business performance and insights</p>
         </div>
 
@@ -254,7 +254,7 @@ export function AnalyticsPage() {
               setCustomApplied(false)
             }}
           >
-            <SelectTrigger className="bg-foreground w-[170px] text-sm text-background font-century">
+            <SelectTrigger className="bg-foreground w-[170px] text-sm text-background font-[Century-Old-Style]">
               <CalendarIcon className="h-4 w-4 text-background" />
               <SelectValue placeholder="Select period">
                 {dateFilter === "custom" && customApplied ? "Custom Range" : undefined}

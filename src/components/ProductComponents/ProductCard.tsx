@@ -15,7 +15,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const fallbackImage = product.image_2 || product.image_1;
 
   return (
-    <div className="transition-all font-century duration-300 overflow-hidden text-secondary-foreground p-0 md:p-[6px] h-[22rem] md:h-[44rem] flex flex-col justify-between w-full bg-[#f8f6ea] rounded-none md:rounded">
+    <div className="transition-all font-[Century-Old-Style] duration-300 overflow-hidden text-secondary-foreground p-0 md:p-[6px] h-[22rem] md:h-[44rem] flex flex-col justify-between w-full bg-[#f8f6ea] rounded-none md:rounded">
       <Link href={`/products/${product.id}`} className="block">
         <div className="relative overflow-hidden w-full h-[15rem] md:h-[36rem] flex items-center justify-center">
           <img

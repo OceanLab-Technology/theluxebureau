@@ -22,10 +22,10 @@ export function EmptyCart({ onClose }: EmptyCartProps) {
       <div className="max-w-md w-full space-y-6 text-left">
         {/* Header */}
         <div className="space-y-4">
-          <h2 className="text-[#50462D] text-[30px] leading-[40px] lg:text-[36px] lg:leading-[48px] font-[400] font-century">
+          <h2 className="text-[#50462D] text-[30px] leading-[40px] lg:text-[36px] lg:leading-[48px] font-[400] font-[Century-Old-Style]">
             Your cart is empty
           </h2>
-          <p className="text-[#50462D] text-[14px] leading-[26px] lg:text-[18px] lg:leading-[28px] font-century">
+          <p className="text-[#50462D] text-[14px] leading-[26px] lg:text-[18px] lg:leading-[28px] font-[Century-Old-Style]">
             Looks like you haven't added any items to your cart yet.
             <br />
             Start exploring our products and add something you love.

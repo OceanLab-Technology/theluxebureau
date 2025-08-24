@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function ProductGridSkeleton() {
   return (
-    <div className="space-y-8 w-full font-century">
+    <div className="space-y-8 w-full font-[Century-Old-Style]">
       <div className="md:px-6 px-6 mb-15">
         <Skeleton className="h-6 w-48 mb-2" />
         <Skeleton className="h-8 w-full max-w-2xl mb-4" />
@@ -29,7 +29,7 @@ export function ProductGridSkeleton() {
 
 function ProductCardSkeleton() {
   return (
-    <div className="transition-all font-century duration-300 overflow-hidden text-secondary-foreground p-0 md:p-[6px] h-[22rem] md:h-[44rem] flex flex-col justify-between w-full bg-[#f8f6ea] rounded-none md:rounded">
+    <div className="transition-all font-[Century-Old-Style] duration-300 overflow-hidden text-secondary-foreground p-0 md:p-[6px] h-[22rem] md:h-[44rem] flex flex-col justify-between w-full bg-[#f8f6ea] rounded-none md:rounded">
       <div className="relative overflow-hidden w-full h-[15rem] md:h-[36rem] flex items-center justify-center">
         <Skeleton className="w-full h-full" />
       </div>

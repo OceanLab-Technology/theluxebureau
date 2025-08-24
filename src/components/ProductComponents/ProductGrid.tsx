@@ -158,10 +158,10 @@ export function ProductGrid({
         <div className="max-w-md w-full space-y-6 pb-20 text-left lg:pl-10 lg:pb-20">
           {/* Header */}
           <div className="space-y-4">
-            <h2 className="text-[#50462D] text-[30px] leading-[40px] lg:text-[36px] lg:leading-[48px] font-[400] font-century">
+            <h2 className="text-[#50462D] text-[30px] leading-[40px] lg:text-[36px] lg:leading-[48px] font-[400] font-[Century-Old-Style]">
               No products found
             </h2>
-            <p className="text-[#50462D] text-[14px] leading-[26px] lg:text-[18px] lg:leading-[28px] font-century">
+            <p className="text-[#50462D] text-[14px] leading-[26px] lg:text-[18px] lg:leading-[28px] font-[Century-Old-Style]">
               Try adjusting your filters or search terms.
             </p>
           </div>
@@ -191,7 +191,7 @@ export function ProductGrid({
         exit="out"
         variants={pageVariants}
         transition={pageTransition}
-        className="space-y-8 w-full font-century"
+        className="space-y-8 w-full font-[Century-Old-Style]"
       >
         <motion.div
           className="md:px-6 px-6 mb-15"

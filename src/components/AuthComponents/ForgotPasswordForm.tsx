@@ -37,7 +37,7 @@
 //   };
 
 //   return (
-//     <div className={cn("w-full px-4 sm:px-10 font-century", className)} {...props}>
+//     <div className={cn("w-full px-4 sm:px-10 font-[Century-Old-Style]", className)} {...props}>
 //       <h1 className="text-xs font-light mb-4 tracking-wide sm:py-20">
 //         {success ? "CHECK YOUR EMAIL" : "RESET PASSWORD"}
 //       </h1>
@@ -226,7 +226,7 @@ export function ForgotPasswordForm({
   const submitDisabled = isLoading || !isValidEmail;
 
   return (
-    <div className={cn("w-full px-4 sm:px-10 md:pt-0 pt-10 font-century ", className)} {...props}>
+    <div className={cn("w-full px-4 sm:px-10 md:pt-0 pt-10 font-[Century-Old-Style] ", className)} {...props}>
       <h1 className="text-[1rem] font-light mb-4 tracking-wide md:py-20 small-text">
         {success ? "CHECK YOUR EMAIL" : "RESET PASSWORD"}
       </h1>

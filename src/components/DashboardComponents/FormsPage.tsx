@@ -89,12 +89,12 @@ const truncateMessage = (message: string, maxLength: number = 50) => {
 
 export function FormsPage() {
   return (
-    <div className="flex flex-col font-century">
+    <div className="flex flex-col font-[Century-Old-Style]">
       {/* Header */}
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mr-2 h-4" />
-        <h1 className="text-lg font-[200] font-century">Form Submissions</h1>
+        <h1 className="text-lg font-[200] font-[Century-Old-Style]">Form Submissions</h1>
       </header>
 
       {/* Main Content */}

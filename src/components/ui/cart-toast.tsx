@@ -38,7 +38,7 @@ export function CartToast({
             damping: 25,
             mass: 0.8,
           }}
-          className="fixed top-16 right-0 z-50 bg-background border border-stone-300  p-4 md:min-w-xl font-century"
+          className="fixed top-16 right-0 z-50 bg-background border border-stone-300  p-4 md:min-w-xl font-[Century-Old-Style]"
         >
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">

@@ -316,7 +316,7 @@ export default function PersonaliseForm({
     <section className="flex flex-col min-h-[calc(100vh-2rem)] md:pt-20 pt-15">
       <div className="mb-6 md:mb-10">
         <div className="mb-4 flex md:items-center items-start justify-between md:flex-row flex-col">
-          <h1 className="md:text-[2rem] text-secondary-foreground font-century text-[1.5rem] md:mb-4 font-medium">
+          <h1 className="md:text-[2rem] text-secondary-foreground font-[Century-Old-Style] text-[1.5rem] md:mb-4 font-medium">
             {stepTitles[currentStep as keyof typeof stepTitles]}
           </h1>
           <button
@@ -326,7 +326,7 @@ export default function PersonaliseForm({
             BACK TO STORE
           </button>
         </div>
-        <div className="grid grid-cols-4 justify-around uppercase text-stone-600 font-century">
+        <div className="grid grid-cols-4 justify-around uppercase text-stone-600 font-[Century-Old-Style]">
           {steps.map((s) => (
             <div
               key={s.id}
@@ -365,7 +365,7 @@ export default function PersonaliseForm({
         </AnimatePresence>
       </div>
 
-      <div className="flex-shrink-0 bg-background pt-4 pb-4 font-century">
+      <div className="flex-shrink-0 bg-background pt-4 pb-4 font-[Century-Old-Style]">
         <div className="flex md:gap-3 gap-1 justify-end">
           {currentStep === 4 ? (
             <>

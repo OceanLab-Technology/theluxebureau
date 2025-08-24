@@ -35,7 +35,7 @@ export function UpdatePasswordForm({
   };
 
   return (
-    <div className={cn("w-full px-10 font-century", className)} {...props}>
+    <div className={cn("w-full px-10 font-[Century-Old-Style]", className)} {...props}>
       <h1 className="text-xs font-light mb-4 tracking-wide py-20">UPDATE PASSWORD</h1>
       <div className="mb-8">
         <form onSubmit={handleForgotPassword}>

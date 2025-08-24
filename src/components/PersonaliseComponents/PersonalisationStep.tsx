@@ -143,17 +143,17 @@
 
 //   // ------- Render -------
 //   return (
-//     <div className="font-century">
+//     <div className="font-[Century-Old-Style]">
 //       <div className="max-w-2xl w-full">
-//         <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-1 break-words">
+//         <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-1 break-words">
 //           Our gifts arrive with custom stationery, letterpressed by hand at the Luxe Bureau atelier, in Noir ink on GF Smith Mohawk White card.
 //         </p>
 
-//         <p className="text-secondary-foreground mt-4 font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-4 break-words">
+//         <p className="text-secondary-foreground mt-4 font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-4 break-words">
 //           Please click on the card below to personalise your message. In the header, add your name, initials, or company to create your bespoke letterhead. You may choose from type styles below.
 //         </p>
 
-//         <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-1 break-words">
+//         <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-1 break-words">
 //           Your personal message will be set in our signature typewriter font. For inspiration, you can select a quote from the dropdown, or write your own.
 //         </p>
 //       </div>
@@ -489,17 +489,17 @@
 
 //   // ------- Render -------
 //   return (
-//     <div className="font-century">
+//     <div className="font-[Century-Old-Style]">
 //       <div className="max-w-2xl w-full">
-//         <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-1 break-words">
+//         <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-1 break-words">
 //           Our gifts arrive with custom stationery, letterpressed by hand at the Luxe Bureau atelier, in Noir ink on GF Smith Mohawk White card.
 //         </p>
 
-//         <p className="text-secondary-foreground mt-4 font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-4 break-words">
+//         <p className="text-secondary-foreground mt-4 font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-4 break-words">
 //           Please click on the card below to personalise your message. In the header, add your name, initials, or company to create your bespoke letterhead. You may choose from type styles below.
 //         </p>
 
-//         <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-1 break-words">
+//         <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-1 break-words">
 //           Your personal message will be set in our signature typewriter font. For inspiration, you can select a quote from the dropdown, or write your own.
 //         </p>
 //       </div>
@@ -805,17 +805,17 @@ export default function PersonalizationStep() {
   };
 
   return (
-    <div className="font-century">
+    <div className="font-[Century-Old-Style]">
       <div className="max-w-2xl w-full">
-        <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-1 break-words">
+        <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-1 break-words">
           Our gifts arrive with custom stationery, letterpressed by hand at the Luxe Bureau atelier, in Noir ink on GF Smith Mohawk White card.
         </p>
 
-        <p className="text-secondary-foreground mt-4 font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-4 break-words">
+        <p className="text-secondary-foreground mt-4 font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-4 break-words">
           Please click on the card below to personalise your message. In the header, add your name, initials, or company to create your bespoke letterhead. You may choose from type styles below.
         </p>
 
-        <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-century mb-1 break-words">
+        <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-1 break-words">
           Your personal message will be set in our signature typewriter font. For inspiration, you can select a quote from the dropdown, or write your own.
         </p>
       </div>

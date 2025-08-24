@@ -84,27 +84,27 @@ export function OrdersPage() {
     .reduce((acc, curr) => acc + curr, 0);
 
   return (
-    <div className="flex flex-col font-century">
+    <div className="flex flex-col font-[Century-Old-Style]">
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <SidebarTrigger className="-ml-1" />
-        <h1 className="text-lg font-semibold font-century">Orders</h1>
+        <h1 className="text-lg font-semibold font-[Century-Old-Style]">Orders</h1>
       </header>
 
       <div className="flex-1 space-y-4 p-8 pt-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-semibold font-century">Orders</h2>
+            <h2 className="text-3xl font-semibold font-[Century-Old-Style]">Orders</h2>
             <p className="text-muted-foreground">
               Manage and track Clients orders
             </p>
           </div>
           <div className="flex items-center gap-2">
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="bg-foreground w-[145px] text-sm text-background font-century">
+              <SelectTrigger className="bg-foreground w-[145px] text-sm text-background font-[Century-Old-Style]">
                 <Filter className="mr-2 h-4 w-4 text-background" />
                 <SelectValue placeholder="Filter orders" />
               </SelectTrigger>
-              <SelectContent className="text-foreground font-century">
+              <SelectContent className="text-foreground font-[Century-Old-Style]">
                 <SelectItem value="all">All Orders</SelectItem>
                 <SelectItem value="New">New</SelectItem>
                 <SelectItem value="Active">Active</SelectItem>

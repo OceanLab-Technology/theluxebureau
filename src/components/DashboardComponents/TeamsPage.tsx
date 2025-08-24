@@ -103,7 +103,7 @@ export function TeamsPage() {
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mr-2 h-4" />
-        <h1 className="text-lg font-semibold font-century">Teams</h1>
+        <h1 className="text-lg font-semibold font-[Century-Old-Style]">Teams</h1>
       </header>
 
       {/* Main Content */}
@@ -111,7 +111,7 @@ export function TeamsPage() {
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-semibold font-century">Teams</h2>
+            <h2 className="text-3xl font-semibold font-[Century-Old-Style]">Teams</h2>
             <p className="text-muted-foreground">
               Manage your team members and their permissions
             </p>

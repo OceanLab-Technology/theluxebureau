@@ -30,7 +30,7 @@ export function ProductFilters({
 
   return (
     <motion.div
-      className="md:flex hidden font-century lg:flex lg:flex-row flex-col items-center justify-center lg:gap-20"
+      className="md:flex hidden font-[Century-Old-Style] lg:flex lg:flex-row flex-col items-center justify-center lg:gap-20"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, staggerChildren: 0.1 }}

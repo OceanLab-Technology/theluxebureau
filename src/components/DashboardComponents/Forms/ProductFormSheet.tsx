@@ -322,7 +322,7 @@ export function ProductFormSheet({
             )}
           </div>
 
-          <div className="space-y-6 font-century">
+          <div className="space-y-6 font-[Century-Old-Style]">
             {/* Product Info */}
             <div>
               {formData.category && (
@@ -824,7 +824,7 @@ export function ProductFormSheet({
                       id="particulars"
                       {...form.register("particulars")}
                       rows={4}
-                      placeholder="• Size: &#10;• Materials: &#10;• Care instructions: &#10;• What's included: "
+                      placeholder="Always use commas to separate points. Example: point1, point2, point3"
                     />
                     {/* <p className="text-xs text-muted-foreground">
                       Use bullet points or line breaks to list product details

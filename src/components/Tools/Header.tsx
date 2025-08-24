@@ -99,7 +99,7 @@ export default function Header() {
       }}
       onMouseLeave={() => setExtended(false)}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className={`font-century fixed top-0 left-0 right-0 z-[99999] h-[3.9375rem] md:h-[5.9375rem] md:py-0 py-5 w-full overflow-hidden text-background bg-background ${extended ? "backdrop-blur-sm" : ""
+      className={`font-[Century-Old-Style] fixed top-0 left-0 right-0 z-[99999] h-[3.9375rem] md:h-[5.9375rem] md:py-0 py-5 w-full overflow-hidden text-background bg-background ${extended ? "backdrop-blur-sm" : ""
         }`}
     >
       <div className="relative md:py-8.5 flex items-center justify-between px-6">
@@ -322,7 +322,7 @@ export default function Header() {
                   <X />
                 </button>
               </div>
-              <h2 className="absolute left-1/2 transform -translate-x-1/2 text-[.9rem] font-century flex items-center gap-1 font-[100] text-background">
+              <h2 className="absolute left-1/2 transform -translate-x-1/2 text-[.9rem] font-[Century-Old-Style] flex items-center gap-1 font-[100] text-background">
                 <span className="tracking-widest">the</span>
                 <span className="uppercase italic tracking-[5px]">luxe</span>
                 <span className="uppercase tracking-[5px]">BUreau</span>
@@ -406,7 +406,7 @@ export default function Header() {
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block text-[#FBD060] font-[100] font-century text-[1rem] uppercase hover:text-background transition-colors"
+                    className="block text-[#FBD060] font-[100] font-[Century-Old-Style] text-[1rem] uppercase hover:text-background transition-colors"
                     {...(item.href.startsWith("http")
                       ? {
                         target: "_blank",

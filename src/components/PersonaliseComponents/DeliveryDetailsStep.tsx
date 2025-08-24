@@ -130,10 +130,10 @@ export default function DeliveryDetailsStep() {
 
   return (
     <div>
-      <p className="text-secondary-foreground font-century text-[1rem] leading-[1.4]">
+      <p className="text-secondary-foreground font-[Century-Old-Style] text-[1rem] leading-[1.4]">
         Our gifts are sent by zero-emission, nominated-day delivery.
       </p>
-      <p className="text-secondary-foreground font-century text-[1rem] leading-[1.4] mb-8">
+      <p className="text-secondary-foreground font-[Century-Old-Style] text-[1rem] leading-[1.4] mb-8">
         Please add your recipient&apos;s details, and your preferred delivery day and time, below.
       </p>
 
@@ -172,7 +172,7 @@ export default function DeliveryDetailsStep() {
               <Button
                 variant="ghost"
                 className={cn(
-                  "w-full justify-start text-left border-0 border-b border-stone-500 bg-transparent px-0 py-1 text-stone-800 hover:bg-transparent rounded-none shadow-none text-[15px] font-[300]",
+                  "w-full justify-start text-left border-0 border-b border-stone-500 bg-transparent px-0 py-1 text-stone-800 hover:bg-transparent rounded-none shadow-none text-[15px] font-[300] font-[Marfa]",
                   !date && "text-stone-500"
                 )}
               >
@@ -194,7 +194,7 @@ export default function DeliveryDetailsStep() {
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
+            <PopoverContent className="w-auto p-0 font-[Marfa]" align="start">
               <Calendar
                 mode="single"
                 selected={date}
@@ -203,7 +203,7 @@ export default function DeliveryDetailsStep() {
                 initialFocus
                 classNames={{
                   day_selected:
-                    "bg-[#50462D] text-white hover:bg-[#50462D] hover:text-white",
+                    "bg-[#50462D] text-white hover:bg-[#50462D] hover:text-white font-[Marfa]",
                   day_disabled: "opacity-40 cursor-not-allowed line-through",
                   caption: "font-[Marfa] text-[15px] font-[300]",
                   head_cell: "font-[Marfa] text-[15px] font-[300]",

@@ -104,7 +104,7 @@ export function LoginForm({
 
   return (
     <div
-      className={cn("w-full px-4 sm:px-10 font-century md:pt-0 pt-20", className)}
+      className={cn("w-full px-4 sm:px-10 font-[Century-Old-Style] md:pt-0 pt-20", className)}
       {...props}
     >
       <h1 className="text-[1rem] font-light mb-4 tracking-wide md:py-20 small-text">

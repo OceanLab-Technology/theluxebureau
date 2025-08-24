@@ -111,10 +111,10 @@ export default function CheckoutPage() {
     return (
       <div className="w-full flex items-center justify-center min-h-[70vh] py-20">
         <div className="space-y-6 text-left">
-          <h2 className="text-[#50462D] text-[30px] leading-[40px] lg:text-[36px] lg:leading-[48px] font-[400] font-century">
+          <h2 className="text-[#50462D] text-[30px] leading-[40px] lg:text-[36px] lg:leading-[48px] font-[400] font-[Century-Old-Style]">
             Your cart is empty
           </h2>
-          <p className="text-[#50462D] text-[14px] leading-[26px] lg:text-[18px] lg:leading-[28px] font-century">
+          <p className="text-[#50462D] text-[14px] leading-[26px] lg:text-[18px] lg:leading-[28px] font-[Century-Old-Style]">
             Looks like you haven&apos;t added any items to your cart yet.
             <br />
             Start exploring our products and add something you love.
@@ -138,7 +138,7 @@ export default function CheckoutPage() {
       <div className="min-h-screen">
         <div className="max-w-[75rem] md:p-10 md:pb-10 md:px-20 lg:px-10 px-4 mx-auto">
           <div className="flex items-center justify-between py-10">
-            <h2 className="text-[2rem] font-medium font-century">CHECK OUT</h2>
+            <h2 className="text-[2rem] font-medium font-[Century-Old-Style]">CHECK OUT</h2>
             {/* <Button variant="link" asChild className="small-text">
               <Link href="/cart">Back to Cart</Link>
             </Button> */}
@@ -152,7 +152,7 @@ export default function CheckoutPage() {
 
             <div className="sticky top-6 self-start">
               <h2 className="my-6 pb-2 border-b small-text">Payment</h2>
-              <div className="mb-6 p-4 bg-muted/20 rounded-[5px] font-century">
+              <div className="mb-6 p-4 bg-muted/20 rounded-[5px] font-[Century-Old-Style]">
                 <h3 className="font-semibold mb-4">Order Summary</h3>
                 <div className="space-y-2 text-sm">
                   {checkoutItems.map((item) => (

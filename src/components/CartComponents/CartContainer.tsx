@@ -61,7 +61,7 @@ export function CartContainer({ onClose }: CartContainerProps) {
     <div className="min-h-[calc(100vh-2rem)] md:pt-20 pt-15 flex flex-col justify-between">
       <div>
         <div className="flex items-center justify-between md:mb-2">
-          <h1 className="text-[1.5rem] font-century font-light ">
+          <h1 className="text-[1.5rem] font-[Century-Old-Style] font-light ">
             Shopping Cart
           </h1>
           {onClose ? (
@@ -82,14 +82,14 @@ export function CartContainer({ onClose }: CartContainerProps) {
           )}
         </div>
 
-        <div className="space-y-6 overflow-y-auto font-century h-[calc(100vh-22rem)] hide-scrollbar">
+        <div className="space-y-6 overflow-y-auto font-[Century-Old-Style] h-[calc(100vh-22rem)] hide-scrollbar">
           {enrichedCartItems.map((item, index) => (
             <CartItem key={item.id} item={item} index={index} loading={cartLoading} lastIndex={cartItems.length - 1} />
           ))}
         </div>
       </div>
 
-      <div className="font-century py-2">
+      <div className="font-[Century-Old-Style] py-2">
         <CartSummary onClose={onClose} />
       </div>
     </div>

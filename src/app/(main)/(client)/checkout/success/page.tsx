@@ -6,7 +6,7 @@ export default function CheckoutSuccessPage() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-transparent">
       <div className="max-w-md w-full text-center space-y-6">
-        <h1 className="text-4xl font-century text-secondary-foreground">Payment Successful</h1>
+        <h1 className="text-4xl font-[Century-Old-Style] text-secondary-foreground">Payment Successful</h1>
        <p className="text-stone-600 text-sm">
           Thank you for your purchase, your order has been confirmed<br />
           A confirmation has been sent to your email address

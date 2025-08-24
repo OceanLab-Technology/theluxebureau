@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 
 export function ProductDetailSkeleton() {
   return (
-    <div className="font-century">
+    <div className="font-[Century-Old-Style]">
       <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-12">
         {/* Image Section Skeleton */}
         <div className="space-y-4">

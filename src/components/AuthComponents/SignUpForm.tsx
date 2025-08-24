@@ -141,7 +141,7 @@ export function SignUpForm({
     !!(emailWarning || phoneWarning || passwordWarning || repeatPasswordWarning);
 
   return (
-    <div className={cn("w-full px-4 sm:px-10 md:pt-0 pt-10 font-century", className)} {...props}>
+    <div className={cn("w-full px-4 sm:px-10 md:pt-0 pt-10 font-[Century-Old-Style]", className)} {...props}>
       <h1 className="text-[1rem] font-light mb-4 tracking-wide md:py-20 small-text">SIGN UP</h1>
 
       <div className="mb-8">
