@@ -109,7 +109,7 @@ export default function CheckoutPage() {
 
   if (totalItems === 0) {
     return (
-      <div className="w-full flex items-center justify-center min-h-[70vh] py-20">
+      <div className="w-full flex items-center justify-center min-h-[70vh] py-20 bg-transparent">
         <div className="space-y-6 text-left">
           <h2 className="text-[#50462D] text-[30px] leading-[40px] lg:text-[36px] lg:leading-[48px] font-[400] font-[Century-Old-Style]">
             Your cart is empty

@@ -1,6 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface EmptyCartProps {
@@ -18,7 +16,7 @@ export function EmptyCart({ onClose }: EmptyCartProps) {
     }
   };
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-6 bg-[#FDF9ED]">
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-6 bg-transparent">
       <div className="max-w-md w-full space-y-6 text-left">
         {/* Header */}
         <div className="space-y-4">
