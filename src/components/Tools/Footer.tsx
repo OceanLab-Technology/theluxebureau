@@ -45,7 +45,7 @@ const footerData = {
 
 export function Footer() {
   return (
-    <footer className="relative mt-auto min-h-[400px] mt-0">
+    <footer className="relative mt-auto min-h-[400px] mt-0 absolute top-0">
       <div className="absolute inset-0">
         <Image
           src={footerData.background.src}
@@ -53,6 +53,7 @@ export function Footer() {
           fill
           className="object-cover bg-no-repeat"
           priority={false}
+          loading="lazy"
         />
       </div>
 
@@ -120,6 +121,7 @@ export function Footer() {
                 width={footerData.logo.width}
                 height={footerData.logo.height}
                 className="w-35"
+                priority={false}
               />
             </div>
             <p className="font-[Marfa]">{footerData.copyright.text}</p>

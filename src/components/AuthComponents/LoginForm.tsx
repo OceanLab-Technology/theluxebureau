@@ -166,7 +166,7 @@ export function LoginForm({
               <Button
                 type="submit"
                 disabled={submitDisabled}
-                className="w-full rounded-none px-6 sm:px-12 py-2 sm:py-3 bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider uppercase transition-colors text-sm sm:text-base disabled:opacity-60"
+                className="w-full rounded-none px-6 sm:px-12 py-2 sm:py-3 bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider uppercase transition-colors text-sm sm:text-base disabled:opacity-60 rounded-[0.25rem]"
               >
                 {isLoading ? "Logging in..." : "LOGIN"}
               </Button>
