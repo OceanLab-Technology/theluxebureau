@@ -46,7 +46,7 @@ export function CartSummary({ onClose }: CartSummaryProps) {
           <Button
             onClick={handleCheckout}
             disabled={cartLoading || cartItems.length === 0}
-            className="md:px-22 md:py-6 rounded-sm bg-yellow-400 hover:bg-yellow-500 text-stone-700 font-medium uppercase tracking-wider"
+            className="md:px-22 md:py-6 rounded-[0.25rem] bg-[#FBD060] hover:bg-[#FBD060]/80 text-stone-700 font-medium uppercase tracking-wider"
           >
             CHECKOUT
           </Button>

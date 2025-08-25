@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { LoginRequiredModal } from "@/components/ui/login-required-modal";
 import Script from "next/script";
 import { useRouter } from "next/navigation";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function CheckoutPage() {
   const {
@@ -25,6 +26,9 @@ export default function CheckoutPage() {
   const { items: guestItems } = useGuestCartStore();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [showAgeModal, setShowAgeModal] = useState(false);
+  const [isAgeConfirmed, setIsAgeConfirmed] = useState(false);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -106,6 +110,7 @@ export default function CheckoutPage() {
   }
 
   const totalItems = isAuthenticated ? cartItems.length : guestItems.length;
+  const hasAlcohol = checkoutItems.some((item: any) => item.contains_alcohol === true);
 
   if (totalItems === 0) {
     return (
@@ -145,14 +150,25 @@ export default function CheckoutPage() {
           </div>
           <div className="grid lg:grid-cols-2 gap-12 grid-cols-1">
             <div className="flex flex-col md:space-y-4 space-y-10">
-              {checkoutItems.map((product, index) => (
+              {/* {checkoutItems.map((product, index) => (
                 <DetailProductCard key={product.id} product={product} index={index} />
-              ))}
+              ))} */}
+              {checkoutItems.map((product, index) => {
+                console.log(product);
+                return (
+                  <DetailProductCard
+                    key={product.id}
+                    product={product}
+                    index={index}
+                  />
+                );
+              })}
+
             </div>
 
             <div className="sticky top-6 self-start">
               <h2 className="my-6 pb-2 border-b small-text">Payment</h2>
-              <div className="mb-6 p-4 bg-muted/20 rounded-[5px] font-[Century-Old-Style]">
+              <div className="mb-6 p-4 bg-muted/20 rounded-[0.25rem] font-[Century-Old-Style]">
                 <h3 className="font-semibold mb-4">Order Summary</h3>
                 <div className="space-y-2 text-sm">
                   {checkoutItems.map((item) => (
@@ -212,16 +228,24 @@ export default function CheckoutPage() {
 
               <div className="w-full">
                 {isAuthenticated ? (
-                  <CheckoutContainer items={checkoutItems} />
+                  // <CheckoutContainer items={checkoutItems} />
+                  !isAgeConfirmed && hasAlcohol ? (
+                    <Button onClick={() => setShowAgeModal(true)} className="w-full" variant="box_yellow">
+                      Pay Now
+                    </Button>
+                  ) : (
+                    <CheckoutContainer items={checkoutItems} />
+                  )
+
                 ) : (
-                  <div className="p-6 bg-muted/20 rounded-[5px] text-center">
+                  <div className="p-6 bg-muted/20 rounded-[0.25rem] text-center">
                     <h3 className="text-lg font-semibold mb-2">Login Required</h3>
                     <p className="text-sm text-muted-foreground mb-4">
                       Please login to continue with your purchase. Your cart items will be saved.
                     </p>
                     <Button
                       onClick={() => setShowLoginModal(true)}
-                      className="w-full"
+                      className="w-full rounded-[0.25rem]"
                       variant="box_yellow"
                     >
                       Login to Checkout
@@ -233,6 +257,113 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
+
+      {/* {showAgeModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-white p-6 rounded-md max-w-sm text-center">
+            <h2 className="text-lg font-semibold mb-2">Age Verification</h2>
+            <p className="text-sm mb-4">This order contains alcohol. You must confirm you are 18+ to continue.</p>
+            <div className="flex gap-2 justify-center">
+              <Button variant="secondary" onClick={() => setShowAgeModal(false)}>
+                Cancel
+              </Button>
+              <Button
+                variant="box_yellow"
+                onClick={() => {
+                  setIsAgeConfirmed(true);
+                  setShowAgeModal(false);
+                }}
+              >
+                I am 18+
+              </Button>
+            </div>
+          </div>
+        </div>
+      )} */}
+
+      {/* {showAgeModal && (
+        <DialogContent className="sm:max-w-xl font-[Century-Old-Style] rounded-none">
+          <DialogHeader className="text-center font-[Century-Old-Style]">
+            <DialogTitle className="text-[1.8rem] font-[400] text-secondary-foreground font-[Century-Old-Style]">
+              AGE VERIFICATION
+            </DialogTitle>
+            <DialogDescription className="text-stone-600 mt-2 text-[1rem] font-[Century-Old-Style]">
+              This order contains alcohol. You must confirm you are 18+ to continue.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex flex-col gap-3 mt-6 font-[Century-Old-Style]">
+            <Button
+              variant="box_yellow"
+              className="w-full uppercase tracking-[0.08em] text-[0.75rem] font-[font-schoolbook-cond] rounded-[0.25rem] bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800 !border-0 !shadow-none focus-visible:ring-0"
+              onClick={() => {
+                setIsAgeConfirmed(true);
+                setShowAgeModal(false);
+              }}
+            >
+              I am 18+
+            </Button>
+
+            <Button
+              variant="secondary"
+              className="w-full uppercase tracking-[0.08em] text-[0.75rem] font-[font-schoolbook-cond] rounded-[0.25rem]"
+              onClick={() => setShowAgeModal(false)}
+            >
+              Cancel
+            </Button>
+          </div>
+
+          <div className="text-center mt-4 font-[SchoolBook]">
+            <button
+              onClick={() => setShowAgeModal(false)}
+              className="text-sm text-stone-500 hover:text-stone-700 underline-offset-4 hover:underline font-[Century-Old-Style]"
+            >
+              Continue browsing
+            </button>
+          </div>
+        </DialogContent>
+      )} */}
+
+      <Dialog open={showAgeModal} onOpenChange={setShowAgeModal}>
+        <DialogContent className="sm:max-w-xl font-[Century-Old-Style] rounded-none">
+          <DialogHeader className="text-center font-[Century-Old-Style]">
+            <DialogTitle className="text-[1.8rem] font-[400] text-secondary-foreground font-[Century-Old-Style]">
+              AGE VERIFICATION
+            </DialogTitle>
+            <DialogDescription className="text-stone-600 mt-2 text-[1rem] font-[Century-Old-Style]">
+              This order contains alcohol. You must confirm you are 18+ to continue.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex flex-col gap-3 mt-6 font-[Century-Old-Style]">
+            <Button
+              variant="box_yellow"
+              className="w-full uppercase tracking-[0.08em] text-[0.75rem] font-[font-schoolbook-cond] rounded-[0.25rem] bg-[#FBD060] hover:bg-[#FBD060]/80 text-stone-800 !border-0 !shadow-none focus-visible:ring-0"
+              onClick={() => setIsAgeConfirmed(true)}
+            >
+              I am 18+
+            </Button>
+
+            <Button
+              variant="secondary"
+              className="w-full uppercase tracking-[0.08em] text-[0.75rem] font-[font-schoolbook-cond] rounded-[0.25rem]"
+            >
+              Cancel
+            </Button>
+          </div>
+
+          <div className="text-center mt-4 font-[SchoolBook]">
+            <button
+              onClick={() => setShowAgeModal(false)}
+              className="text-sm text-stone-500 hover:text-stone-700 underline-offset-4 hover:underline font-[Century-Old-Style]"
+            >
+              Continue browsing
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+
 
       <LoginRequiredModal
         isOpen={showLoginModal}

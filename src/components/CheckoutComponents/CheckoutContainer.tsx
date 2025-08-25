@@ -184,7 +184,7 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
             !customerInfo.lastName ||
             !customerInfo.email
           }
-          className="w-full bg-[#FBD060] hover:bg-[#F9C74F] text-stone-800 font-medium py-3 rounded-[5px]"
+          className="w-full bg-[#FBD060] hover:bg-[#F9C74F] text-stone-800 font-medium py-3 rounded-[0.25rem]"
         >
           {loading ? (
             <>

@@ -118,6 +118,7 @@ export interface Product {
   quantity?: number;
   cartItemId?: string;
   customData?: Record<string, any>;
+  contains_alcohol: boolean;
 }
 
 export interface Profile {

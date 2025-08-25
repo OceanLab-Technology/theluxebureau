@@ -703,7 +703,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
         type="date"
         value={formData.deliveryDate}
         onChange={(e) => handleFieldChange("deliveryDate", e.target.value)}
-        className="border rounded-lg"
+        className="border rounded-[0.25rem]"
       />
     </div>
    <div className="space-y-2">
@@ -712,7 +712,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
     value={formData.preferredDeliveryTime || ""}
     onValueChange={(value) => handleFieldChange("preferredDeliveryTime", value)}
   >
-    <SelectTrigger className="border border-stone-300 rounded-md px-2 py-2 w-[22%] text-sm text-stone-800 font-medium">
+    <SelectTrigger className="border border-stone-300 rounded-[0.25rem] px-2 py-2 w-[22%] text-sm text-stone-800 font-medium">
       <SelectValue placeholder="Select preferred delivery time" />
     </SelectTrigger>
     <SelectContent>

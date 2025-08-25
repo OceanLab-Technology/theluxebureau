@@ -298,7 +298,7 @@ export function AnalyticsPage() {
               <CardContent>
                 <div className="space-y-4">
                   {data?.mostSellingProducts?.map((product, index) => (
-                    <div key={product.product_id} className="flex items-center justify-between p-3 rounded-lg border">
+                    <div key={product.product_id} className="flex items-center justify-between p-3 rounded-[0.25rem] border">
                       <div className="flex items-center gap-3">
                         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-sm font-medium text-green-700">
                           {index + 1}
@@ -333,7 +333,7 @@ export function AnalyticsPage() {
               <CardContent>
                 <div className="space-y-4">
                   {data?.leastSellingProducts?.map((product, index) => (
-                    <div key={product.product_id} className="flex items-center justify-between p-3 rounded-lg border">
+                    <div key={product.product_id} className="flex items-center justify-between p-3 rounded-[0.25rem] border">
                       <div className="flex items-center gap-3">
                         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100 text-sm font-medium text-red-700">
                           {index + 1}
@@ -372,7 +372,7 @@ export function AnalyticsPage() {
             <CardContent>
               <div className="space-y-4">
                 {data?.revenueByProduct?.map((product, index) => (
-                  <div key={product.product_id} className="flex items-center justify-between p-3 rounded-lg border">
+                  <div key={product.product_id} className="flex items-center justify-between p-3 rounded-[0.25rem] border">
                     <div className="flex items-center gap-3">
                       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-sm font-medium text-blue-700">
                         {index + 1}
@@ -412,7 +412,7 @@ export function AnalyticsPage() {
             <CardContent>
               <div className="space-y-4">
                 {data?.revenueByCategory?.map((category, index) => (
-                  <div key={category.category} className="flex items-center justify-between p-4 rounded-lg border">
+                  <div key={category.category} className="flex items-center justify-between p-4 rounded-[0.25rem] border">
                     <div className="flex items-center gap-3">
                       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 text-sm font-medium text-purple-700">
                         {index + 1}
