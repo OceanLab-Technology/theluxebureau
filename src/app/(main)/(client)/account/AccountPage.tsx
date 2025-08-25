@@ -260,7 +260,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                         <Link href={`/orders/${order.id}`}>
                           <Button
                             variant="box_yellow"
-                            className="px-14 h-10 rounded-sm"
+                            className="px-14 h-10 rounded-[0.25rem]"
                           >
                             VIEW ORDER
                           </Button>
