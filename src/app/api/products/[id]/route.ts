@@ -273,7 +273,7 @@ export const PUT = withAdminAuth(
         // Scalars
         const scalar = [
           "name","description","title","slug","category",
-          "packaging","why_we_chose_it","about_the_maker","particulars",
+          "packaging","why_we_chose_it","about_the_maker","particulars", "contains_alcohol",
         ] as const;
         for (const k of scalar) {
           const v = formData.get(k);

@@ -936,6 +936,7 @@ const productSchema = z.object({
   particulars: z.string().min(1, "Particulars are required"),
 
   // New fields aligned with DB
+  contains_alcohol: z.boolean(),
   variants: z.array(variantSchema).min(1, "At least one variant is required"),
 });
 
@@ -1011,6 +1012,7 @@ export function ProductFormSheet({
       about_the_maker: "",
       particulars: "",
       variants: [{ name: "default", inventory: 0, threshold: 0, qty_blocked: 0 }],
+      contains_alcohol: false
     },
   });
 
@@ -1038,6 +1040,7 @@ export function ProductFormSheet({
           about_the_maker: "",
           particulars: "",
           variants: [{ name: "default", inventory: 0, threshold: 0, qty_blocked: 0 }],
+          contains_alcohol: false
         });
         setImages([]);
       }
@@ -1069,6 +1072,7 @@ export function ProductFormSheet({
             qty_blocked: Number(v?.qty_blocked ?? 0),
           }))
           : [{ name: "default", inventory: 0, threshold: 0, qty_blocked: 0 }],
+        contains_alcohol: (selectedProduct as any).contains_alcohol
       });
       setImages(
         [
@@ -1172,6 +1176,7 @@ export function ProductFormSheet({
       formData.append("why_we_chose_it", data.why_we_chose_it);
       formData.append("about_the_maker", data.about_the_maker);
       formData.append("particulars", data.particulars);
+      formData.append("contains_alcohol", data.contains_alcohol);
 
       // json fields
       formData.append("variants", JSON.stringify(data.variants));
@@ -1538,6 +1543,18 @@ export function ProductFormSheet({
                     <Textarea id="particulars" rows={4} placeholder="Bullet points or lines" {...form.register("particulars")} />
                     {form.formState.errors.particulars && <p className="text-sm text-red-500 flex items-center gap-1"><AlertCircle className="h-3 w-3" />{form.formState.errors.particulars.message}</p>}
                   </div>
+
+                  {/* ✅ New Field: Contains Alcohol */}
+                  <div className="flex items-center space-x-3 pt-2">
+                    <input
+                      type="checkbox"
+                      id="contains_alcohol"
+                      {...form.register("contains_alcohol")}
+                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                    />
+                    <Label htmlFor="contains_alcohol">Contains Alcohol</Label>
+                  </div>
+
                 </div>
               </div>
 

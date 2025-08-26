@@ -185,6 +185,7 @@ export const POST = withAdminAuth(
       const why_we_chose_it = (formData.get("why_we_chose_it") as string) || null;
       const about_the_maker = (formData.get("about_the_maker") as string) || null;
       const particulars = (formData.get("particulars") as string) || null;
+      const contains_alcohol = (formData.get("contains_alcohol") as string) || null;
 
       if (!name || !slug || !category || Number.isNaN(price)) {
         return NextResponse.json(
@@ -228,6 +229,7 @@ export const POST = withAdminAuth(
           particulars,
           slug,
           variants, // ✅ jsonb
+          contains_alcohol,
         })
         .select()
         .single();

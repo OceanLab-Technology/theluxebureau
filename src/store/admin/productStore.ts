@@ -283,6 +283,7 @@ export type Product = {
 
   // ✅ DB jsonb
   variants: Variant[];                  // required
+  contains_alcohol: boolean;
 };
 
 export type ProductUpdateJson = Partial<{
@@ -303,6 +304,7 @@ export type ProductUpdateJson = Partial<{
   particulars: string | null;
 
   variants: Variant[];
+  contains_alcohol: boolean;
 }>;
 
 type ProductUpdate = ProductUpdateJson | FormData;
