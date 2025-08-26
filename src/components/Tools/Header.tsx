@@ -251,7 +251,7 @@ export default function Header() {
             ></div>
 
             <div className="flex items-start space-x-16 lg:space-x-10">
-              <div className="flex flex-col items-start space-y-3">
+              <div className="flex flex-col items-start space-y-3 pl-1">
                 {shopCategories.map((category) => (
                   <Link
                     key={category.href}
