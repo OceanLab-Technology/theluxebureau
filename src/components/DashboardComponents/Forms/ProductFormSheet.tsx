@@ -1176,7 +1176,7 @@ export function ProductFormSheet({
       formData.append("why_we_chose_it", data.why_we_chose_it);
       formData.append("about_the_maker", data.about_the_maker);
       formData.append("particulars", data.particulars);
-      formData.append("contains_alcohol", data.contains_alcohol);
+      formData.append("contains_alcohol", data.contains_alcohol ? "true" : "false");
 
       // json fields
       formData.append("variants", JSON.stringify(data.variants));
