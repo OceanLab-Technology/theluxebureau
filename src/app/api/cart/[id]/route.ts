@@ -19,20 +19,24 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         { status: 401 }
       );
     }
-    
+
     const body = await request.json();
-    
+
     const updateData: any = {
       updated_at: new Date().toISOString(),
     };
-    
+
     if (body.quantity !== undefined) {
       updateData.quantity = parseInt(body.quantity);
     }
     if (body.custom_data !== undefined) {
       updateData.custom_data = body.custom_data;
     }
-    
+    if (body.selected_variant_name !== undefined) {
+      updateData.selected_variant_name = body.selected_variant_name ?? null;
+    }
+
+
     const { data, error } = await supabase
       .from('cart_items')
       .update(updateData)
@@ -40,9 +44,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       .eq('user_id', user.id) // Ensure user can only update their own items
       .select()
       .single();
-    
+
     if (error) throw error;
-    
+
     return NextResponse.json({
       success: true,
       data: data,
@@ -65,15 +69,15 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
         { status: 401 }
       );
     }
-    
+
     const { error } = await supabase
       .from('cart_items')
       .delete()
       .eq('id', id)
-      .eq('user_id', user.id); 
-    
+      .eq('user_id', user.id);
+
     if (error) throw error;
-    
+
     return NextResponse.json({
       success: true,
       message: 'Item removed from cart successfully'

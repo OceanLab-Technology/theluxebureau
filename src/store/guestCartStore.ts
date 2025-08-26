@@ -7,25 +7,26 @@ export interface GuestCartItem {
   product_id: string;
   quantity: number;
   custom_data?: Record<string, any>;
+  selected_variant_name?: string;
   added_at: string;
 }
 
 interface GuestCartStore {
   items: GuestCartItem[];
   isGuestMode: boolean;
-  
+
   // Actions
-  addItem: (productId: string, quantity: number, customData?: Record<string, any>) => void;
+  addItem: (productId: string, quantity: number, customData?: Record<string, any>, selected_variant_name?: string) => void;
   updateItem: (localId: string, quantity: number, customData?: Record<string, any>) => void;
   removeItem: (localId: string) => void;
   clearCart: () => void;
   getItemCount: () => number;
   getTotal: (products: Product[]) => number;
-  
+
   // Helper functions
-  findItemByProductId: (productId: string) => GuestCartItem | undefined;
+  findItemByProductId: (productId: string, selected_variant_name?: string) => GuestCartItem | undefined;
   generateLocalId: () => string;
-  
+
   // Migration functions
   migrateToUserCart: (userCartFunction: (items: GuestCartItem[]) => Promise<void>) => Promise<void>;
   mergeWithUserCart: (userItems: any[]) => void;
@@ -37,11 +38,10 @@ export const useGuestCartStore = create<GuestCartStore>()(
       items: [],
       isGuestMode: true,
 
-      addItem: (productId: string, quantity: number, customData?: Record<string, any>) => {
-        const existingItem = get().findItemByProductId(productId);
-        
+      addItem: (productId, quantity, customData, selected_variant_name) => {
+        const existingItem = get().findItemByProductId(productId, selected_variant_name);
+
         if (existingItem && !customData) {
-          // Update existing item quantity if no custom data
           set(state => ({
             items: state.items.map(item =>
               item.id === existingItem.id
@@ -50,27 +50,25 @@ export const useGuestCartStore = create<GuestCartStore>()(
             )
           }));
         } else {
-          // Add new item
           const newItem: GuestCartItem = {
             id: get().generateLocalId(),
             product_id: productId,
             quantity,
             custom_data: customData,
+            selected_variant_name,                // ✅ stays
             added_at: new Date().toISOString(),
           };
-          
-          set(state => ({
-            items: [...state.items, newItem]
-          }));
+          set(state => ({ items: [...state.items, newItem] }));
         }
       },
+
 
       updateItem: (localId: string, quantity: number, customData?: Record<string, any>) => {
         if (quantity <= 0) {
           get().removeItem(localId);
           return;
         }
-        
+
         set(state => ({
           items: state.items.map(item =>
             item.id === localId
@@ -101,9 +99,16 @@ export const useGuestCartStore = create<GuestCartStore>()(
         }, 0);
       },
 
-      findItemByProductId: (productId: string) => {
-        return get().items.find(item => 
-          item.product_id === productId && !item.custom_data
+      // findItemByProductId: (productId: string) => {
+      //   return get().items.find(item =>
+      //     item.product_id === productId && !item.custom_data
+      //   );
+      // },
+      findItemByProductId: (productId: string, selected_variant_name?: string) => {
+        return get().items.find(item =>
+          item.product_id === productId &&
+          !item.custom_data &&
+          item.selected_variant_name === selected_variant_name
         );
       },
 

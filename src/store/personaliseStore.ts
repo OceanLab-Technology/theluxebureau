@@ -62,79 +62,79 @@
 //       currentStep: 1,
 //       formData: initialFormData,
 //       selectedProduct: null,
-      
+
 //       setStep: (step: number) => 
 //         set({ currentStep: Math.max(1, Math.min(4, step)) }),
-      
+
 //       nextStep: () => {
 //         const { currentStep } = get()
 //         if (currentStep < 4) {
 //           set({ currentStep: currentStep + 1 })
 //         }
 //       },
-      
+
 //       prevStep: () => {
 //         const { currentStep } = get()
 //         if (currentStep > 1) {
 //           set({ currentStep: currentStep - 1 })
 //         }
 //       },
-      
+
 //       updateFormData: (data: Partial<personaliseFormData>) =>
 //         set((state) => ({
 //           formData: { ...state.formData, ...data }
 //         })),
-      
+
 //       setSelectedProduct: (product: Product) =>
 //         set({ selectedProduct: product }),
-      
+
 //       resetCheckout: () =>
 //         set({ currentStep: 1, formData: initialFormData, selectedProduct: null }),
-      
+
 //       loadExistingData: (data: personaliseFormData, product: Product) =>
 //         set({ currentStep: 1, formData: data, selectedProduct: product }),
-      
+
 //       validateStep: (step: number) => {
 //         const { formData } = get()
-        
+
 //         switch (step) {
 //         case 1: 
 //         return !!(
 //           formData.yourName?.trim() &&
 //           formData.recipientName?.trim() &&
-        
+
 //           formData.recipientPhone?.trim() &&
 //           formData.recipientEmail?.trim() &&
 //           isValidPhone(formData.recipientPhone) &&
 //           isValidEmail(formData.recipientEmail)
 //         )
-          
+
 //           case 2: // Personalization Step
 //             return !!(
 //               formData.headerText?.trim() &&
 //               formData.selectedFont &&
 //               (formData.customMessage?.trim() || formData.selectedQuote?.trim())
 //             )
-          
+
 //           case 3: // Delivery Details Step
 //             return !!(
 //               formData.deliveryDate &&
 //               formData.preferredDeliveryTime &&
 //               formData.smsUpdates
 //             )
-          
+
 //           case 4: // Summary Step - all previous steps should be valid
 //             return (
 //               get().validateStep(1) &&
 //               get().validateStep(2) &&
 //               get().validateStep(3)
 //             )
-          
+
 //           default:
 //             return false
 //         }
 //       },
-      
+
 //       isStepValid: (step: number) => {
 //         return get().validateStep(step)
 //       }
@@ -167,23 +167,25 @@ export interface personaliseFormData {
   selectedQuote: string
   customMessage: string
   smsUpdates: 'send-to-me' | 'send-to-recipient'
-  shippingUpdateMethod: "text-message" | "email" 
+  shippingUpdateMethod: "text-message" | "email"
 }
+
+type ProductWithVariant = Product & { selectedVariant?: string };
 
 interface PersonaliseState {
   currentStep: number
   formData: personaliseFormData
-  selectedProduct: Product | null
+  selectedProduct: ProductWithVariant | null
   setStep: (step: number) => void
   nextStep: () => void
   prevStep: () => void
   updateFormData: (data: Partial<personaliseFormData>) => void
-  setSelectedProduct: (product: Product) => void
   resetCheckout: () => void
   loadExistingData: (data: personaliseFormData, product: Product) => void
   validateStep: (step: number) => boolean
   isStepValid: (step: number) => boolean
   printSnapshot: (label?: string) => void
+  setSelectedProduct: (product: ProductWithVariant) => void;
 }
 
 const initialFormData: personaliseFormData = {
@@ -273,7 +275,7 @@ export const usePersonaliseStore = create<PersonaliseState>()(
 
         setSelectedProduct: (product: Product) => {
           set({ selectedProduct: product })
-          // optional: log('setSelectedProduct')
+          console.log("pr", product)
         },
 
         resetCheckout: () => {

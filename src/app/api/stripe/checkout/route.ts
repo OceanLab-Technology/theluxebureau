@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     const lineItems = items.map((item: any) => ({
       price_data: {
-        currency: "usd",
+        currency: "gbp",
         product_data: {
           name: item.name,
           images: item.image_1 ? [item.image_1] : [],
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
 
     lineItems.push({
       price_data: {
-        currency: "usd",
+        currency: "gbp",
         product_data: { name: "Shipping" },
         unit_amount: 1500,
       },
@@ -99,6 +99,7 @@ export async function POST(request: NextRequest) {
           quantity: item.quantity,
           price_at_purchase: item.price,
           custom_data: item.customData,
+          selected_variant_name: item.selected_variant_name,
         });
       }
     }

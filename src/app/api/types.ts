@@ -24,6 +24,7 @@ export interface CartItem {
   custom_data?: Record<string, any>;
   created_at?: string;
   updated_at?: string;
+  selected_variant_name: string | null; // 👈 allow null
 }
 
 export interface Customer {
@@ -120,6 +121,7 @@ export interface Product {
   customData?: Record<string, any>;
   contains_alcohol: boolean;
   variants: string;
+  selectedVariant: string;
 }
 
 export interface Profile {

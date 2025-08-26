@@ -112,7 +112,7 @@ export default function OrderDetailPage({ order, user }: OrderDetailPageProps) {
                     month: "long"
                   }).toUpperCase()}
                 </h3>
-                <h3 className="">${order.total_amount?.toFixed(2)}</h3>
+                <h3 className="">£{order.total_amount?.toFixed(2)}</h3>
               </div>
             </div>
 

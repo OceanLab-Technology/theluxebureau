@@ -255,7 +255,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                               }
                             )}
                           </h3>
-                          <h3 className="">${order.total_amount?.toFixed(2)}</h3>
+                          <h3 className="">£{order.total_amount?.toFixed(2)}</h3>
                         </div>
                         <Link href={`/orders/${order.id}`}>
                           <Button
@@ -512,7 +512,7 @@ export default function AccountPage({ user }: AccountPageProps) {
                                   }
                                 )}
                               </h3>
-                              <h3 className="">${order.total_amount?.toFixed(2)}</h3>
+                              <h3 className="">£{order.total_amount?.toFixed(2)}</h3>
                             </div>
                             <Link href={`/orders/${order.id}`}>
                               <Button

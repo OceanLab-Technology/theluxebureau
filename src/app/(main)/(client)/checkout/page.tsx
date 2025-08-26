@@ -82,6 +82,7 @@ export default function CheckoutPage() {
             quantity: cartItem.quantity,
             cartItemId: cartItem.id,
             customData: cartItem.custom_data,
+            selected_variant_name: (cartItem as any).selected_variant_name,
           };
         })
         .filter(Boolean) as Product[];
@@ -98,6 +99,7 @@ export default function CheckoutPage() {
             quantity: guestItem.quantity,
             cartItemId: guestItem.id,
             customData: guestItem.custom_data,
+            selected_variant_name: guestItem.selected_variant_name
           };
         })
         .filter(Boolean) as Product[];

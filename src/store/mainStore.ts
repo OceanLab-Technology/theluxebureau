@@ -28,7 +28,7 @@ interface MainStore {
 
   // Cart actions - now handles both authenticated and guest carts
   fetchCartItems: () => Promise<void>;
-  addToCart: (productId: string, quantity: number, customData?: Record<string, any>) => Promise<void>;
+  addToCart: (productId: string, quantity: number, customData?: Record<string, any>, selectedVariantName?: string) => Promise<void>;
   updateCartItem: (itemId: string, quantity: number, customData?: Record<string, any>) => Promise<void>;
   removeFromCart: (itemId: string) => Promise<void>;
   clearCart: () => Promise<void>;
@@ -157,6 +157,7 @@ export const useMainStore = create<MainStore>()(
               product_id: item.product_id,
               quantity: item.quantity,
               custom_data: item.custom_data || {},
+              selected_variant_name: item.selected_variant_name ?? null, // 👈 null when absent
               created_at: item.added_at,
               updated_at: item.added_at,
             }));
@@ -227,7 +228,7 @@ export const useMainStore = create<MainStore>()(
       // },
 
 
-      addToCart: async (productId: string, quantity: number, customData?: Record<string, any>) => {
+      addToCart: async (productId: string, quantity: number, customData?: Record<string, any>, selectedVariantName?: string) => {
 
         const guestStore = useGuestCartStore.getState();
         try {
@@ -244,6 +245,7 @@ export const useMainStore = create<MainStore>()(
                 product_id: productId,
                 quantity,
                 custom_data: customData,
+                selected_variant_name: selectedVariantName
               }),
             });
 
@@ -258,7 +260,7 @@ export const useMainStore = create<MainStore>()(
           } else {
             // Add to guest cart
             const guestStore = useGuestCartStore.getState();
-            guestStore.addItem(productId, quantity, customData);
+            guestStore.addItem(productId, quantity, customData, selectedVariantName);
 
             // Update local cart display
             await get().fetchCartItems();
@@ -465,6 +467,7 @@ export const useMainStore = create<MainStore>()(
                   product_id: item.product_id,
                   quantity: item.quantity,
                   custom_data: item.custom_data,
+                  selected_variant_name: item.selected_variant_name
                 }),
               });
             }

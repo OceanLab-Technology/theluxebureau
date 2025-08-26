@@ -567,18 +567,6 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
       ? variants.find((v) => v.name === selectedVariantName) ?? null
       : null;
 
-  // personalise click
-  const handlePersonalise = () => {
-    if (!user) {
-      setShowLoginModal(true);
-      return;
-    }
-    resetCheckout();
-    const payload = hasVariants ? { ...currentProduct, selectedVariant } : currentProduct;
-    setSelectedProduct(payload);
-    router.push(`/personalise?productId=${currentProduct.id}`);
-  };
-
   return (
     <div>
       <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-6 overflow-hidden pt-8 font-[Century-Old-Style]">
@@ -779,8 +767,9 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                     isVariantInStock(selectedVariant) ? (
                       <PersonaliseSheet handleOnClick={() => {
                         resetCheckout();
-                        const payload = hasVariants ? { ...currentProduct, selectedVariant } : currentProduct;
+                        const payload = hasVariants ? { ...currentProduct, selectedVariant: selectedVariant.name } : currentProduct;
                         setSelectedProduct(payload);
+                        console.log(payload);
                       }} />
                     ) : (
                       <Button
@@ -824,9 +813,8 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                 isVariantInStock(selectedVariant) && (
                   <PersonaliseSheet handleOnClick={() => {
                     resetCheckout();
-                    const payload = hasVariants ? { ...currentProduct, selectedVariant } : currentProduct;
+                    const payload = hasVariants ? { ...currentProduct, selectedVariant: selectedVariant.name } : currentProduct;
                     setSelectedProduct(payload);
-
                   }} />
                 )
               )}

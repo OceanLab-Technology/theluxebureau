@@ -123,7 +123,7 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
       <div className="flex flex-col justify-between flex-grow h-full">
         <div className="h-full">
           <h3 className="font-medium text-lg text-stone-800 mb-2">
-            {product.name}
+            {product.name} + {product.selectedVariant}
           </h3>
           {item.custom_data && Object.keys(item.custom_data).length > 0 && (
             <div className="text-xs text-stone-500 mb-3 space-y-1">

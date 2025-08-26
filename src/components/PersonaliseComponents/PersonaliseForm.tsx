@@ -110,7 +110,7 @@ export default function PersonaliseForm({
         isPersonalised: true,
       };
 
-      await addToCart(selectedProduct.id!, 1, personalizationData);
+      await addToCart(selectedProduct.id!, 1, personalizationData, selectedProduct.selectedVariant);
       setIsLoading(false);
       setIsAdded(true);
       
@@ -201,7 +201,7 @@ export default function PersonaliseForm({
         isPersonalised: true,
       };
 
-      await addToCart(selectedProduct.id!, 1, personalizationData);
+      await addToCart(selectedProduct.id!, 1, personalizationData, selectedProduct.selectedVariant);
       setIsLoading(false);
       setIsAdded(true);
       resetCheckout();
