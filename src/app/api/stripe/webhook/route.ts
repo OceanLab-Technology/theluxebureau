@@ -9,6 +9,11 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
+type OrderItemRow = {
+  product_id: string;
+  quantity: number;
+  selected_variant_name: string | null; // in case some old rows are null
+};
 
 
 export async function POST(request: Request) {
@@ -54,31 +59,59 @@ export async function POST(request: Request) {
       if (orderData?.id) {
         const { data: orderItems, error: itemsError } = await supabase
           .from("order_items")
-          .select("product_id, quantity")
+          .select("product_id, quantity, selected_variant_name")
           .eq("order_id", orderData.id);
 
         if (itemsError) {
           console.error("Order Items Fetch Error:", itemsError);
         } else if (orderItems?.length) {
-          for (const item of orderItems) {
-            const { error: inventoryError } = await supabase.rpc(
-              "decrement_inventory",
-              {
-                product_id: item.product_id,
-                quantity: item.quantity,
+          // for (const item of orderItems) {
+          // const { error: inventoryError } = await supabase.rpc(
+          //   "decrement_inventory",
+          //   {
+          //     product_id: item.product_id,
+          //     quantity: item.quantity,
+          //   }
+          // );
+          // if (inventoryError) {
+          //   console.error(
+          //     `Inventory Update Error for product ${item.product_id}:`,
+          //     inventoryError
+          //   );
+          // } else {
+          //   console.log(
+          //     `Inventory decreased for product ${item.product_id} by ${item.quantity}`
+          //   );
+          // }
+
+          if (orderItems && orderItems.length) {
+            for (const item of orderItems as OrderItemRow[]) {
+              const variantName = item.selected_variant_name ?? "default";
+
+              const { error: inventoryError } = await supabase.rpc(
+                "decrement_variant_inventory",
+                {
+                  product_id: item.product_id,
+                  variant_name: variantName,
+                  quantity: item.quantity,
+                }
+              );
+
+              if (inventoryError) {
+                console.error(
+                  `Inventory Update Error for product ${item.product_id}, variant ${variantName}:`,
+                  inventoryError
+                );
+              } else {
+                console.log(
+                  `Inventory decreased for product ${item.product_id}, variant ${variantName} by ${item.quantity}`
+                );
               }
-            );
-            if (inventoryError) {
-              console.error(
-                `Inventory Update Error for product ${item.product_id}:`,
-                inventoryError
-              );
-            } else {
-              console.log(
-                `Inventory decreased for product ${item.product_id} by ${item.quantity}`
-              );
             }
           }
+
+
+          // }
         }
       }
 
