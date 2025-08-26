@@ -15,17 +15,20 @@ interface LoginRequiredModalProps {
   isOpen: boolean;
   onClose: () => void;
   feature?: string;
+  onCloseCartSheet?: () => void; // optional
 }
 
 export function LoginRequiredModal({
   isOpen,
   onClose,
-  feature = "personalize products"
+  feature = "personalize products",
+  onCloseCartSheet
 }: LoginRequiredModalProps) {
   const router = useRouter();
 
   const handleLogin = () => {
     onClose();
+    onCloseCartSheet?.(); // guard optional
     // Include current path as redirect parameter
     const currentPath = window.location.pathname + window.location.search;
     router.push(`/auth/login?redirect=${encodeURIComponent(currentPath)}`);
@@ -33,6 +36,7 @@ export function LoginRequiredModal({
 
   const handleSignUp = () => {
     onClose();
+    onCloseCartSheet?.(); // guard optional
     router.push("/auth/sign-up");
   };
 
@@ -67,7 +71,10 @@ export function LoginRequiredModal({
 
         <div className="text-center mt-4 font-[SchoolBook]">
           <button
-            onClick={onClose}
+            onClick={() => {
+              onClose();
+              onCloseCartSheet?.(); // guard optional
+            }}
             className="text-sm text-stone-500 hover:text-stone-700 underline-offset-4 hover:underline  font-[Century-Old-Style]"
           >
             Continue browsing

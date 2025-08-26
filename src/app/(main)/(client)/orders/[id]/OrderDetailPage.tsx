@@ -63,6 +63,9 @@ export default function OrderDetailPage({ order, user }: OrderDetailPageProps) {
     inventory: 1,
     quantity: item.quantity,
     customData: item.custom_data || {},
+    contains_alcohol: false,
+    variants: "",
+    selectedVariant: ""
   }));
 
   return (

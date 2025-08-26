@@ -56,6 +56,7 @@ export function CartSummary({ onClose }: CartSummaryProps) {
       <LoginRequiredModal
         isOpen={showLoginModal}
         onClose={handleCloseModal}
+        onCloseCartSheet={onClose} // this may be undefined in some contexts, that's ok
         feature={featureName}
       />
     </>
