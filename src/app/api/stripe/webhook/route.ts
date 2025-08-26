@@ -91,9 +91,9 @@ export async function POST(request: Request) {
               const { error: inventoryError } = await supabase.rpc(
                 "decrement_variant_inventory",
                 {
-                  product_id: item.product_id,
-                  variant_name: variantName,
-                  quantity: item.quantity,
+                  p_product_id: item.product_id,
+                  p_variant_name: variantName,
+                  p_quantity: item.quantity,
                 }
               );
 
