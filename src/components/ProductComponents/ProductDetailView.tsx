@@ -916,6 +916,11 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
 
       <ProductRecommendations currentProductId={currentProduct.id!} />
 
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        feature="personalization"
+      />
     </div>
   );
 }

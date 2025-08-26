@@ -19,15 +19,15 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
       </h2>
       <div className={`${isOrder ? "md:flex-row flex-col md:gap-18 gap-8" : "flex-col gap-8"} flex`}>
         <div className={`flex items-start gap-10`}>
-         <div
-  className="bg-muted/20 h-60 md:h-[20rem] md:w-[28rem] w-full overflow-hidden "
->
-  <img
-    src={product.image_1 || "/placeholder.jpg"}
-    alt={product.name}
-    className="w-full h-full object-cover"
-  />
-</div>
+          <div
+            className="bg-muted/20 h-60 md:h-[20rem] md:w-[28rem] w-full overflow-hidden "
+          >
+            <img
+              src={product.image_1 || "/placeholder.jpg"}
+              alt={product.name}
+              className="w-full h-full object-cover"
+            />
+          </div>
           {!isOrder && (
             <div className="flex flex-col w-[90%] text-[1.5rem] justify-center space-y-8 font-[Century-Old-Style]">
               <h1 className="font-medium">{product.name}</h1>
@@ -57,10 +57,7 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
                   Recipients Address
                 </label>
                 <p className="text-stone-600">
-                  {product.customData.recipientAddress &&
-                  product.customData.recipientCity
-                    ? `${product.customData.recipientAddress}, ${product.customData.recipientCity}`
-                    : "Not provided"}
+                  {product.customData.recipientAddress}
                 </p>
               </div>
               <div className="flex flex-row items-center gap-4 md:gap-8">
@@ -70,37 +67,37 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
                 <p className="text-stone-600">
                   {product.customData.deliveryDate
                     ? (() => {
-                        const date = new Date(product.customData.deliveryDate);
-                        const dayName = date.toLocaleDateString("en-GB", {
-                          weekday: "long",
-                        });
-                        const day = date.getDate();
-                        const month = date.toLocaleDateString("en-GB", {
-                          month: "long",
-                        });
-                        const year = date.getFullYear();
-                        const getOrdinalSuffix = (d: number) => {
-                          if (d >= 11 && d <= 13) return "th";
-                          switch (d % 10) {
-                            case 1:
-                              return "st";
-                            case 2:
-                              return "nd";
-                            case 3:
-                              return "rd";
-                            default:
-                              return "th";
-                          }
-                        };
-                        const ordinalSuffix = getOrdinalSuffix(day);
-                        return (
-                          <>
-                            {dayName},{" "} {day}
-                            <sup className="text-xs">{ordinalSuffix}</sup>{" "}
-                            {month} {year}
-                          </>
-                        );
-                      })()
+                      const date = new Date(product.customData.deliveryDate);
+                      const dayName = date.toLocaleDateString("en-GB", {
+                        weekday: "long",
+                      });
+                      const day = date.getDate();
+                      const month = date.toLocaleDateString("en-GB", {
+                        month: "long",
+                      });
+                      const year = date.getFullYear();
+                      const getOrdinalSuffix = (d: number) => {
+                        if (d >= 11 && d <= 13) return "th";
+                        switch (d % 10) {
+                          case 1:
+                            return "st";
+                          case 2:
+                            return "nd";
+                          case 3:
+                            return "rd";
+                          default:
+                            return "th";
+                        }
+                      };
+                      const ordinalSuffix = getOrdinalSuffix(day);
+                      return (
+                        <>
+                          {dayName},{" "} {day}
+                          <sup className="text-xs">{ordinalSuffix}</sup>{" "}
+                          {month} {year}
+                        </>
+                      );
+                    })()
                     : "Not selected"}
                 </p>
               </div>
@@ -117,14 +114,14 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
               </div>
               <div className="flex flex-row items-center gap-4 md:gap-8">
                 <span className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
-                   Delivery Updates
+                  Delivery Updates
                 </span>
                 <span className="text-stone-600">
                   {product.customData.smsUpdates === "send-to-me"
                     ? `You`
                     : product.customData.smsUpdates === "send-to-recipient"
-                    ? `Recipient`
-                    : "none"}
+                      ? `Recipient`
+                      : "none"}
                 </span>
               </div>
               <div className="flex flex-row items-center gap-4 md:gap-8">
