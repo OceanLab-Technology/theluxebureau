@@ -429,7 +429,7 @@ interface ProductDetailViewProps {
 type Variant = {
   name: string;
   inventory: number;
-  theresold: number | boolean;
+  threshold: number | boolean;
   qty_blocked: number;
 };
 
