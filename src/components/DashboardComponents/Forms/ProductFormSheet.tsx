@@ -891,7 +891,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { Resolver, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -977,8 +977,28 @@ export function ProductFormSheet({
 
   const { settings: siteSettings, fetchSettings } = useSiteSettingsStore();
 
+  // const form = useForm<ProductFormValues>({
+  //   resolver: zodResolver(productSchema),
+  //   defaultValues: {
+  //     name: "",
+  //     description: "",
+  //     price: 0,
+  //     title: "",
+  //     slug: "",
+  //     category: "",
+  //     packaging: "",
+  //     why_we_chose_it: "",
+  //     about_the_maker: "",
+  //     particulars: "",
+  //     variants: [{ name: "default", inventory: 0, threshold: 0, qty_blocked: 0 }],
+  //   },
+  // });
+
+  type ProductFormValues = z.infer<typeof productSchema>;
+
   const form = useForm<ProductFormValues>({
-    resolver: zodResolver(productSchema),
+    // 👇 assert the resolver's field type to align with ProductFormValues
+    resolver: zodResolver(productSchema) as Resolver<ProductFormValues>,
     defaultValues: {
       name: "",
       description: "",
@@ -993,6 +1013,7 @@ export function ProductFormSheet({
       variants: [{ name: "default", inventory: 0, threshold: 0, qty_blocked: 0 }],
     },
   });
+
 
   const watched = form.watch();
 
@@ -1042,11 +1063,11 @@ export function ProductFormSheet({
         particulars: (selectedProduct as any).particulars ?? "",
         variants: Array.isArray((selectedProduct as any).variants)
           ? (selectedProduct as any).variants.map((v: any) => ({
-              name: String(v?.name ?? "default"),
-              inventory: Number(v?.inventory ?? 0),
-              threshold: Number(v?.threshold ?? 0),
-              qty_blocked: Number(v?.qty_blocked ?? 0),
-            }))
+            name: String(v?.name ?? "default"),
+            inventory: Number(v?.inventory ?? 0),
+            threshold: Number(v?.threshold ?? 0),
+            qty_blocked: Number(v?.qty_blocked ?? 0),
+          }))
           : [{ name: "default", inventory: 0, threshold: 0, qty_blocked: 0 }],
       });
       setImages(
@@ -1132,7 +1153,7 @@ export function ProductFormSheet({
   }, [products, relatedQuery, selectedProduct]);
 
   /* ---------- Submit ---------- */
-  const onSubmit = async (data: ProductFormValues) => {
+  const onSubmit: SubmitHandler<ProductFormValues> = async (data) => {
     try {
       if (!isEdit && images.length === 0) {
         toast.error("Please upload at least one image");
@@ -1311,7 +1332,7 @@ export function ProductFormSheet({
           </div>
           <SheetDescription>
             {isEdit ? "Update your product information and preview changes."
-                    : "Create a new product with all required information and preview before saving."}
+              : "Create a new product with all required information and preview before saving."}
           </SheetDescription>
         </SheetHeader>
 
