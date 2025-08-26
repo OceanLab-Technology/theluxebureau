@@ -1379,7 +1379,7 @@ export function ProductFormSheet({
 
                 <div className="space-y-2">
                   <Label>Category <span className="text-red-500">*</span></Label>
-                  <Select onValueChange={handleCategorySelect} value={form.getValues("category")}>
+                  {/* <Select onValueChange={handleCategorySelect} value={form.getValues("category")}>
                     <SelectTrigger className="w-full h-10 text-[15px]">
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
@@ -1390,8 +1390,25 @@ export function ProductFormSheet({
                         </SelectItem>
                       ))}
                     </SelectContent>
+                  </Select> */}
+                  <Select
+                    onValueChange={handleCategorySelect}
+                    value={form.watch("category") || ""}
+                  >
+                    <SelectTrigger className="w-full h-10 text-[15px]">
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {["Literature", "Drinks & Spirits", "Floral", "Home"].map((c) => (
+                        <SelectItem key={c} value={c}>
+                          {c}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
                   </Select>
-                  {form.formState.errors.category && <p className="text-sm text-red-500 flex items-center gap-1"><AlertCircle className="h-3 w-3" />{form.formState.errors.category.message}</p>}
+
+
+                  {/* {form.formState.errors.category && <p className="text-sm text-red-500 flex items-center gap-1"><AlertCircle className="h-3 w-3" />{form.formState.errors.category.message}</p>} */}
                 </div>
 
                 <div className="space-y-2">
