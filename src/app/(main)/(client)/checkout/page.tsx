@@ -341,13 +341,17 @@ export default function CheckoutPage() {
             <Button
               variant="box_yellow"
               className="w-full uppercase tracking-[0.08em] text-[0.75rem] font-[font-schoolbook-cond] rounded-[0.25rem] bg-[#FBD060] hover:bg-[#FBD060]/80 text-stone-800 !border-0 !shadow-none focus-visible:ring-0"
-              onClick={() => setIsAgeConfirmed(true)}
+              onClick={() => {
+                setIsAgeConfirmed(true)
+                setShowAgeModal(false)
+              }}
             >
               I am 18+
             </Button>
 
             <Button
               variant="secondary"
+              onClick={() => setShowAgeModal(false)}
               className="w-full uppercase tracking-[0.08em] text-[0.75rem] font-[font-schoolbook-cond] rounded-[0.25rem]"
             >
               Cancel
@@ -356,7 +360,9 @@ export default function CheckoutPage() {
 
           <div className="text-center mt-4 font-[SchoolBook]">
             <button
-              onClick={() => setShowAgeModal(false)}
+              onClick={() => {
+                setShowAgeModal(false)
+              }}
               className="text-sm text-stone-500 hover:text-stone-700 underline-offset-4 hover:underline font-[Century-Old-Style]"
             >
               Continue browsing

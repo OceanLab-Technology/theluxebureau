@@ -113,7 +113,7 @@ export default function PersonaliseForm({
       await addToCart(selectedProduct.id!, 1, personalizationData, selectedProduct.selectedVariant);
       setIsLoading(false);
       setIsAdded(true);
-      
+
       // Reset states after a delay
       setTimeout(() => {
         setIsAdded(false);
@@ -155,10 +155,10 @@ export default function PersonaliseForm({
       if (onSave) {
         onSave(personalizationData);
       }
-      
+
       setIsLoading(false);
       setIsAdded(true);
-      
+
       // Close sheet after a delay
       setTimeout(() => {
         setIsAdded(false);
@@ -205,7 +205,7 @@ export default function PersonaliseForm({
       setIsLoading(false);
       setIsAdded(true);
       resetCheckout();
-      
+
       toast.success("Proceeding to checkout...");
       router.push("/checkout");
     } catch (error) {
@@ -225,7 +225,7 @@ export default function PersonaliseForm({
       case 2:
         return <PersonalizationStep />;
       case 3:
-        return <DeliveryDetailsStep />;
+        return <DeliveryDetailsStep isFloral={selectedProduct?.category?.toLowerCase() === "floral"} />;
       case 4:
         return <SummaryStep />;
       default:
@@ -263,7 +263,7 @@ export default function PersonaliseForm({
     };
   }, [onCloseSheet]);
 
-  
+
   const isStepAccessible = (stepId: number) => {
     // Check if all steps 
     for (let i = 1; i < stepId; i++) {
@@ -288,10 +288,10 @@ export default function PersonaliseForm({
       return;
     }
 
-  
+
     if (stepId > currentStep) {
       if (!isStepAccessible(stepId)) {
-        
+
         switch (stepId) {
           case 2:
             toast.error("Please complete recipient details first.");
@@ -330,11 +330,10 @@ export default function PersonaliseForm({
           {steps.map((s) => (
             <div
               key={s.id}
-              className={`text-[0.93rem] tracking-wider small-text cursor-pointer ${
-                currentStep === s.id
+              className={`text-[0.93rem] tracking-wider small-text cursor-pointer ${currentStep === s.id
                   ? "text-secondary-foreground"
                   : "text-stone-500"
-              }`}
+                }`}
               onClick={() => handleStepClick(s.id)}
             >
               {s.label}
