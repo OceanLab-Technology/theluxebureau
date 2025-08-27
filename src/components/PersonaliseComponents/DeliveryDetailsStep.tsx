@@ -123,7 +123,6 @@
 //         ? "Weekend delivery unavailable"
 //         : undefined;
 
-
 //   const handleSMSTextOrEmailChange = (value: "text-message" | "email") => {
 //     updateFormData({ shippingUpdateMethod: value });
 //   };
@@ -248,7 +247,6 @@
 //             </Select>
 //             {timeHint && <p className="mt-1 text-xs text-stone-500">{timeHint}</p>}
 //           </div>
-          
 
 //           <label className="text-stone-700 text-[0.9375rem] font-[300]">
 //             Who would you like to receive shipping updates?
@@ -310,7 +308,6 @@
 //             </label>
 //           </div>
 
-          
 //           <label className="text-stone-700 text-[0.9375rem] font-[300]">
 //             Would you like shipping updates to be sent by text message or email?
 //           </label>
@@ -376,17 +373,6 @@
 //   );
 // }
 
-
-
-
-
-
-
-
-
-
-
-
 // "use client";
 
 // import React from "react";
@@ -449,7 +435,6 @@
 //   const candidateUK = toZonedTime(d, LONDON_TZ);
 //   return candidateUK < startOfTodayUK;
 // };
-
 
 //   // Same-day allowed strictly before 13:00 UK
 //   const isSameDayAllowedByCutoff = () => nowUK().getHours() < 13;
@@ -836,17 +821,7 @@
 //   );
 // }
 
-
-
-
-
-
-
-
-
-
 // -----------------------------------
-
 
 // "use client";
 
@@ -1306,7 +1281,6 @@
 //   );
 // }
 
-
 "use client";
 
 import React from "react";
@@ -1329,6 +1303,12 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { usePersonaliseStore } from "@/store/personaliseStore";
+import { Info } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const LONDON_TZ = "Europe/London";
 
@@ -1356,7 +1336,8 @@ const sameDayInUK = (a: Date, b: Date) =>
   formatInTimeZone(b, LONDON_TZ, "yyyy-MM-dd");
 
 // Is the selected date "today" in UK calendar terms?
-const isSelectedDayTodayInUK = (selected: Date) => sameDayInUK(selected, nowInstant());
+const isSelectedDayTodayInUK = (selected: Date) =>
+  sameDayInUK(selected, nowInstant());
 
 // Weekend check by UK weekday number (ISO 1=Mon ... 7=Sun)
 const isWeekendInUK = (d: Date) => {
@@ -1383,7 +1364,9 @@ const isPre9UK = () => {
   return hour < 9;
 };
 
-export default function DeliveryDetailsStep({ isFloral = false }: DeliveryDetailsStepProps) {
+export default function DeliveryDetailsStep({
+  isFloral = false,
+}: DeliveryDetailsStepProps) {
   const { formData, updateFormData } = usePersonaliseStore();
   const [date, setDate] = React.useState<Date | undefined>();
   const [nowTick, setNowTick] = React.useState(0); // triggers recompute each minute
@@ -1494,7 +1477,8 @@ export default function DeliveryDetailsStep({ isFloral = false }: DeliveryDetail
     if (isBeforeTodayUK(d)) return true; // Past
     if (isWeekendInUK(d)) return true; // Weekends
     if (isFloral && isSelectedDayTodayInUK(d)) return true; // Floral: block UK-today entirely
-    if (!isFloral && isSelectedDayTodayInUK(d) && !isSameDayAllowedByCutoff()) return true; // Non-floral: after 13:00 UK
+    if (!isFloral && isSelectedDayTodayInUK(d) && !isSameDayAllowedByCutoff())
+      return true; // Non-floral: after 13:00 UK
     return false;
   };
 
@@ -1506,7 +1490,7 @@ export default function DeliveryDetailsStep({ isFloral = false }: DeliveryDetail
     const month = format(d, "MMMM");
     const year = format(d, "yyyy");
     const getSuffix = (n: number) =>
-      n >= 11 && n <= 13 ? "th" : (["th", "st", "nd", "rd"][n % 10] || "th");
+      n >= 11 && n <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th";
     return { dayName, day, month, year, suffix: getSuffix(parseInt(day, 10)) };
   };
 
@@ -1515,15 +1499,15 @@ export default function DeliveryDetailsStep({ isFloral = false }: DeliveryDetail
       ? isFloral
         ? "Flowers are next-day only"
         : !isSameDayAllowedByCutoff()
-          ? "Same-day closed after 13:00 UK"
-          : isPre9UK()
-            ? "All slots available (pre 09:00 UK)"
-            : "Only afternoon/evening slots available"
+        ? "Same-day closed after 13:00 UK"
+        : isPre9UK()
+        ? "All slots available (pre 09:00 UK)"
+        : "Only afternoon/evening slots available"
       : date && isWeekendInUK(date)
-        ? "Weekend delivery unavailable"
-        : isFloral && !date
-          ? "Flowers are next-day only"
-          : undefined;
+      ? "Weekend delivery unavailable"
+      : isFloral && !date
+      ? "Flowers are next-day only"
+      : undefined;
 
   /* --------------------- Render --------------------- */
 
@@ -1533,13 +1517,17 @@ export default function DeliveryDetailsStep({ isFloral = false }: DeliveryDetail
         Our gifts are sent by zero-emission, nominated-day delivery.
       </p>
       <p className="text-secondary-foreground font-[Century-Old-Style] text-[1rem] leading-[1.4] mb-8">
-        Please add your recipient&apos;s details, and your preferred delivery day and time, below.
+        Please add your recipient&apos;s details, and your preferred delivery
+        day and time, below.
       </p>
 
       <form className="font-[Marfa] space-y-6">
         <div className="grid gap-8 md:grid-cols-[320px_1fr]">
           {/* Recipient name */}
-          <label htmlFor="recipient-name" className="text-stone-700 text-[0.9375rem] font-[300]">
+          <label
+            htmlFor="recipient-name"
+            className="text-stone-700 text-[0.9375rem] font-[300]"
+          >
             Recipient&apos;s name*
           </label>
           <Input
@@ -1551,14 +1539,19 @@ export default function DeliveryDetailsStep({ isFloral = false }: DeliveryDetail
           />
 
           {/* Address */}
-          <label htmlFor="address" className="text-stone-700 text-[0.9375rem] font-[300]">
+          <label
+            htmlFor="address"
+            className="text-stone-700 text-[0.9375rem] font-[300]"
+          >
             Recipient&apos;s Address*
           </label>
           <Input
             id="address"
             type="text"
             value={formData.recipientAddress}
-            onChange={(e) => handleInputChange("recipientAddress", e.target.value)}
+            onChange={(e) =>
+              handleInputChange("recipientAddress", e.target.value)
+            }
             className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 rounded-none shadow-none text-[0.9375rem] font-[300] w-full focus:outline-none"
           />
 
@@ -1578,7 +1571,8 @@ export default function DeliveryDetailsStep({ isFloral = false }: DeliveryDetail
                 {date ? (
                   <span className="flex items-baseline">
                     {(() => {
-                      const { dayName, day, suffix, month, year } = formatDateWithOrdinal(date);
+                      const { dayName, day, suffix, month, year } =
+                        formatDateWithOrdinal(date);
                       return (
                         <>
                           {dayName}, {day}
@@ -1589,7 +1583,9 @@ export default function DeliveryDetailsStep({ isFloral = false }: DeliveryDetail
                     })()}
                   </span>
                 ) : (
-                  <span>{isFloral ? "Select next eligible day" : "Select a date"}</span>
+                  <span>
+                    {isFloral ? "Select next eligible day" : "Select a date"}
+                  </span>
                 )}
               </Button>
             </PopoverTrigger>
@@ -1630,8 +1626,8 @@ export default function DeliveryDetailsStep({ isFloral = false }: DeliveryDetail
                         ? "Select next eligible day"
                         : "Select a date first"
                       : allowedSlotValues.length === 0
-                        ? timeHint || "No slots available"
-                        : "Select a time slot"
+                      ? timeHint || "No slots available"
+                      : "Select a time slot"
                   }
                 />
               </SelectTrigger>
@@ -1647,18 +1643,52 @@ export default function DeliveryDetailsStep({ isFloral = false }: DeliveryDetail
                 ))}
               </SelectContent>
             </Select>
-            {timeHint && <p className="mt-1 text-xs text-stone-500">{timeHint}</p>}
+            {timeHint && (
+              <p className="mt-1 text-xs text-stone-500">{timeHint}</p>
+            )}
           </div>
 
           {/* Who receives updates */}
-          <label className="text-stone-700 text-[0.9375rem] font-[300]">
-            Who would you like to receive shipping updates?
-          </label>
+          <div className="">
+            <label className="text-stone-700 text-[0.9375rem] font-[300] flex">
+              <span> Who would you like to receive shipping updates? </span>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info className="h-4 w-4 text-stone-500" />
+                </TooltipTrigger>
+                <TooltipContent
+                  side="bottom"
+                  className="max-w-[340px] bg-[#50462D] text-white p-3 text-sm"
+                  // sideOffset={5}
+                >
+                  <div className="space-y-2 w-full">
+                    <p className="w-full">
+                      To keep your gift a surprise, we can send delivery updates
+                      to you instead of the recipient. If sent to them, they'll
+                      receive:
+                    </p>
+                    <ul className="space-y-1 ml-2">
+                      <li>
+                        • A confirmation with a link to reschedule (at no charge
+                        if requested at least 2 hours before delivery)
+                      </li>
+                      <li>
+                        • A message when we're on our way, plus a call 15
+                        minutes before arrival
+                      </li>
+                    </ul>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </label>
+          </div>
           <div className="flex gap-16 justify-end mr-4 w-[95%]">
             <label className="flex items-center gap-3 cursor-pointer">
               <span
                 className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
-                  formData.smsUpdates === "send-to-me" ? "text-[#50462D]" : "text-[#50462d]/50"
+                  formData.smsUpdates === "send-to-me"
+                    ? "text-[#50462D]"
+                    : "text-[#50462d]/50"
                 }`}
               >
                 Send to me
@@ -1668,7 +1698,9 @@ export default function DeliveryDetailsStep({ isFloral = false }: DeliveryDetail
                 name="smsUpdates"
                 value="send-to-me"
                 checked={formData.smsUpdates === "send-to-me"}
-                onChange={(e) => handleSMSChange(e.target.value as "send-to-me")}
+                onChange={(e) =>
+                  handleSMSChange(e.target.value as "send-to-me")
+                }
                 className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
                   ${
                     formData.smsUpdates === "send-to-me"
@@ -1680,7 +1712,9 @@ export default function DeliveryDetailsStep({ isFloral = false }: DeliveryDetail
             <label className="flex items-center gap-3 cursor-pointer">
               <span
                 className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
-                  formData.smsUpdates === "send-to-recipient" ? "text-[#50462D]" : "text-[#50462d]/50"
+                  formData.smsUpdates === "send-to-recipient"
+                    ? "text-[#50462D]"
+                    : "text-[#50462d]/50"
                 }`}
               >
                 Send to recipient
@@ -1690,7 +1724,9 @@ export default function DeliveryDetailsStep({ isFloral = false }: DeliveryDetail
                 name="smsUpdates"
                 value="send-to-recipient"
                 checked={formData.smsUpdates === "send-to-recipient"}
-                onChange={(e) => handleSMSChange(e.target.value as "send-to-recipient")}
+                onChange={(e) =>
+                  handleSMSChange(e.target.value as "send-to-recipient")
+                }
                 className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
                   ${
                     formData.smsUpdates === "send-to-recipient"
@@ -1709,7 +1745,9 @@ export default function DeliveryDetailsStep({ isFloral = false }: DeliveryDetail
             <label className="flex items-center gap-3 cursor-pointer">
               <span
                 className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
-                  formData.shippingUpdateMethod === "text-message" ? "text-[#50462D]" : "text-[#50462d]/50"
+                  formData.shippingUpdateMethod === "text-message"
+                    ? "text-[#50462D]"
+                    : "text-[#50462d]/50"
                 }`}
               >
                 Text Message
@@ -1719,7 +1757,9 @@ export default function DeliveryDetailsStep({ isFloral = false }: DeliveryDetail
                 name="smsTextOrEmail"
                 value="text-message"
                 checked={formData.shippingUpdateMethod === "text-message"}
-                onChange={(e) => handleSMSTextOrEmailChange(e.target.value as "text-message")}
+                onChange={(e) =>
+                  handleSMSTextOrEmailChange(e.target.value as "text-message")
+                }
                 className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
                   ${
                     formData.shippingUpdateMethod === "text-message"
@@ -1731,7 +1771,9 @@ export default function DeliveryDetailsStep({ isFloral = false }: DeliveryDetail
             <label className="flex items-center gap-3 cursor-pointer">
               <span
                 className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
-                  formData.shippingUpdateMethod === "email" ? "text-[#50462D]" : "text-[#50462d]/50"
+                  formData.shippingUpdateMethod === "email"
+                    ? "text-[#50462D]"
+                    : "text-[#50462d]/50"
                 }`}
               >
                 Email
@@ -1741,7 +1783,9 @@ export default function DeliveryDetailsStep({ isFloral = false }: DeliveryDetail
                 name="smsTextOrEmail"
                 value="email"
                 checked={formData.shippingUpdateMethod === "email"}
-                onChange={(e) => handleSMSTextOrEmailChange(e.target.value as "email")}
+                onChange={(e) =>
+                  handleSMSTextOrEmailChange(e.target.value as "email")
+                }
                 className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
                   ${
                     formData.shippingUpdateMethod === "email"

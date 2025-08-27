@@ -46,7 +46,7 @@ export function PersonalisedCartToast({
             damping: 25,
             mass: 0.8,
           }}
-          className="fixed top-25 right-4 z-50 bg-background border shadow-xl p-4 md:min-w-lg font-[Century-Old-Style] max-w-xl"
+          className="fixed md:top-25 top-16 right-4 z-50 bg-background border shadow-xl p-4 md:min-w-lg font-[Century-Old-Style] max-w-sm"
         >
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium  uppercase tracking-wider flex items-center gap-2">
