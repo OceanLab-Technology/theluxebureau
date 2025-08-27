@@ -154,6 +154,62 @@ export async function POST(request: Request) {
       if (cartError) {
         console.error("Cart Clear Error:", cartError);
       }
+
+      // Send order confirmation email to external user
+      // using maidrill API, templayte: 
+      // Order Confirme
+      // Slug : order-confirmation-external
+
+      // Mappings : 
+      // Dear {{ first_name }}
+      // Order Number: {{ order_number }}
+
+      // Recipient: {{ Recipient }}
+
+      // Date: {{ delivery_date }}
+      // Time: {{ delivery_time }}
+
+      // Items: {{ item_list }}
+
+      // Total: {{ order_total }}
+      //       // 
+      // \
+
+
+      // try {
+      //   const res = await fetch("https://mandrillapp.com/api/1.0/messages/send-template.json", {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify({
+      //       key: process.env.MANDRILL_API_KEY,
+      //       template_name: "order-confirmation-external",
+      //       template_content: [],
+      //       message: {
+      //         from_email: "info@luxebureau.com",
+      //         to: [{ email: customer_email, type: "to" }],
+      //         merge: true,
+      //         global_merge_vars: [
+      //           { name: "first_name", content: session.customer_details?.name?.split(" ")?.[0] ?? "" },
+      //           { name: "order_number", content: orderData?.id ?? "" },
+      //           { name: "Recipient", content: session.customer_details?.name ?? "" },
+      //           { name: "delivery_date", content: "" },
+      //           { name: "delivery_time", content: "" },
+      //           { name: "item_list", content: "" }, // You can build from order_items join if needed
+      //           { name: "order_total", content: orderTotal.toFixed(2) },
+      //         ],
+      //       },
+      //     }),
+      //   });
+      //   if (!res.ok) {
+      //     const txt = await res.text();
+      //     console.error("Mandrill error:", res.status, txt);
+      //   }
+      // } catch (e) {
+      //   console.error("Mandrill fetch failed:", e);
+      // }
+
+
+
     }
 
     if (event.type === "payment_intent.payment_failed") {

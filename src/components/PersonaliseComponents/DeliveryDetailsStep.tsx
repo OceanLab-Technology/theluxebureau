@@ -1307,6 +1307,7 @@ import { Info } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
@@ -1499,26 +1500,26 @@ export default function DeliveryDetailsStep({
       ? isFloral
         ? "Flowers are next-day only"
         : !isSameDayAllowedByCutoff()
-        ? "Same-day closed after 13:00 UK"
-        : isPre9UK()
-        ? "All slots available (pre 09:00 UK)"
-        : "Only afternoon/evening slots available"
+          ? "Same-day closed after 13:00 UK"
+          : isPre9UK()
+            ? "All slots available (pre 09:00 UK)"
+            : "Only afternoon/evening slots available"
       : date && isWeekendInUK(date)
-      ? "Weekend delivery unavailable"
-      : isFloral && !date
-      ? "Flowers are next-day only"
-      : undefined;
+        ? "Weekend delivery unavailable"
+        : isFloral && !date
+          ? "Flowers are next-day only"
+          : undefined;
 
   /* --------------------- Render --------------------- */
 
   return (
     <div>
       <p className="text-secondary-foreground font-[Century-Old-Style] text-[1rem] leading-[1.4]">
-        Our gifts are sent by zero-emission, nominated-day delivery.
+        Our gifts are sent by zero-emission, nominated-day delivery. Please add your recipient's details, and your preferred delivery day and time, below.
       </p>
+      <br />
       <p className="text-secondary-foreground font-[Century-Old-Style] text-[1rem] leading-[1.4] mb-8">
-        Please add your recipient&apos;s details, and your preferred delivery
-        day and time, below.
+        We hand-deliver every gift to ensure it arrives in perfect condition. Please choose a date and time when the recipient will be at home. Our agents can't leave gifts unattended, so a redelivery fee may apply if no one is available.
       </p>
 
       <form className="font-[Marfa] space-y-6">
@@ -1626,8 +1627,8 @@ export default function DeliveryDetailsStep({
                         ? "Select next eligible day"
                         : "Select a date first"
                       : allowedSlotValues.length === 0
-                      ? timeHint || "No slots available"
-                      : "Select a time slot"
+                        ? timeHint || "No slots available"
+                        : "Select a time slot"
                   }
                 />
               </SelectTrigger>
@@ -1650,46 +1651,47 @@ export default function DeliveryDetailsStep({
 
           {/* Who receives updates */}
           <div className="">
-            <label className="text-stone-700 text-[0.9375rem] font-[300] flex">
-              <span> Who would you like to receive shipping updates? </span>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Info className="h-4 w-4 text-stone-500" />
-                </TooltipTrigger>
-                <TooltipContent
-                  side="bottom"
-                  className="max-w-[340px] bg-[#50462D] text-white p-3 text-sm"
-                  // sideOffset={5}
-                >
-                  <div className="space-y-2 w-full">
-                    <p className="w-full">
-                      To keep your gift a surprise, we can send delivery updates
-                      to you instead of the recipient. If sent to them, they'll
-                      receive:
-                    </p>
-                    <ul className="space-y-1 ml-2">
-                      <li>
-                        • A confirmation with a link to reschedule (at no charge
-                        if requested at least 2 hours before delivery)
-                      </li>
-                      <li>
-                        • A message when we're on our way, plus a call 15
-                        minutes before arrival
-                      </li>
-                    </ul>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
+            <label className="text-stone-700 text-[0.9375rem] font-[300] inline-flex writespace-nowrap gap-1">
+              <span className="flex-none"> Who would you like to receive shipping updates?</span>
+              <div className="flex items-center justify-center t-1">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Info className="h-4 w-4 text-stone-500" />
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="bottom"
+                      className="max-w-[500px] bg-[#50462D] text-white p-3 text-sm"
+                    // sideOffset={5}
+                    >
+                      <div className="space-y-2 w-full">
+                        <p className="w-full">
+                          To keep your gift a surprise, we can send delivery updates to you instead of the recipient. If sent to them, they'll receive:
+                        </p>
+                        <ul className="space-y-1 ml-2">
+                          <li>
+                            • A confirmation with a link to reschedule (at no charge
+                            if requested at least 2 hours before delivery)
+                          </li>
+                          <li>
+                            • A message when we're on our way, plus a call 15
+                            minutes before arrival
+                          </li>
+                        </ul>
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
             </label>
           </div>
           <div className="flex gap-16 justify-end mr-4 w-[95%]">
             <label className="flex items-center gap-3 cursor-pointer">
               <span
-                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
-                  formData.smsUpdates === "send-to-me"
-                    ? "text-[#50462D]"
-                    : "text-[#50462d]/50"
-                }`}
+                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${formData.smsUpdates === "send-to-me"
+                  ? "text-[#50462D]"
+                  : "text-[#50462d]/50"
+                  }`}
               >
                 Send to me
               </span>
@@ -1702,20 +1704,18 @@ export default function DeliveryDetailsStep({
                   handleSMSChange(e.target.value as "send-to-me")
                 }
                 className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
-                  ${
-                    formData.smsUpdates === "send-to-me"
-                      ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
-                      : "bg-[#50462d]/50"
+                  ${formData.smsUpdates === "send-to-me"
+                    ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
+                    : "bg-[#50462d]/50"
                   }`}
               />
             </label>
             <label className="flex items-center gap-3 cursor-pointer">
               <span
-                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
-                  formData.smsUpdates === "send-to-recipient"
-                    ? "text-[#50462D]"
-                    : "text-[#50462d]/50"
-                }`}
+                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${formData.smsUpdates === "send-to-recipient"
+                  ? "text-[#50462D]"
+                  : "text-[#50462d]/50"
+                  }`}
               >
                 Send to recipient
               </span>
@@ -1728,10 +1728,9 @@ export default function DeliveryDetailsStep({
                   handleSMSChange(e.target.value as "send-to-recipient")
                 }
                 className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
-                  ${
-                    formData.smsUpdates === "send-to-recipient"
-                      ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
-                      : "bg-[#50462d]/50"
+                  ${formData.smsUpdates === "send-to-recipient"
+                    ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
+                    : "bg-[#50462d]/50"
                   }`}
               />
             </label>
@@ -1744,11 +1743,10 @@ export default function DeliveryDetailsStep({
           <div className="flex gap-37 justify-end mr-4 w-[95%]">
             <label className="flex items-center gap-3 cursor-pointer">
               <span
-                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
-                  formData.shippingUpdateMethod === "text-message"
-                    ? "text-[#50462D]"
-                    : "text-[#50462d]/50"
-                }`}
+                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${formData.shippingUpdateMethod === "text-message"
+                  ? "text-[#50462D]"
+                  : "text-[#50462d]/50"
+                  }`}
               >
                 Text Message
               </span>
@@ -1761,20 +1759,18 @@ export default function DeliveryDetailsStep({
                   handleSMSTextOrEmailChange(e.target.value as "text-message")
                 }
                 className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
-                  ${
-                    formData.shippingUpdateMethod === "text-message"
-                      ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
-                      : "bg-[#50462d]/50"
+                  ${formData.shippingUpdateMethod === "text-message"
+                    ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
+                    : "bg-[#50462d]/50"
                   }`}
               />
             </label>
             <label className="flex items-center gap-3 cursor-pointer">
               <span
-                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${
-                  formData.shippingUpdateMethod === "email"
-                    ? "text-[#50462D]"
-                    : "text-[#50462d]/50"
-                }`}
+                className={`font-[Marfa] font-[300] text-[15px] tracking-[0.02em] ${formData.shippingUpdateMethod === "email"
+                  ? "text-[#50462D]"
+                  : "text-[#50462d]/50"
+                  }`}
               >
                 Email
               </span>
@@ -1787,10 +1783,9 @@ export default function DeliveryDetailsStep({
                   handleSMSTextOrEmailChange(e.target.value as "email")
                 }
                 className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
-                  ${
-                    formData.shippingUpdateMethod === "email"
-                      ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
-                      : "bg-[#50462d]/50"
+                  ${formData.shippingUpdateMethod === "email"
+                    ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
+                    : "bg-[#50462d]/50"
                   }`}
               />
             </label>
