@@ -957,7 +957,7 @@ export default function PersonalizationStep() {
                 }
                 onChange={(e) => {
                   const newValue = e.target.value;
-                  if (newValue.length <= 400) {
+                  if (newValue.length <= 380) {
                     handleQuoteInput(newValue);
                   }
                 }}
@@ -969,16 +969,16 @@ export default function PersonalizationStep() {
                       : formData.customMessage || "";
                   const combined = current + pasted;
 
-                  if (combined.length <= 400) {
+                  if (combined.length <= 380) {
                     e.preventDefault();
                     handleQuoteInput(combined);
                   }
                 }}
                 placeholder="Select a quote or write your own"
-                maxLength={400}
+                maxLength={380}
                 className={`w-full text-center md:text-[0.8rem] text-[8px] h-full mt-4 bg-transparent border-none outline-none resize-none scrollbar-hide pointer-events-auto focus:outline-none overflow-hidden ${
                   customDraft.length > 300
-                    ? "pt-[1rem]"
+                    ? "md:pt-[2rem] pt-[1rem]"
                     : customDraft.length > 100
                     ? "pt-[2rem]"
                     : "pt-[3rem]"
