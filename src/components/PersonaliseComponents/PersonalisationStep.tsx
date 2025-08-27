@@ -933,7 +933,8 @@ export default function PersonalizationStep() {
                 value={formData.headerText || ""}
                 onChange={(e) => updateFormData({ headerText: e.target.value })}
                 onFocus={(e) =>
-                  e.target.value === "Header" && updateFormData({ headerText: "" })
+                  e.target.value === "Header" &&
+                  updateFormData({ headerText: "" })
                 }
                 placeholder="Enter header text*"
                 maxLength={25}
@@ -955,21 +956,38 @@ export default function PersonalizationStep() {
                     ? customDraft
                     : formData.customMessage || ""
                 }
-                onChange={(e) => handleQuoteInput(e.target.value)}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  if (newValue.length <= 420) {
+                    handleQuoteInput(newValue);
+                  }
+                }}
                 onPaste={(e) => {
                   const pasted = e.clipboardData.getData("text") || "";
-                  if (!pasted) return;
-                  e.preventDefault();
                   const current =
                     formData.selectedQuote === "custom"
                       ? customDraft
                       : formData.customMessage || "";
-                  handleQuoteInput(current + pasted);
+                  const combined = current + pasted;
+
+                  if (combined.length <= 420) {
+                    e.preventDefault();
+                    handleQuoteInput(combined);
+                  }
                 }}
                 placeholder="Select a quote or write your own"
-                // maxLength={300} // since we instantly switch to custom, we can cap at 300
-                className="w-full text-center md:text-[0.8rem] text-[10px] bg-transparent border-none outline-none resize-none scrollbar-hide pointer-events-auto focus:outline-none overflow-hidden"
-                style={{ ...getQuoteStyle(), minHeight: "8rem" }}
+                maxLength={300}
+                className="w-full text-center md:text-[0.8rem] text-[10px] h-full mt-4 bg-transparent border-none outline-none resize-none scrollbar-hide pointer-events-auto focus:outline-none overflow-hidden"
+                style={{
+                  ...getQuoteStyle(),
+                  minHeight: "8rem",
+                  paddingTop:
+                    (customDraft || "").length > 400
+                      ? "1rem"
+                      : (customDraft || "").length > 100
+                      ? "2rem"
+                      : "3rem",
+                }}
                 rows={6}
               />
             </div>
