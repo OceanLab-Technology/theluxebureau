@@ -26,14 +26,14 @@ export default function SummaryStep() {
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const [fontLoaded, setFontLoaded] = useState(false);
   const [showBackArrow, setShowBackArrow] = useState(false);
-  
+
   const selectedFont = siteSettings?.fonts.find(
     (font) => font.name === formData.selectedFont
   );
 
   const getHeaderStyle = () => {
     const baseStyle: React.CSSProperties = {
-      fontSize: "0.70rem",
+      // fontSize: "0.70rem",
       color: "#57534e",
     };
     if (selectedFont && fontLoaded && formData.selectedFont !== "default") {
@@ -86,7 +86,6 @@ export default function SummaryStep() {
     };
     loadFont();
   }, [selectedFont, formData.selectedFont]);
-  
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -174,26 +173,33 @@ export default function SummaryStep() {
             {formData.deliveryDate
               ? (() => {
                   const date = new Date(formData.deliveryDate);
-                  const dayName = date.toLocaleDateString("en-GB", { weekday: "long" });
+                  const dayName = date.toLocaleDateString("en-GB", {
+                    weekday: "long",
+                  });
                   const day = date.getDate();
-                  const month = date.toLocaleDateString("en-GB", { month: "long" });
+                  const month = date.toLocaleDateString("en-GB", {
+                    month: "long",
+                  });
                   const year = date.getFullYear();
                   const getOrdinalSuffix = (d: number) => {
                     if (d >= 11 && d <= 13) return "th";
                     switch (d % 10) {
-                      case 1: return "st";
-                      case 2: return "nd";
-                      case 3: return "rd";
-                      default: return "th";
+                      case 1:
+                        return "st";
+                      case 2:
+                        return "nd";
+                      case 3:
+                        return "rd";
+                      default:
+                        return "th";
                     }
                   };
                   const ordinalSuffix = getOrdinalSuffix(day);
                   return (
                     <>
-                      {dayName},{" "}
-                      {day}
-                      <sup className="text-xs">{ordinalSuffix}</sup>{" "}
-                      {month} {year}
+                      {dayName}, {day}
+                      <sup className="text-xs">{ordinalSuffix}</sup> {month}{" "}
+                      {year}
                     </>
                   );
                 })()
@@ -208,8 +214,12 @@ export default function SummaryStep() {
             {formData.preferredDeliveryTime === "10am-1pm" && "10:00 – 13:00"}
             {formData.preferredDeliveryTime === "1pm-4pm" && "13:00 – 16:00"}
             {formData.preferredDeliveryTime === "4pm-6pm" && "16:00 – 18:00"}
-            {!["10am-1pm", "1pm-4pm", "4pm-6pm"].includes(formData.preferredDeliveryTime) && (
-              <span className="font-[marfa]">{formData.preferredDeliveryTime || "Not selected"}</span>
+            {!["10am-1pm", "1pm-4pm", "4pm-6pm"].includes(
+              formData.preferredDeliveryTime
+            ) && (
+              <span className="font-[marfa]">
+                {formData.preferredDeliveryTime || "Not selected"}
+              </span>
             )}
           </p>
         </div>
@@ -274,12 +284,14 @@ export default function SummaryStep() {
                         {formData.headerText || "No header text"}
                       </span>
                     </div>
-                    <div className="text-center font-[Monospace] md:w-72 w-56 mx-auto absolute inset-0 flex items-center justify-center md:p-12 flex-col">
-                      <span className="text-secondary-foreground md:text-[0.45rem] text-[8px] flex flex-col">
+                    <div
+                      className={`text-center font-[Monospace] md:w-60 w-45 mx-auto absolute inset-0 flex items-center justify-center pt-8 flex-col`}
+                    >
+                      <span className="text-secondary-foreground md:text-[0.50rem] text-[5.5px] flex flex-col">
                         {formData.customMessage.split("\n")[0] ||
                           "No custom message"}
                       </span>
-                      <span className="text-secondary-foreground md:text-[0.45rem] text-[8px] flex flex-col">
+                      <span className="text-secondary-foreground md:text-[0.45rem] text-[5.5px] flex flex-col">
                         {formData.customMessage.split("\n")[1] || ""}
                       </span>
                     </div>

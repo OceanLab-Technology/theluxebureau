@@ -736,7 +736,6 @@ export default function PersonalizationStep() {
   };
 
   const getQuoteStyle = (): React.CSSProperties => ({
-    fontSize: "12px",
     color: "#57534e",
     fontFamily: "monospace",
   });
@@ -949,7 +948,7 @@ export default function PersonalizationStep() {
             </div>
 
             {/* Quote Textarea */}
-            <div className="text-center md:w-96 mx-auto absolute inset-0 flex items-center justify-center md:mt-2 mt-4 px-8">
+            <div className="text-center md:w-96 w-60 mx-auto absolute inset-0 flex items-center justify-center md:mt-2 mt-4 md:px-8">
               <textarea
                 value={
                   formData.selectedQuote === "custom"
@@ -958,7 +957,7 @@ export default function PersonalizationStep() {
                 }
                 onChange={(e) => {
                   const newValue = e.target.value;
-                  if (newValue.length <= 420) {
+                  if (newValue.length <= 400) {
                     handleQuoteInput(newValue);
                   }
                 }}
@@ -970,23 +969,23 @@ export default function PersonalizationStep() {
                       : formData.customMessage || "";
                   const combined = current + pasted;
 
-                  if (combined.length <= 420) {
+                  if (combined.length <= 400) {
                     e.preventDefault();
                     handleQuoteInput(combined);
                   }
                 }}
                 placeholder="Select a quote or write your own"
-                maxLength={300}
-                className="w-full text-center md:text-[0.8rem] text-[10px] h-full mt-4 bg-transparent border-none outline-none resize-none scrollbar-hide pointer-events-auto focus:outline-none overflow-hidden"
+                maxLength={400}
+                className={`w-full text-center md:text-[0.8rem] text-[8px] h-full mt-4 bg-transparent border-none outline-none resize-none scrollbar-hide pointer-events-auto focus:outline-none overflow-hidden ${
+                  customDraft.length > 300
+                    ? "pt-[1rem]"
+                    : customDraft.length > 100
+                    ? "pt-[2rem]"
+                    : "pt-[3rem]"
+                }`}
                 style={{
                   ...getQuoteStyle(),
                   minHeight: "8rem",
-                  paddingTop:
-                    (customDraft || "").length > 400
-                      ? "1rem"
-                      : (customDraft || "").length > 100
-                      ? "2rem"
-                      : "3rem",
                 }}
                 rows={6}
               />
