@@ -295,11 +295,6 @@
 //   );
 // }
 
-
-
-
-
-
 // "use client";
 
 // import React, { useEffect, useState } from "react";
@@ -678,7 +673,6 @@
 //   );
 // }
 
-
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -693,9 +687,19 @@ import {
 import axios from "axios";
 import { ChevronDown } from "lucide-react";
 
-interface FontSetting { name: string; url: string; }
-interface QuoteSetting { text: string; author: string; }
-interface SiteSettings { fonts: FontSetting[]; quotes: QuoteSetting[]; api_key: string; }
+interface FontSetting {
+  name: string;
+  url: string;
+}
+interface QuoteSetting {
+  text: string;
+  author: string;
+}
+interface SiteSettings {
+  fonts: FontSetting[];
+  quotes: QuoteSetting[];
+  api_key: string;
+}
 
 const DEFAULT_FONT_LABEL = "Garamond";
 
@@ -738,7 +742,11 @@ export default function PersonalizationStep() {
   });
 
   useEffect(() => {
-    if (!formData.headerText && !formData.selectedFont && !formData.selectedQuote) {
+    if (
+      !formData.headerText &&
+      !formData.selectedFont &&
+      !formData.selectedQuote
+    ) {
       updateFormData({
         headerText: "Header",
         selectedFont: DEFAULT_FONT_LABEL,
@@ -752,7 +760,10 @@ export default function PersonalizationStep() {
 
   useEffect(() => {
     const loadFont = async () => {
-      if (!selectedFontFromApi) { setFontLoaded(false); return; }
+      if (!selectedFontFromApi) {
+        setFontLoaded(false);
+        return;
+      }
       try {
         const fontFace = new FontFace(
           selectedFontFromApi.name,
@@ -808,15 +819,20 @@ export default function PersonalizationStep() {
     <div className="font-[Century-Old-Style]">
       <div className="max-w-2xl w-full">
         <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-1 break-words">
-          Our gifts arrive with custom stationery, letterpressed by hand at the Luxe Bureau atelier, in Noir ink on GF Smith Mohawk White card.
+          Our gifts arrive with custom stationery, letterpressed by hand at the
+          Luxe Bureau atelier, in Noir ink on GF Smith Mohawk White card.
         </p>
 
         <p className="text-secondary-foreground mt-4 font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-4 break-words">
-          Please click on the card below to personalise your message. In the header, add your name, initials, or company to create your bespoke letterhead. You may choose from type styles below.
+          Please click on the card below to personalise your message. In the
+          header, add your name, initials, or company to create your bespoke
+          letterhead. You may choose from type styles below.
         </p>
 
         <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-1 break-words">
-          Your personal message will be set in our signature typewriter font. For inspiration, you can select a quote from the dropdown, or write your own.
+          Your personal message will be set in our signature typewriter font.
+          For inspiration, you can select a quote from the dropdown, or write
+          your own.
         </p>
       </div>
 
@@ -844,7 +860,9 @@ export default function PersonalizationStep() {
             </SelectTrigger>
 
             <SelectContent className="rounded-[0.3rem]">
-              <SelectItem value={DEFAULT_FONT_LABEL}>{DEFAULT_FONT_LABEL}</SelectItem>
+              <SelectItem value={DEFAULT_FONT_LABEL}>
+                {DEFAULT_FONT_LABEL}
+              </SelectItem>
               {apiFontsWithoutGaramond.map((font) => (
                 <SelectItem key={font.name} value={font.name}>
                   {font.name}
@@ -914,10 +932,17 @@ export default function PersonalizationStep() {
                 type="text"
                 value={formData.headerText || ""}
                 onChange={(e) => updateFormData({ headerText: e.target.value })}
+                onFocus={(e) =>
+                  e.target.value === "Header" && updateFormData({ headerText: "" })
+                }
                 placeholder="Enter header text*"
                 maxLength={25}
                 className="w-full text-center bg-transparent border-none outline-none pointer-events-auto focus:outline-none whitespace-nowrap overflow-hidden text-ellipsis"
-                style={{ ...getHeaderStyle(), position: "relative", zIndex: 50 }}
+                style={{
+                  ...getHeaderStyle(),
+                  position: "relative",
+                  zIndex: 50,
+                }}
                 tabIndex={50}
               />
             </div>
@@ -942,7 +967,7 @@ export default function PersonalizationStep() {
                   handleQuoteInput(current + pasted);
                 }}
                 placeholder="Select a quote or write your own"
-                maxLength={300} // since we instantly switch to custom, we can cap at 300
+                // maxLength={300} // since we instantly switch to custom, we can cap at 300
                 className="w-full text-center md:text-[0.8rem] text-[10px] bg-transparent border-none outline-none resize-none scrollbar-hide pointer-events-auto focus:outline-none overflow-hidden"
                 style={{ ...getQuoteStyle(), minHeight: "8rem" }}
                 rows={6}
