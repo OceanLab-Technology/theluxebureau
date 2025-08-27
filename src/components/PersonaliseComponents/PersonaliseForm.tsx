@@ -364,7 +364,7 @@ export default function PersonaliseForm({
         </AnimatePresence>
       </div>
 
-      <div className="flex-shrink-0 bg-background pt-4 font-[Century-Old-Style] md:pb4 pb-14">
+      <div className="flex-shrink-0 bg-background pt-4 font-[Century-Old-Style] md:pb-4 pb-20">
         <div className="flex md:gap-3 gap-1 justify-end">
           {currentStep === 4 ? (
             <>
