@@ -285,7 +285,7 @@ export default function SummaryStep() {
                       </span>
                     </div>
                     <div
-                      className={`text-center font-[Monospace] md:w-60 w-45 mx-auto absolute inset-0 flex items-center justify-center md:p-6 p-3 flex-col`}
+                      className={`text-center font-[Monospace] md:w-65 w-44 mx-auto absolute inset-0 flex items-center justify-center md:p-6 px-2 pt-4 flex-col`}
                     >
                       <span className="text-secondary-foreground md:text-[0.50rem] text-[5.5px] flex flex-col">
                         {formData.customMessage.split("\n")[0] ||
