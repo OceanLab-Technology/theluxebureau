@@ -105,7 +105,7 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
   return (
     <div className={`flex items-start space-x-6 md:py-6 py-4 border-secondary-foreground/50 ${borderClass}`}>
       <div className="flex-shrink-0">
-        <div className="w-32 h-32 relative overflow-hidden bg-stone-100">
+        <div className="relative w-32 aspect-[4/5] overflow-hidden bg-stone-100">
           {product.image_1 || product.image ? (
             <Image
               src={product.image_1 || product.image || ""}
@@ -125,7 +125,7 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
           <h3 className="font-medium text-lg text-stone-800 mb-2">
             {product.name} + {product.selectedVariant}
           </h3>
-          {item.custom_data && Object.keys(item.custom_data).length > 0 && (
+          {/* {item.custom_data && Object.keys(item.custom_data).length > 0 && (
             <div className="text-xs text-stone-500 mb-3 space-y-1">
               {item.custom_data.isPersonalized ? (
                 <div className="space-y-1">
@@ -170,7 +170,7 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
                 </div>
               )}
             </div>
-          )}
+          )} */}
           <div className="text-lg font-medium text-stone-800">
             £{product.price ? product.price.toLocaleString() : "0"}.00
           </div>

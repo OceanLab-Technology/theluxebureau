@@ -95,20 +95,23 @@ export default function PersonaliseForm({
 
     try {
       setIsLoading(true);
-      const personalizationData = {
-        yourName: formData.yourName,
-        recipientName: formData.recipientName,
-        recipientAddress: formData.recipientAddress,
-        recipientEmail: formData.recipientEmail,
-        recipientPhone: formData.recipientPhone,
-        deliveryDate: formData.deliveryDate,
-        preferredDeliveryTime: formData.preferredDeliveryTime,
-        headerText: formData.headerText,
-        selectedQuote: formData.selectedQuote,
-        customMessage: formData.customMessage,
-        smsUpdates: formData.smsUpdates,
-        isPersonalised: true,
-      };
+      // const personalizationData = {
+      //   yourName: formData.yourName,
+      //   recipientName: formData.recipientName,
+      //   recipientAddress: formData.recipientAddress,
+      //   recipientEmail: formData.recipientEmail,
+      //   recipientPhone: formData.recipientPhone,
+      //   deliveryDate: formData.deliveryDate,
+      //   preferredDeliveryTime: formData.preferredDeliveryTime,
+      //   headerText: formData.headerText,
+      //   selectedQuote: formData.selectedQuote,
+      //   customMessage: formData.customMessage,
+      //   smsUpdates: formData.smsUpdates,
+      //   isPersonalised: true,
+      // };
+
+      const personalizationData = buildPersonalisationPayload(formData);
+
 
       await addToCart(selectedProduct.id!, 1, personalizationData, selectedProduct.selectedVariant);
       setIsLoading(false);
@@ -137,20 +140,23 @@ export default function PersonaliseForm({
 
     try {
       setIsLoading(true);
-      const personalizationData = {
-        yourName: formData.yourName,
-        recipientName: formData.recipientName,
-        recipientAddress: formData.recipientAddress,
-        recipientEmail: formData.recipientEmail,
-        recipientPhone: formData.recipientPhone,
-        deliveryDate: formData.deliveryDate,
-        preferredDeliveryTime: formData.preferredDeliveryTime,
-        headerText: formData.headerText,
-        selectedQuote: formData.selectedQuote,
-        customMessage: formData.customMessage,
-        smsUpdates: formData.smsUpdates,
-        isPersonalised: true,
-      };
+      // const personalizationData = {
+      //   yourName: formData.yourName,
+      //   recipientName: formData.recipientName,
+      //   recipientAddress: formData.recipientAddress,
+      //   recipientEmail: formData.recipientEmail,
+      //   recipientPhone: formData.recipientPhone,
+      //   deliveryDate: formData.deliveryDate,
+      //   preferredDeliveryTime: formData.preferredDeliveryTime,
+      //   headerText: formData.headerText,
+      //   selectedQuote: formData.selectedQuote,
+      //   customMessage: formData.customMessage,
+      //   smsUpdates: formData.smsUpdates,
+      //   isPersonalised: true,
+      // };
+
+      const personalizationData = buildPersonalisationPayload(formData);
+
 
       if (onSave) {
         onSave(personalizationData);
@@ -186,20 +192,22 @@ export default function PersonaliseForm({
 
     try {
       setIsLoading(true);
-      const personalizationData = {
-        yourName: formData.yourName,
-        recipientName: formData.recipientName,
-        recipientAddress: formData.recipientAddress,
-        recipientEmail: formData.recipientEmail,
-        recipientPhone: formData.recipientPhone,
-        deliveryDate: formData.deliveryDate,
-        preferredDeliveryTime: formData.preferredDeliveryTime,
-        headerText: formData.headerText,
-        selectedQuote: formData.selectedQuote,
-        customMessage: formData.customMessage,
-        smsUpdates: formData.smsUpdates,
-        isPersonalised: true,
-      };
+      // const personalizationData = {
+      //   yourName: formData.yourName,
+      //   recipientName: formData.recipientName,
+      //   recipientAddress: formData.recipientAddress,
+      //   recipientEmail: formData.recipientEmail,
+      //   recipientPhone: formData.recipientPhone,
+      //   deliveryDate: formData.deliveryDate,
+      //   preferredDeliveryTime: formData.preferredDeliveryTime,
+      //   headerText: formData.headerText,
+      //   selectedQuote: formData.selectedQuote,
+      //   customMessage: formData.customMessage,
+      //   smsUpdates: formData.smsUpdates,
+      //   isPersonalised: true,
+      // };
+      const personalizationData = buildPersonalisationPayload(formData);
+
 
       await addToCart(selectedProduct.id!, 1, personalizationData, selectedProduct.selectedVariant);
       setIsLoading(false);
@@ -424,3 +432,68 @@ export default function PersonaliseForm({
 }
 
 // bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800
+
+
+
+
+
+
+
+
+// types/personalise.ts
+export type PersonaliseFormData = {
+  yourName: string;
+  recipientName: string;
+  recipientAddress: string;
+  recipientPhone: string;
+  recipientEmail: string;
+  deliveryDate: string;              // ISO yyyy-mm-dd
+  preferredDeliveryTime: string;     // e.g. "10am-1pm"
+  headerText: string;
+  selectedQuote: string;             // label/author
+  customMessage: string;
+  selectedFont: string;              // "default" etc.
+  smsUpdates: "send-to-me" | "send-to-recipient" | "no";
+  shippingUpdateMethod: "text-message" | "email" | "both";
+};
+
+export type PersonalisationPayload = PersonaliseFormData & {
+  isPersonalised: true;
+};
+
+export function buildPersonalisationPayload(
+  formData: PersonaliseFormData
+): PersonalisationPayload {
+  const {
+    yourName = "",
+    recipientName = "",
+    recipientAddress = "",
+    recipientPhone = "",
+    recipientEmail = "",
+    deliveryDate = "",
+    preferredDeliveryTime = "",
+    headerText = "Header",
+    selectedQuote = "",
+    customMessage = "",
+    selectedFont = "default",
+    smsUpdates = "send-to-me",
+    shippingUpdateMethod = "text-message",
+  } = formData || ({} as PersonaliseFormData);
+
+  return {
+    yourName,
+    recipientName,
+    recipientAddress,
+    recipientPhone,
+    recipientEmail,
+    deliveryDate,
+    preferredDeliveryTime,
+    headerText,
+    selectedQuote,
+    customMessage,
+    selectedFont,
+    smsUpdates,
+    shippingUpdateMethod,
+    isPersonalised: true,
+  };
+}
