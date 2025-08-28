@@ -969,18 +969,68 @@ export async function POST(request: Request) {
     // Payment failed handler
     if (event.type === "payment_intent.payment_failed") {
       const intent = event.data.object as Stripe.PaymentIntent;
-      const { error: failError } = await supabase
+
+      // Update order status
+      const { data: orderData, error: failError } = await supabase
         .from("orders")
         .update({
           payment_status: "failed",
           updated_at: new Date().toISOString(),
         })
-        .eq("stripe_payment_intent_id", intent.id);
+        .eq("stripe_payment_intent_id", intent.id)
+        .select()
+        .single();
 
       if (failError) {
         console.error("Payment Failed Update Error:", failError);
+        return;
+      }
+
+      // If order found and has customer email, send cancellation email
+      try {
+        if (orderData?.customer_email) {
+          const res = await axios.post(
+            "https://mandrillapp.com/api/1.0/messages/send-template.json",
+            {
+              key: "md-BfHmKxZ95KI6BiaR4dwUJQ", // move to ENV in production
+              template_name: "new-order-internal",
+              template_content: [],
+              message: {
+                from_email: "no-reply@theluxebureau.com",
+                from_name: "The Luxe Bureau",
+                to: [
+                  {
+                    email: orderData.customer_email,
+                    type: "to",
+                  },
+                ],
+                subject: "Your order has been cancelled",
+                merge: true,
+                merge_language: "handlebars",
+                global_merge_vars: [
+                  {
+                    name: "preheader_text",
+                    content:
+                      "We're sorry to let you know that your Luxe Bureau order has been cancelled. If this was intentional, there's nothing further you need to do.",
+                  },
+                  { name: "order_number", content: orderData.id },
+                  { name: "Recipient", content: orderData.recipient_name },
+                  { name: "order_total", content: orderData.total_amount },
+                ],
+              },
+            }
+          );
+          console.log("Mandrill response:", res.data);
+        } else {
+          console.warn(
+            "No customer email found for order; skipping Mandrill send."
+          );
+        }
+      } catch (e: any) {
+        console.error("Mandrill axios error:", e?.response?.data || e?.message);
       }
     }
+
 
     return new Response("Webhook received", { status: 200 });
   } catch (err: any) {

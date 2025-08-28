@@ -522,11 +522,13 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
           <div className="flex-1 min-w-0">
             <h4 className="font-medium text-sm whitespace-normal break-words">{item.products?.name}</h4>
             <p className="text-xs text-muted-foreground">{item.products?.category}</p>
+            <h4 className="font-medium text-sm whitespace-normal break-words">Varient: {item.selected_variant_name}</h4>
             <div className="flex justify-between items-center mt-2">
               <span className="text-xs">Qty: {item.quantity}</span>
               <span className="font-medium text-sm">£{item.price_at_purchase?.toFixed(2)}</span>
             </div>
           </div>
+          
         </div>
         {item.custom_data && Object.keys(item.custom_data).length > 0 && (
           <div>
