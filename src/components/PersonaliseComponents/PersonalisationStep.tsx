@@ -735,9 +735,38 @@ export default function PersonalizationStep() {
     return { ...base, fontFamily: DEFAULT_FONT_LABEL };
   };
 
+
+
+
+  // Put near the top of your component/file
+  const MAX_CHARS = 300;
+  const MAX_LINES = 6;                 // tweak as you like
+  const MAX_CONSEC_NEWLINES = 1;       // no more than one blank line in a row
+
+  const clampMessage = (raw: string) => {
+    // collapse > MAX_CONSEC_NEWLINES consecutive newlines
+    const collapsed = raw.replace(
+      new RegExp(`\\n{${MAX_CONSEC_NEWLINES + 1},}`, "g"),
+      "\n".repeat(MAX_CONSEC_NEWLINES)
+    );
+
+    // hard char cap first so split isn't huge
+    let s = collapsed.slice(0, MAX_CHARS);
+
+    // enforce max lines
+    const lines = s.split("\n");
+    if (lines.length > MAX_LINES) {
+      s = lines.slice(0, MAX_LINES).join("\n");
+    }
+    return s;
+  };
+
+  const countLines = (s: string) => s.split("\n").length;
+
+
   const getQuoteStyle = (): React.CSSProperties => ({
     color: "#57534e",
-    fontFamily: "monospace",
+    fontFamily: "Courier",
   });
 
   useEffect(() => {
@@ -957,7 +986,7 @@ export default function PersonalizationStep() {
                 }
                 onChange={(e) => {
                   const newValue = e.target.value;
-                if (newValue.length <= 300) {
+                  if (newValue.length <= 300) {
                     handleQuoteInput(newValue);
                   }
                 }}
@@ -969,20 +998,28 @@ export default function PersonalizationStep() {
                       : formData.customMessage || "";
                   const combined = current + pasted;
 
-                if (combined.length <= 300) {
+                  if (combined.length <= 300) {
                     e.preventDefault();
                     handleQuoteInput(combined);
                   }
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    const current = formData.selectedQuote === "custom" ? customDraft : formData.customMessage || "";
+                    if (countLines(current) >= MAX_LINES) {
+                      e.preventDefault(); // block extra newlines
+                    }
+                  }
+                }}
+
                 placeholder="Select a quote or write your own"
-              maxLength={300}
-                className={`w-full text-center md:text-[0.8rem] text-[8px] h-full mt-4 bg-transparent border-none outline-none resize-none scrollbar-hide pointer-events-auto focus:outline-none overflow-hidden ${
-                  customDraft.length > 300
-                    ? "md:pt-[2rem] pt-[1rem]"
-                    : customDraft.length > 100
+                maxLength={300}
+                className={`w-full text-center md:text-[0.8rem] text-[8px] h-full mt-4 bg-transparent border-none outline-none resize-none scrollbar-hide pointer-events-auto focus:outline-none overflow-hidden ${customDraft.length > 300
+                  ? "md:pt-[2rem] pt-[1rem]"
+                  : customDraft.length > 100
                     ? "pt-[2rem]"
                     : "pt-[3rem]"
-                }`}
+                  }`}
                 style={{
                   ...getQuoteStyle(),
                   minHeight: "8rem",
