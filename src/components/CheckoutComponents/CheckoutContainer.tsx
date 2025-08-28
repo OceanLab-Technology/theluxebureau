@@ -60,6 +60,7 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
         0
       );
 
+
       const response = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: {
@@ -79,18 +80,7 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
           },
           personalization: items.map((item) => item.customData || ""),
           // ✅ Extract deliveryDate from first customData entry
-          deliveryDate: (() => {
-            try {
-              // If customData is a JSON string, parse it
-              const data =
-                typeof items[0]?.customData === "string"
-                  ? JSON.parse(items[0].customData)
-                  : items[0]?.customData;
-              return data?.[0]?.deliveryDate || new Date().toISOString();
-            } catch {
-              return new Date().toISOString();
-            }
-          })(),
+          deliveryDate: items?.[0]?.customData?.deliveryDate || "",
           notes: "",
           total,
         }),

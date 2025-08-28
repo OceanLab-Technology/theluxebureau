@@ -30,8 +30,6 @@ export async function POST(request: NextRequest) {
       notes,
     } = body;
 
-    console.log("Payload for Stripe Checkout Session:", items);
-
     const lineItems = items.map((item: any) => ({
       price_data: {
         currency: "gbp",
