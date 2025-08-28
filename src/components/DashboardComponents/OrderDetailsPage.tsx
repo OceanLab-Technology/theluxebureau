@@ -393,6 +393,430 @@
 // }
 
 
+
+
+
+
+
+// "use client";
+
+// import { useEffect, useState } from "react";
+// import Link from "next/link";
+// import Image from "next/image";
+// import { SidebarTrigger } from "@/components/ui/sidebar";
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// import { Badge } from "@/components/ui/badge";
+// import { Button } from "@/components/ui/button";
+// import { Skeleton } from "@/components/ui/skeleton";
+// import { Input } from "@/components/ui/input";
+// import { Label } from "@/components/ui/label";
+// import { Textarea } from "@/components/ui/textarea";
+// import { ArrowLeft, Calendar, User, MapPin, Package, CreditCard, ShoppingBag, Loader2 } from "lucide-react";
+// import { useOrderDetailsStore, useOrdersStore } from "@/store/admin/orderStore";
+// import { useRouter } from "next/navigation";
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+// import { toast } from "sonner";
+
+// interface OrderDetailsPageProps {
+//   orderId: string;
+// }
+
+// export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
+//   const { order, loading, error, fetchOrder, updateOrder, deleteOrder } =
+//     useOrderDetailsStore();
+//   const { updateOrderStatus } = useOrdersStore();
+//   const router = useRouter();
+//   const [updatingOrderId, setUpdatingOrderId] = useState<string | null>(null);
+
+
+//   const [formData, setFormData] = useState({
+//     deliveryDate: "",
+//     status: "",
+//     total: "",
+//     notes: "",
+//     preferredDeliveryTime: "",
+//   });
+//   const [hasChanges, setHasChanges] = useState(false);
+
+//   useEffect(() => {
+//     fetchOrder(orderId);
+//   }, [orderId]);
+
+//   useEffect(() => {
+//     if (order) {
+//       setFormData({
+//         deliveryDate: order.orderInfo.deliveryDate || "",
+//         status: order.orderInfo.status || "",
+//         total: order.orderInfo.total || "",
+//         notes: order.orderInfo.notes || "",
+//         preferredDeliveryTime:
+//           order.orderInfo.preferredDeliveryTime ||
+//           (Array.isArray(order.personalization) && order.personalization.length > 0
+//             ? order.personalization[0].preferredDeliveryTime || ""
+//             : ""),
+//       });
+//       setHasChanges(false);
+//     }
+//   }, [order?.id]);
+
+//   const handleFieldChange = (field: keyof typeof formData, value: string) => {
+//     setFormData((prev) => {
+//       const updated = { ...prev, [field]: value };
+//       const changed = Object.entries(updated).some(
+//         ([key, val]) =>
+//           val !== (order?.orderInfo[key as keyof typeof formData] || "")
+//       );
+//       setHasChanges(changed);
+//       return updated;
+//     });
+//   };
+
+//   const handleSave = async () => {
+//     if (!order || !hasChanges) return;
+//     await updateOrder(order.id, { orderInfo: { ...order.orderInfo, ...formData } });
+//     setHasChanges(false);
+//   };
+
+//   const handleDelete = async () => {
+//     if (!order) return;
+//     const confirmed = window.confirm("Are you sure you want to delete this order?");
+//     if (!confirmed) return;
+//     await deleteOrder(order.id);
+//     router.push("/admin/orders");
+//   };
+
+//   const handleStatusUpdate = async (orderId: string, newStatus: string) => {
+//     setUpdatingOrderId(orderId);
+//     const success = await updateOrderStatus(orderId, newStatus);
+//     if (success) {
+//       toast.success(`Order status updated to ${newStatus}`);
+//       setFormData((prev) => ({ ...prev, status: newStatus }));
+//     } else {
+//       toast.error("Failed to update order status");
+//     }
+//     setUpdatingOrderId(null);
+//   };
+
+
+//   function formatTimestamp(timestamp: string) {
+//     const date = new Date(timestamp);
+//     const day = String(date.getDate()).padStart(2, "0");
+//     const month = String(date.getMonth() + 1).padStart(2, "0");
+//     const year = date.getFullYear();
+//     const hours = String(date.getHours()).padStart(2, "0");
+//     const minutes = String(date.getMinutes()).padStart(2, "0");
+//     return `${day}.${month}.${year} ${hours}:${minutes}`;
+//   }
+
+//   const items = Array.isArray(order.orderItems)
+//   ? order.orderItems
+//   : order.orderItems
+//   ? [order.orderItems] // single object -> wrap
+//   : [];
+
+
+//   const renderOrderItemCard = (item: any, index: number) => (
+//     <Card key={item.id} className="overflow-hidden">
+//       <CardHeader className="pb-3">
+//         <CardTitle className="text-sm">Item #{index + 1}</CardTitle>
+//       </CardHeader>
+//       <CardContent className="space-y-4">
+//         <div className="flex gap-4">
+//           <div className="w-20 h-20 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
+//             <Image
+//               src={item.products?.image_1 || "/placeholder.jpg"}
+//               alt={item.products?.name || "Product"}
+//               width={80}
+//               height={80}
+//               className="w-full h-full object-cover"
+//             />
+//           </div>
+//           <div className="flex-1 min-w-0">
+//             <h4 className="font-medium text-sm whitespace-normal break-words">{item.products?.name}</h4>
+//             <p className="text-xs text-muted-foreground">{item.products?.category}</p>
+//             <h4 className="font-medium text-sm whitespace-normal break-words">Varient: {item.selected_variant_name}</h4>
+//             <div className="flex justify-between items-center mt-2">
+//               <span className="text-xs">Qty: {item.quantity}</span>
+//               <span className="font-medium text-sm">£{item.price_at_purchase?.toFixed(2)}</span>
+//             </div>
+//           </div>
+          
+//         </div>
+//         {item.custom_data && Object.keys(item.custom_data).length > 0 && (
+//           <div>
+//             <Label className="text-xs font-medium">Personalization</Label>
+//             <div className="mt-1 space-y-1">
+//               {Object.entries(item.custom_data).map(([key, value]) => (
+//                 <div key={key} className="flex justify-between text-xs">
+//                   <span className="text-muted-foreground capitalize">
+//                     {key.replace(/([A-Z])/g, ' $1').trim()}:
+//                   </span>
+//                   <span className="font-medium max-w-32 whitespace-normal break-words">
+//                     {String(value)}
+//                   </span>
+//                 </div>
+//               ))}
+//             </div>
+//           </div>
+//         )}
+//       </CardContent>
+//     </Card>
+//   );
+
+//   if (loading || !order) {
+//     return (
+//       <div className="flex flex-col min-h-screen bg-muted/50 animate-pulse">
+//         <header className="flex h-16 items-center gap-2 border-b px-4 bg-background">
+//           <SidebarTrigger className="-ml-1" />
+//           <h1 className="text-lg font-[200] font-[Century-Old-Style]">Order Details</h1>
+//         </header>
+//         <main className="flex-1 p-8 space-y-6">
+//           {[...Array(4)].map((_, i) => (
+//             <Card key={i}>
+//               <CardHeader>
+//                 <Skeleton className="h-5 w-40" />
+//               </CardHeader>
+//               <CardContent className="space-y-4">
+//                 <Skeleton className="h-4 w-full" />
+//                 <Skeleton className="h-4 w-3/4" />
+//                 <Skeleton className="h-4 w-1/2" />
+//               </CardContent>
+//             </Card>
+//           ))}
+//           <Card>
+//             <CardHeader>
+//               <Skeleton className="h-5 w-44" />
+//             </CardHeader>
+//             <CardContent className="space-y-4">
+//               {[...Array(3)].map((_, i) => (
+//                 <Skeleton key={i} className="h-4 w-full" />
+//               ))}
+//             </CardContent>
+//           </Card>
+//           <div className="flex justify-end gap-2">
+//             <Skeleton className="h-10 w-32" />
+//             <Skeleton className="h-10 w-32" />
+//           </div>
+//         </main>
+//       </div>
+//     );
+//   }
+
+//   if (error) return <div className="p-8 text-red-500">Error: {error}</div>;
+
+//   return (
+//     <div className="flex flex-col font-[Century-Old-Style] min-h-screen bg-muted/50">
+//       <header className="flex h-16 items-center gap-2 border-b px-4 bg-background">
+//         <SidebarTrigger className="-ml-1" />
+//         <h1 className="text-lg font-[200]">Order Details</h1>
+//       </header>
+
+//       <main className="flex-1 p-8 space-y-6">
+//         <Button asChild variant="ghost" size="sm">
+//           <Link href="/admin/orders">
+//             <ArrowLeft className="mr-2 h-4 w-4" />
+//             Back to Orders
+//           </Link>
+//         </Button>
+
+//         <div className="grid gap-6 lg:grid-cols-2">
+//           {/* Customer Info */}
+//           <Card>
+//             <CardHeader className="flex items-center gap-2">
+//               <User className="h-5 w-5" />
+//               <CardTitle>Clients Information</CardTitle>
+//             </CardHeader>
+//             <CardContent className="space-y-3">
+//               <div>
+//                 <Label className="text-sm">Name</Label>
+//                 <p className="text-sm text-muted-foreground">{order.customerInfo.name}</p>
+//               </div>
+//               <div>
+//                 <Label className="text-sm">Email</Label>
+//                 <p className="text-sm text-muted-foreground">{order.customerInfo.email}</p>
+//               </div>
+//             </CardContent>
+//           </Card>
+
+//           {/* Recipient Info */}
+//           <Card>
+//             <CardHeader className="flex items-center gap-2">
+//               <MapPin className="h-5 w-5" />
+//               <CardTitle>Recipient Information</CardTitle>
+//             </CardHeader>
+//             <CardContent className="space-y-3">
+//               <div>
+//                 <Label className="text-sm">Name</Label>
+//                 <p className="text-sm text-muted-foreground">{order.recipientInfo.name}</p>
+//               </div>
+//               <div>
+//                 <Label className="text-sm">Address</Label>
+//                 <p className="text-sm text-muted-foreground">{order.recipientInfo.address}</p>
+//               </div>
+//             </CardContent>
+//           </Card>
+
+//           {/* Payment & Status Info */}
+//           <Card>
+//             <CardHeader className="flex items-center gap-2">
+//               <CreditCard className="h-5 w-5" />
+//               <CardTitle>Payment & Status</CardTitle>
+//             </CardHeader>
+
+//             <CardContent className="space-y-3">
+//               <div>
+//                 <Label className="text-sm">Payment Status</Label>
+//                 <Badge variant="outline">{order.orderInfo.paymentStatus}</Badge>
+//               </div>
+//               <div>
+//                 <Label className="text-sm">Order Status</Label>
+//                 <Badge variant="outline">{order.orderInfo.status}</Badge>
+//               </div>
+//               <div>
+//                 <Label className="text-sm">Total Amount</Label>
+//                 <p className="text-lg font-semibold">£{Number(order.orderInfo.total).toFixed(2)}</p>
+//               </div>
+//             </CardContent>
+//           </Card>
+
+//           {/* Timeline */}
+//           <Card>
+//             <CardHeader className="flex items-center gap-2">
+//               <Calendar className="h-5 w-5" />
+//               <CardTitle>Timeline</CardTitle>
+//             </CardHeader>
+//             <CardContent className="space-y-3">
+//               <div>
+//                 <Label className="text-sm">Delivery Date</Label>
+//                 <p className="text-sm text-muted-foreground">
+//                   {new Date(order.orderInfo.deliveryDate || "1-1-1970").toDateString()}
+//                 </p>
+//               </div>
+//               <div>
+//                 <Label className="text-sm"> Order Placed </Label>
+//                 <p className="text-sm text-muted-foreground">
+//                   {formatTimestamp(order.orderInfo.placedAt)}
+//                 </p>
+//               </div>
+
+//             </CardContent>
+//           </Card>
+//         </div>
+
+//         {/* Editable Order Info */}
+//         <Card>
+//           <CardHeader className="flex items-center gap-2">
+//             <Package className="h-5 w-5" />
+//             <CardTitle>Edit Order Information</CardTitle>
+//           </CardHeader>
+
+//           <CardContent className="grid gap-4 md:grid-cols-2">
+//             <div className="space-y-1.5">
+//               <Label>Delivery Date</Label>
+//               <Input
+//                 type="date"
+//                 value={formData.deliveryDate}
+//                 onChange={(e) => handleFieldChange("deliveryDate", e.target.value)}
+//                 className="border rounded-[0.25rem]"
+//               />
+//             </div>
+//             <div className="space-y-2">
+//               <Label>Preferred delivery time</Label>
+//               <Select
+//                 value={formData.preferredDeliveryTime || ""}
+//                 onValueChange={(value) => handleFieldChange("preferredDeliveryTime", value)}
+//               >
+//                 <SelectTrigger className="border border-stone-300 rounded-[0.25rem] px-2 py-2 w-[22%] text-sm text-stone-800 font-medium">
+//                   <SelectValue placeholder="Select preferred delivery time" />
+//                 </SelectTrigger>
+//                 <SelectContent>
+//                   <SelectItem value="10am-1pm">10:00 – 13:00</SelectItem>
+//                   <SelectItem value="1pm-4pm">13:00 – 16:00</SelectItem>
+//                   <SelectItem value="4pm-6pm">16:00 – 18:00</SelectItem>
+//                   <SelectItem value="6pm-11pm">18:00 – 23:00</SelectItem>
+//                 </SelectContent>
+//               </Select>
+//             </div>
+//             <div className="space-y-1.5">
+//               <Label>Total (£)</Label>
+//               <Input
+//                 type="number"
+//                 step="0.01"
+//                 value={formData.total}
+//                 onChange={(e) => handleFieldChange("total", e.target.value)}
+//               />
+//             </div>
+//             <div className="space-y-1.5">
+//               <Label>Status</Label>
+//               <Select
+//                 value={formData.status}
+//                 onValueChange={(newStatus) =>
+//                   handleStatusUpdate(order.id!, newStatus)
+//                 }
+//                 disabled={updatingOrderId === order.id}
+//               >
+//                 <SelectTrigger className="w-[130px] h-8 text-[15px] border-stone-300 hover:bg-secondary bg-transparent py-0 focus:ring-0">
+//                   <div className="flex items-center gap-2">
+//                     {updatingOrderId === order.id ? (
+//                       <>
+//                         <Loader2 className="h-4 w-4 animate-spin" />
+//                         <span>{formData.status}</span>
+//                       </>
+//                     ) : (
+//                       <span>{formData.status}</span>
+//                     )}
+//                   </div>
+//                 </SelectTrigger>
+//                 <SelectContent>
+//                   {["New", "Active", "Shipped", "Complete", "Cancelled"].map(status => (
+//                     <SelectItem key={status} value={status}>{status}</SelectItem>
+//                   ))}
+//                 </SelectContent>
+//               </Select>
+//             </div>
+//             <div className="space-y-1.5 md:col-span-2">
+//               <Label>Notes</Label>
+//               <Textarea
+//                 value={formData.notes}
+//                 onChange={(e) => handleFieldChange("notes", e.target.value)}
+//                 className="min-h-[80px]"
+//               />
+//             </div>
+//           </CardContent>
+//         </Card>
+
+
+//         {/* Order Items */}
+//         {order.orderItems && order.orderItems.length > 0 && (
+//           <Card>
+//             <CardHeader className="flex items-center gap-2">
+//               <ShoppingBag className="h-5 w-5" />
+//               <CardTitle>Order Items ({order.orderItems.length})</CardTitle>
+//             </CardHeader>
+//             <CardContent>
+//               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+//                 {order.orderItems.map((item, index) => renderOrderItemCard(item, index))}
+//               </div>
+//             </CardContent>
+//           </Card>
+//         )}
+
+//         <div className="flex justify-end gap-2">
+//           <Button onClick={handleSave} disabled={!hasChanges}>
+//             Save Changes
+//           </Button>
+//           <Button onClick={handleDelete} variant="destructive">
+//             Delete Order
+//           </Button>
+//         </div>
+//       </main>
+//     </div>
+//   );
+// }
+
+
+
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -406,10 +830,25 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Calendar, User, MapPin, Package, CreditCard, ShoppingBag, Loader2 } from "lucide-react";
+import {
+  ArrowLeft,
+  Calendar,
+  User,
+  MapPin,
+  Package,
+  CreditCard,
+  ShoppingBag,
+  Loader2,
+} from "lucide-react";
 import { useOrderDetailsStore, useOrdersStore } from "@/store/admin/orderStore";
 import { useRouter } from "next/navigation";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { toast } from "sonner";
 
 interface OrderDetailsPageProps {
@@ -423,7 +862,6 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
   const router = useRouter();
   const [updatingOrderId, setUpdatingOrderId] = useState<string | null>(null);
 
-
   const [formData, setFormData] = useState({
     deliveryDate: "",
     status: "",
@@ -435,7 +873,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
 
   useEffect(() => {
     fetchOrder(orderId);
-  }, [orderId]);
+  }, [orderId, fetchOrder]);
 
   useEffect(() => {
     if (order) {
@@ -446,20 +884,20 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
         notes: order.orderInfo.notes || "",
         preferredDeliveryTime:
           order.orderInfo.preferredDeliveryTime ||
-          (Array.isArray(order.personalization) && order.personalization.length > 0
+          (Array.isArray(order.personalization) &&
+          order.personalization.length > 0
             ? order.personalization[0].preferredDeliveryTime || ""
             : ""),
       });
       setHasChanges(false);
     }
-  }, [order?.id]);
+  }, [order?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleFieldChange = (field: keyof typeof formData, value: string) => {
     setFormData((prev) => {
       const updated = { ...prev, [field]: value };
       const changed = Object.entries(updated).some(
-        ([key, val]) =>
-          val !== (order?.orderInfo[key as keyof typeof formData] || "")
+        ([key, val]) => val !== (order?.orderInfo[key as keyof typeof formData] || "")
       );
       setHasChanges(changed);
       return updated;
@@ -492,7 +930,6 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
     setUpdatingOrderId(null);
   };
 
-
   function formatTimestamp(timestamp: string) {
     const date = new Date(timestamp);
     const day = String(date.getDate()).padStart(2, "0");
@@ -503,60 +940,81 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
     return `${day}.${month}.${year} ${hours}:${minutes}`;
   }
 
-  const renderOrderItemCard = (item: any, index: number) => (
-    <Card key={item.id} className="overflow-hidden">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-sm">Item #{index + 1}</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex gap-4">
-          <div className="w-20 h-20 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
-            <Image
-              src={item.products?.image_1 || "/placeholder.jpg"}
-              alt={item.products?.name || "Product"}
-              width={80}
-              height={80}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="flex-1 min-w-0">
-            <h4 className="font-medium text-sm whitespace-normal break-words">{item.products?.name}</h4>
-            <p className="text-xs text-muted-foreground">{item.products?.category}</p>
-            <h4 className="font-medium text-sm whitespace-normal break-words">Varient: {item.selected_variant_name}</h4>
-            <div className="flex justify-between items-center mt-2">
-              <span className="text-xs">Qty: {item.quantity}</span>
-              <span className="font-medium text-sm">£{item.price_at_purchase?.toFixed(2)}</span>
+  const renderOrderItemCard = (item: any, index: number) => {
+    const price = Number(item?.price_at_purchase ?? 0);
+    const imgSrc =
+      typeof item?.products?.image_1 === "string" && item.products.image_1.length > 0
+        ? item.products.image_1
+        : "/placeholder.jpg"; // ensure this exists in /public
+
+    return (
+      <Card key={item?.id ?? `item-${index}`} className="overflow-hidden">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm">Item #{index + 1}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex gap-4">
+            <div className="w-20 h-20 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
+              <Image
+                src={imgSrc}
+                alt={item?.products?.name || "Product"}
+                width={80}
+                height={80}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h4 className="font-medium text-sm whitespace-normal break-words">
+                {item?.products?.name ?? "Unnamed product"}
+              </h4>
+              <p className="text-xs text-muted-foreground">
+                {item?.products?.category ?? "-"}
+              </p>
+              <h4 className="font-medium text-sm whitespace-normal break-words">
+                Varient: {item?.selected_variant_name ?? "-"}
+              </h4>
+              <div className="flex justify-between items-center mt-2">
+                <span className="text-xs">Qty: {item?.quantity ?? 0}</span>
+                <span className="font-medium text-sm">£{price.toFixed(2)}</span>
+              </div>
             </div>
           </div>
-          
-        </div>
-        {item.custom_data && Object.keys(item.custom_data).length > 0 && (
-          <div>
-            <Label className="text-xs font-medium">Personalization</Label>
-            <div className="mt-1 space-y-1">
-              {Object.entries(item.custom_data).map(([key, value]) => (
-                <div key={key} className="flex justify-between text-xs">
-                  <span className="text-muted-foreground capitalize">
-                    {key.replace(/([A-Z])/g, ' $1').trim()}:
-                  </span>
-                  <span className="font-medium max-w-32 whitespace-normal break-words">
-                    {String(value)}
-                  </span>
-                </div>
-              ))}
+
+          {item?.custom_data && Object.keys(item.custom_data).length > 0 && (
+            <div>
+              <Label className="text-xs font-medium">Personalization</Label>
+              <div className="mt-1 space-y-1">
+                {Object.entries(item.custom_data).map(([key, value]) => (
+                  <div key={key} className="flex justify-between text-xs">
+                    <span className="text-muted-foreground capitalize">
+                      {key.replace(/([A-Z])/g, " $1").trim()}:
+                    </span>
+                    <span className="font-medium max-w-32 whitespace-normal break-words">
+                      {String(value)}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  );
+          )}
+        </CardContent>
+      </Card>
+    );
+  };
+
+  // ---- Normalize orderItems to ALWAYS be an array ----
+  const items = (() => {
+    const raw = (order as any)?.orderItems;
+    if (Array.isArray(raw)) return raw;
+    if (raw && typeof raw === "object") return [raw];
+    return [];
+  })();
 
   if (loading || !order) {
     return (
       <div className="flex flex-col min-h-screen bg-muted/50 animate-pulse">
         <header className="flex h-16 items-center gap-2 border-b px-4 bg-background">
           <SidebarTrigger className="-ml-1" />
-          <h1 className="text-lg font-[200] font-[Century-Old-Style]">Order Details</h1>
         </header>
         <main className="flex-1 p-8 space-y-6">
           {[...Array(4)].map((_, i) => (
@@ -651,7 +1109,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
               <CardTitle>Payment & Status</CardTitle>
             </CardHeader>
 
-            <CardContent className="space-y-3">
+          <CardContent className="space-y-3">
               <div>
                 <Label className="text-sm">Payment Status</Label>
                 <Badge variant="outline">{order.orderInfo.paymentStatus}</Badge>
@@ -662,7 +1120,9 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
               </div>
               <div>
                 <Label className="text-sm">Total Amount</Label>
-                <p className="text-lg font-semibold">£{Number(order.orderInfo.total).toFixed(2)}</p>
+                <p className="text-lg font-semibold">
+                  £{Number(order.orderInfo.total).toFixed(2)}
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -686,7 +1146,6 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
                   {formatTimestamp(order.orderInfo.placedAt)}
                 </p>
               </div>
-
             </CardContent>
           </Card>
         </div>
@@ -738,9 +1197,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
               <Label>Status</Label>
               <Select
                 value={formData.status}
-                onValueChange={(newStatus) =>
-                  handleStatusUpdate(order.id!, newStatus)
-                }
+                onValueChange={(newStatus) => handleStatusUpdate(order.id!, newStatus)}
                 disabled={updatingOrderId === order.id}
               >
                 <SelectTrigger className="w-[130px] h-8 text-[15px] border-stone-300 hover:bg-secondary bg-transparent py-0 focus:ring-0">
@@ -756,8 +1213,10 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
                   </div>
                 </SelectTrigger>
                 <SelectContent>
-                  {["New", "Active", "Shipped", "Complete", "Cancelled"].map(status => (
-                    <SelectItem key={status} value={status}>{status}</SelectItem>
+                  {["New", "Active", "Shipped", "Complete", "Cancelled"].map((status) => (
+                    <SelectItem key={status} value={status}>
+                      {status}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -773,21 +1232,22 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
           </CardContent>
         </Card>
 
-
         {/* Order Items */}
-        {order.orderItems && order.orderItems.length > 0 && (
-          <Card>
-            <CardHeader className="flex items-center gap-2">
-              <ShoppingBag className="h-5 w-5" />
-              <CardTitle>Order Items ({order.orderItems.length})</CardTitle>
-            </CardHeader>
-            <CardContent>
+        <Card>
+          <CardHeader className="flex items-center gap-2">
+            <ShoppingBag className="h-5 w-5" />
+            <CardTitle>Order Items ({items.length})</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {items.length > 0 ? (
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {order.orderItems.map((item, index) => renderOrderItemCard(item, index))}
+                {items.map((item, index) => renderOrderItemCard(item, index))}
               </div>
-            </CardContent>
-          </Card>
-        )}
+            ) : (
+              <p className="text-sm text-muted-foreground">No items found for this order.</p>
+            )}
+          </CardContent>
+        </Card>
 
         <div className="flex justify-end gap-2">
           <Button onClick={handleSave} disabled={!hasChanges}>
