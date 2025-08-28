@@ -78,9 +78,19 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
             phone: customerInfo.phone,
           },
           personalization: items.map((item) => item.customData || ""),
-          deliveryDate: new Date(
-            Date.now() + 7 * 24 * 60 * 60 * 1000
-          ).toISOString(),
+          // ✅ Extract deliveryDate from first customData entry
+          deliveryDate: (() => {
+            try {
+              // If customData is a JSON string, parse it
+              const data =
+                typeof items[0]?.customData === "string"
+                  ? JSON.parse(items[0].customData)
+                  : items[0]?.customData;
+              return data?.[0]?.deliveryDate || new Date().toISOString();
+            } catch {
+              return new Date().toISOString();
+            }
+          })(),
           notes: "",
           total,
         }),
@@ -149,7 +159,7 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
               disabled={loading}
             />
             {emailWarning && (
-               <p className="text-[#50462D] text-[12px] mt-0.5 font-[Marfa]">{emailWarning}</p>
+              <p className="text-[#50462D] text-[12px] mt-0.5 font-[Marfa]">{emailWarning}</p>
             )}
           </div>
 
@@ -165,7 +175,7 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
               disabled={loading}
             />
             {phoneWarning && (
-                <p className="text-[#50462D] text-[12px] mt-0.5 font-[Marfa]">{phoneWarning}</p>
+              <p className="text-[#50462D] text-[12px] mt-0.5 font-[Marfa]">{phoneWarning}</p>
             )}
           </div>
         </div>

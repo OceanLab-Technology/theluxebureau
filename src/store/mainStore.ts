@@ -270,7 +270,7 @@ export const useMainStore = create<MainStore>()(
             cartError: error instanceof Error ? error.message : "Failed to add to cart",
             cartLoading: false,
           });
-          throw error; // Re-throw so AddToCartButton can handle it
+          throw error; 
         }
       },
 
