@@ -740,7 +740,7 @@ export default function PersonalizationStep() {
 
   // Put near the top of your component/file
   const MAX_CHARS = 300;
-  const MAX_LINES = 6;                 // tweak as you like
+  const MAX_LINES = 7;                 // tweak as you like
   const MAX_CONSEC_NEWLINES = 1;       // no more than one blank line in a row
 
   const clampMessage = (raw: string) => {
@@ -762,6 +762,13 @@ export default function PersonalizationStep() {
   };
 
   const countLines = (s: string) => s.split("\n").length;
+
+
+  useEffect(() => {
+  if (formData.selectedQuote === "custom") {
+    setCustomDraft(formData.customMessage || "");
+  }
+}, [formData.selectedQuote, formData.customMessage]);
 
 
   const getQuoteStyle = (): React.CSSProperties => ({

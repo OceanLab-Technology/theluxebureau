@@ -331,8 +331,8 @@ export default function PersonaliseForm({
             <div
               key={s.id}
               className={`text-[0.93rem] tracking-wider small-text cursor-pointer ${currentStep === s.id
-                  ? "text-secondary-foreground"
-                  : "text-stone-500"
+                ? "text-secondary-foreground"
+                : "text-stone-500"
                 }`}
               onClick={() => handleStepClick(s.id)}
             >
