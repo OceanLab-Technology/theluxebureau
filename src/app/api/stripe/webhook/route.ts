@@ -659,9 +659,9 @@ type OrderItemRowDB = {
   selected_variant_name: string | null;
   price_at_purchase: number | null;
   product:
-    | { id: string; name: string; image_1: string | null }
-    | { id: string; name: string; image_1: string | null }[]
-    | null;
+  | { id: string; name: string; image_1: string | null }
+  | { id: string; name: string; image_1: string | null }[]
+  | null;
 };
 
 /** Utility: event-level dedupe; returns true if this event was already processed */
@@ -872,6 +872,52 @@ export async function POST(request: Request) {
                   { name: "Recipient", content: session.customer_details?.name ?? "" },
                   { name: "order_total", content: orderTotal.toFixed(2) },
                   { name: "items", content: mandrillItems },
+                ],
+              },
+            }
+          );
+          console.log("Mandrill response:", res.data);
+        } else {
+          console.warn("No customer email on session; skipping Mandrill send.");
+        }
+      } catch (e: any) {
+        console.error("Mandrill axios error:", e?.response?.data || e?.message);
+      }
+
+      const TodayDate = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" }) ?? "theluxebureau";
+      // Send mail to internal team    
+      try {
+        if (session.customer_details?.email) {
+          const res = await axios.post(
+            "https://mandrillapp.com/api/1.0/messages/send-template.json",
+            {
+              key: "md-BfHmKxZ95KI6BiaR4dwUJQ",
+              template_name: "new-order-internal",
+              template_content: [],
+              message: {
+                from_email: "no-reply@theluxebureau.com",
+                from_name: "The Luxe Bureau",
+                to: [
+                  {
+                    email: "remotevansh@gmail.com",
+                    type: "to",
+                  },
+                ],
+                subject: "You have a new order",
+                merge: true,
+                merge_language: "handlebars",
+                global_merge_vars: [
+                  {
+                    name: "preheader_text",
+                    content: "You have a new order",
+                  },
+                  { name: "order_number", content: existingOrder.id },
+                  { name: "senders_name", content: session.customer_details?.name ?? "" },
+                  {
+                    name: "order_date",
+                    content: TodayDate
+                  },
+                  { name: "order_total", content: orderTotal.toFixed(2) }
                 ],
               },
             }
