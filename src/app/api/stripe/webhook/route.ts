@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
+import axios from "axios";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -12,7 +13,14 @@ const supabase = createClient(
 type OrderItemRow = {
   product_id: string;
   quantity: number;
-  selected_variant_name: string | null; // in case some old rows are null
+  selected_variant_name: string | null;
+  price_at_purchase: number;
+  products: {
+    id: string;
+    name: string;
+    image_1: string | null;
+  }[]; // <-- now matches the inferred type
+
 };
 
 
@@ -57,33 +65,30 @@ export async function POST(request: Request) {
       )
       // ✅ Decrease product inventory based on order_items table
       if (orderData?.id) {
+        // const { data: orderItems, error: itemsError } = await supabase
+        //   .from("order_items")
+        //   .select("product_id, quantity, selected_variant_name")
+        //   .eq("order_id", orderData.id);
+
         const { data: orderItems, error: itemsError } = await supabase
           .from("order_items")
-          .select("product_id, quantity, selected_variant_name")
+          .select(`
+            product_id,
+            quantity,
+            selected_variant_name,
+            price_at_purchase,
+            products (
+              id,
+              image_1,
+              name
+            )
+          `)
           .eq("order_id", orderData.id);
+
 
         if (itemsError) {
           console.error("Order Items Fetch Error:", itemsError);
         } else if (orderItems?.length) {
-          // for (const item of orderItems) {
-          // const { error: inventoryError } = await supabase.rpc(
-          //   "decrement_inventory",
-          //   {
-          //     product_id: item.product_id,
-          //     quantity: item.quantity,
-          //   }
-          // );
-          // if (inventoryError) {
-          //   console.error(
-          //     `Inventory Update Error for product ${item.product_id}:`,
-          //     inventoryError
-          //   );
-          // } else {
-          //   console.log(
-          //     `Inventory decreased for product ${item.product_id} by ${item.quantity}`
-          //   );
-          // }
-
           if (orderItems && orderItems.length) {
             for (const item of orderItems as OrderItemRow[]) {
               const variantName = item.selected_variant_name ?? "default";
@@ -109,13 +114,62 @@ export async function POST(request: Request) {
               }
             }
           }
-
-
-          // }
         }
+        // take all product_id from orderItems and then fetch data and do this maildrill worksm
+
+        const mandrillItems =
+          orderItems?.map((item, i) => ({
+            gift_label: `GIFT ${String(i + 1).padStart(2, "0")}`,
+            title: item.products[0].name ?? "Product",
+            variant: item.selected_variant_name ?? "Default",
+            qty: item.quantity,
+            price: (item.price_at_purchase ?? 0).toFixed(2),
+            image_url: item.products[0].image_1 ?? "https://placehold.co/600x400",
+            url: `https://yourstore.com/products/${item.product_id}`,
+            date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+            time: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+            right_image: false,
+          })) ?? [];
+
+        const orderTotal = session.amount_total ? session.amount_total / 100 : 0;
+
+        try {
+          const res = await axios.post("https://mandrillapp.com/api/1.0/messages/send-template.json", {
+            key: process.env.MANDRILL_API_KEY,
+            template_name: "order-confirmation-external",
+            template_content: [],
+            message: {
+              from_email: "no-reply@theluxebureau.com",
+              from_name: "The Luxe Bureau",
+              to: [
+                {
+                  email: session.customer_details?.email,
+                  name: session.customer_details?.name ?? "",
+                  type: "to",
+                },
+              ],
+              subject: "Your Luxe Bureau order is confirmed",
+              merge: true,
+              merge_language: "handlebars",
+              global_merge_vars: [
+                { name: "first_name", content: session.customer_details?.name?.split(" ")?.[0] ?? "" },
+                { name: "preheader_text", content: "Your order is confirmed and being prepared with care." },
+                { name: "order_number", content: orderData.id },
+                { name: "Recipient", content: session.customer_details?.name ?? "" },
+                { name: "order_total", content: orderTotal.toFixed(2) },
+                { name: "items", content: mandrillItems },
+              ],
+            },
+          });
+
+          console.log("Mandrill response:", res.data);
+        } catch (e: any) {
+          console.error("Mandrill axios error:", e.response?.data || e.message);
+        }
+
       }
 
-      // Add dtaa in client
+      // Add data in client
       // ✅ Add/Update customer after order success
       if (orderData?.id) {
         const customerEmail = session.customer_details?.email;
@@ -154,6 +208,8 @@ export async function POST(request: Request) {
       if (cartError) {
         console.error("Cart Clear Error:", cartError);
       }
+
+
 
       // Send order confirmation email to external user
       // using maidrill API, templayte: 
