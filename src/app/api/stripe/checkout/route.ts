@@ -44,15 +44,6 @@ export async function POST(request: NextRequest) {
       quantity: item.quantity,
     }));
 
-    lineItems.push({
-      price_data: {
-        currency: "gbp",
-        product_data: { name: "Shipping" },
-        unit_amount: 1500,
-      },
-      quantity: 1,
-    });
-
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: lineItems,
