@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from("products")
-      .select("id, name, description, price, category, image_1, image_2, contains_alcohol, variants", { count: "exact" })
+      .select("id, name,item, description, price, category, image_1, image_2, contains_alcohol, female_founded, variants", { count: "exact" })
       .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1);
 
@@ -177,6 +177,7 @@ export const POST = withAdminAuth(
       const slug = (formData.get("slug") as string) || "";
       const category = (formData.get("category") as string) || "";
       const price = n(formData.get("price"));
+      const item = (formData.get("item") as string) || "";
 
       // optional fields
       const description = (formData.get("description") as string) || null;
@@ -186,6 +187,7 @@ export const POST = withAdminAuth(
       const about_the_maker = (formData.get("about_the_maker") as string) || null;
       const particulars = (formData.get("particulars") as string) || null;
       const contains_alcohol = (formData.get("contains_alcohol") as string) || null;
+      const female_founded = (formData.get("female_founded") as string) === "true";
 
       if (!name || !slug || !category || Number.isNaN(price)) {
         return NextResponse.json(
@@ -220,6 +222,7 @@ export const POST = withAdminAuth(
         .insert({
           name,
           price,
+          item,
           category,
           description,
           title,
@@ -230,6 +233,7 @@ export const POST = withAdminAuth(
           slug,
           variants, // ✅ jsonb
           contains_alcohol,
+          female_founded,
         })
         .select()
         .single();

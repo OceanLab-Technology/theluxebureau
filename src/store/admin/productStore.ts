@@ -265,6 +265,7 @@ export type Variant = {
 
 export type Product = {
   id: string;
+  item: string;
   name: string;
   description?: string | null;
   price: number;
@@ -288,6 +289,7 @@ export type Product = {
 
 export type ProductUpdateJson = Partial<{
   name: string;
+  item: string;
   description: string | null;
   price: number;
   title: string | null;

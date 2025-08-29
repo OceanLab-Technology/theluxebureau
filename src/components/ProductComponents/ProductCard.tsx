@@ -47,19 +47,27 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const availability = product.inventory > 0 ? "in-stock" : "sold-out";
-  const fallbackImage = product.image_2 || product.image_1;
+  // const availability = product.inventory > 0 ? "in-stock" : "sold-out";
+  const fallbackImage = product.image_2 || product.image_1 || product.image_3;
 
   return (
     <div className="transition-all font-[Century-Old-Style] duration-300 overflow-hidden text-secondary-foreground p-0 md:p-[6px] flex flex-col justify-between w-full bg-[#f8f6ea] rounded-none md:rounded">
       <Link href={`/products/${product.id}`} className="block">
         {/* Image wrapper locked to 4:5 */}
-        <div className="relative aspect-[4/5] w-full overflow-hidden">
+        <div className="relative aspect-[4/5] w-full overflow-hidden group">
+          {/* First image */}
           <img
             src={product.image_1 || fallbackImage!}
             alt={product.name}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+            className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 group-hover:opacity-0"
           />
+          {product.image_2 && (
+            <img
+              src={product.image_2 ? product.image_2 : fallbackImage!}
+              alt={product.name}
+              className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 opacity-0 group-hover:opacity-100"
+            />
+          )}
         </div>
 
         {/* Product info */}

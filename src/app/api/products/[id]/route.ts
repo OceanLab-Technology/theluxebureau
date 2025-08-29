@@ -272,12 +272,18 @@ export const PUT = withAdminAuth(
 
         // Scalars
         const scalar = [
-          "name","description","title","slug","category",
-          "packaging","why_we_chose_it","about_the_maker","particulars", "contains_alcohol",
+          "name","description","title","item", "slug","category",
+          "packaging","why_we_chose_it","about_the_maker","particulars", "contains_alcohol", "female_founded",
         ] as const;
         for (const k of scalar) {
           const v = formData.get(k);
-          if (v !== null) updates[k] = String(v);
+          if (v !== null) {
+            if (k === "female_founded" || k === "contains_alcohol") {
+              updates[k] = v === "true";
+            } else {
+              updates[k] = String(v);
+            }
+          }
         }
         const price = formData.get("price");
         if (price !== null) updates["price"] = n(price, 0);
