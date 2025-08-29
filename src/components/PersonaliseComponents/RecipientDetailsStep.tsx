@@ -26,14 +26,14 @@ export default function RecipientDetailsStep() {
 
   return (
     <div>
-      <p className="text-secondary-foreground mb-12 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1.3rem] font-[Century-Old-Style]">
+      <p className="text-secondary-foreground mb-10 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-[Century-Old-Style]">
         Please enter the recipient's contact details
       </p>
 
-      <form className="space-y-4 font-[Marfa] transition-all duration-300">
+      <form className="font-[Marfa] transition-all duration-300">
         {/* Desktop Grid Layout */}
-        <div className="hidden md:grid md:grid-cols-[320px_1fr] gap-6 items-center">
-          <label htmlFor="your-name" className="text-stone-700 text-[0.9375rem] font-[300]">
+        <div className="hidden md:grid md:grid-cols-[320px_1fr] gap-4 items-center">
+          <label htmlFor="your-name" className="text-stone-700 text-[0.8125rem] font-[300]">
             Your name*
           </label>
           <div className="flex flex-col">
@@ -49,7 +49,7 @@ export default function RecipientDetailsStep() {
             />
           </div>
 
-          <label htmlFor="recipient-name" className="text-stone-700 text-[0.9375rem] font-[300]">
+          <label htmlFor="recipient-name" className="text-stone-700 text-[0.8125rem] font-[300]">
             Recipient's Name*
           </label>
           <div className="flex flex-col">
@@ -67,7 +67,7 @@ export default function RecipientDetailsStep() {
 
           <label
             htmlFor="phone"
-            className="text-stone-700 text-[0.9375rem] font-[300]"
+            className="text-stone-700 text-[0.8125rem] font-[300]"
           >
             Recipient&apos;s phone number*
           </label>
@@ -96,7 +96,7 @@ export default function RecipientDetailsStep() {
 
           <label
             htmlFor="email"
-            className="text-stone-700 text-[0.9375rem] font-[300]"
+            className="text-stone-700 text-[0.8125rem] font-[300]"
           >
             Recipient&apos;s e-mail
           </label>
@@ -124,7 +124,7 @@ export default function RecipientDetailsStep() {
           </div>
 
 
-          <label className="text-stone-700 text-[0.9375rem] font-[300]">
+          {/* <label className="text-stone-700 text-[0.8125rem] font-[300]">
             Would you like shipping updates via SMS?
           </label>
           <div className="flex gap-16 justify-end mr-4 w-[95%]">
@@ -182,13 +182,13 @@ export default function RecipientDetailsStep() {
                 `}
               />
             </label>
-          </div>
+          </div> */}
         </div>
 
         {/* Mobile Stack Layout */}
         <div className="md:hidden space-y-6 transition-all duration-300">
           <div className="flex flex-col space-y-2">
-            <label htmlFor="your-name-mobile" className="text-stone-700 text-[0.9375rem] font-[300]">
+            <label htmlFor="your-name-mobile" className="text-stone-700 text-[0.8125rem] font-[300]">
               Your name*
             </label>
             <Input
@@ -204,7 +204,7 @@ export default function RecipientDetailsStep() {
           </div>
 
           <div className="flex flex-col space-y-2">
-            <label htmlFor="recipient-name-mobile" className="text-stone-700 text-[0.9375rem] font-[300]">
+            <label htmlFor="recipient-name-mobile" className="text-stone-700 text-[0.8125rem] font-[300]">
               Recipient's Name*
             </label>
             <Input
@@ -221,7 +221,7 @@ export default function RecipientDetailsStep() {
 
 
           <div className="flex flex-col space-y-1">
-            <label htmlFor="phone-mobile" className="text-stone-700 text-[0.9375rem] font-[300]">
+            <label htmlFor="phone-mobile" className="text-stone-700 text-[0.8125rem] font-[300]">
               Recipient's phone number*
             </label>
             <Input
@@ -241,7 +241,7 @@ export default function RecipientDetailsStep() {
 
 
           <div className="flex flex-col space-y-1">
-            <label htmlFor="email-mobile" className="text-stone-700 text-[0.9375rem] font-[300]">
+            <label htmlFor="email-mobile" className="text-stone-700 text-[0.8125rem] font-[300]">
               Recipient's e-mail*
             </label>
             <Input
@@ -260,7 +260,7 @@ export default function RecipientDetailsStep() {
           </div>
 
 
-          <label className="text-stone-700 text-[0.9375rem] font-[300]">
+          <label className="text-stone-700 text-[0.8125rem] font-[300]">
             Would you like shipping updates via SMS?
           </label>
           <div className="flex gap-8 mt-1 justify-start w-full">

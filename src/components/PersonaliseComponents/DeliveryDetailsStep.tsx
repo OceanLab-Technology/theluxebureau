@@ -139,7 +139,7 @@
 //       <form className="font-[Marfa] space-y-6">
 //         <div className="grid gap-8 md:grid-cols-[320px_1fr]">
 //           {/* Recipient name */}
-//           <label htmlFor="recipient-name" className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label htmlFor="recipient-name" className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Recipient&apos;s name*
 //           </label>
 //           <Input
@@ -147,11 +147,11 @@
 //             type="text"
 //             value={formData.recipientName}
 //             onChange={(e) => handleInputChange("recipientName", e.target.value)}
-//             className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 rounded-none shadow-none text-[0.9375rem] font-[300] w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+//             className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 rounded-none shadow-none text-[0.8125rem] font-[300] w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
 //           />
 
 //           {/* Address */}
-//           <label htmlFor="address" className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label htmlFor="address" className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Recipient&apos;s Address*
 //           </label>
 //           <Input
@@ -159,11 +159,11 @@
 //             type="text"
 //             value={formData.recipientAddress}
 //             onChange={(e) => handleInputChange("recipientAddress", e.target.value)}
-//             className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 rounded-none shadow-none text-[0.9375rem] font-[300] w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+//             className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 focus:border-stone-600 rounded-none shadow-none text-[0.8125rem] font-[300] w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
 //           />
 
 //           {/* Delivery date */}
-//           <label className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Preferred delivery date*
 //           </label>
 //           <Popover>
@@ -213,7 +213,7 @@
 //           </Popover>
 
 //           {/* Delivery time */}
-//           <label className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Preferred delivery time*
 //           </label>
 //           <div>
@@ -248,7 +248,7 @@
 //             {timeHint && <p className="mt-1 text-xs text-stone-500">{timeHint}</p>}
 //           </div>
 
-//           <label className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Who would you like to receive shipping updates?
 //           </label>
 //           <div className="flex gap-16 justify-end mr-4 w-[95%]">
@@ -308,7 +308,7 @@
 //             </label>
 //           </div>
 
-//           <label className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Would you like shipping updates to be sent by text message or email?
 //           </label>
 //           <div className="flex gap-37 justify-end mr-4 w-[95%]">
@@ -605,7 +605,7 @@
 //       <form className="font-[Marfa] space-y-6">
 //         <div className="grid gap-8 md:grid-cols-[320px_1fr]">
 //           {/* Recipient name */}
-//           <label htmlFor="recipient-name" className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label htmlFor="recipient-name" className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Recipient&apos;s name*
 //           </label>
 //           <Input
@@ -613,11 +613,11 @@
 //             type="text"
 //             value={formData.recipientName}
 //             onChange={(e) => handleInputChange("recipientName", e.target.value)}
-//             className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 rounded-none shadow-none text-[0.9375rem] font-[300] w-full focus:outline-none"
+//             className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 rounded-none shadow-none text-[0.8125rem] font-[300] w-full focus:outline-none"
 //           />
 
 //           {/* Address */}
-//           <label htmlFor="address" className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label htmlFor="address" className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Recipient&apos;s Address*
 //           </label>
 //           <Input
@@ -625,11 +625,11 @@
 //             type="text"
 //             value={formData.recipientAddress}
 //             onChange={(e) => handleInputChange("recipientAddress", e.target.value)}
-//             className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 rounded-none shadow-none text-[0.9375rem] font-[300] w-full focus:outline-none"
+//             className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 rounded-none shadow-none text-[0.8125rem] font-[300] w-full focus:outline-none"
 //           />
 
 //           {/* Delivery date */}
-//           <label className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Preferred delivery date*
 //           </label>
 //           <Popover>
@@ -679,7 +679,7 @@
 //           </Popover>
 
 //           {/* Delivery time */}
-//           <label className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Preferred delivery time*
 //           </label>
 //           <div>
@@ -715,7 +715,7 @@
 //           </div>
 
 //           {/* Who receives updates */}
-//           <label className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Who would you like to receive shipping updates?
 //           </label>
 //           <div className="flex gap-16 justify-end mr-4 w-[95%]">
@@ -766,7 +766,7 @@
 //           </div>
 
 //           {/* Update method */}
-//           <label className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Would you like shipping updates to be sent by text message or email?
 //           </label>
 //           <div className="flex gap-37 justify-end mr-4 w-[95%]">
@@ -1065,7 +1065,7 @@
 //       <form className="font-[Marfa] space-y-6">
 //         <div className="grid gap-8 md:grid-cols-[320px_1fr]">
 //           {/* Recipient name */}
-//           <label htmlFor="recipient-name" className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label htmlFor="recipient-name" className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Recipient&apos;s name*
 //           </label>
 //           <Input
@@ -1073,11 +1073,11 @@
 //             type="text"
 //             value={formData.recipientName}
 //             onChange={(e) => handleInputChange("recipientName", e.target.value)}
-//             className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 rounded-none shadow-none text-[0.9375rem] font-[300] w-full focus:outline-none"
+//             className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 rounded-none shadow-none text-[0.8125rem] font-[300] w-full focus:outline-none"
 //           />
 
 //           {/* Address */}
-//           <label htmlFor="address" className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label htmlFor="address" className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Recipient&apos;s Address*
 //           </label>
 //           <Input
@@ -1085,11 +1085,11 @@
 //             type="text"
 //             value={formData.recipientAddress}
 //             onChange={(e) => handleInputChange("recipientAddress", e.target.value)}
-//             className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 rounded-none shadow-none text-[0.9375rem] font-[300] w-full focus:outline-none"
+//             className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 rounded-none shadow-none text-[0.8125rem] font-[300] w-full focus:outline-none"
 //           />
 
 //           {/* Delivery date */}
-//           <label className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Preferred delivery date*
 //           </label>
 //           <Popover>
@@ -1139,7 +1139,7 @@
 //           </Popover>
 
 //           {/* Delivery time */}
-//           <label className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Preferred delivery time*
 //           </label>
 //           <div>
@@ -1175,7 +1175,7 @@
 //           </div>
 
 //           {/* Who receives updates */}
-//           <label className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Who would you like to receive shipping updates?
 //           </label>
 //           <div className="flex gap-16 justify-end mr-4 w-[95%]">
@@ -1226,7 +1226,7 @@
 //           </div>
 
 //           {/* Update method */}
-//           <label className="text-stone-700 text-[0.9375rem] font-[300]">
+//           <label className="text-stone-700 text-[0.8125rem] font-[300]">
 //             Would you like shipping updates to be sent by text message or email?
 //           </label>
 //           <div className="flex gap-37 justify-end mr-4 w-[95%]">
@@ -1522,12 +1522,12 @@ export default function DeliveryDetailsStep({
         We hand-deliver every gift to ensure it arrives in perfect condition. Please choose a date and time when the recipient will be at home. Our agents can't leave gifts unattended, so a redelivery fee may apply if no one is available.
       </p>
 
-      <form className="font-[Marfa] space-y-6">
-        <div className="grid gap-8 md:grid-cols-[320px_1fr]">
+      <form className="font-[Marfa] space-y-4">
+        <div className="grid gap-4 md:grid-cols-[320px_1fr]">
           {/* Recipient name */}
           <label
             htmlFor="recipient-name"
-            className="text-stone-700 text-[0.9375rem] font-[300]"
+            className="text-stone-700 text-[0.8125rem] font-[300]"
           >
             Recipient&apos;s name*
           </label>
@@ -1536,13 +1536,13 @@ export default function DeliveryDetailsStep({
             type="text"
             value={formData.recipientName}
             onChange={(e) => handleInputChange("recipientName", e.target.value)}
-            className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 rounded-none shadow-none text-[0.9375rem] font-[300] w-full focus:outline-none"
+            className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 rounded-none shadow-none text-[0.8125rem] font-[300] w-full focus:outline-none"
           />
 
           {/* Address */}
           <label
             htmlFor="address"
-            className="text-stone-700 text-[0.9375rem] font-[300]"
+            className="text-stone-700 text-[0.8125rem] font-[300]"
           >
             Recipient&apos;s Address*
           </label>
@@ -1553,11 +1553,11 @@ export default function DeliveryDetailsStep({
             onChange={(e) =>
               handleInputChange("recipientAddress", e.target.value)
             }
-            className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 rounded-none shadow-none text-[0.9375rem] font-[300] w-full focus:outline-none"
+            className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 rounded-none shadow-none text-[0.8125rem] font-[300] w-full focus:outline-none"
           />
 
           {/* Delivery date */}
-          <label className="text-stone-700 text-[0.9375rem] font-[300]">
+          <label className="text-stone-700 text-[0.8125rem] font-[300]">
             Preferred delivery date*
           </label>
           <Popover>
@@ -1610,7 +1610,7 @@ export default function DeliveryDetailsStep({
           </Popover>
 
           {/* Delivery time */}
-          <label className="text-stone-700 text-[0.9375rem] font-[300]">
+          <label className="text-stone-700 text-[0.8125rem] font-[300]">
             Preferred delivery time*
           </label>
           <div>
@@ -1651,38 +1651,36 @@ export default function DeliveryDetailsStep({
 
           {/* Who receives updates */}
           <div className="">
-            <label className="text-stone-700 text-[0.9375rem] font-[300] inline-flex writespace-nowrap gap-1">
-              <span className="flex-none"> Who would you like to receive shipping updates?</span>
-              <div className="flex items-center justify-center t-1">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Info className="h-4 w-4 text-stone-500" />
-                    </TooltipTrigger>
-                    <TooltipContent
-                      side="bottom"
-                      className="max-w-[500px] bg-[#50462D] text-white p-3 text-sm"
-                    // sideOffset={5}
-                    >
-                      <div className="space-y-2 w-full">
-                        <p className="w-full">
-                          To keep your gift a surprise, we can send delivery updates to you instead of the recipient. If sent to them, they'll receive:
-                        </p>
-                        <ul className="space-y-1 ml-2">
-                          <li>
-                            • A confirmation with a link to reschedule (at no charge
-                            if requested at least 2 hours before delivery)
-                          </li>
-                          <li>
-                            • A message when we're on our way, plus a call 15
-                            minutes before arrival
-                          </li>
-                        </ul>
-                      </div>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
+            <label className="text-stone-700 text-[0.8125rem] font-[300] flex">
+              <span> Who would you like to receive shipping updates? </span>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info className="h-4 w-4 mt-0.5 ml-2   text-stone-500" />
+                </TooltipTrigger>
+                <TooltipContent
+                  side="bottom"
+                  className="max-w-[340px] bg-[#50462D] text-background p-3 text-sm"
+                  // sideOffset={5}
+                >
+                  <div className="space-y-2 w-full">
+                    <p className="w-full">
+                      To keep your gift a surprise, we can send delivery updates
+                      to you instead of the recipient. If sent to them, they'll
+                      receive:
+                    </p>
+                    <ul className="space-y-1 ml-2">
+                      <li>
+                        • A confirmation with a link to reschedule (at no charge
+                        if requested at least 2 hours before delivery)
+                      </li>
+                      <li>
+                        • A message when we're on our way, plus a call 15
+                        minutes before arrival
+                      </li>
+                    </ul>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
             </label>
           </div>
           <div className="flex gap-16 justify-end mr-4 w-[95%]">
@@ -1737,7 +1735,7 @@ export default function DeliveryDetailsStep({
           </div>
 
           {/* Update method */}
-          <label className="text-stone-700 text-[0.9375rem] font-[300]">
+          <label className="text-stone-700 text-[0.8125rem] font-[300]">
             Would you like shipping updates to be sent by text message or email?
           </label>
           <div className="flex gap-37 justify-end mr-4 w-[95%]">
@@ -1748,7 +1746,7 @@ export default function DeliveryDetailsStep({
                   : "text-[#50462d]/50"
                   }`}
               >
-                Text Message
+                Text message
               </span>
               <input
                 type="radio"

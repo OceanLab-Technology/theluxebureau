@@ -92,6 +92,7 @@ export interface Order {
 export interface Product {
   id?: string;
   slug?: string;
+  item: string;
   category?: string;
   name: string;
   description?: string;
@@ -120,6 +121,7 @@ export interface Product {
   cartItemId?: string;
   customData?: Record<string, any>;
   contains_alcohol: boolean;
+  female_founded: boolean;
   variants: string;
   selectedVariant: string;
 }

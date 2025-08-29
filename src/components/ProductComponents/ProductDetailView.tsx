@@ -634,19 +634,25 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
           </div>
         </div>
 
-        <div className="space-y-6 py-10 lg:px-4 px-6">
+        <div className="space-y-6 lg:py-40 py-10 lg:px-30 px-6">
           <div className="md:w-96">
             <div className="small-text gap-2 mb-2 text-stone-600 uppercase">
               <span>{currentProduct.category}</span>
             </div>
 
-            <h1 className="text-[2rem] leading-none text-secondary-foreground font-medium">
+            <h1 className="text-[2rem] py-4 leading-none text-secondary-foreground font-medium">
               {currentProduct.name}
             </h1>
-            <span className="text-[2rem] font-medium">£{currentProduct.price}</span>
+            <h1 className="text-[1.5rem] leading-none text-secondary-foreground font-medium">
+              {currentProduct.item}
+            </h1>
+            <span className="text-[1.5rem] font-medium">£{currentProduct.price}</span>
+            <p className="small-text font-medium md:mb-20 mt-4 uppercase">
+              {currentProduct.female_founded && "Female Founded"}
+            </p>
           </div>
 
-          <p className="text-[20px] leading-[30px] font-[400]">
+          <p className="text-[1rem] leading-[30px] font-[400]">
             {currentProduct.description}
           </p>
 
@@ -843,7 +849,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                   {currentProduct.why_we_chose_it && (
                     <AccordionItem value="why-we-chose-it">
                       <AccordionTrigger className="text-left small-text font-medium uppercase">
-                        Why We Chose It
+                        Who It's For
                       </AccordionTrigger>
                       <AccordionContent>
                         <p className="text-muted-foreground leading-relaxed font-[Marfa]">
