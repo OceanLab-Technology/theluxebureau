@@ -895,11 +895,22 @@ export default function PersonalizationStep() {
             </SelectTrigger>
 
             <SelectContent className="rounded-[0.3rem]">
-              <SelectItem value={DEFAULT_FONT_LABEL}>
+              <SelectItem 
+                value={DEFAULT_FONT_LABEL}
+                style={{ fontFamily: DEFAULT_FONT_LABEL }}
+              >
                 {DEFAULT_FONT_LABEL}
               </SelectItem>
               {apiFontsWithoutGaramond.map((font) => (
-                <SelectItem key={font.name} value={font.name}>
+                <SelectItem 
+                  key={font.name} 
+                  value={font.name}
+                  style={{ 
+                    fontFamily: fontLoaded && selectedFontFromApi?.name === font.name 
+                      ? `"${font.name}", serif` 
+                      : font.name 
+                  }}
+                >
                   {font.name}
                 </SelectItem>
               ))}
@@ -940,11 +951,20 @@ export default function PersonalizationStep() {
             <SelectContent className="rounded-[0.3rem]">
               <SelectItem value="select">Select a quote</SelectItem>
               {siteSettings?.quotes?.map((quote, idx) => (
-                <SelectItem key={idx} value={quote.author}>
+                <SelectItem 
+                  key={idx} 
+                  value={quote.author}
+                  style={{ fontFamily: "monospace" }}
+                >
                   {quote.author}
                 </SelectItem>
               ))}
-              <SelectItem value="custom">Write my own</SelectItem>
+              <SelectItem 
+                value="custom"
+                style={{ fontFamily: "monospace" }}
+              >
+                Write my own
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -1021,9 +1041,10 @@ export default function PersonalizationStep() {
 
                 placeholder="Select a quote or write your own"
                 maxLength={300}
-                className={`w-full text-center md:text-[0.8rem] text-[8px] h-full mt-4 bg-transparent border-none outline-none resize-none scrollbar-hide pointer-events-auto focus:outline-none overflow-hidden ${customDraft.length > 300
-                  ? "md:pt-[2rem] pt-[1rem]"
-                  : customDraft.length > 100
+                className={`w-full text-center md:text-[0.8rem] text-[8px] h-full mt-4 bg-transparent border-none outline-none resize-none scrollbar-hide pointer-events-auto focus:outline-none overflow-hidden ${
+                  customDraft.length > 300
+                    ? "md:pt-[2rem] pt-[1rem]"
+                    : customDraft.length > 100
                     ? "pt-[2rem]"
                     : "pt-[3rem]"
                   }`}

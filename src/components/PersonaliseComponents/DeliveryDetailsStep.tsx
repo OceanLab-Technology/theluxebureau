@@ -1651,38 +1651,36 @@ export default function DeliveryDetailsStep({
 
           {/* Who receives updates */}
           <div className="">
-            <label className="text-stone-700 text-[0.9375rem] font-[300] inline-flex writespace-nowrap gap-1">
-              <span className="flex-none"> Who would you like to receive shipping updates?</span>
-              <div className="flex items-center justify-center t-1">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Info className="h-4 w-4 text-stone-500" />
-                    </TooltipTrigger>
-                    <TooltipContent
-                      side="bottom"
-                      className="max-w-[500px] bg-[#50462D] text-white p-3 text-sm"
-                    // sideOffset={5}
-                    >
-                      <div className="space-y-2 w-full">
-                        <p className="w-full">
-                          To keep your gift a surprise, we can send delivery updates to you instead of the recipient. If sent to them, they'll receive:
-                        </p>
-                        <ul className="space-y-1 ml-2">
-                          <li>
-                            • A confirmation with a link to reschedule (at no charge
-                            if requested at least 2 hours before delivery)
-                          </li>
-                          <li>
-                            • A message when we're on our way, plus a call 15
-                            minutes before arrival
-                          </li>
-                        </ul>
-                      </div>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
+            <label className="text-stone-700 text-[0.8125rem] font-[300] flex">
+              <span> Who would you like to receive shipping updates? </span>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info className="h-4 w-4 mt-0.5 ml-2   text-stone-500" />
+                </TooltipTrigger>
+                <TooltipContent
+                  side="bottom"
+                  className="max-w-[340px] bg-[#50462D] text-background p-3 text-sm"
+                  // sideOffset={5}
+                >
+                  <div className="space-y-2 w-full">
+                    <p className="w-full">
+                      To keep your gift a surprise, we can send delivery updates
+                      to you instead of the recipient. If sent to them, they'll
+                      receive:
+                    </p>
+                    <ul className="space-y-1 ml-2">
+                      <li>
+                        • A confirmation with a link to reschedule (at no charge
+                        if requested at least 2 hours before delivery)
+                      </li>
+                      <li>
+                        • A message when we're on our way, plus a call 15
+                        minutes before arrival
+                      </li>
+                    </ul>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
             </label>
           </div>
           <div className="flex gap-16 justify-end mr-4 w-[95%]">
@@ -1748,7 +1746,7 @@ export default function DeliveryDetailsStep({
                   : "text-[#50462d]/50"
                   }`}
               >
-                Text Message
+                Text message
               </span>
               <input
                 type="radio"
