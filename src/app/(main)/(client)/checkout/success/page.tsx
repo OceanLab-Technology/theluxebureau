@@ -7,9 +7,8 @@ export default function CheckoutSuccessPage() {
     <div className="min-h-screen flex items-center justify-center p-4 bg-transparent">
       <div className="max-w-md w-full text-center space-y-6">
         <h1 className="text-4xl font-[Century-Old-Style] text-secondary-foreground">Payment Successful</h1>
-       <p className="text-stone-600 text-sm">
-          Thank you for your purchase, your order has been confirmed<br />
-          A confirmation has been sent to your email address
+       <p className="text-stone-600 text-[1rem] font-[Century-Old-Style]">
+         Thank you for your purchase, your order has been confirmed and a confirmation has been sent to your email address.
         </p>
         <div className="flex flex-col gap-3">
           <Button asChild className="w-full bg-yellow-500 hover:bg-yellow-600 text-stone-800">
@@ -19,8 +18,8 @@ export default function CheckoutSuccessPage() {
             <Link href="/account">View Order History</Link>
           </Button>
         </div>
-        <p className="text-xs text-stone-500 font-[Marfa]">
-          Need help? Email us at support@luxebureau.com
+        <p className="text-sm text-stone-500 font-[Marfa]">
+          Need help? Email us at founders@luxebureau.com
         </p>
       </div>
     </div>
