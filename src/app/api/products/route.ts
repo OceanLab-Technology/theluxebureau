@@ -19,7 +19,10 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from("products")
-      .select("id, name,item, description, price, category, image_1, image_2, contains_alcohol, female_founded, variants", { count: "exact" })
+      .select(`
+        id, name, item, description, price, category, image_1, image_2, contains_alcohol, female_founded,
+        product_variants(id, name, inventory, threshold, qty_blocked)
+      `, { count: "exact" })
       .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1);
 
@@ -186,7 +189,7 @@ export const POST = withAdminAuth(
       const why_we_chose_it = (formData.get("why_we_chose_it") as string) || null;
       const about_the_maker = (formData.get("about_the_maker") as string) || null;
       const particulars = (formData.get("particulars") as string) || null;
-      const contains_alcohol = (formData.get("contains_alcohol") as string) || null;
+      const contains_alcohol = (formData.get("contains_alcohol") as string) === "true";
       const female_founded = (formData.get("female_founded") as string) === "true";
 
       if (!name || !slug || !category || Number.isNaN(price)) {
@@ -215,8 +218,7 @@ export const POST = withAdminAuth(
         );
       }
 
-
-      // 1) Create base product
+      // 1) Create base product (without variants field since it's now in separate table)
       const { data: created, error: insertErr } = await supabase
         .from("products")
         .insert({
@@ -231,7 +233,6 @@ export const POST = withAdminAuth(
           about_the_maker,
           particulars,
           slug,
-          variants, // ✅ jsonb
           contains_alcohol,
           female_founded,
         })
@@ -240,9 +241,23 @@ export const POST = withAdminAuth(
       if (insertErr || !created) throw insertErr;
 
       const productId = created.id;
+
+      const variantInserts = variants.map(variant => ({
+        product_id: productId,
+        name: variant.name,
+        inventory: variant.inventory,
+        threshold: variant.threshold,
+        qty_blocked: variant.qty_blocked,
+      }));
+
+      const { error: variantErr } = await supabase
+        .from("product_variants")
+        .insert(variantInserts);
+      if (variantErr) throw variantErr;
+
       const uploaded: string[] = [];
 
-      // 2) Upload up to 5 images
+      // 3) Upload up to 5 images
       for (let i = 1; i <= 5; i++) {
         const file = formData.get(`image_${i}`) as File | null;
         if (!file) continue;
@@ -261,7 +276,7 @@ export const POST = withAdminAuth(
         if (publicUrlData?.publicUrl) uploaded.push(publicUrlData.publicUrl);
       }
 
-      // 3) Update product with image URLs
+      // 4) Update product with image URLs
       const imagePayload: Record<string, string | null> = {};
       for (let i = 0; i < 5; i++) {
         imagePayload[`image_${i + 1}`] = uploaded[i] || null;

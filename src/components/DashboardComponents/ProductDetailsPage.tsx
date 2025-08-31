@@ -403,6 +403,16 @@ function asVariants(input: unknown): Variant[] {
   return [{ name: "default", inventory: 0, threshold: 0, qty_blocked: 0 }];
 }
 
+function getProductVariants(product: any): Variant[] {
+  if (Array.isArray(product?.product_variants)) {
+    return asVariants(product.product_variants);
+  }
+  if (product?.variants) {
+    return asVariants(product.variants);
+  }
+  return [{ name: "default", inventory: 0, threshold: 0, qty_blocked: 0 }];
+}
+
 function totalAvailable(variants: Variant[]) {
   return variants.reduce(
     (sum, v) => sum + Math.max(0, n(v.inventory) - n(v.qty_blocked)),
@@ -473,7 +483,7 @@ function ProductDetailsPage({ productId }: ProductDetailsPageProps) {
       image_4: selectedProduct.image_4 || "",
       image_5: selectedProduct.image_5 || "",
     });
-    setVariants(asVariants((selectedProduct as any).variants));
+    setVariants(getProductVariants(selectedProduct));
     setHasChanges(false);
   }, [selectedProduct]);
 
@@ -498,7 +508,7 @@ function ProductDetailsPage({ productId }: ProductDetailsPageProps) {
     });
     const variantsChanged =
       JSON.stringify(vs) !==
-      JSON.stringify(asVariants((selectedProduct as any)?.variants));
+      JSON.stringify(getProductVariants(selectedProduct));
     setHasChanges(baseChanged || variantsChanged);
   };
 

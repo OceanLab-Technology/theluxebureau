@@ -1089,7 +1089,14 @@ export function ProductFormSheet({
         why_we_chose_it: (selectedProduct as any).why_we_chose_it ?? "",
         about_the_maker: (selectedProduct as any).about_the_maker ?? "",
         particulars: (selectedProduct as any).particulars ?? "",
-        variants: Array.isArray((selectedProduct as any).variants)
+        variants: Array.isArray((selectedProduct as any).product_variants)
+          ? (selectedProduct as any).product_variants.map((v: any) => ({
+              name: String(v?.name ?? "default"),
+              inventory: Number(v?.inventory ?? 0),
+              threshold: Number(v?.threshold ?? 0),
+              qty_blocked: Number(v?.qty_blocked ?? 0),
+            }))
+          : Array.isArray((selectedProduct as any).variants)
           ? (selectedProduct as any).variants.map((v: any) => ({
               name: String(v?.name ?? "default"),
               inventory: Number(v?.inventory ?? 0),

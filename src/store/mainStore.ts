@@ -39,6 +39,12 @@ interface MainStore {
   handleLoginSuccess: () => Promise<void>;
   handleLogout: () => void;
 
+  // Inventory management
+  checkInventoryAvailability: () => Promise<boolean>;
+  reserveCartInventory: () => Promise<boolean>;
+  releaseCartInventory: (items?: Array<{product_id: string; quantity: number; selected_variant_name?: string}>) => Promise<void>;
+  confirmCartInventory: (items?: Array<{product_id: string; quantity: number; selected_variant_name?: string}>) => Promise<void>;
+
   // Global reset method
   resetStore: () => void;
   cartInitialized: boolean;
@@ -499,6 +505,181 @@ export const useMainStore = create<MainStore>()(
         const guestStore = useGuestCartStore.getState();
         guestStore.clearCart();
         set({ isAuthenticated: false });
+      },
+
+      // Inventory Management Functions
+      checkInventoryAvailability: async () => {
+        try {
+          const { cartItems } = get();
+          
+          if (cartItems.length === 0) {
+            return true;
+          }
+          const items = cartItems.map(item => ({
+            product_id: item.product_id,
+            quantity: item.quantity,
+            selected_variant_name: item.selected_variant_name || 'default',
+          }));
+
+          const response = await fetch('/api/cart/check-inventory', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items }),
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            throw new Error(result.error || 'Failed to check inventory');
+          }
+
+          const { data } = result;
+
+          if (!data.all_available) {
+            const unavailableMessages = data.unavailable_items.map((item: any) => 
+              `${item.product_name} (${item.variant_name}): ${item.available_quantity} available, ${item.requested_quantity} requested`
+            );
+            
+            toast.error(`Some items are not available:\n${unavailableMessages.join('\n')}`, {
+              duration: 8000,
+            });
+
+            return false;
+          }
+
+          if (data.warnings.length > 0) {
+            const warningMessages = data.warnings.map((item: any) => 
+              `${item.product_name} (${item.variant_name}): Low stock (${item.available_quantity} remaining)`
+            );
+            
+            toast.warning(`Low stock warning:\n${warningMessages.join('\n')}`, {
+              duration: 5000,
+            });
+          }
+
+          return true;
+
+        } catch (error) {
+          console.error('Inventory check failed:', error);
+          toast.error('Failed to check inventory availability');
+          return false;
+        }
+      },
+
+      reserveCartInventory: async () => {
+        try {
+          const { cartItems } = get();
+          
+          if (cartItems.length === 0) {
+            return true;
+          }
+
+          const items = cartItems.map(item => ({
+            product_id: item.product_id,
+            quantity: item.quantity,
+            selected_variant_name: item.selected_variant_name || 'default',
+          }));
+
+          const response = await fetch('/api/cart/reserve-inventory', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items }),
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            throw new Error(result.error || 'Failed to reserve inventory');
+          }
+
+          const { data } = result;
+
+          if (!data.success) {
+            const failedMessages = data.failed_items.map((item: any) => 
+              `${item.variant_name}: ${item.reason}`
+            );
+            
+            toast.error(`Failed to reserve inventory:\n${failedMessages.join('\n')}`, {
+              duration: 8000,
+            });
+
+            return false;
+          }
+
+          toast.success('Inventory reserved for checkout');
+          return true;
+
+        } catch (error) {
+          console.error('Inventory reservation failed:', error);
+          toast.error('Failed to reserve inventory for checkout');
+          return false;
+        }
+      },
+
+      releaseCartInventory: async (items) => {
+        try {
+          const { cartItems } = get();
+          const itemsToRelease = items || cartItems.map(item => ({
+            product_id: item.product_id,
+            quantity: item.quantity,
+            selected_variant_name: item.selected_variant_name || 'default',
+          }));
+
+          if (itemsToRelease.length === 0) {
+            return;
+          }
+
+          const response = await fetch('/api/cart/release-inventory', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items: itemsToRelease }),
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            console.error('Failed to release inventory:', result.error);
+            return;
+          }
+
+          console.log('Inventory released successfully');
+
+        } catch (error) {
+          console.error('Inventory release failed:', error);
+        }
+      },
+
+      confirmCartInventory: async (items) => {
+        try {
+          const { cartItems } = get();
+          const itemsToConfirm = items || cartItems.map(item => ({
+            product_id: item.product_id,
+            quantity: item.quantity,
+            selected_variant_name: item.selected_variant_name || 'default',
+          }));
+
+          if (itemsToConfirm.length === 0) {
+            return;
+          }
+
+          const response = await fetch('/api/cart/confirm-inventory', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items: itemsToConfirm }),
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            console.error('Failed to confirm inventory:', result.error);
+            return;
+          }
+
+          console.log('Inventory confirmed successfully');
+
+        } catch (error) {
+          console.error('Inventory confirmation failed:', error);
+        }
       },
 
       resetStore: () => {

@@ -464,6 +464,19 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
     return [];
   }
 
+  function getProductVariants(product: any): Variant[] {
+    // Check new format first (product_variants relation)
+    if (Array.isArray(product?.product_variants)) {
+      return normalizeVariants(product.product_variants);
+    }
+    // Fallback to old format (variants JSONB field)
+    if (product?.variants) {
+      return normalizeVariants(product.variants);
+    }
+    // Default fallback
+    return [];
+  }
+
   // ---- fetch product ----
   useEffect(() => {
     fetchProductById(productId);
@@ -490,7 +503,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
 
   // ---- auto-select single variant (KEEP ABOVE EARLY RETURNS) ----
   useEffect(() => {
-    const parsed = normalizeVariants((currentProduct as any)?.variants);
+    const parsed = getProductVariants(currentProduct);
     if (parsed.length === 1) {
       setSelectedVariantName(parsed[0].name);
     }
@@ -552,7 +565,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
   // =========================
   // VARIANT + STOCK LOGIC
   // =========================
-  const variants: Variant[] = normalizeVariants((currentProduct as any)?.variants);
+  const variants: Variant[] = getProductVariants(currentProduct);
   const hasVariants = variants.length > 0;
 
   const calcAvailableStock = (v: Variant) =>
@@ -647,7 +660,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               {currentProduct.item}
             </h1>
             <span className="text-[1.5rem] font-medium">£{currentProduct.price}</span>
-            <p className="small-text font-medium md:mb-20 mt-4 uppercase">
+            <p className="small-text font-medium md:mb-16 mt-4 uppercase">
               {currentProduct.female_founded && "Female Founded"}
             </p>
           </div>
@@ -741,7 +754,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                   value={selectedVariantName ?? undefined}
                   onValueChange={(value) => setSelectedVariantName(value)}
                 >
-                  <SelectTrigger className="w-[200px] h-9 border-stone-300 bg-transparent rounded-[0.25rem] px-2 text-center  flex items-center focus:outline-none">
+                  <SelectTrigger className="capitalize w-[200px] h-9 border-stone-300">
                     <SelectValue placeholder="Select" />
                     <ChevronDown className="ml-auto h-4 w-4 opacity-100" />
                   </SelectTrigger>
@@ -749,7 +762,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                     {variants.map((v) => {
                       const inStock = isVariantInStock(v);
                       return (
-                        <SelectItem key={v.name} value={v.name} disabled={!inStock}>
+                        <SelectItem key={v.name} value={v.name} disabled={!inStock} className="capitalize small-text">
                           {v.name}
                           {!inStock ? " — Out of stock" : ""}
                         </SelectItem>
@@ -764,7 +777,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                 {!anyInStock ? (
                   <Button
                     disabled
-                    className="text-[0.75rem] leading-[119.58%] w-[20.812rem] h-[2.5rem] tracking-[0.075rem] uppercase rounded-[0.25rem] bg-[#FDCF5F] hover:bg-[#FDCF5F]/80"
+                    className="text-[0.75rem] leading-[119.58%] w-[20.812rem] h-[2.5rem] tracking-[0.075rem] uppercase rounded-[0.25rem] bg-[#FDCF5F] text-stone-700 hover:bg-[#FDCF5F]/80"
                   >
                     Sold Out
                   </Button>
@@ -780,7 +793,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                     ) : (
                       <Button
                         disabled
-                        className="text-[0.75rem] leading-[119.58%] w-[20.812rem] h-[2.5rem] tracking-[0.075rem] uppercase rounded-[0.25rem] bg-[#FDCF5F] hover:bg-[#FDCF5F]/80"
+                        className="text-[0.75rem] leading-[119.58%] w-[20.812rem] h-[2.5rem] tracking-[0.075rem] text-stone-700 uppercase rounded-[0.25rem] bg-[#FDCF5F] hover:bg-[#FDCF5F]/80"
                       >
                         Sold Out
                       </Button>
@@ -797,7 +810,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                 ) : (
                   <Button
                     disabled
-                    className="text-[0.75rem] leading-[119.58%] w-[20.812rem] h-[2.5rem] tracking-[0.075rem] uppercase rounded-[0.25rem] bg-[#FDCF5F] hover:bg-[#FDCF5F]/80"
+                    className="text-[0.75rem] leading-[119.58%] w-[20.812rem] h-[2.5rem] tracking-[0.075rem] uppercase text-stone-700 rounded-[0.25rem] bg-[#FDCF5F] hover:bg-[#FDCF5F]/80"
                   >
                     Sold Out
                   </Button>
@@ -810,7 +823,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               {!anyInStock ? (
                 <Button
                   disabled
-                  className="text-[0.75rem] leading-[119.58%] w-[20.812rem] h-[2.5rem] tracking-[0.075rem] uppercase rounded-[0.25rem] bg-[#FDCF5F] hover:bg-[#FDCF5F]/80"
+                  className="text-[0.75rem] leading-[119.58%] w-[20.812rem] h-[2.5rem] tracking-[0.075rem] uppercase rounded-[0.25rem] bg-[#FDCF5F] text-stone-700 hover:bg-[#FDCF5F]/80"
                 >
                   Sold Out
                 </Button>

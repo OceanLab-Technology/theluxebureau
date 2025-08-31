@@ -518,6 +518,19 @@ function asVariants(input: unknown): Variant[] {
   return [];
 }
 
+function getProductVariants(product: any): Variant[] {
+  // Check new format first (product_variants relation)
+  if (Array.isArray(product?.product_variants)) {
+    return asVariants(product.product_variants);
+  }
+  // Fallback to old format (variants JSONB field)
+  if (product?.variants) {
+    return asVariants(product.variants);
+  }
+  // Default fallback
+  return [];
+}
+
 function totalAvailable(variants: Variant[]) {
   return variants.reduce((sum, v) => {
     const avail = Math.max(0, v.inventory - v.qty_blocked);
@@ -633,7 +646,7 @@ export function ProductsPage() {
                   ? renderSkeletonRow()
                   : products?.map((product: any) => {
                       // variants is jsonb in DB and follows your shape
-                      const variants: Variant[] = asVariants(product.variants);
+                      const variants: Variant[] = getProductVariants(product);
                       const stock = totalAvailable(variants);
                       const badge = computeStockBadge(variants);
 

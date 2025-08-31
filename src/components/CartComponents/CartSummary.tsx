@@ -12,12 +12,18 @@ interface CartSummaryProps {
 }
 
 export function CartSummary({ onClose }: CartSummaryProps) {
-  const { cartItems, cartTotal, cartLoading } = useMainStore();
+  const { cartItems, cartTotal, cartLoading, checkInventoryAvailability } = useMainStore();
   const router = useRouter();
   const { user } = useAuth();
   const { navigateWithAuth, showLoginModal, handleCloseModal, featureName } = useAuthenticatedNavigation();
   
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
+    const inventoryAvailable = await checkInventoryAvailability();
+    
+    if (!inventoryAvailable) {
+      return;
+    }
+
     if (onClose && user) {
       onClose();
     }
