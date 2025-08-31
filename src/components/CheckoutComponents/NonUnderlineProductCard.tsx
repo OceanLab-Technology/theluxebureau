@@ -36,7 +36,7 @@ export const NonUnderlineProductCard: React.FC<CheckoutItemProps> = ({
         </div>
         <div className="space-y-4 w-full">
           {product.customData && Object.keys(product.customData).length > 0 && (
-            <div className="md:space-y-4 space-y-4 w-full">
+            <div className="md:space-y-3 space-y-4 w-full">
               <div className="flex items-center gap-16">
                 <label className="text-muted-foreground font-[ABC Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Recipients name
