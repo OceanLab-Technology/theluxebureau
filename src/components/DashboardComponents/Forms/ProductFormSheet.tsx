@@ -920,6 +920,7 @@ import {
   Search,
 } from "lucide-react";
 import Image from "next/image";
+import { DraggableImageGrid } from "@/components/ui/draggable-image-grid";
 
 /* ---------- Schema (matches DB) ---------- */
 const num = z.coerce.number().nonnegative();
@@ -1237,16 +1238,23 @@ export function ProductFormSheet({
         data.female_founded ? "true" : "false"
       );
 
-      // json fields
       formData.append("variants", JSON.stringify(data.variants));
+      if (isEdit) {
+        images.forEach((fileOrUrl, i) => {
+          if (fileOrUrl instanceof File) {
+            formData.append(`image_${i + 1}`, fileOrUrl);
+          } else {
+            formData.append(`image_${i + 1}`, fileOrUrl);
+          }
+        });
+      } else {
+        images.forEach((fileOrUrl, i) => {
+          if (fileOrUrl instanceof File) {
+            formData.append(`image_${i + 1}`, fileOrUrl);
+          }
+        });
+      }
 
-      // images (only new files)
-      images.forEach((fileOrUrl, i) => {
-        if (fileOrUrl instanceof File)
-          formData.append(`image_${i + 1}`, fileOrUrl);
-      });
-
-      // removed image URLs
       if (isEdit && removedImages.length) {
         removedImages.forEach((url) => formData.append("removedImages[]", url));
       }
@@ -1772,39 +1780,20 @@ export function ProductFormSheet({
                         <p className="text-sm text-muted-foreground">
                           Upload up to 5 product images (PNG, JPG, WEBP)
                         </p>
+                        <p className="text-xs text-muted-foreground">
+                          💡 Tip: Click and drag any image to reorder them. Position 1 = image_1, Position 2 = image_2, etc.
+                        </p>
                       </div>
                     </Label>
                   </div>
 
                   {images.length > 0 && (
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                      {images.map((img, i) => (
-                        <div key={i} className="relative group">
-                          <div className="aspect-square overflow-hidden rounded-lg border bg-muted/20">
-                            <Image
-                              src={
-                                typeof img === "string"
-                                  ? img
-                                  : URL.createObjectURL(img)
-                              }
-                              alt={`Preview ${i + 1}`}
-                              width={200}
-                              height={200}
-                              className="object-cover w-full h-full"
-                            />
-                          </div>
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="destructive"
-                            className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                            onClick={() => removeImage(i)}
-                          >
-                            <X className="h-3 w-3" />
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
+                    <DraggableImageGrid
+                      images={images}
+                      onImagesChange={setImages}
+                      onRemoveImage={removeImage}
+                      maxImages={5}
+                    />
                   )}
 
                   {!isEdit && images.length === 0 && (

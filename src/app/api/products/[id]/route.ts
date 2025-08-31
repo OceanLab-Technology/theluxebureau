@@ -325,10 +325,18 @@ export const PUT = withAdminAuth(
           }
         }
 
-        // Upload new images (image_1..image_5)
+        // Handle image uploads and reordering
+        // The frontend sends both new files and existing URLs in image_1, image_2, etc.
+        // After drag/drop reordering, existing images can be in different positions
+        const currentImages = [
+          current.image_1, current.image_2, current.image_3, current.image_4, current.image_5
+        ].filter(Boolean);
+
         for (let i = 1; i <= 5; i++) {
           const fileOrUrl = formData.get(`image_${i}`);
+          
           if (fileOrUrl instanceof File && fileOrUrl.size > 0) {
+            // New file upload - handle as before
             const fileName = `${Date.now()}-${fileOrUrl.name.replace(/\s+/g, "-")}`;
             const filePath = `${id}/${fileName}`;
             const { error: uploadErr } = await supabase.storage
@@ -340,7 +348,22 @@ export const PUT = withAdminAuth(
                 .getPublicUrl(filePath);
               if (publicUrlData?.publicUrl) updates[`image_${i}`] = publicUrlData.publicUrl;
             }
+          } else if (typeof fileOrUrl === 'string' && fileOrUrl.trim() !== '') {
+            updates[`image_${i}`] = fileOrUrl;
+          } else {
+              updates[`image_${i}`] = null;
           }
+        }
+
+        const finalImageUrls = Object.values(updates)
+          .filter(val => typeof val === 'string' && val.includes('product-images'));
+        const orphanedImages = currentImages.filter(url => 
+          !finalImageUrls.includes(url) && !removed.includes(url)
+        );
+        for (const url of orphanedImages) {
+          const parts = url.split("/");
+          const key = parts.slice(parts.length - 2).join("/");
+          await supabase.storage.from("product-images").remove([key]);
         }
 
         // Apply updates
