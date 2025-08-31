@@ -1536,7 +1536,7 @@ export default function DeliveryDetailsStep({
             type="text"
             value={formData.recipientName}
             onChange={(e) => handleInputChange("recipientName", e.target.value)}
-            className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 rounded-none shadow-none text-[0.8125rem] font-[300] w-full focus:outline-none"
+            className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 rounded-none shadow-none text-[0.8125rem] font-[300] w-full focus:outline-none focus-visible:ring-0 focus-visible:outline-none focus:ring-0"
           />
 
           {/* Address */}
@@ -1553,7 +1553,7 @@ export default function DeliveryDetailsStep({
             onChange={(e) =>
               handleInputChange("recipientAddress", e.target.value)
             }
-            className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 rounded-none shadow-none text-[0.8125rem] font-[300] w-full focus:outline-none"
+            className="border-0 border-b border-stone-500 bg-transparent px-0 text-stone-800 placeholder:text-stone-500 rounded-none shadow-none text-[0.8125rem] font-[300] w-full focus:outline-none focus-visible:ring-0 focus-visible:outline-none focus:ring-0"
           />
 
           {/* Delivery date */}
@@ -1596,15 +1596,6 @@ export default function DeliveryDetailsStep({
                 selected={date}
                 onSelect={handleDateSelect}
                 disabled={calendarDisabled}
-                initialFocus
-                classNames={{
-                  day_selected:
-                    "bg-[#50462D] text-white hover:bg-[#50462D] hover:text-white font-[Marfa]",
-                  day_disabled: "opacity-40 cursor-not-allowed line-through",
-                  caption: "font-[Marfa] text-[15px] font-[300]",
-                  head_cell: "font-[Marfa] text-[15px] font-[300]",
-                  cell: "font-[Marfa] text-[15px] font-[300]",
-                }}
               />
             </PopoverContent>
           </Popover>
@@ -1658,8 +1649,11 @@ export default function DeliveryDetailsStep({
                   <Info className="h-4 w-4 mt-0.5 ml-2   text-stone-500" />
                 </TooltipTrigger>
                 <TooltipContent
+                style={{
+                  width: "490px",
+                }}
                   side="bottom"
-                  className="max-w-[340px] bg-[#50462D] text-background p-3 text-sm"
+                  className=" bg-[#50462D] text-background p-3 text-sm"
                   // sideOffset={5}
                 >
                   <div className="space-y-2 w-full">
@@ -1670,11 +1664,11 @@ export default function DeliveryDetailsStep({
                     </p>
                     <ul className="space-y-1 ml-2">
                       <li>
-                        • A confirmation with a link to reschedule (at no charge
+                        - A confirmation with a link to reschedule (at no charge
                         if requested at least 2 hours before delivery)
                       </li>
                       <li>
-                        • A message when we're on our way, plus a call 15
+                        - A message when we're on our way, plus a call 15
                         minutes before arrival
                       </li>
                     </ul>
@@ -1701,7 +1695,7 @@ export default function DeliveryDetailsStep({
                 onChange={(e) =>
                   handleSMSChange(e.target.value as "send-to-me")
                 }
-                className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
+                className={`w-4 h-4 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
                   ${formData.smsUpdates === "send-to-me"
                     ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
                     : "bg-[#50462d]/50"
@@ -1725,7 +1719,7 @@ export default function DeliveryDetailsStep({
                 onChange={(e) =>
                   handleSMSChange(e.target.value as "send-to-recipient")
                 }
-                className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
+                className={`w-4 h-4 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
                   ${formData.smsUpdates === "send-to-recipient"
                     ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
                     : "bg-[#50462d]/50"
@@ -1756,7 +1750,7 @@ export default function DeliveryDetailsStep({
                 onChange={(e) =>
                   handleSMSTextOrEmailChange(e.target.value as "text-message")
                 }
-                className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
+                className={`w-4 h-4 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
                   ${formData.shippingUpdateMethod === "text-message"
                     ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
                     : "bg-[#50462d]/50"
@@ -1780,7 +1774,7 @@ export default function DeliveryDetailsStep({
                 onChange={(e) =>
                   handleSMSTextOrEmailChange(e.target.value as "email")
                 }
-                className={`w-5 h-5 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
+                className={`w-4 h-4 flex-shrink-0 border border-stone-300 appearance-none rounded-full focus:outline-none
                   ${formData.shippingUpdateMethod === "email"
                     ? "bg-[#50462D] checked:bg-[#50462D] checked:border-[#50462D]"
                     : "bg-[#50462d]/50"
