@@ -921,7 +921,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
         <span className="small-text pt-2">PABLO PICASSO</span>
       </div>
 
-      <ProductRecommendations currentProductId={currentProduct.id!} />
+          <ProductRecommendations currentProductId={currentProduct.id!} />
 
       <LoginRequiredModal
         isOpen={showLoginModal}

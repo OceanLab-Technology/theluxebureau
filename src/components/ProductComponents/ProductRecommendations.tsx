@@ -21,9 +21,16 @@ export function ProductRecommendations({
 
   const filteredRecommendations = products
     .filter((product) => {
-      return product.id !== currentProductId && product.inventory > 0;
+      if (product.id === currentProductId) return false;
+      if (product.product_variants && product.product_variants.length > 0) {
+        return product.product_variants.some(
+          variant => variant.inventory > variant.qty_blocked
+        );
+      }
+      return (product as any).inventory > 0;
     })
-    .slice(0, 2); // Limit to 2 recommendations
+    .slice(0, 2);
+
 
   if (loading && products.length === 0) {
     return (
