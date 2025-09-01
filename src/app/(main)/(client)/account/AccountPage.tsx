@@ -433,13 +433,13 @@ export default function AccountPage({ user }: AccountPageProps) {
                         className="border-0 font-[Century-Old-Style] focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
                         placeholder="••••••••••••••••••••"
                       />
-                      <button
+                      {/* <button
                         type="button"
                         onClick={togglePasswordVisibility} 
                         className="absolute right-0 top-1/2 transform -translate-y-1/2 text-stone-500 hover:text-stone-700"
                       >
                         {isPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                 </div>

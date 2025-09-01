@@ -245,7 +245,14 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
     const supabase = await createClient();
-    const { data, error } = await supabase.from("products").select("*").eq("id", id).single();
+    const { data, error } = await supabase
+      .from("products")
+      .select(`
+        *,
+        product_variants(id, name, inventory, threshold, qty_blocked)
+      `)
+      .eq("id", id)
+      .single();
     if (error) throw error;
     return NextResponse.json({ success: true, data });
   } catch (error) {
@@ -272,12 +279,18 @@ export const PUT = withAdminAuth(
 
         // Scalars
         const scalar = [
-          "name","description","title","slug","category",
-          "packaging","why_we_chose_it","about_the_maker","particulars", "contains_alcohol",
+          "name","description","title","item", "slug","category",
+          "packaging","why_we_chose_it","about_the_maker","particulars", "contains_alcohol", "female_founded",
         ] as const;
         for (const k of scalar) {
           const v = formData.get(k);
-          if (v !== null) updates[k] = String(v);
+          if (v !== null) {
+            if (k === "female_founded" || k === "contains_alcohol") {
+              updates[k] = v === "true";
+            } else {
+              updates[k] = String(v);
+            }
+          }
         }
         const price = formData.get("price");
         if (price !== null) updates["price"] = n(price, 0);
@@ -285,21 +298,39 @@ export const PUT = withAdminAuth(
         // Get current for merges & image mapping
         const { data: current, error: fetchError } = await supabase
           .from("products")
-          .select("*")
+          .select(`
+            *,
+            product_variants(id, name, inventory, threshold, qty_blocked)
+          `)
           .eq("id", id)
           .single();
         if (fetchError || !current) {
           return NextResponse.json({ success: false, error: "Product not found" }, { status: 404 });
         }
-
-        // ✅ variants (JSON)
         const rawVariants = formData.get("variants");
         if (rawVariants !== null) {
           try {
             const incoming = JSON.parse(String(rawVariants));
-            // choose merge OR replace:
-            const merged = mergeVariantsByName(current.variants ?? [], Array.isArray(incoming) ? incoming : []);
-            updates["variants"] = merged;
+            if (Array.isArray(incoming)) {
+              await supabase
+                .from("product_variants")
+                .delete()
+                .eq("product_id", id);
+
+              // Then insert new variants
+              const variantInserts = incoming.map(variant => ({
+                product_id: id,
+                name: variant.name || "default",
+                inventory: Number(variant.inventory || 0),
+                threshold: Number(variant.threshold || 0),
+                qty_blocked: Number(variant.qty_blocked || 0),
+              }));
+
+              const { error: variantErr } = await supabase
+                .from("product_variants")
+                .insert(variantInserts);
+              if (variantErr) throw variantErr;
+            }
           } catch (e) {
             return NextResponse.json({ success: false, error: "Invalid variants JSON" }, { status: 400 });
           }
@@ -319,10 +350,15 @@ export const PUT = withAdminAuth(
           }
         }
 
-        // Upload new images (image_1..image_5)
+        const currentImages = [
+          current.image_1, current.image_2, current.image_3, current.image_4, current.image_5
+        ].filter(Boolean);
+
         for (let i = 1; i <= 5; i++) {
           const fileOrUrl = formData.get(`image_${i}`);
+          
           if (fileOrUrl instanceof File && fileOrUrl.size > 0) {
+            // New file upload - handle as before
             const fileName = `${Date.now()}-${fileOrUrl.name.replace(/\s+/g, "-")}`;
             const filePath = `${id}/${fileName}`;
             const { error: uploadErr } = await supabase.storage
@@ -334,7 +370,22 @@ export const PUT = withAdminAuth(
                 .getPublicUrl(filePath);
               if (publicUrlData?.publicUrl) updates[`image_${i}`] = publicUrlData.publicUrl;
             }
+          } else if (typeof fileOrUrl === 'string' && fileOrUrl.trim() !== '') {
+            updates[`image_${i}`] = fileOrUrl;
+          } else {
+              updates[`image_${i}`] = null;
           }
+        }
+
+        const finalImageUrls = Object.values(updates)
+          .filter(val => typeof val === 'string' && val.includes('product-images'));
+        const orphanedImages = currentImages.filter(url => 
+          !finalImageUrls.includes(url) && !removed.includes(url)
+        );
+        for (const url of orphanedImages) {
+          const parts = url.split("/");
+          const key = parts.slice(parts.length - 2).join("/");
+          await supabase.storage.from("product-images").remove([key]);
         }
 
         // Apply updates
@@ -342,7 +393,10 @@ export const PUT = withAdminAuth(
           .from("products")
           .update(updates)
           .eq("id", id)
-          .select()
+          .select(`
+            *,
+            product_variants(id, name, inventory, threshold, qty_blocked)
+          `)
           .single();
         if (updateErr) throw updateErr;
 
@@ -352,19 +406,57 @@ export const PUT = withAdminAuth(
       // ---------- JSON ----------
       const body = await req.json();
 
-      // normalize if variants present
+      // Handle variants separately if present
+      let variants = null;
       if (Array.isArray(body?.variants)) {
-        body.variants = body.variants.map(normalizeVariant);
+        variants = body.variants.map((v: any) => normalizeVariant(v));
+        delete body.variants; // Remove from main update object
       }
       if (body?.price !== undefined) body.price = n(body.price, 0);
 
+      // Update product (without variants)
       const { data: updated, error: updateErr } = await supabase
         .from("products")
         .update(body)
         .eq("id", id)
-        .select()
+        .select(`
+          *,
+          product_variants(id, name, inventory, threshold, qty_blocked)
+        `)
         .single();
       if (updateErr) throw updateErr;
+
+      if (variants) {
+        await supabase
+          .from("product_variants")
+          .delete()
+          .eq("product_id", id);
+
+        const variantInserts = variants.map((variant: any) => ({
+          product_id: id,
+          name: variant.name,
+          inventory: variant.inventory,
+          threshold: variant.threshold,
+          qty_blocked: variant.qty_blocked,
+        }));
+
+        const { error: variantErr } = await supabase
+          .from("product_variants")
+          .insert(variantInserts);
+        if (variantErr) throw variantErr;
+
+        const { data: finalUpdated, error: finalFetchErr } = await supabase
+          .from("products")
+          .select(`
+            *,
+            product_variants(id, name, inventory, threshold, qty_blocked)
+          `)
+          .eq("id", id)
+          .single();
+        if (finalFetchErr) throw finalFetchErr;
+
+        return NextResponse.json({ success: true, data: finalUpdated });
+      }
 
       return NextResponse.json({ success: true, data: updated });
     } catch (err: any) {
@@ -408,6 +500,7 @@ export const DELETE = withAdminAuth(
         await supabase.storage.from("product-images").remove(imageKeys);
       }
 
+      // Delete the product - variants will be deleted automatically due to CASCADE constraint
       const { error: delErr } = await supabase.from("products").delete().eq("id", id);
       if (delErr) throw delErr;
 

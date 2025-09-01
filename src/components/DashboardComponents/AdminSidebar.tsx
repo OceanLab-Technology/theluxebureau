@@ -23,9 +23,12 @@ import {
   FileText,
   TrendingUp,
   UserPlus,
+  LogOutIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { LogoutButton } from "../AuthComponents/LogoutButton";
+import { createClient } from "@/lib/supabase/client";
 
 const menuItems = [
   {
@@ -77,6 +80,7 @@ const menuItems = [
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
     <Sidebar className="bg-background">
@@ -108,7 +112,10 @@ export function AdminSidebar() {
                       isActive={pathname === item.url}
                       className="w-full"
                     >
-                      <Link href={item.url} className="flex items-center gap-6 text-sm">
+                      <Link
+                        href={item.url}
+                        className="flex items-center gap-6 text-sm"
+                      >
                         <item.icon className="size-4" />
                         <span>{item.title}</span>
                       </Link>
@@ -129,6 +136,27 @@ export function AdminSidebar() {
                 <Settings className="size-4" />
                 <span>Settings</span>
               </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={async () => {
+                try {
+                  const supabase = createClient();
+                  await supabase.auth.signOut();
+                  localStorage.clear();
+                  sessionStorage.clear();
+                  router.push("/auth/login");
+                } catch (error) {
+                  console.error("Error during logout:", error);
+                  router.push("/auth/login");
+                }
+              }}
+            >
+              <button className="flex items-center gap-2 w-full text-left">
+                <LogOutIcon className="size-4" />
+                <span>Logout</span>
+              </button>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

@@ -12,12 +12,18 @@ interface CartSummaryProps {
 }
 
 export function CartSummary({ onClose }: CartSummaryProps) {
-  const { cartItems, cartTotal, cartLoading } = useMainStore();
+  const { cartItems, cartTotal, cartLoading, checkInventoryAvailability } = useMainStore();
   const router = useRouter();
   const { user } = useAuth();
   const { navigateWithAuth, showLoginModal, handleCloseModal, featureName } = useAuthenticatedNavigation();
   
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
+    const inventoryAvailable = await checkInventoryAvailability();
+    
+    if (!inventoryAvailable) {
+      return;
+    }
+
     if (onClose && user) {
       onClose();
     }
@@ -34,9 +40,9 @@ export function CartSummary({ onClose }: CartSummaryProps) {
         <div className="md:flex-grow">
           <span className="md:text-lg font-medium">SUBTOTAL</span>
 
-          <p className="md:text-sm text-xs text-stone-600 mb-6">
+          {/* <p className="md:text-sm text-xs text-stone-600 mb-6">
             TAXES AND DELIVERY  CALCULATED AT CHECKOUT
-          </p>
+          </p> */}
           <div className="flex justify-between items-center text-xl font-medium mb-8">
             <span>£{cartTotal.toFixed(2)}</span>
           </div>

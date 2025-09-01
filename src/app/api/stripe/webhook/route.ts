@@ -712,12 +712,10 @@ export async function POST(request: Request) {
 
       if (fetchOrderError || !existingOrder) {
         console.error("Order fetch error or not found:", fetchOrderError);
-        // Don’t fail webhook; Stripe will retry. Our event table prevents reprocessing.
-        return new Response("No order for session", { status: 200 });
+      return new Response("No order for session", { status: 200 });
       }
 
-      // 2) If already processed, skip all side effects (order-level guard)
-      if (
+       if (
         existingOrder.payment_status === "completed" &&
         existingOrder.inventory_processed === true
       ) {
@@ -725,8 +723,7 @@ export async function POST(request: Request) {
         return new Response("OK (order already processed)", { status: 200 });
       }
 
-      // 3) Update order with Stripe info (do NOT mark inventory yet)
-      const { data: orderData, error: updateError } = await supabase
+     const { data: orderData, error: updateError } = await supabase
         .from("orders")
         .update({
           stripe_payment_intent_id: session.payment_intent as string,
@@ -769,43 +766,54 @@ export async function POST(request: Request) {
         return new Response("Items fetch error", { status: 200 });
       }
 
-      // 5) Normalize product shape (array | object -> single object)
-      const orderItems: OrderItemRow[] = (orderItemsRaw as OrderItemRowDB[]).map(
+       const orderItems: OrderItemRow[] = (orderItemsRaw as OrderItemRowDB[]).map(
         ({ product, ...rest }) => ({
           ...rest,
           product: Array.isArray(product) ? product[0] ?? null : product,
         })
       );
 
-      // 6) Decrement inventory exactly once (guard against races)
-      if (orderData?.inventory_processed === true) {
+        if (orderData?.inventory_processed === true) {
         console.log(`Order ${orderData.id} inventory already processed.`);
       } else {
         for (const item of orderItems) {
           const variantName = item.selected_variant_name ?? "default";
-          const { error: inventoryError } = await supabase.rpc(
-            "decrement_variant_inventory",
-            {
-              p_product_id: item.product_id,
-              p_variant_name: variantName,
-              p_quantity: item.quantity,
-            }
-          );
+          
+           try {
+            const { data: currentVariant } = await supabase
+              .from('product_variants')
+              .select('qty_blocked')
+              .eq('product_id', item.product_id)
+              .eq('name', variantName)
+              .single();
 
-          if (inventoryError) {
-            console.error(
-              `Inventory Update Error for product ${item.product_id}, variant ${variantName}:`,
-              inventoryError
-            );
-          } else {
-            console.log(
-              `Inventory decreased for product ${item.product_id}, variant ${variantName} by ${item.quantity}`
-            );
+            if (currentVariant) {
+              const { error: confirmError } = await supabase
+                .from('product_variants')
+                .update({
+                  qty_blocked: Math.max(0, currentVariant.qty_blocked - item.quantity),
+                  updated_at: new Date().toISOString(),
+                })
+                .eq('product_id', item.product_id)
+                .eq('name', variantName);
+                
+              if (confirmError) {
+                console.error(
+                  `Inventory confirmation error for product ${item.product_id}, variant ${variantName}:`,
+                  confirmError
+                );
+              } else {
+                console.log(
+                  `Inventory confirmed for product ${item.product_id}, variant ${variantName} - reduced qty_blocked by ${item.quantity}`
+                );
+              }
+            }
+          } catch (error) {
+            console.error('Error confirming inventory:', error);
           }
         }
 
-        // Mark inventory processed to prevent double-decrement
-        const { error: markProcessedError } = await supabase
+         const { error: markProcessedError } = await supabase
           .from("orders")
           .update({
             inventory_processed: true,
@@ -978,22 +986,62 @@ export async function POST(request: Request) {
           updated_at: new Date().toISOString(),
         })
         .eq("stripe_payment_intent_id", intent.id)
-        .select()
+        .select("id, customer_email, recipient_name, total_amount")
         .single();
 
       if (failError) {
         console.error("Payment Failed Update Error:", failError);
-        return;
+        return new Response("Payment failed update error", { status: 200 });
       }
 
-      // If order found and has customer email, send cancellation email
+      if (orderData?.id) {
+        try {
+          const { data: orderItems } = await supabase
+            .from("order_items")
+            .select("product_id, quantity, selected_variant_name")
+            .eq("order_id", orderData.id);
+
+          if (orderItems && orderItems.length > 0) {
+            for (const item of orderItems) {
+              const variantName = item.selected_variant_name ?? "default";
+              
+              const { data: currentVariant } = await supabase
+                .from('product_variants')
+                .select('inventory, qty_blocked')
+                .eq('product_id', item.product_id)
+                .eq('name', variantName)
+                .single();
+
+              if (currentVariant) {
+                await supabase
+                  .from('product_variants')
+                  .update({
+                    inventory: currentVariant.inventory + item.quantity,
+                    qty_blocked: Math.max(0, currentVariant.qty_blocked - item.quantity),
+                    updated_at: new Date().toISOString(),
+                  })
+                  .eq('product_id', item.product_id)
+                  .eq('name', variantName);
+                  
+                console.log(
+                  `Inventory released for failed payment - product ${item.product_id}, variant ${variantName}: +${item.quantity} inventory, -${item.quantity} qty_blocked`
+                );
+              }
+            }
+          }
+        } catch (inventoryError) {
+          console.error('Error releasing inventory for failed payment:', inventoryError);
+        }
+      }
+
+      // Send cancellation email if order found and has customer email
       try {
         if (orderData?.customer_email) {
           const res = await axios.post(
             "https://mandrillapp.com/api/1.0/messages/send-template.json",
             {
               key: "md-BfHmKxZ95KI6BiaR4dwUJQ", // move to ENV in production
-              template_name: "new-order-internal",
+              template_name: "order-cancelled",
               template_content: [],
               message: {
                 from_email: "no-reply@theluxebureau.com",
@@ -1011,7 +1059,7 @@ export async function POST(request: Request) {
                   {
                     name: "preheader_text",
                     content:
-                      "We're sorry to let you know that your Luxe Bureau order has been cancelled. If this was intentional, there's nothing further you need to do.",
+                      "We're sorry to let you know that your Luxe Bureau order has been cancelled due to payment failure.",
                   },
                   { name: "order_number", content: orderData.id },
                   { name: "Recipient", content: orderData.recipient_name },
@@ -1020,17 +1068,16 @@ export async function POST(request: Request) {
               },
             }
           );
-          console.log("Mandrill response:", res.data);
+          console.log("Cancellation email sent:", res.data);
         } else {
           console.warn(
-            "No customer email found for order; skipping Mandrill send."
+            "No customer email found for order; skipping cancellation email."
           );
         }
       } catch (e: any) {
-        console.error("Mandrill axios error:", e?.response?.data || e?.message);
+        console.error("Mandrill cancellation email error:", e?.response?.data || e?.message);
       }
     }
-
 
     return new Response("Webhook received", { status: 200 });
   } catch (err: any) {

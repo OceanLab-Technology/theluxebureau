@@ -29,17 +29,17 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
             />
           </div>
           {!isOrder && (
-            <div className="flex flex-col w-[90%] text-[1.5rem] justify-center space-y-8 font-[Century-Old-Style]">
+            <div className="flex flex-col w-[90%] text-[1.5rem] justify-center font-[Century-Old-Style]">
               <h1 className="font-medium">{product.name}</h1>
-              <p className="mt-2">
+              <p className="">
                 for {product.customData?.recipientName || "recipient"}
               </p>
             </div>
           )}
         </div>
-        <div className="space-y-8 mt-8 w-full">
+        <div className="mt-5 w-full">
           {product.customData && Object.keys(product.customData).length > 0 && (
-            <div className="md:space-y-8 space-y-8 w-full">
+            <div className="space-y-4 w-full">
               <div className="flex flex-row items-center gap-4 md:gap-8">
                 <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Your Name

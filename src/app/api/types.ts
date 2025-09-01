@@ -89,13 +89,25 @@ export interface Order {
   personalization?: Record<string, any>;
 }
 
+export interface ProductVariant {
+  id: string;
+  product_id: string;
+  name: string;
+  inventory: number;
+  threshold: number;
+  qty_blocked: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface Product {
   id?: string;
   slug?: string;
+  item: string;
   category?: string;
   name: string;
   description?: string;
-  inventory: number;
+  inventory: number; // Keep for backward compatibility, but variants should be used
   price: number;
   title?: string;
   image_1?: string;
@@ -110,6 +122,8 @@ export interface Product {
   least_inventory_trigger?: number;
   created_at?: string;
   updated_at?: string;
+  // Product variants relation
+  product_variants?: ProductVariant[];
   // Computed fields for frontend compatibility
   image?: string; // Will map to image_1
   availability?: "in-stock" | "limited-edition" | "sold-out"; // Will compute from inventory
@@ -120,6 +134,7 @@ export interface Product {
   cartItemId?: string;
   customData?: Record<string, any>;
   contains_alcohol: boolean;
+  female_founded: boolean;
   variants: string;
   selectedVariant: string;
 }

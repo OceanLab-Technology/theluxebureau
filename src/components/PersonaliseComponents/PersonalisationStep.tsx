@@ -735,13 +735,10 @@ export default function PersonalizationStep() {
     return { ...base, fontFamily: DEFAULT_FONT_LABEL };
   };
 
-
-
-
   // Put near the top of your component/file
   const MAX_CHARS = 300;
-  const MAX_LINES = 7;                 // tweak as you like
-  const MAX_CONSEC_NEWLINES = 1;       // no more than one blank line in a row
+  const MAX_LINES = 7; // tweak as you like
+  const MAX_CONSEC_NEWLINES = 1; // no more than one blank line in a row
 
   const clampMessage = (raw: string) => {
     // collapse > MAX_CONSEC_NEWLINES consecutive newlines
@@ -763,13 +760,11 @@ export default function PersonalizationStep() {
 
   const countLines = (s: string) => s.split("\n").length;
 
-
   useEffect(() => {
-  if (formData.selectedQuote === "custom") {
-    setCustomDraft(formData.customMessage || "");
-  }
-}, [formData.selectedQuote, formData.customMessage]);
-
+    if (formData.selectedQuote === "custom") {
+      setCustomDraft(formData.customMessage || "");
+    }
+  }, [formData.selectedQuote, formData.customMessage]);
 
   const getQuoteStyle = (): React.CSSProperties => ({
     color: "#57534e",
@@ -852,7 +847,7 @@ export default function PersonalizationStep() {
 
   return (
     <div className="font-[Century-Old-Style]">
-      <div className="max-w-2xl w-full">
+      <div className="w-full">
         <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-1 break-words">
           Our gifts arrive with custom stationery, letterpressed by hand at the
           Luxe Bureau atelier, in Noir ink on GF Smith Mohawk White card.
@@ -889,17 +884,29 @@ export default function PersonalizationStep() {
             onValueChange={(value) => updateFormData({ selectedFont: value })}
             disabled={loading}
           >
-            <SelectTrigger className="w-[150px] h-6 md:w-[200px] text-[15px] border-stone-300 hover:bg-secondary bg-transparent rounded-[0.3rem] py-0 focus:ring-0 relative px-2">
-              <SelectValue />
+            <SelectTrigger style={{ fontFamily: DEFAULT_FONT_LABEL }} className="w-[150px] h-6 md:w-[200px] text-[15px] border-stone-300 hover:bg-secondary bg-transparent rounded-[0.3rem] py-0 focus:ring-0 relative px-2">
+              <SelectValue  />
               <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 opacity-60 pointer-events-none" />
             </SelectTrigger>
 
             <SelectContent className="rounded-[0.3rem]">
-              <SelectItem value={DEFAULT_FONT_LABEL}>
+              <SelectItem
+                value={DEFAULT_FONT_LABEL}
+                style={{ fontFamily: DEFAULT_FONT_LABEL }}
+              >
                 {DEFAULT_FONT_LABEL}
               </SelectItem>
               {apiFontsWithoutGaramond.map((font) => (
-                <SelectItem key={font.name} value={font.name}>
+                <SelectItem
+                  key={font.name}
+                  value={font.name}
+                  style={{
+                    fontFamily:
+                      fontLoaded && selectedFontFromApi?.name === font.name
+                        ? `"${font.name}", serif`
+                        : font.name,
+                  }}
+                >
                   {font.name}
                 </SelectItem>
               ))}
@@ -919,7 +926,7 @@ export default function PersonalizationStep() {
               if (authorName === "custom") {
                 updateFormData({
                   selectedQuote: "custom",
-                  customMessage: customDraft, // restore draft
+                  customMessage: customDraft, 
                 });
               } else if (authorName === "select") {
                 updateFormData({ selectedQuote: "select", customMessage: "" });
@@ -940,11 +947,17 @@ export default function PersonalizationStep() {
             <SelectContent className="rounded-[0.3rem]">
               <SelectItem value="select">Select a quote</SelectItem>
               {siteSettings?.quotes?.map((quote, idx) => (
-                <SelectItem key={idx} value={quote.author}>
+                <SelectItem
+                  key={idx}
+                  value={quote.author}
+                  style={{ fontFamily: "monospace" }}
+                >
                   {quote.author}
                 </SelectItem>
               ))}
-              <SelectItem value="custom">Write my own</SelectItem>
+              <SelectItem value="custom" style={{ fontFamily: "monospace" }}>
+                Write my own
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -1012,21 +1025,24 @@ export default function PersonalizationStep() {
                 }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    const current = formData.selectedQuote === "custom" ? customDraft : formData.customMessage || "";
+                    const current =
+                      formData.selectedQuote === "custom"
+                        ? customDraft
+                        : formData.customMessage || "";
                     if (countLines(current) >= MAX_LINES) {
                       e.preventDefault(); // block extra newlines
                     }
                   }
                 }}
-
                 placeholder="Select a quote or write your own"
                 maxLength={300}
-                className={`w-full text-center md:text-[0.8rem] text-[8px] h-full mt-4 bg-transparent border-none outline-none resize-none scrollbar-hide pointer-events-auto focus:outline-none overflow-hidden ${customDraft.length > 300
-                  ? "md:pt-[2rem] pt-[1rem]"
-                  : customDraft.length > 100
+                className={`w-full text-center md:text-[0.8rem] text-[8px] h-full mt-4 bg-transparent border-none outline-none resize-none scrollbar-hide pointer-events-auto focus:outline-none overflow-hidden ${
+                  customDraft.length > 300
+                    ? "md:pt-[2rem] pt-[1rem]"
+                    : customDraft.length > 100
                     ? "pt-[2rem]"
                     : "pt-[3rem]"
-                  }`}
+                }`}
                 style={{
                   ...getQuoteStyle(),
                   minHeight: "8rem",

@@ -265,6 +265,7 @@ export type Variant = {
 
 export type Product = {
   id: string;
+  item: string;
   name: string;
   description?: string | null;
   price: number;
@@ -281,13 +282,15 @@ export type Product = {
   about_the_maker?: string | null;
   particulars?: string | null;
 
-  // ✅ DB jsonb
-  variants: Variant[];                  // required
+  // ✅ DB jsonb (legacy) or product_variants relation (new)
+  variants?: Variant[];                  // for 
+  product_variants?: Variant[];          // new relation field
   contains_alcohol: boolean;
 };
 
 export type ProductUpdateJson = Partial<{
   name: string;
+  item: string;
   description: string | null;
   price: number;
   title: string | null;
@@ -343,6 +346,16 @@ function normalizeVariant(v: any): Variant {
 }
 function totalAvailable(variants: Variant[] = []): number {
   return variants.reduce((sum, v) => sum + Math.max(0, n(v.inventory) - n(v.qty_blocked)), 0);
+}
+
+function getProductVariants(product: any): Variant[] {
+  if (Array.isArray(product?.product_variants)) {
+    return product.product_variants.map(normalizeVariant);
+  }
+  if (Array.isArray(product?.variants)) {
+    return product.variants.map(normalizeVariant);
+  }
+  return [{ name: "default", inventory: 0, threshold: 0, qty_blocked: 0 }];
 }
 
 /* -------------------- Store -------------------- */
@@ -412,7 +425,7 @@ export const useProductAdminStore = create<ProductStore>((set, get) => ({
       }));
 
       // Activity log (no top-level inventory anymore; compute from variants)
-      const stock = totalAvailable(json.data?.variants || []);
+      const stock = totalAvailable(getProductVariants(json.data));
       await fetch("/api/activities", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -450,7 +463,7 @@ export const useProductAdminStore = create<ProductStore>((set, get) => ({
         selectedProduct: json.data,
       }));
 
-      const stock = totalAvailable(json.data?.variants || []);
+      const stock = totalAvailable(getProductVariants(json.data));
       await fetch("/api/activities", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

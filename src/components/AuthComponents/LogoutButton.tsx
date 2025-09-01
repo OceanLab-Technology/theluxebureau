@@ -29,7 +29,7 @@ export function LogoutButton() {
 
   return (
     <button
-      className="text-secondary-foreground hover:text-stone-500 font-medium cursor-pointer"
+      className="text-secondary-foreground hover:text-stone-500 small-text font-medium cursor-pointer"
       onClick={logout}
     >
       LOGOUT

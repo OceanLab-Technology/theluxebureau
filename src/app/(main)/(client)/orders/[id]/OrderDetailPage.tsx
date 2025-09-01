@@ -65,7 +65,9 @@ export default function OrderDetailPage({ order, user }: OrderDetailPageProps) {
     customData: item.custom_data || {},
     contains_alcohol: false,
     variants: "",
-    selectedVariant: ""
+    selectedVariant: "",
+    item: "",
+    female_founded: false
   }));
 
   return (

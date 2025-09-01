@@ -169,7 +169,7 @@ export default function CheckoutPage() {
             </div>
 
             <div className="sticky top-6 self-start">
-              <h2 className="my-6 pb-2 border-b small-text">Payment</h2>
+              <h2 className="text-[18px] font-normal font-[SchoolBook] tracking-wide pb-3 border-b border-b-stone-300 mb-8">Payment</h2>
               <div className="mb-6 p-4 bg-muted/20 rounded-[0.25rem] font-[Century-Old-Style]">
                 <h3 className="font-semibold mb-4">Order Summary</h3>
                 <div className="space-y-2 text-sm">
@@ -208,8 +208,8 @@ export default function CheckoutPage() {
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span> DELIVERY </span>
-                      <span>Free</span>
+                      <span> Delivery </span>
+                      <span>Complimentry</span>
                     </div>
                     <div className="flex justify-between font-semibold border-t pt-2 mt-2">
                       <span>Total</span>
@@ -333,26 +333,26 @@ export default function CheckoutPage() {
               AGE VERIFICATION
             </DialogTitle>
             <DialogDescription className="text-stone-600 mt-2 text-[1rem] font-[Century-Old-Style]">
-              This order contains alcohol. You must confirm you are 18+ to continue.
+             Because your order includes alcohol, by continuing you confirm that you are at least 18 years old.
             </DialogDescription>
           </DialogHeader>
 
           <div className="flex flex-col gap-3 mt-6 font-[Century-Old-Style]">
             <Button
               variant="box_yellow"
-              className="w-full uppercase tracking-[0.08em] text-[0.75rem] font-[font-schoolbook-cond] rounded-[0.25rem] bg-[#FBD060] hover:bg-[#FBD060]/80 text-stone-800 !border-0 !shadow-none focus-visible:ring-0"
+              className="w-full uppercase tracking-[0.08em] small-text rounded-[0.25rem] bg-[#FBD060] hover:bg-[#FBD060]/80 text-stone-800 !border-0 !shadow-none focus-visible:ring-0"
               onClick={() => {
                 setIsAgeConfirmed(true)
                 setShowAgeModal(false)
               }}
             >
-              I am 18+
+              I am at least 18 years old
             </Button>
 
             <Button
               variant="secondary"
               onClick={() => setShowAgeModal(false)}
-              className="w-full uppercase tracking-[0.08em] text-[0.75rem] font-[font-schoolbook-cond] rounded-[0.25rem]"
+              className="w-full uppercase tracking-[0.08em] small-text rounded-[0.25rem]"
             >
               Cancel
             </Button>

@@ -7,6 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Lock } from "lucide-react";
 import { Product } from "@/app/api/types";
+import { useMainStore } from "@/store/mainStore";
+import { toast } from "sonner";
 
 interface CheckoutContainerProps {
   items: Product[];
@@ -15,6 +17,7 @@ interface CheckoutContainerProps {
 export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { checkInventoryAvailability, reserveCartInventory } = useMainStore();
   const [customerInfo, setCustomerInfo] = useState({
     firstName: "",
     lastName: "",
@@ -55,11 +58,26 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
     }
 
     try {
+      // First check inventory availability
+      const inventoryAvailable = await checkInventoryAvailability();
+      
+      if (!inventoryAvailable) {
+        setLoading(false);
+        return;
+      }
+
+      // Reserve inventory before proceeding to payment
+      const reservationSuccessful = await reserveCartInventory();
+      
+      if (!reservationSuccessful) {
+        setLoading(false);
+        return;
+      }
+
       const total = items.reduce(
         (sum, item) => sum + item.price * ((item as any).quantity || 1),
         0
       );
-
 
       const response = await fetch("/api/stripe/checkout", {
         method: "POST",
@@ -103,6 +121,15 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
     } catch (error: any) {
       console.error("Checkout error:", error);
       setError(error.message || "Failed to proceed to checkout");
+      
+      // Release reserved inventory if checkout failed
+      try {
+        const { releaseCartInventory } = useMainStore.getState();
+        await releaseCartInventory();
+        toast.error("Inventory reservation released due to checkout error");
+      } catch (releaseError) {
+        console.error("Failed to release inventory:", releaseError);
+      }
     } finally {
       setLoading(false);
     }

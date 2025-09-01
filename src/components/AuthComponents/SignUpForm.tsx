@@ -14,7 +14,7 @@ import { Eye, EyeOff } from "lucide-react";
 const baseInput =
   "border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base";
 
-const inputWithHint = cn(baseInput); // adds desktop-only bottom padding for overlayed hint
+const inputWithHint = cn(baseInput);
 
 function Field({
   id,
@@ -134,7 +134,6 @@ export function SignUpForm({
     isLoading ||
     !name ||
     !email ||
-    !shippingAddress ||
     !phoneNumber ||
     !password ||
     !repeatPassword ||
@@ -188,13 +187,12 @@ export function SignUpForm({
               />
             </Field>
 
-            {/* Address (no warning) */}
             <div className="border border-stone-700 p-4 sm:p-8">
               <Label
                 htmlFor="shipping-address"
                 className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500"
               >
-                BILLING ADDRESS
+                ADDRESS (OPTIONAL)
               </Label>
               <Input
                 id="shipping-address"
@@ -205,7 +203,6 @@ export function SignUpForm({
                 autoComplete="street-address"
                 className={baseInput}
                 placeholder="206 Batran's Street, 39, 2044 Ontario..."
-                required
               />
             </div>
 
@@ -298,7 +295,7 @@ export function SignUpForm({
             <Button
               type="submit"
               disabled={submitDisabled}
-              className="w-full rounded-none px-6 sm:px-12 py-2 sm:py-3 bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider uppercase transition-colors text-sm sm:text-base disabled:opacity-60 rounded-[0.25rem]"
+              className="w-full rounded-none px-6 sm:px-12 py-2 sm:py-3 bg-[#FDCF5F] hover:bg-[#FDCF5F]/80 text-stone-800 font-medium tracking-wider uppercase transition-colors text-sm sm:text-base disabled:opacity-60"
             >
               {isLoading ? "Creating Account..." : "SIGN UP"}
             </Button>
