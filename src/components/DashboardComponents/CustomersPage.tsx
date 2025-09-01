@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Mail, Phone, Edit, UserPlus, Users, Loader2 } from "lucide-react";
+import { Mail, Phone, Edit, UserPlus, Users, Loader2, ChevronUp, ChevronDown } from "lucide-react";
 import { useCustomerAdminStore } from "@/store/admin/customerStore";
 import { CustomerFormDialog } from "./Forms/CustomerFormDialog";
 import {
@@ -72,6 +72,14 @@ function SummarySkeleton() {
   );
 }
 
+type SortField = 'name' | 'email' | 'totalOrders' | 'totalSpent' | 'joinDate' | 'status';
+type SortDirection = 'asc' | 'desc';
+
+interface SortConfig {
+  field: SortField;
+  direction: SortDirection;
+}
+
 export function CustomersPage() {
   const {
     customers,
@@ -86,6 +94,7 @@ export function CustomersPage() {
   } = useCustomerAdminStore();
 
   const [rowsPerPage] = useState(10);
+  const [sortConfig, setSortConfig] = useState<SortConfig>({ field: 'name', direction: 'asc' });
 
   useEffect(() => {
     fetchCustomers(page);
@@ -94,6 +103,69 @@ export function CustomersPage() {
   const handleStatusChange = async (customerId: string, newStatus: string) => {
     await updateCustomer(customerId, { status: newStatus });
   };
+
+  const handleSort = (field: SortField) => {
+    setSortConfig(prev => ({
+      field,
+      direction: prev.field === field && prev.direction === 'asc' ? 'desc' : 'asc'
+    }));
+  };
+
+  const getSortIcon = (field: SortField) => {
+    if (sortConfig.field !== field) {
+      return <ChevronUp className="h-4 w-4 opacity-30" />;
+    }
+    return sortConfig.direction === 'asc' 
+      ? <ChevronUp className="h-4 w-4" />
+      : <ChevronDown className="h-4 w-4" />;
+  };
+
+  const sortedCustomers = customers ? [...customers].sort((a, b) => {
+    const { field, direction } = sortConfig;
+    let aValue: any = a[field];
+    let bValue: any = b[field];
+
+    switch (field) {
+      case 'totalSpent':
+        aValue = Number(aValue) || 0;
+        bValue = Number(bValue) || 0;
+        break;
+      case 'totalOrders':
+        aValue = Number(aValue) || 0;
+        bValue = Number(bValue) || 0;
+        break;
+      case 'joinDate':
+        aValue = aValue ? new Date(aValue).getTime() : 0;
+        bValue = bValue ? new Date(bValue).getTime() : 0;
+        break;
+      case 'name':
+      case 'email':
+      case 'status':
+        aValue = String(aValue || '').toLowerCase();
+        bValue = String(bValue || '').toLowerCase();
+        break;
+    }
+
+    if (aValue < bValue) return direction === 'asc' ? -1 : 1;
+    if (aValue > bValue) return direction === 'asc' ? 1 : -1;
+    return 0;
+  }) : [];
+
+  const SortableHeader = ({ field, children, className = "" }: { 
+    field: SortField; 
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <TableHead 
+      className={`cursor-pointer hover:bg-muted/50 select-none ${className}`}
+      onClick={() => handleSort(field)}
+    >
+      <div className="flex items-center gap-2">
+        {children}
+        {getSortIcon(field)}
+      </div>
+    </TableHead>
+  );
 
   return (
     <div className="flex flex-col font-[Century-Old-Style]">
@@ -113,7 +185,6 @@ export function CustomersPage() {
           <CustomerFormDialog />
         </div>
 
-        {/* Summary Cards */}
         {loading ? (
           <SummarySkeleton />
         ) : (
@@ -161,21 +232,21 @@ export function CustomersPage() {
           <CardContent className="p-0">
             {loading ? (
               <CustomersTableSkeleton />
-            ) : customers?.length ? (
+            ) : sortedCustomers?.length ? (
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Customer</TableHead>
-                    <TableHead>Contact</TableHead>
-                    <TableHead>Orders</TableHead>
-                    <TableHead>Total Spent</TableHead>
-                    <TableHead>Join Date</TableHead>
-                    <TableHead>Status</TableHead>
+                    <SortableHeader field="name">Customer</SortableHeader>
+                    <SortableHeader field="email">Contact</SortableHeader>
+                    <SortableHeader field="totalOrders">Orders</SortableHeader>
+                    <SortableHeader field="totalSpent">Total Spent</SortableHeader>
+                    <SortableHeader field="joinDate">Join Date</SortableHeader>
+                    <SortableHeader field="status">Status</SortableHeader>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {customers.map((customer) => (
+                  {sortedCustomers.map((customer) => (
                     <TableRow key={customer.id}>
                       <TableCell className="font-medium">
                         {customer.name}

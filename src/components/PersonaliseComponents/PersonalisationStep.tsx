@@ -852,7 +852,7 @@ export default function PersonalizationStep() {
 
   return (
     <div className="font-[Century-Old-Style]">
-      <div className="max-w-2xl w-full">
+      <div className="w-full">
         <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-1 break-words">
           Our gifts arrive with custom stationery, letterpressed by hand at the
           Luxe Bureau atelier, in Noir ink on GF Smith Mohawk White card.
