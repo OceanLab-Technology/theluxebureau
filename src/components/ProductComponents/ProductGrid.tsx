@@ -158,7 +158,7 @@ export function ProductGrid({
         <div className="max-w-md w-full space-y-6 pb-20 text-left lg:pl-10 lg:pb-20">
           {/* Header */}
           <div className="space-y-4">
-            <h2 className="text-[#50462D] text-[30px] leading-[40px] lg:text-[36px] lg:leading-[48px] font-[400] font-[Century-Old-Style]">
+            <h2 className="text-[#50462D] text-[30px] leading-[40px] lg:text-[36px] lg:leading-[48px] font-[400] font-[Century-Old-Style] text-center">
               No products found
             </h2>
             <p className="text-[#50462D] text-[14px] leading-[26px] lg:text-[18px] lg:leading-[28px] font-[Century-Old-Style]">

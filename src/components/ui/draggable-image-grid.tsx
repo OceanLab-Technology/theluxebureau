@@ -1,26 +1,4 @@
-import React from "react";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-  DragOverlay,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-  rectSortingStrategy,
-} from "@dnd-kit/sortable";
-import {
-  useSortable,
-  SortableContext as SortableContextType,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { X, GripVertical } from "lucide-react";
 import Image from "next/image";
@@ -32,39 +10,45 @@ interface DraggableImageGridProps {
   maxImages?: number;
 }
 
-interface SortableImageItemProps {
-  id: string;
+interface ImageItemProps {
   image: File | string;
   index: number;
   onRemove: (index: number) => void;
+  onDragStart: (index: number) => void;
+  onDragOver: (index: number) => void;
+  onDragEnd: () => void;
+  isDragging: boolean;
+  dragOverIndex: number | null;
 }
 
-function SortableImageItem({ id, image, index, onRemove }: SortableImageItemProps) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
+function ImageItem({ 
+  image, 
+  index, 
+  onRemove, 
+  onDragStart, 
+  onDragOver, 
+  onDragEnd,
+  isDragging,
+  dragOverIndex 
+}: ImageItemProps) {
   const imageUrl = typeof image === "string" ? image : URL.createObjectURL(image);
+  const isBeingDragged = isDragging;
+  const isDraggedOver = dragOverIndex === index;
 
   return (
     <div
-      ref={setNodeRef}
-      style={style}
-      className={`relative group ${isDragging ? "z-50 opacity-50" : ""}`}
-      {...attributes}
-      {...listeners}
+      draggable
+      onDragStart={() => onDragStart(index)}
+      onDragOver={(e) => {
+        e.preventDefault();
+        onDragOver(index);
+      }}
+      onDragEnd={onDragEnd}
+      className={`relative group cursor-move transition-all ${
+        isBeingDragged ? 'opacity-50 scale-95' : ''
+      } ${isDraggedOver ? 'scale-105 ring-2 ring-secondary-foreground' : ''}`}
     >
-      <div className="aspect-square overflow-hidden rounded-lg border bg-muted/20 relative cursor-grab active:cursor-grabbing">
+      <div className="aspect-square overflow-hidden rounded-lg border bg-muted/20 relative">
         <Image
           src={imageUrl}
           alt={`Preview ${index + 1}`}
@@ -77,7 +61,7 @@ function SortableImageItem({ id, image, index, onRemove }: SortableImageItemProp
           <GripVertical className="h-4 w-4 text-gray-600" />
         </div>
         
-        <div className="absolute top-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">
+        <div className="absolute top-2 right-2 bg-secondary-foreground text-white text-xs px-2 py-1 rounded">
           {index + 1}
         </div>
         
@@ -94,7 +78,6 @@ function SortableImageItem({ id, image, index, onRemove }: SortableImageItemProp
             e.stopPropagation();
             onRemove(index);
           }}
-          onPointerDown={(e) => e.stopPropagation()}
         >
           <X className="h-3 w-3" />
         </Button>
@@ -109,81 +92,56 @@ export function DraggableImageGrid({
   onRemoveImage,
   maxImages = 5,
 }: DraggableImageGridProps) {
-  const [activeId, setActiveId] = React.useState<string | null>(null);
-  
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
-  const handleDragStart = (event: any) => {
-    setActiveId(event.active.id);
+  const handleDragStart = (index: number) => {
+    setDraggedIndex(index);
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    setActiveId(null);
-
-    if (active.id !== over?.id) {
-      const oldIndex = images.findIndex((_, index) => `image-${index}` === active.id);
-      const newIndex = images.findIndex((_, index) => `image-${index}` === over?.id);
-
-      if (oldIndex !== -1 && newIndex !== -1) {
-        const newImages = arrayMove(images, oldIndex, newIndex);
-        onImagesChange(newImages);
-      }
+  const handleDragOver = (index: number) => {
+    if (draggedIndex !== null && draggedIndex !== index) {
+      setDragOverIndex(index);
     }
   };
 
-  const activeImage = activeId ? images[parseInt(activeId.replace('image-', ''))] : null;
+  const handleDragEnd = () => {
+    if (draggedIndex !== null && dragOverIndex !== null && draggedIndex !== dragOverIndex) {
+      const newImages = [...images];
+      const draggedImage = newImages[draggedIndex];
+      
+      // Remove the dragged item
+      newImages.splice(draggedIndex, 1);
+      
+      // Insert it at the new position
+      newImages.splice(dragOverIndex, 0, draggedImage);
+      
+      onImagesChange(newImages);
+    }
+    
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
 
   if (images.length === 0) {
     return null;
   }
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext
-        items={images.map((_, index) => `image-${index}`)}
-        strategy={rectSortingStrategy}
-      >
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          {images.map((image, index) => (
-            <SortableImageItem
-              key={`image-${index}`}
-              id={`image-${index}`}
-              image={image}
-              index={index}
-              onRemove={onRemoveImage}
-            />
-          ))}
-        </div>
-      </SortableContext>
-      
-      <DragOverlay>
-        {activeImage ? (
-          <div className="aspect-square overflow-hidden rounded-lg border bg-muted/20 relative">
-            <Image
-              src={typeof activeImage === "string" ? activeImage : URL.createObjectURL(activeImage)}
-              alt="Dragging preview"
-              width={200}
-              height={200}
-              className="object-cover w-full h-full"
-            />
-          </div>
-        ) : null}
-      </DragOverlay>
-    </DndContext>
+    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 w-full">
+      {images.map((image, index) => (
+        <ImageItem
+          key={`image-${index}`}
+          image={image}
+          index={index}
+          onRemove={onRemoveImage}
+          onDragStart={handleDragStart}
+          onDragOver={handleDragOver}
+          onDragEnd={handleDragEnd}
+          isDragging={draggedIndex === index}
+          dragOverIndex={dragOverIndex}
+        />
+      ))}
+    </div>
   );
 }

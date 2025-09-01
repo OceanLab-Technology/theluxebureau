@@ -14,7 +14,7 @@ import { Eye, EyeOff } from "lucide-react";
 const baseInput =
   "border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base";
 
-const inputWithHint = cn(baseInput); // adds desktop-only bottom padding for overlayed hint
+const inputWithHint = cn(baseInput);
 
 function Field({
   id,
