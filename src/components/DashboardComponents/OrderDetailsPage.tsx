@@ -1158,7 +1158,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
           </CardHeader>
 
           <CardContent className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-1.5">
+            {/* <div className="space-y-1.5">
               <Label>Delivery Date</Label>
               <Input
                 type="date"
@@ -1166,8 +1166,8 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
                 onChange={(e) => handleFieldChange("deliveryDate", e.target.value)}
                 className="border rounded-[0.25rem]"
               />
-            </div>
-            <div className="space-y-2">
+            </div> */}
+            {/* <div className="space-y-2">
               <Label>Preferred delivery time</Label>
               <Select
                 value={formData.preferredDeliveryTime || ""}
@@ -1183,7 +1183,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
                   <SelectItem value="6pm-11pm">18:00 – 23:00</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
+            </div> */}
             <div className="space-y-1.5">
               <Label>Total (£)</Label>
               <Input

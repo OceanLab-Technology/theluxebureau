@@ -64,7 +64,7 @@ export default function Header() {
       href: `/products?category=${encodeURIComponent("Drinks & Spirits")}`,
     },
     { label: "Floral", href: "/products?category=Floral" },
-    { label: "Home", href: "/products?category=Home" },
+    { label: "Home & Lifestyle", href: `/products?category=${encodeURIComponent("Home & Lifestyle")}` },
   ];
 
   const aboutLinks = [

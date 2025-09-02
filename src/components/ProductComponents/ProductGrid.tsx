@@ -28,7 +28,7 @@ export function ProductGrid({
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const categories = ["Literature", "Drinks & Spirits", "Floral", "Home"];
+  const categories = ["Literature", "Drinks & Spirits", "Floral", "Home & Lifestyle"];
 
   const pageVariants = {
     initial: {
@@ -221,7 +221,7 @@ export function ProductGrid({
                   ? "Thoughtfully curated and artfully presented, our selection of wines and spirits transforms exceptional bottles into extraordinary gestures"
                   : selectedCategory === "Floral"
                     ? "Explore our exquisite floral arrangements, where each bloom is handpicked to create stunning displays that bring beauty and elegance to any occasion."
-                    : selectedCategory === "Home"
+                    : selectedCategory === "Home & Lifestyle"
                       ? "Discover our curated collection of home decor, where each piece is chosen for its unique design and ability to transform your living space into a haven of style and comfort."
                       : ""}
           </motion.p>

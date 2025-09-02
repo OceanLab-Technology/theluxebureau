@@ -19,7 +19,7 @@ export function ProductFilters({
     "Literature",
     "Drinks & Spirits",
     "Floral",
-    "Home",
+    "Home & Lifestyle",
   ];
 
   const handleCategoryClick = (category: string) => {

@@ -1616,7 +1616,7 @@ export function ProductFormSheet({
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                     <SelectContent>
-                      {["Literature", "Drinks & Spirits", "Floral", "Home"].map(
+                      {["Literature", "Drinks & Spirits", "Floral", "Home & Lifestyle"].map(
                         (c) => (
                           <SelectItem key={c} value={c}>
                             {c}
