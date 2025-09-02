@@ -329,10 +329,10 @@ export default function CheckoutPage() {
       <Dialog open={showAgeModal} onOpenChange={setShowAgeModal}>
         <DialogContent className="sm:max-w-xl font-[Century-Old-Style] rounded-none">
           <DialogHeader className="text-center font-[Century-Old-Style]">
-            <DialogTitle className="text-[1.8rem] font-[400] text-secondary-foreground font-[Century-Old-Style]">
+            <DialogTitle className="text-[1.8rem] font-[400] text-secondary-foreground font-[Century-Old-Style] text-[#3f352c]">
               AGE VERIFICATION
             </DialogTitle>
-            <DialogDescription className="text-stone-600 mt-2 text-[1rem] font-[Century-Old-Style]">
+            <DialogDescription className="text-stone-600 mt-2 text-[1rem] font-[Century-Old-Style] text-[#3f352c]">
              Because your order includes alcohol, by continuing you confirm that you are at least 18 years old.
             </DialogDescription>
           </DialogHeader>
@@ -340,7 +340,7 @@ export default function CheckoutPage() {
           <div className="flex flex-col gap-3 mt-6 font-[Century-Old-Style]">
             <Button
               variant="box_yellow"
-              className="w-full uppercase tracking-[0.08em] small-text rounded-[0.25rem] bg-[#FBD060] hover:bg-[#FBD060]/80 text-stone-800 !border-0 !shadow-none focus-visible:ring-0"
+              className="w-full uppercase tracking-[0.08em] small-text rounded-[0.25rem] bg-[#FBD060] hover:bg-[#FBD060]/80 text-[#3f352c] hover:text-[#3f352c] !border-0 !shadow-none focus-visible:ring-0"
               onClick={() => {
                 setIsAgeConfirmed(true)
                 setShowAgeModal(false)
@@ -352,7 +352,7 @@ export default function CheckoutPage() {
             <Button
               variant="secondary"
               onClick={() => setShowAgeModal(false)}
-              className="w-full uppercase tracking-[0.08em] small-text rounded-[0.25rem]"
+              className="w-full uppercase tracking-[0.08em] small-text rounded-[0.25rem] bg-[#FFFFFF] hover:bg-[#FFFFFF]/80 text-[#50462D] hover:text-[#50462D] !border-0 !shadow-none focus-visible:ring-0"
             >
               Cancel
             </Button>

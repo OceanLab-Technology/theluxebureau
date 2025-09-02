@@ -860,9 +860,7 @@ export default function PersonalisationStep() {
         </p>
 
         <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-1 break-words">
-          Your personal message will be set in our signature typewriter font.
-          For inspiration, you can select a quote from the dropdown, or write
-          your own.
+          Your personal message will be typeset in our signature typewriter font. For inspiration, you can select a quote from the dropdown or compose your own.
         </p>
       </div>
 
