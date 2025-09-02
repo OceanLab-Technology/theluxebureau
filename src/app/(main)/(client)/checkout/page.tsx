@@ -333,7 +333,7 @@ export default function CheckoutPage() {
               AGE VERIFICATION
             </DialogTitle>
             <DialogDescription className="text-stone-600 mt-2 text-[1rem] font-[Century-Old-Style] text-[#3f352c]">
-             Because your order includes alcohol, by continuing you confirm that you are at least 18 years old.
+              Because your order includes alcohol, by continuing you confirm that you are at least 18 years old.
             </DialogDescription>
           </DialogHeader>
 
@@ -348,14 +348,15 @@ export default function CheckoutPage() {
             >
               I am at least 18 years old
             </Button>
-
+     
             <Button
-              variant="secondary"
               onClick={() => setShowAgeModal(false)}
-              className="w-full uppercase tracking-[0.08em] small-text rounded-[0.25rem] bg-[#FFFFFF] hover:bg-[#FFFFFF]/80 text-[#50462D] hover:text-[#50462D] !border-0 !shadow-none focus-visible:ring-0"
+              variant="outline"
+              className="w-full uppercase tracking-[0.08em] text-[0.75rem] font-[font-schoolbook-cond] rounded-[0.25rem]"
             >
               Cancel
             </Button>
+
           </div>
 
           <div className="text-center mt-4 font-[SchoolBook]">
