@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       total,
       recipientInfo,
       deliveryDate,
-      personalization,
+      personalisation,
       notes,
     } = body;
 
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
         status: "New",
         payment_status: "pending",
         total_amount: total,
-        personalization,
+        personalisation,
       })
       .select()
       .single();

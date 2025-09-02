@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { usePersonaliseStore } from "@/store/personaliseStore";
 import { useMainStore } from "@/store/mainStore";
 import RecipientDetailsStep from "./RecipientDetailsStep";
-import PersonalizationStep from "./PersonalisationStep";
+import PersonalisationStep from "./PersonalisationStep";
 import DeliveryDetailsStep from "./DeliveryDetailsStep";
 import SummaryStep from "./SummaryStep";
 import { useRouter } from "next/navigation";
@@ -59,7 +59,7 @@ export default function PersonaliseForm({
           break;
         case 2:
           toast.error(
-            "Please complete the personalization (header text, font, and message) to continue."
+            "Please complete the personalisation (header text, font, and message) to continue."
           );
           break;
         case 3:
@@ -95,7 +95,7 @@ export default function PersonaliseForm({
 
     try {
       setIsLoading(true);
-      // const personalizationData = {
+      // const personalisationData = {
       //   yourName: formData.yourName,
       //   recipientName: formData.recipientName,
       //   recipientAddress: formData.recipientAddress,
@@ -110,10 +110,10 @@ export default function PersonaliseForm({
       //   isPersonalised: true,
       // };
 
-      const personalizationData = buildPersonalisationPayload(formData);
+      const personalisationData = buildPersonalisationPayload(formData);
 
 
-      await addToCart(selectedProduct.id!, 1, personalizationData, selectedProduct.selectedVariant);
+      await addToCart(selectedProduct.id!, 1, personalisationData, selectedProduct.selectedVariant);
       setIsLoading(false);
       setIsAdded(true);
 
@@ -140,7 +140,7 @@ export default function PersonaliseForm({
 
     try {
       setIsLoading(true);
-      // const personalizationData = {
+      // const personalisationData = {
       //   yourName: formData.yourName,
       //   recipientName: formData.recipientName,
       //   recipientAddress: formData.recipientAddress,
@@ -155,11 +155,11 @@ export default function PersonaliseForm({
       //   isPersonalised: true,
       // };
 
-      const personalizationData = buildPersonalisationPayload(formData);
+      const personalisationData = buildPersonalisationPayload(formData);
 
 
       if (onSave) {
-        onSave(personalizationData);
+        onSave(personalisationData);
       }
 
       setIsLoading(false);
@@ -192,7 +192,7 @@ export default function PersonaliseForm({
 
     try {
       setIsLoading(true);
-      // const personalizationData = {
+      // const personalisationData = {
       //   yourName: formData.yourName,
       //   recipientName: formData.recipientName,
       //   recipientAddress: formData.recipientAddress,
@@ -206,10 +206,10 @@ export default function PersonaliseForm({
       //   smsUpdates: formData.smsUpdates,
       //   isPersonalised: true,
       // };
-      const personalizationData = buildPersonalisationPayload(formData);
+      const personalisationData = buildPersonalisationPayload(formData);
 
 
-      await addToCart(selectedProduct.id!, 1, personalizationData, selectedProduct.selectedVariant);
+      await addToCart(selectedProduct.id!, 1, personalisationData, selectedProduct.selectedVariant);
       setIsLoading(false);
       setIsAdded(true);
       resetCheckout();
@@ -231,7 +231,7 @@ export default function PersonaliseForm({
       case 1:
         return <RecipientDetailsStep />;
       case 2:
-        return <PersonalizationStep />;
+        return <PersonalisationStep />;
       case 3:
         return <DeliveryDetailsStep isFloral={selectedProduct?.category?.toLowerCase() === "floral"} />;
       case 4:
@@ -305,7 +305,7 @@ export default function PersonaliseForm({
             toast.error("Please complete recipient details first.");
             break;
           case 3:
-            toast.error("Please complete recipient details and personalization first.");
+            toast.error("Please complete recipient details and personalisation first.");
             break;
           case 4:
             toast.error("Please complete all previous steps first.");

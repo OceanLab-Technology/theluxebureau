@@ -23,7 +23,7 @@
 //     custom_data: any;
 //     selected_variant_name: string | null;
 //   }>;
-//   personalization?: any[];
+//   personalisation?: any[];
 //   notes?: string;
 //   createdAt?: string;
 //   updatedAt?: string;
@@ -76,7 +76,7 @@
 //         status: order.status,
 //         paymentStatus: order.payment_status,
 //         orderItems: order.order_items || [],
-//         personalization: order.personalization || [],
+//         personalisation: order.personalisation || [],
 //         notes: order.notes,
 //         createdAt: order.created_at,
 //         updatedAt: order.updated_at,
@@ -173,7 +173,7 @@
 //     custom_data: any;
 //     selected_variant_name: string | null;
 //   }>;
-//   personalization: any[];
+//   personalisation: any[];
 // }
 
 // interface OrderDetailsState {
@@ -222,7 +222,7 @@
 //             updatedAt: order.updated_at
 //           },
 //           orderItems: order.order_items || [],
-//           personalization: order.personalization || [],
+//           personalisation: order.personalisation || [],
 //           selected_variant_name: order.selected_variant_name
 //         },
 //         loading: false,
@@ -332,7 +332,7 @@
 //   status: string;
 //   paymentStatus?: string | null;
 //   orderItems?: OrderItem[];
-//   personalization?: any[];
+//   personalisation?: any[];
 //   notes?: string | null;
 //   createdAt?: string | null;
 //   updatedAt?: string | null;
@@ -390,7 +390,7 @@
 //         status: order.status,
 //         paymentStatus: order.payment_status ?? null,
 //         orderItems: Array.isArray(order.order_items) ? order.order_items : [],
-//         personalization: order.personalization ?? [],
+//         personalisation: order.personalisation ?? [],
 //         notes: order.notes ?? null,
 //         createdAt: order.created_at ?? null,
 //         updatedAt: order.updated_at ?? null,
@@ -478,7 +478,7 @@
 //     preferredDeliveryTime?: string | null;
 //   };
 //   orderItems: OrderDetailsItem[];
-//   personalization: any[];
+//   personalisation: any[];
 // }
 
 // interface OrderDetailsState {
@@ -506,7 +506,7 @@
 //       if (!res.ok) throw new Error(result?.error || "Failed to fetch order");
 
 //       const order = result.data;
-//       console.log("Personalization:", order.personalization);
+//       console.log("Personalisation:", order.personalisation);
 
 //       const orderDetails: OrderDetails = {
 //         id: order.id,
@@ -531,7 +531,7 @@
 //           updatedAt: order.updated_at,
 //         },
 //         orderItems: Array.isArray(order.order_items) ? order.order_items : [],
-//         personalization: order.personalization ?? [],
+//         personalisation: order.personalisation ?? [],
 //       };
 
 //       set({ order: orderDetails, loading: false });
@@ -635,7 +635,7 @@ type Order = {
   status: string;
   paymentStatus?: string | null;
   orderItems?: OrderItem[];
-  personalization?: any[];
+  personalisation?: any[];
   notes?: string | null;
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -709,7 +709,7 @@ export const useOrdersStore = create<OrdersState>((set, get) => ({
         status: row.status,
         paymentStatus: row.payment_status ?? null,
         orderItems: normalizeItems(row.order_items),
-        personalization: row.personalization ?? [],
+        personalisation: row.personalisation ?? [],
         notes: row.notes ?? null,
         createdAt: row.created_at ?? null,
         updatedAt: row.updated_at ?? null,
@@ -797,7 +797,7 @@ interface OrderDetails {
     preferredDeliveryTime?: string | null;
   };
   orderItems: OrderDetailsItem[];
-  personalization: any[];
+  personalisation: any[];
 }
 
 interface OrderDetailsState {
@@ -850,7 +850,7 @@ export const useOrderDetailsStore = create<OrderDetailsState>((set, get) => ({
         },
         // 👇 normalize no matter what comes back
         orderItems: normalizeItems(order.order_items),
-        personalization: order.personalization ?? [],
+        personalisation: order.personalisation ?? [],
       };
 
 

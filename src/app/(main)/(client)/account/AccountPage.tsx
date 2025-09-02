@@ -75,7 +75,7 @@ interface Order {
     price_at_purchase: number;
     custom_data?: any;
   }>;
-  personalization?: any;
+  personalisation?: any;
 }
 
 interface AccountPageProps {

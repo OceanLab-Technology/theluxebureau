@@ -62,7 +62,7 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
     try {
       const updatedCustomData = {
         ...newData,
-        isPersonalized: true,
+        isPersonalised: true,
       };
       await updateCartItem(item.id!, item.quantity, updatedCustomData);
     } catch (error) {
@@ -71,7 +71,7 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
       setIsUpdating(false);
     }
   };
-  const isPersonalized = item.custom_data?.isPersonalized || item.custom_data?.isPersonalised;
+  const isPersonalised = item.custom_data?.isPersonalised || item.custom_data?.isPersonalised;
   const handleQuantityChange = async (newQuantity: number) => {
     if (newQuantity < 1) return;
     setQuantity(newQuantity);
@@ -127,7 +127,7 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
           </h3>
           {/* {item.custom_data && Object.keys(item.custom_data).length > 0 && (
             <div className="text-xs text-stone-500 mb-3 space-y-1">
-              {item.custom_data.isPersonalized ? (
+              {item.custom_data.isPersonalised ? (
                 <div className="space-y-1">
                   <div className="font-medium text-stone-600">
                     for {item.custom_data.recipientName || "recipient"}
@@ -181,7 +181,7 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
               QUANTITY
             </span>
             <div className="flex-col flex md:hidden  justify-start items-end text-sm">
-              {isPersonalized ? (
+              {isPersonalised ? (
                 <EditPersonaliseSheet
                   product={product}
                   existingData={convertToPersonaliseData(item.custom_data)}
@@ -260,7 +260,7 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
         </div>
       </div>
       <div className="hidden flex-col md:flex  justify-start items-end text-sm">
-        {isPersonalized ? (
+        {isPersonalised ? (
           <EditPersonaliseSheet
             product={product}
             existingData={convertToPersonaliseData(item.custom_data)}

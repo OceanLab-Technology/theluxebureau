@@ -93,7 +93,7 @@
 //       "notes",
 //       "status",
 //       "product_details",
-//       "personalization",
+//       "personalisation",
 //     ];
 
 //     allowedFields.forEach((field) => {
@@ -158,7 +158,7 @@
 //       "recipient_address",
 //       "delivery_date",
 //       "product_details",
-//       "personalization",
+//       "personalisation",
 //     ];
 
 //     allowedFields.forEach((field) => {
@@ -343,7 +343,7 @@
 //       "payment_status",
 //       "delivery_status",
 //       "product_details",
-//       "personalization",
+//       "personalisation",
 //       "total_amount", // ← you parse this, so allow it
 //     ] as const;
 
@@ -408,7 +408,7 @@
 //       "recipient_address",
 //       "delivery_date",
 //       "product_details",
-//       "personalization",
+//       "personalisation",
 //       "total_amount", // ← allow and parse
 //     ] as const;
 
@@ -606,7 +606,7 @@
 //     "status",
 //     "payment_status",
 //     "delivery_status",
-//     "personalization",
+//     "personalisation",
 //     "total_amount",
 //     "currency",
 //   ]);
@@ -776,7 +776,7 @@
 //     "status",
 //     "payment_status",
 //     "delivery_status",
-//     "personalization",
+//     "personalisation",
 //     "total_amount",
 //     "currency",
 //   ]);
@@ -1050,7 +1050,7 @@ function buildUpdate(body: any) {
     "status",
     "payment_status",
     "delivery_status",
-    "personalization",
+    "personalisation",
     "total_amount",
     "currency",
   ]);
@@ -1123,8 +1123,7 @@ export async function GET(
             about_the_maker,
             particulars,
             packaging,
-            contains_alcohol,
-            variants
+            contains_alcohol
           )
         )
       `

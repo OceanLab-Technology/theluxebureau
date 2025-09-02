@@ -165,7 +165,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const productId = body.product_id;
     const quantity  = parseInt(body.quantity);
-    const custom    = body.custom_data ?? null; // <- null means “no personalization”
+    const custom    = body.custom_data ?? null; // <- null means “no personalisation”
     const variant   = body.selected_variant_name ?? null;
 
     if (!productId || !quantity) {

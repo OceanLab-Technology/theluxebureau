@@ -32,7 +32,7 @@ const formSubmissions = [
     submitterName: "Michael Chen",
     submitterEmail: "m.chen@company.com",
     subject: "Custom Gift Set",
-    message: "Looking for a personalized gift set for corporate clients...",
+    message: "Looking for a personalised gift set for corporate clients...",
     submittedAt: "2025-07-26 09:15:00",
     status: "In Progress",
   },

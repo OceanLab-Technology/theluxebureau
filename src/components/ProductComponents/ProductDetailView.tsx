@@ -377,7 +377,7 @@
 //       <LoginRequiredModal
 //         isOpen={showLoginModal}
 //         onClose={() => setShowLoginModal(false)}
-//         feature="personalization"
+//         feature="personalisation"
 //       />
 //     </div>
 //   );
@@ -926,7 +926,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
       <LoginRequiredModal
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
-        feature="personalization"
+        feature="personalisation"
       />
     </div>
   );

@@ -178,10 +178,10 @@ export default function CheckoutPage() {
                       <span className="flex items-center gap-1">
                         {item.name} ({(item as any).quantity})
                         {(item as any).customData &&
-                          (item as any).customData.isPersonalized && (
+                          (item as any).customData.isPersonalised && (
                             <span
                               className="text-amber-600"
-                              title="Personalized Item"
+                              title="Personalised Item"
                             ></span>
                           )}
                       </span>

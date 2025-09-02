@@ -30,7 +30,7 @@
 
 // const DEFAULT_FONT_LABEL = "Garamond";
 
-// export default function PersonalizationStep() {
+// export default function PersonalisationStep() {
 //   const { formData, updateFormData } = usePersonaliseStore();
 
 //   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
@@ -327,7 +327,7 @@
 
 // const DEFAULT_FONT_LABEL = "Garamond";
 
-// export default function PersonalizationStep() {
+// export default function PersonalisationStep() {
 //   const { formData, updateFormData } = usePersonaliseStore();
 
 //   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
@@ -703,7 +703,7 @@ interface SiteSettings {
 
 const DEFAULT_FONT_LABEL = "Garamond";
 
-export default function PersonalizationStep() {
+export default function PersonalisationStep() {
   const { formData, updateFormData } = usePersonaliseStore();
 
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);

@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
       stripe_payment_intent_id: body.stripe_payment_intent_id,
       payment_status: body.payment_status || 'pending',
       product_details: body.product_details,
-      personalization: body.personalization,
+      personalisation: body.personalisation,
     };
 
     const { data, error } = await supabase

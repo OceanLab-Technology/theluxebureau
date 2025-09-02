@@ -109,7 +109,7 @@
 //           isValidEmail(formData.recipientEmail)
 //         )
 
-//           case 2: // Personalization Step
+//           case 2: // Personalisation Step
 //             return !!(
 //               formData.headerText?.trim() &&
 //               formData.selectedFont &&

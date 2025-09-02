@@ -8,14 +8,14 @@ import { usePersonaliseStore } from "@/store/personaliseStore";
 export function LogoutButton() {
   const router = useRouter();
   const resetMainStore = useMainStore((state) => state.resetStore);
-  const resetPersonalizeStore = usePersonaliseStore((state) => state.resetCheckout);
+  const resetPersonaliseStore = usePersonaliseStore((state) => state.resetCheckout);
 
   const logout = async () => {
     try {
       const supabase = createClient();
       
       resetMainStore();
-      resetPersonalizeStore();
+      resetPersonaliseStore();
       
       await supabase.auth.signOut();
       localStorage.clear();

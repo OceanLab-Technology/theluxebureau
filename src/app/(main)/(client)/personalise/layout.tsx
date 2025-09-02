@@ -73,7 +73,7 @@ export default function PersonaliseLayout({
         <LoginRequiredModal
           isOpen={showLoginModal}
           onClose={handleCloseModal}
-          feature="personalize products"
+          feature="personalise products"
         />
       </>
     );

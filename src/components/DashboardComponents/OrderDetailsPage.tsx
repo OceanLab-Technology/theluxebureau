@@ -132,7 +132,7 @@
 //         </div>
 //         {item.custom_data && Object.keys(item.custom_data).length > 0 && (
 //           <div>
-//             <Label className="text-xs font-medium">Personalization</Label>
+//             <Label className="text-xs font-medium">Personalisation</Label>
 //             <div className="mt-1 space-y-1">
 //               {Object.entries(item.custom_data).map(([key, value]) => (
 //                 <div key={key} className="flex justify-between text-xs">
@@ -451,8 +451,8 @@
 //         notes: order.orderInfo.notes || "",
 //         preferredDeliveryTime:
 //           order.orderInfo.preferredDeliveryTime ||
-//           (Array.isArray(order.personalization) && order.personalization.length > 0
-//             ? order.personalization[0].preferredDeliveryTime || ""
+//           (Array.isArray(order.personalisation) && order.personalisation.length > 0
+//             ? order.personalisation[0].preferredDeliveryTime || ""
 //             : ""),
 //       });
 //       setHasChanges(false);
@@ -544,7 +544,7 @@
 //         </div>
 //         {item.custom_data && Object.keys(item.custom_data).length > 0 && (
 //           <div>
-//             <Label className="text-xs font-medium">Personalization</Label>
+//             <Label className="text-xs font-medium">Personalisation</Label>
 //             <div className="mt-1 space-y-1">
 //               {Object.entries(item.custom_data).map(([key, value]) => (
 //                 <div key={key} className="flex justify-between text-xs">
@@ -884,9 +884,9 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
         notes: order.orderInfo.notes || "",
         preferredDeliveryTime:
           order.orderInfo.preferredDeliveryTime ||
-          (Array.isArray(order.personalization) &&
-          order.personalization.length > 0
-            ? order.personalization[0].preferredDeliveryTime || ""
+          (Array.isArray(order.personalisation) &&
+          order.personalisation.length > 0
+            ? order.personalisation[0].preferredDeliveryTime || ""
             : ""),
       });
       setHasChanges(false);
@@ -982,7 +982,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
 
           {item?.custom_data && Object.keys(item.custom_data).length > 0 && (
             <div>
-              <Label className="text-xs font-medium">Personalization</Label>
+              <Label className="text-xs font-medium">Personalisation</Label>
               <div className="mt-1 space-y-1">
                 {Object.entries(item.custom_data).map(([key, value]) => (
                   <div key={key} className="flex justify-between text-xs">

@@ -96,7 +96,7 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
             email: customerInfo.email,
             phone: customerInfo.phone,
           },
-          personalization: items.map((item) => item.customData || ""),
+          personalisation: items.map((item) => item.customData || ""),
           // ✅ Extract deliveryDate from first customData entry
           deliveryDate: items?.[0]?.customData?.deliveryDate || "",
           notes: "",

@@ -86,7 +86,7 @@ export interface Order {
   stripe_payment_intent_id?: string;
   payment_status?: 'pending' | 'completed' | 'failed' | 'refunded';
   product_details?: Record<string, any>;
-  personalization?: Record<string, any>;
+  personalisation?: Record<string, any>;
 }
 
 export interface ProductVariant {

@@ -44,7 +44,7 @@ interface Order {
   payment_status: string;
   delivery_status?: string;
   order_items: OrderItem[];
-  personalization?: any[];
+  personalisation?: any[];
 }
 
 interface OrderDetailPageProps {

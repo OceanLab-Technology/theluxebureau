@@ -67,7 +67,7 @@ export function PersonalisedAddToCartButton({
       <PersonalisedCartToast
         isVisible={showToast}
         onClose={handleCloseToast}
-        productName={selectedProduct?.name || "Personalized Gift"}
+        productName={selectedProduct?.name || "Personalised Gift"}
         productImage={selectedProduct?.image_1}
         productPrice={selectedProduct?.price}
         onViewCart={handleViewCart}

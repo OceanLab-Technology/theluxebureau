@@ -6,9 +6,9 @@ import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { usePersonaliseStore } from "@/store/personaliseStore";
 import { useMainStore } from "@/store/mainStore";
-import PersonalizeForm from "@/components/PersonaliseComponents/PersonaliseForm";
+import PersonaliseForm from "@/components/PersonaliseComponents/PersonaliseForm";
 
-export default function PersonalizeClient() {
+export default function PersonaliseClient() {
   const searchParams = useSearchParams();
   const productId = searchParams.get("productId");
   const { setSelectedProduct, selectedProduct, resetCheckout } =
@@ -80,7 +80,7 @@ export default function PersonalizeClient() {
       </div>
 
       <div className="px-6 py-8 bg-background border-l relative">
-        <PersonalizeForm />
+        <PersonaliseForm />
       </div>
     </div>
   );

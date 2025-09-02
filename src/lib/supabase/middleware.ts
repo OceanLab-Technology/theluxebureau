@@ -58,7 +58,7 @@ export async function updateSession(request: NextRequest) {
   const protectedRoutes = ["/admin", "/account"];
   
   // Routes that show dialog before redirecting (handled by client-side)
-  const dialogRoutes = ["/personalize", "/personalise", "/checkout"];
+  const dialogRoutes = ["/personalise", "/personalise", "/checkout"];
   
   const isPublicRoute = publicRoutes.some(route => 
     request.nextUrl.pathname === route || 

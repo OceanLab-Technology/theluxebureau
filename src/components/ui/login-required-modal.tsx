@@ -21,7 +21,7 @@ interface LoginRequiredModalProps {
 export function LoginRequiredModal({
   isOpen,
   onClose,
-  feature = "personalize products",
+  feature = "personalise products",
   onCloseCartSheet
 }: LoginRequiredModalProps) {
   const router = useRouter();
