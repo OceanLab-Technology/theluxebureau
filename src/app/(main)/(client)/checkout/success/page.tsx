@@ -27,14 +27,11 @@ export default function CheckoutSuccessPage() {
             </Button>
           </div>
         </div>
+          
+        <p className="text-[#50462D] text-[10px] leading-[26px] lg:text-[14px] lg:leading-[28px] font-[Century-Old-Style]">
+            Need help? Email us at founders@theluxebureau.com
+        </p>
       </div>
     </div>
   );
 }
-
-
-// <button
-//   onClick={handleBack}
-//   disabled={isLoading}
-//   className="bg-[#50462D] hover:bg-[#50462D]/80 text-[#FAF7E7] tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm md:py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%] disabled:opacity-50 disabled:cursor-not-allowed"
-// >

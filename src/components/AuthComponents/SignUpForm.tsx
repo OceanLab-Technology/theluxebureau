@@ -108,7 +108,7 @@ export function SignUpForm({
     }
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -119,7 +119,20 @@ export function SignUpForm({
           },
         },
       });
-      if (error) throw error;
+
+      console.log("SUPABASE SIGNUP RESPONSE:", { data, error });
+      if (error) {
+        setError(error.message);
+        setIsLoading(false);
+        return;
+      }
+
+      // Check if duplicate
+      if (data?.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+        setError("This email is already registered. Please log in instead.");
+        setIsLoading(false);
+        return;
+      }
 
       await handleLoginSuccess();
       router.push("/auth/sign-up-success");
@@ -303,7 +316,7 @@ export function SignUpForm({
 
           {error && (
             <div className="mb-6">
-              <p className="text-red-500 text-sm">{error}</p>
+              <p className="text-[#50462D] text-sm">{error}</p>
             </div>
           )}
 

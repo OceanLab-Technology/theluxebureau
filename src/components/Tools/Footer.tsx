@@ -13,9 +13,9 @@ const footerData = {
   concierge: {
     title: "Concierge",
     links: [
-      { label: "Cookies", href: "/shipping" },
-      { label: "Shipping & Returns", href: "/shipping" },
-      { label: "Term & Conditions", href: "/fa" },
+      { label: "Cookies Policy", href: "https://www.theluxebureau.com/cookiespolicy" },
+      { label: "Term & Conditions", href: "https://www.theluxebureau.com/termsandconditions" },
+      { label: "Shipping & Returns", href: "https://www.theluxebureau.com/shippingandreturns" },
       { label: "Contact", href: "https://www.theluxebureau.com/contact" },
     ],
   },
@@ -29,7 +29,7 @@ const footerData = {
     designCredit: {
       text: "Design & Creative Direction by",
       name: "Duncan Fenech",
-      href: "#",
+      href: "https://duncanfenech.com",
     },
   },
   logo: {
@@ -131,10 +131,13 @@ export function Footer() {
               {footerData.copyright.designCredit.text}{" "}
               <Link
                 href={footerData.copyright.designCredit.href}
-                className="underline hover:no-underline font-[Marfa]"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="no-underline font-[Marfa] hover:text-stone-300 transition-colors"
               >
                 {footerData.copyright.designCredit.name}
               </Link>
+
             </p>
           </div>
         </div>
