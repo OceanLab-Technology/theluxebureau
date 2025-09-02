@@ -940,7 +940,7 @@ const productSchema = z.object({
   slug: z.string().min(1, "Slug is required"),
   category: z.string().min(1, "Category is required"),
   packaging: z.string().optional(),
-  why_we_chose_it: z.string().min(1, "Why we chose it is required"),
+  why_we_chose_it: z.string().min(1, "Who it's for it is required"),
   about_the_maker: z.string().min(1, "About the maker is required"),
   particulars: z.string().min(1, "Particulars are required"),
 
@@ -1420,7 +1420,7 @@ export function ProductFormSheet({
                 {fd.why_we_chose_it && (
                   <div>
                     <h4 className="small-text text-muted-foreground">
-                      Why We Chose It
+                      Who it’s for
                     </h4>
                     <p className="text-sm leading-relaxed">
                       {fd.why_we_chose_it}
@@ -1820,7 +1820,7 @@ export function ProductFormSheet({
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="why_we_chose_it">
-                      Why We Chose It <span className="text-red-500">*</span>
+                      Who it's for <span className="text-red-500">*</span>
                     </Label>
                     <Textarea
                       id="why_we_chose_it"
