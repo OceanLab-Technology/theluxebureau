@@ -95,7 +95,7 @@ export default function Header() {
       animate={{
         // height: extended ? "41.25rem" : (isMobile ? "3.9375rem" : "5.9375rem"),
         height: extended ? "41.25rem" : undefined,
-        backgroundColor: extended ? "rgba(80, 70, 45, 0.95)" : "#FBF7E5",
+        backgroundColor: extended ? "rgba(80, 70, 45, 0.95)" : "#FAF7E7",
       }}
       onMouseLeave={() => setExtended(false)}
       transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -125,7 +125,7 @@ export default function Header() {
               className={`md:relative absolute left-1/2 -translate-x-1/2 cursor-pointer md:w-auto md:scale-100 scale-55 md:h-auto flex-shrink-0 ${extended ? "text-background" : "text-stone-600"
                 }`}
             >
-              <Logo fill={extended ? "#FBF7E5" : "#50462D"} />
+              <Logo fill={extended ? "#FAF7E7" : "#50462D"} />
             </Link>
           </div>
 

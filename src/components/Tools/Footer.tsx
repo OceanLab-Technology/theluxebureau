@@ -58,7 +58,7 @@ export function Footer() {
         />
       </div>
 
-      <div className="relative z-10 text-[#FBF7E5]">
+      <div className="relative z-10 text-[#FAF7E7]">
         <div className="mx-auto md:px-12 px-2 md:py-8 py-6 h-full min-h-[300px] flex flex-col justify-between">
           <div className="flex md:flex-row flex-col justify-between">
             <div className="flex md:space-x-44 gap-10">

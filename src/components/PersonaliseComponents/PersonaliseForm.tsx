@@ -379,7 +379,7 @@ export default function PersonaliseForm({
               <button
                 onClick={handleBack}
                 disabled={isLoading}
-                className="bg-[#50462D] hover:bg-[#50462D]/80 text-[#FBF7E5] tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm md:py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-[#50462D] hover:bg-[#50462D]/80 text-[#FAF7E7] tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm md:py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 BACK
               </button>
@@ -413,7 +413,7 @@ export default function PersonaliseForm({
               <button
                 onClick={handleBack}
                 disabled={currentStep === 1}
-                className="bg-[#50462D] hover:bg-[#50462D]/80 text-[#FBF7E5] tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%]"
+                className="bg-[#50462D] hover:bg-[#50462D]/80 text-[#FAF7E7] tracking-wider text-[0.75rem] font-[400] px-[1.875rem] w-[11.56rem] md:text-sm py-[1.135rem] transition-colors cursor-pointer rounded-[0.25rem] leading-[119.58%]"
               >
                 BACK
               </button>
