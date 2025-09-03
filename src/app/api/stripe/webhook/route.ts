@@ -712,10 +712,10 @@ export async function POST(request: Request) {
 
       if (fetchOrderError || !existingOrder) {
         console.error("Order fetch error or not found:", fetchOrderError);
-      return new Response("No order for session", { status: 200 });
+        return new Response("No order for session", { status: 200 });
       }
 
-       if (
+      if (
         existingOrder.payment_status === "completed" &&
         existingOrder.inventory_processed === true
       ) {
@@ -723,7 +723,7 @@ export async function POST(request: Request) {
         return new Response("OK (order already processed)", { status: 200 });
       }
 
-     const { data: orderData, error: updateError } = await supabase
+      const { data: orderData, error: updateError } = await supabase
         .from("orders")
         .update({
           stripe_payment_intent_id: session.payment_intent as string,
@@ -766,20 +766,20 @@ export async function POST(request: Request) {
         return new Response("Items fetch error", { status: 200 });
       }
 
-       const orderItems: OrderItemRow[] = (orderItemsRaw as OrderItemRowDB[]).map(
+      const orderItems: OrderItemRow[] = (orderItemsRaw as OrderItemRowDB[]).map(
         ({ product, ...rest }) => ({
           ...rest,
           product: Array.isArray(product) ? product[0] ?? null : product,
         })
       );
 
-        if (orderData?.inventory_processed === true) {
+      if (orderData?.inventory_processed === true) {
         console.log(`Order ${orderData.id} inventory already processed.`);
       } else {
         for (const item of orderItems) {
           const variantName = item.selected_variant_name ?? "default";
-          
-           try {
+
+          try {
             const { data: currentVariant } = await supabase
               .from('product_variants')
               .select('qty_blocked')
@@ -796,7 +796,7 @@ export async function POST(request: Request) {
                 })
                 .eq('product_id', item.product_id)
                 .eq('name', variantName);
-                
+
               if (confirmError) {
                 console.error(
                   `Inventory confirmation error for product ${item.product_id}, variant ${variantName}:`,
@@ -813,7 +813,7 @@ export async function POST(request: Request) {
           }
         }
 
-         const { error: markProcessedError } = await supabase
+        const { error: markProcessedError } = await supabase
           .from("orders")
           .update({
             inventory_processed: true,
@@ -855,8 +855,8 @@ export async function POST(request: Request) {
               template_name: "order-confirmation-external",
               template_content: [],
               message: {
-                from_email: "no-reply@theluxebureau.com",
-                from_name: "The Luxe Bureau",
+                from_email: "orders@theluxebureau.com",
+                from_name: "the Luxe Bureau",
                 to: [
                   {
                     email: session.customer_details.email,
@@ -903,11 +903,11 @@ export async function POST(request: Request) {
               template_name: "new-order-internal",
               template_content: [],
               message: {
-                from_email: "no-reply@theluxebureau.com",
-                from_name: "The Luxe Bureau",
+                from_email: "orders@theluxebureau.com",
+                from_name: "the Luxe Bureau",
                 to: [
                   {
-                    email: "info@luxebureau.com",
+                    email: "orders@luxebureau.com",
                     type: "to",
                   },
                 ],
@@ -915,6 +915,7 @@ export async function POST(request: Request) {
                 merge: true,
                 merge_language: "handlebars",
                 global_merge_vars: [
+                  { name: "first_name", content: session.customer_details?.name ?? "" },
                   {
                     name: "preheader_text",
                     content: "You have a new order",
@@ -974,7 +975,7 @@ export async function POST(request: Request) {
       }
     }
 
-    // Payment failed handler
+
     if (event.type === "payment_intent.payment_failed") {
       const intent = event.data.object as Stripe.PaymentIntent;
 
@@ -986,7 +987,7 @@ export async function POST(request: Request) {
           updated_at: new Date().toISOString(),
         })
         .eq("stripe_payment_intent_id", intent.id)
-        .select("id, customer_email, recipient_name, total_amount")
+        .select("id, customer_name, customer_email, recipient_name, total_amount")
         .single();
 
       if (failError) {
@@ -994,43 +995,82 @@ export async function POST(request: Request) {
         return new Response("Payment failed update error", { status: 200 });
       }
 
+      let mandrillItems: any[] = [];
+
       if (orderData?.id) {
         try {
-          const { data: orderItems } = await supabase
+          // Fetch order items with product details
+          const { data: orderItemsRaw, error: itemsError } = await supabase
             .from("order_items")
-            .select("product_id, quantity, selected_variant_name")
+            .select(`
+          product_id,
+          quantity,
+          selected_variant_name,
+          price_at_purchase,
+          product:products (
+            id, name, image_1
+          )
+        `)
             .eq("order_id", orderData.id);
 
-          if (orderItems && orderItems.length > 0) {
-            for (const item of orderItems) {
-              const variantName = item.selected_variant_name ?? "default";
-              
-              const { data: currentVariant } = await supabase
-                .from('product_variants')
-                .select('inventory, qty_blocked')
-                .eq('product_id', item.product_id)
-                .eq('name', variantName)
-                .single();
+          if (itemsError) {
+            console.error("Order Items Fetch Error (failed payment):", itemsError);
+          }
 
-              if (currentVariant) {
-                await supabase
-                  .from('product_variants')
-                  .update({
-                    inventory: currentVariant.inventory + item.quantity,
-                    qty_blocked: Math.max(0, currentVariant.qty_blocked - item.quantity),
-                    updated_at: new Date().toISOString(),
-                  })
-                  .eq('product_id', item.product_id)
-                  .eq('name', variantName);
-                  
-                console.log(
-                  `Inventory released for failed payment - product ${item.product_id}, variant ${variantName}: +${item.quantity} inventory, -${item.quantity} qty_blocked`
-                );
-              }
+          const orderItems: OrderItemRow[] = (orderItemsRaw as OrderItemRowDB[]).map(
+            ({ product, ...rest }) => ({
+              ...rest,
+              product: Array.isArray(product) ? product[0] ?? null : product,
+            })
+          );
+
+          // Release inventory
+          for (const item of orderItems) {
+            const variantName = item.selected_variant_name ?? "default";
+
+            const { data: currentVariant } = await supabase
+              .from("product_variants")
+              .select("inventory, qty_blocked")
+              .eq("product_id", item.product_id)
+              .eq("name", variantName)
+              .single();
+
+            if (currentVariant) {
+              await supabase
+                .from("product_variants")
+                .update({
+                  inventory: currentVariant.inventory + item.quantity,
+                  qty_blocked: Math.max(0, currentVariant.qty_blocked - item.quantity),
+                  updated_at: new Date().toISOString(),
+                })
+                .eq("product_id", item.product_id)
+                .eq("name", variantName);
+
+              console.log(
+                `Inventory released for failed payment - product ${item.product_id}, variant ${variantName}: +${item.quantity} inventory, -${item.quantity} qty_blocked`
+              );
             }
           }
+
+          // Build gifts for cancellation email
+          mandrillItems = orderItems.map((item, i) => {
+            const product = item.product;
+            return {
+              gift_label: `GIFT ${String(i + 1).padStart(2, "0")}`,
+              title: product?.name ?? "Product",
+              variant: item.selected_variant_name ?? "Default",
+              qty: item.quantity,
+              price: Number(item.price_at_purchase ?? 0).toFixed(2),
+              image_url: product?.image_1 ?? "https://placehold.co/500x800.png",
+              url: `https://theluxebureau.com/products/${item.product_id}`,
+              order_date: new Date().toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              }),
+            };
+          });
         } catch (inventoryError) {
-          console.error('Error releasing inventory for failed payment:', inventoryError);
+          console.error("Error releasing inventory for failed payment:", inventoryError);
         }
       }
 
@@ -1041,11 +1081,11 @@ export async function POST(request: Request) {
             "https://mandrillapp.com/api/1.0/messages/send-template.json",
             {
               key: "md-BfHmKxZ95KI6BiaR4dwUJQ", // move to ENV in production
-              template_name: "order-cancelled",
+              template_name: "order-cancelled-external",
               template_content: [],
               message: {
-                from_email: "no-reply@theluxebureau.com",
-                from_name: "The Luxe Bureau",
+                from_email: "orders@theluxebureau.com",
+                from_name: "the Luxe Bureau",
                 to: [
                   {
                     email: orderData.customer_email,
@@ -1061,23 +1101,139 @@ export async function POST(request: Request) {
                     content:
                       "We're sorry to let you know that your Luxe Bureau order has been cancelled due to payment failure.",
                   },
+                  { name: "first_name", content: orderData.customer_name?.split(" ")?.[0] ?? "" },
                   { name: "order_number", content: orderData.id },
                   { name: "Recipient", content: orderData.recipient_name },
+                  { name: "account_url", content: "https://theluxebureau.com/account" },
                   { name: "order_total", content: orderData.total_amount },
+                  { name: "gifts", content: mandrillItems }, // ✅ now real DB items
                 ],
               },
             }
           );
           console.log("Cancellation email sent:", res.data);
         } else {
-          console.warn(
-            "No customer email found for order; skipping cancellation email."
-          );
+          console.warn("No customer email found for order; skipping cancellation email.");
         }
       } catch (e: any) {
         console.error("Mandrill cancellation email error:", e?.response?.data || e?.message);
       }
     }
+
+
+    // // Payment failed handler
+    // if (event.type === "payment_intent.payment_failed") {
+    //   const intent = event.data.object as Stripe.PaymentIntent;
+
+    //   // Update order status
+    //   const { data: orderData, error: failError } = await supabase
+    //     .from("orders")
+    //     .update({
+    //       payment_status: "failed",
+    //       updated_at: new Date().toISOString(),
+    //     })
+    //     .eq("stripe_payment_intent_id", intent.id)
+    //     .select("id, customer_name, customer_email, recipient_name, total_amount")
+    //     .single();
+
+    //   if (failError) {
+    //     console.error("Payment Failed Update Error:", failError);
+    //     return new Response("Payment failed update error", { status: 200 });
+    //   }
+
+    //   if (orderData?.id) {
+    //     try {
+    //       const { data: orderItems } = await supabase
+    //         .from("order_items")
+    //         .select("product_id, quantity, selected_variant_name")
+    //         .eq("order_id", orderData.id);
+
+    //       if (orderItems && orderItems.length > 0) {
+    //         for (const item of orderItems) {
+    //           const variantName = item.selected_variant_name ?? "default";
+
+    //           const { data: currentVariant } = await supabase
+    //             .from('product_variants')
+    //             .select('inventory, qty_blocked')
+    //             .eq('product_id', item.product_id)
+    //             .eq('name', variantName)
+    //             .single();
+
+    //           if (currentVariant) {
+    //             await supabase
+    //               .from('product_variants')
+    //               .update({
+    //                 inventory: currentVariant.inventory + item.quantity,
+    //                 qty_blocked: Math.max(0, currentVariant.qty_blocked - item.quantity),
+    //                 updated_at: new Date().toISOString(),
+    //               })
+    //               .eq('product_id', item.product_id)
+    //               .eq('name', variantName);
+
+    //             console.log(
+    //               `Inventory released for failed payment - product ${item.product_id}, variant ${variantName}: +${item.quantity} inventory, -${item.quantity} qty_blocked`
+    //             );
+    //           }
+
+    //         }
+
+    //       }
+    //     } catch (inventoryError) {
+    //       console.error('Error releasing inventory for failed payment:', inventoryError);
+    //     }
+    //   }
+
+
+
+
+    //   // Send cancellation email if order found and has customer email
+    //   try {
+    //     if (orderData?.customer_email) {
+    //       const res = await axios.post(
+    //         "https://mandrillapp.com/api/1.0/messages/send-template.json",
+    //         {
+    //           key: "md-BfHmKxZ95KI6BiaR4dwUJQ", // move to ENV in production
+    //           template_name: "order-cancelled-external",
+    //           template_content: [],
+    //           message: {
+    //             from_email: "orders@theluxebureau.com",
+    //             from_name: "the Luxe Bureau",
+    //             to: [
+    //               {
+    //                 email: orderData.customer_email,
+    //                 type: "to",
+    //               },
+    //             ],
+    //             subject: "Your order has been cancelled",
+    //             merge: true,
+    //             merge_language: "handlebars",
+    //             global_merge_vars: [
+    //               {
+    //                 name: "preheader_text",
+    //                 content:
+    //                   "We're sorry to let you know that your Luxe Bureau order has been cancelled due to payment failure.",
+    //               },
+    //               { name: "first_name", content: orderData.customer_name?.split(" ")?.[0] ?? "" },
+    //               { name: "order_number", content: orderData.customer_name?.split(" ")?.[0] ?? "" },
+    //               { name: "order_number", content: orderData.id },
+    //               { name: "Recipient", content: orderData.recipient_name },
+    //               { name: "account_url", content: "https://theluxebureau.com/account" },
+    //               { name: "order_total", content: orderData.total_amount },
+    //               { name: "gifts", content: mandrillItems },
+    //             ],
+    //           },
+    //         }
+    //       );
+    //       console.log("Cancellation email sent:", res.data);
+    //     } else {
+    //       console.warn(
+    //         "No customer email found for order; skipping cancellation email."
+    //       );
+    //     }
+    //   } catch (e: any) {
+    //     console.error("Mandrill cancellation email error:", e?.response?.data || e?.message);
+    //   }
+    // }
 
     return new Response("Webhook received", { status: 200 });
   } catch (err: any) {
