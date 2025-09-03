@@ -192,24 +192,19 @@ export default function PersonaliseForm({
 
     try {
       setIsLoading(true);
-      // const personalisationData = {
-      //   yourName: formData.yourName,
-      //   recipientName: formData.recipientName,
-      //   recipientAddress: formData.recipientAddress,
-      //   recipientEmail: formData.recipientEmail,
-      //   recipientPhone: formData.recipientPhone,
-      //   deliveryDate: formData.deliveryDate,
-      //   preferredDeliveryTime: formData.preferredDeliveryTime,
-      //   headerText: formData.headerText,
-      //   selectedQuote: formData.selectedQuote,
-      //   customMessage: formData.customMessage,
-      //   smsUpdates: formData.smsUpdates,
-      //   isPersonalised: true,
-      // };
       const personalisationData = buildPersonalisationPayload(formData);
 
-
       await addToCart(selectedProduct.id!, 1, personalisationData, selectedProduct.selectedVariant);
+      
+      const { checkInventoryAvailability } = useMainStore.getState();
+      const inventoryAvailable = await checkInventoryAvailability();
+      
+      if (!inventoryAvailable) {
+        setIsLoading(false);
+        setIsAdded(false);
+        return;
+      }
+
       setIsLoading(false);
       setIsAdded(true);
       resetCheckout();

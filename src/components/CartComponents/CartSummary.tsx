@@ -17,12 +17,13 @@ export function CartSummary({ onClose }: CartSummaryProps) {
   const { navigateWithAuth, showLoginModal, handleCloseModal, featureName } = useAuthenticatedNavigation();
   
   const handleCheckout = async () => {
-    navigateWithAuth("/checkout", "proceed to checkout");
     const inventoryAvailable = await checkInventoryAvailability();
     
     if (!inventoryAvailable) {
       return;
     }
+
+    navigateWithAuth("/checkout", "proceed to checkout");
 
     if (onClose && user) {
       onClose();

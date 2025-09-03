@@ -554,18 +554,14 @@ export const useMainStore = create<MainStore>()(
           const { data } = result;
 
           if (!data.all_available) {
-            const unavailableMessages = data.unavailable_items.map((item: any) => 
-              `${item.product_name} (${item.variant_name}): ${item.available_quantity} available, ${item.requested_quantity} requested`
-            );
-            
-            toast.error(`Some items are not available:\n${unavailableMessages.join('\n')}`, {
-              duration: 8000,
+            data.unavailable_items.forEach((item: any) => {
+              const variantText = item.variant_name && item.variant_name !== 'default' ? ` (${item.variant_name})` : '';
+              toast.error(`Out of stock: ${item.product_name}${variantText}`, {
+                duration: 5000,
+              });
             });
-
             return false;
-          }
-
-          if (data.warnings.length > 0) {
+          }          if (data.warnings.length > 0) {
             const warningMessages = data.warnings.map((item: any) => 
               `${item.product_name} (${item.variant_name}): Low stock (${item.available_quantity} remaining)`
             );
@@ -613,18 +609,15 @@ export const useMainStore = create<MainStore>()(
           const { data } = result;
 
           if (!data.success) {
-            const failedMessages = data.failed_items.map((item: any) => 
-              `${item.variant_name}: ${item.reason}`
-            );
-            
-            toast.error(`Failed to reserve inventory:\n${failedMessages.join('\n')}`, {
-              duration: 8000,
+            data.failed_items.forEach((item: any) => {
+              toast.error(`Failed to reserve: ${item.variant_name} - ${item.reason}`, {
+                duration: 5000,
+              });
             });
-
             return false;
           }
 
-          toast.success('Inventory reserved for checkout');
+          // toast.success('Inventory reserved for checkout');
           return true;
 
         } catch (error) {

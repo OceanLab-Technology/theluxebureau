@@ -40,12 +40,10 @@ export async function POST(request: NextRequest): Promise<NextResponse<ApiRespon
     const reservedItems: Array<{ product_id: string; variant_name: string; quantity: number }> = [];
     const failedItems: Array<{ product_id: string; variant_name: string; quantity: number; reason: string }> = [];
 
-    // Process each item
     for (const item of items) {
       const { product_id, quantity, selected_variant_name = 'default' } = item;
 
       try {
-        // Get current variant state with row-level locking to prevent race conditions
         const { data: variant, error: variantError } = await supabase
           .from('product_variants')
           .select('id, name, inventory, qty_blocked')
@@ -63,7 +61,6 @@ export async function POST(request: NextRequest): Promise<NextResponse<ApiRespon
           continue;
         }
 
-        // Check if enough inventory is available
         const availableQuantity = Math.max(0, variant.inventory - variant.qty_blocked);
         
         if (availableQuantity < quantity) {

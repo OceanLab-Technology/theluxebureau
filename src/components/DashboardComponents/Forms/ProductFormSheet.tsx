@@ -1180,8 +1180,11 @@ export function ProductFormSheet({
     const next = [...(form.getValues("variants") ?? [])];
     const v = { ...next[idx] };
     // coerce numbers for numeric fields
-    if (key === "name") (v as any)[key] = value;
-    else (v as any)[key] = value === "" ? 0 : Number(value);
+    if (key === "name") {
+      (v as any)[key] = value.toLowerCase(); // Convert variant names to lowercase
+    } else {
+      (v as any)[key] = value === "" ? 0 : Number(value);
+    }
     next[idx] = v;
     form.setValue("variants", next, { shouldValidate: true });
   };

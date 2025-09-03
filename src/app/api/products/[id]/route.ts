@@ -227,7 +227,7 @@ function n(x: any, f = 0) {
 }
 function normalizeVariant(v: any) {
   return {
-    name: String(v?.name ?? "default"),
+    name: String(v?.name ?? "default").toLowerCase(), // Convert to lowercase
     inventory: n(v?.inventory, 0),
     threshold: n(v?.threshold, 0),
     qty_blocked: n(v?.qty_blocked, 0),

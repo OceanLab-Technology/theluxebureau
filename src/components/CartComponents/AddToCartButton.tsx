@@ -71,8 +71,17 @@ export function AddToCartButton({
     setCartSheetOpen(true);
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     setShowToast(false);
+    
+    // Check inventory availability before navigation
+    const { checkInventoryAvailability } = useMainStore.getState();
+    const inventoryAvailable = await checkInventoryAvailability();
+    
+    if (!inventoryAvailable) {
+      return;
+    }
+
     navigateWithAuth("/checkout", "proceed to checkout");
   };
 

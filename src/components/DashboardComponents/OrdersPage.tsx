@@ -215,7 +215,7 @@ export function OrdersPage() {
                             : "-"}
                         </TableCell>
                         <TableCell className="font-medium">
-                          #{order.id?.slice(-8)}
+                          #{order.id}
                         </TableCell>
                         <TableCell>{order.customerName || "-"}</TableCell>
                         <TableCell>{order.recipientName || "-"}</TableCell>
@@ -338,6 +338,8 @@ function OrdersTableSkeleton() {
           <Skeleton className="h-4 w-20" />
           <Skeleton className="h-4 w-32" />
           <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-4 w-40" />
+          <Skeleton className="h-4 w-28" />
           <Skeleton className="h-4 w-28" />
           <Skeleton className="h-4 w-16" />
           <Skeleton className="h-6 w-20 rounded-full" />
