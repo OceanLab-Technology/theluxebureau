@@ -13,11 +13,11 @@ interface CartSummaryProps {
 
 export function CartSummary({ onClose }: CartSummaryProps) {
   const { cartItems, cartTotal, cartLoading, checkInventoryAvailability } = useMainStore();
-  const router = useRouter();
   const { user } = useAuth();
   const { navigateWithAuth, showLoginModal, handleCloseModal, featureName } = useAuthenticatedNavigation();
   
   const handleCheckout = async () => {
+    navigateWithAuth("/checkout", "proceed to checkout");
     const inventoryAvailable = await checkInventoryAvailability();
     
     if (!inventoryAvailable) {
@@ -27,7 +27,6 @@ export function CartSummary({ onClose }: CartSummaryProps) {
     if (onClose && user) {
       onClose();
     }
-    navigateWithAuth("/checkout", "proceed to checkout");
   };
 
   if (cartItems.length === 0) {

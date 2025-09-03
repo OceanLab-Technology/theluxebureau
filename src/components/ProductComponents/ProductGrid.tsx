@@ -234,13 +234,12 @@ export function ProductGrid({
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="grid grid-cols-2 md:grid-cols-3 gap-y-[12px] md:gap-y-[6px] gap-x-[12px] md:gap-x-1 px-2 md:px-0 w-full max-w-full"
+            className="grid grid-cols-2 md:grid-cols-3 gap-y-[12px] md:gap-y-[6px] gap-x-[12px] md:gap-x-1 px-2 md:px-4 w-full max-w-full"
           >
             {filteredProducts.map((product, idx) => (
               <motion.div
                 key={product.id}
                 variants={cardVariants}
-                className={`flex ${idx === 0 ? "md:ml-3" : ""} ${idx === filteredProducts.length - 1 ? "md:mr-3" : ""}`}
               >
                 <ProductCard product={product} />
               </motion.div>

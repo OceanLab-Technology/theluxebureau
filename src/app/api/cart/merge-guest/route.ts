@@ -97,58 +97,101 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (guestItems.length === 0) {
+      return NextResponse.json({
+        success: true,
+        message: "No items to migrate",
+        migratedCount: 0,
+      });
+    }
+
+    let migratedCount = 0;
+    let errors: string[] = [];
+
     for (const guestItem of guestItems) {
-      const variant = guestItem.selected_variant_name ?? null;
-      const hasCustom = !!guestItem.custom_data;
+      try {
+        const variant = guestItem.selected_variant_name ?? null;
+        const hasCustom = !!guestItem.custom_data;
 
-      if (hasCustom) {
-        // Always insert personalised items
-        await supabase.from("cart_items").insert({
-          user_id: user.id,
-          product_id: guestItem.product_id,
-          quantity: guestItem.quantity,
-          custom_data: guestItem.custom_data,
-          selected_variant_name: variant,
-        });
-        continue;
-      }
+        // Validate guest item
+        if (!guestItem.product_id || !guestItem.quantity || guestItem.quantity <= 0) {
+          errors.push(`Invalid item: ${guestItem.product_id || 'unknown'}`);
+          continue;
+        }
 
-      // Merge plain items by variant
-      let q = supabase
-        .from("cart_items")
-        .select("*")
-        .eq("user_id", user.id)
-        .eq("product_id", guestItem.product_id)
-        .is("custom_data", null);
+        if (hasCustom) {
+          // Always insert personalised items
+          const { error } = await supabase.from("cart_items").insert({
+            user_id: user.id,
+            product_id: guestItem.product_id,
+            quantity: guestItem.quantity,
+            custom_data: guestItem.custom_data,
+            selected_variant_name: variant,
+          });
+          
+          if (error) {
+            errors.push(`Failed to migrate custom item ${guestItem.product_id}: ${error.message}`);
+          } else {
+            migratedCount++;
+          }
+          continue;
+        }
 
-      if (variant === null) q = q.is("selected_variant_name", null);
-      else q = q.eq("selected_variant_name", variant);
-
-      const { data: existingItem, error: exErr } = await q.maybeSingle();
-      if (exErr) throw exErr;
-
-      if (existingItem) {
-        await supabase
+        // Merge plain items by variant
+        let q = supabase
           .from("cart_items")
-          .update({
-            quantity: existingItem.quantity + guestItem.quantity,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", existingItem.id);
-      } else {
-        await supabase.from("cart_items").insert({
-          user_id: user.id,
-          product_id: guestItem.product_id,
-          quantity: guestItem.quantity,
-          custom_data: null, // normalize
-          selected_variant_name: variant,
-        });
+          .select("*")
+          .eq("user_id", user.id)
+          .eq("product_id", guestItem.product_id)
+          .is("custom_data", null);
+
+        if (variant === null) q = q.is("selected_variant_name", null);
+        else q = q.eq("selected_variant_name", variant);
+
+        const { data: existingItem, error: exErr } = await q.maybeSingle();
+        if (exErr) throw exErr;
+
+        if (existingItem) {
+          const { error } = await supabase
+            .from("cart_items")
+            .update({
+              quantity: existingItem.quantity + guestItem.quantity,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", existingItem.id);
+            
+          if (error) {
+            errors.push(`Failed to update item ${guestItem.product_id}: ${error.message}`);
+          } else {
+            migratedCount++;
+          }
+        } else {
+          const { error } = await supabase.from("cart_items").insert({
+            user_id: user.id,
+            product_id: guestItem.product_id,
+            quantity: guestItem.quantity,
+            custom_data: null, // normalize
+            selected_variant_name: variant,
+          });
+          
+          if (error) {
+            errors.push(`Failed to create item ${guestItem.product_id}: ${error.message}`);
+          } else {
+            migratedCount++;
+          }
+        }
+      } catch (itemError) {
+        errors.push(`Error processing item ${guestItem.product_id}: ${itemError instanceof Error ? itemError.message : 'Unknown error'}`);
       }
     }
 
     return NextResponse.json({
       success: true,
-      message: "Guest cart merged successfully",
+      message: errors.length > 0 
+        ? `Migrated ${migratedCount} items with ${errors.length} errors`
+        : `Successfully migrated ${migratedCount} items`,
+      migratedCount,
+      errors: errors.length > 0 ? errors : undefined,
     });
   } catch (error) {
     return handleError(error);

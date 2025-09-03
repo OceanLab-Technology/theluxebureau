@@ -265,7 +265,6 @@
 //             {currentProduct.description}
 //           </p>
 
-
 //           <div className="md:mt-4">
 //             {availability === "sold-out" ? (
 //               <Button
@@ -383,15 +382,6 @@
 //   );
 // }
 
-
-
-
-
-
-
-
-
-
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
@@ -414,13 +404,7 @@ import {
 } from "@/components/ui/accordion";
 import { ProductRecommendations } from "./ProductRecommendations";
 import { PersonaliseSheet } from "../PersonaliseComponents/PersonaliseSheet";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { CustomSelect } from "@/components/ui/custom-select";
 
 interface ProductDetailViewProps {
   productId: string;
@@ -440,9 +424,12 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [touchStartX, setTouchStartX] = useState(0);
   const [isSwiping, setIsSwiping] = useState(false);
-  const [selectedVariantName, setSelectedVariantName] = useState<string | null>(null);
+  const [selectedVariantName, setSelectedVariantName] = useState<string | null>(
+    null
+  );
 
-  const { currentProduct, detailedProductLoading, fetchProductById } = useMainStore();
+  const { currentProduct, detailedProductLoading, fetchProductById } =
+    useMainStore();
   const { setSelectedProduct, resetCheckout } = usePersonaliseStore();
   const router = useRouter();
   const supabase = createClient();
@@ -522,7 +509,8 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
     if (index !== selectedImageIndex) setSelectedImageIndex(index);
   };
   const handleNextImage = () => {
-    if (selectedImageIndex < images.length - 1) setSelectedImageIndex((i) => i + 1);
+    if (selectedImageIndex < images.length - 1)
+      setSelectedImageIndex((i) => i + 1);
   };
   const handlePrevImage = () => {
     if (selectedImageIndex > 0) setSelectedImageIndex((i) => i - 1);
@@ -609,12 +597,17 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               {Array.from({ length: images.length }).map((_, index) => (
                 <motion.span
                   key={index}
-                  className={`h-2 w-2 rounded-full inline-block cursor-pointer ${selectedImageIndex === index ? "bg-[#FBD060]" : "bg-background/50"
-                    }`}
+                  className={`h-2 w-2 rounded-full inline-block cursor-pointer ${
+                    selectedImageIndex === index
+                      ? "bg-[#FBD060]"
+                      : "bg-background/50"
+                  }`}
                   onClick={() => handleImageChange(index)}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.9 }}
-                  animate={selectedImageIndex === index ? { scale: [1, 1.2, 1] } : {}}
+                  animate={
+                    selectedImageIndex === index ? { scale: [1, 1.2, 1] } : {}
+                  }
                   transition={{ duration: 0.3 }}
                 />
               ))}
@@ -626,14 +619,17 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               <motion.button
                 key={index}
                 onClick={() => handleImageChange(index)}
-                className={`md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-full bg-muted/20 overflow-hidden border-2 transition-all ${selectedImageIndex === index ? "border-yellow-500" : "border-transparent"
-                  }`}
+                className={`md:h-[10.375rem] md:w-[8.25rem] lg:w-full lg:h-full bg-muted/20 overflow-hidden border-2 transition-all ${
+                  selectedImageIndex === index
+                    ? "border-yellow-500"
+                    : "border-transparent"
+                }`}
                 animate={
                   selectedImageIndex === index
                     ? {
-                      borderColor: ["#eab308", "#fbbf24", "#eab308"],
-                      transition: { duration: 0.5 },
-                    }
+                        borderColor: ["#eab308", "#fbbf24", "#eab308"],
+                        transition: { duration: 0.5 },
+                      }
                     : { borderColor: "transparent" }
                 }
               >
@@ -659,7 +655,9 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
             <h1 className="text-[1.5rem] leading-none text-secondary-foreground font-medium">
               {currentProduct.item}
             </h1>
-            <span className="text-[1.5rem] font-medium">£{currentProduct.price}</span>
+            <span className="text-[1.5rem] font-medium">
+              £{currentProduct.price}
+            </span>
             <p className="small-text font-medium md:mb-16 mt-4 uppercase">
               {currentProduct.female_founded && "Female Founded"}
             </p>
@@ -750,26 +748,18 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
           {hasVariants && variants.length > 1 ? (
             <div className="flex flex-col md:flex-row md:items-center md:gap-4">
               <div className="flex items-center gap-3">
-                <Select
+                <CustomSelect
+                  options={variants.map((v) => ({
+                    value: v.name,
+                    label: v.name,
+                    disabled: !isVariantInStock(v),
+                  }))}
                   value={selectedVariantName ?? undefined}
-                  onValueChange={(value) => setSelectedVariantName(value)}
-                >
-                  <SelectTrigger className="capitalize w-[200px] h-9 border-stone-300">
-                    <SelectValue placeholder="Select" />
-                    <ChevronDown className="ml-auto h-4 w-4 opacity-100" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-[0.25rem]">
-                    {variants.map((v) => {
-                      const inStock = isVariantInStock(v);
-                      return (
-                        <SelectItem key={v.name} value={v.name} disabled={!inStock} className="capitalize small-text">
-                          {v.name}
-                          {!inStock ? " — Out of stock" : ""}
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectContent>
-                </Select>
+                  onValueChange={(value: string) =>
+                    setSelectedVariantName(value)
+                  }
+                  placeholder="SELECT A SCENT"
+                />
               </div>
 
               {/* ====== BUTTON (responsive position) ====== */}
@@ -784,12 +774,19 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
                 ) : hasVariants ? (
                   selectedVariant ? (
                     isVariantInStock(selectedVariant) ? (
-                      <PersonaliseSheet handleOnClick={() => {
-                        resetCheckout();
-                        const payload = hasVariants ? { ...currentProduct, selectedVariant: selectedVariant.name } : currentProduct;
-                        setSelectedProduct(payload);
-                        console.log(payload);
-                      }} />
+                      <PersonaliseSheet
+                        handleOnClick={() => {
+                          resetCheckout();
+                          const payload = hasVariants
+                            ? {
+                                ...currentProduct,
+                                selectedVariant: selectedVariant.name,
+                              }
+                            : currentProduct;
+                          setSelectedProduct(payload);
+                          console.log(payload);
+                        }}
+                      />
                     ) : (
                       <Button
                         disabled
@@ -830,16 +827,22 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
               ) : (
                 selectedVariant &&
                 isVariantInStock(selectedVariant) && (
-                  <PersonaliseSheet handleOnClick={() => {
-                    resetCheckout();
-                    const payload = hasVariants ? { ...currentProduct, selectedVariant: selectedVariant.name } : currentProduct;
-                    setSelectedProduct(payload);
-                  }} />
+                  <PersonaliseSheet
+                    handleOnClick={() => {
+                      resetCheckout();
+                      const payload = hasVariants
+                        ? {
+                            ...currentProduct,
+                            selectedVariant: selectedVariant.name,
+                          }
+                        : currentProduct;
+                      setSelectedProduct(payload);
+                    }}
+                  />
                 )
               )}
             </div>
           )}
-
 
           {currentProduct.tags && currentProduct.tags.length > 0 && (
             <div>
@@ -857,59 +860,59 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
           {(currentProduct.why_we_chose_it ||
             currentProduct.about_the_maker ||
             currentProduct.particulars) && (
-              <div className="mt-20">
-                <Accordion type="single" collapsible className="">
-                  {currentProduct.why_we_chose_it && (
-                    <AccordionItem value="why-we-chose-it">
-                      <AccordionTrigger className="text-left small-text font-medium uppercase">
-                        Who It's For
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        <p className="text-muted-foreground leading-relaxed font-[Marfa]">
-                          {currentProduct.why_we_chose_it}
-                        </p>
-                      </AccordionContent>
-                    </AccordionItem>
-                  )}
+            <div className="mt-20">
+              <Accordion type="single" collapsible className="">
+                {currentProduct.why_we_chose_it && (
+                  <AccordionItem value="why-we-chose-it">
+                    <AccordionTrigger className="text-left small-text font-medium uppercase">
+                      Who It's For
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <p className="text-muted-foreground leading-relaxed font-[Marfa]">
+                        {currentProduct.why_we_chose_it}
+                      </p>
+                    </AccordionContent>
+                  </AccordionItem>
+                )}
 
-                  {currentProduct.about_the_maker && (
-                    <AccordionItem value="about-the-maker">
-                      <AccordionTrigger className="text-left font-medium uppercase small-text">
-                        About the Maker
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        <p className="text-muted-foreground leading-relaxed font-[Marfa]">
-                          {currentProduct.about_the_maker}
-                        </p>
-                      </AccordionContent>
-                    </AccordionItem>
-                  )}
+                {currentProduct.about_the_maker && (
+                  <AccordionItem value="about-the-maker">
+                    <AccordionTrigger className="text-left font-medium uppercase small-text">
+                      About the Maker
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <p className="text-muted-foreground leading-relaxed font-[Marfa]">
+                        {currentProduct.about_the_maker}
+                      </p>
+                    </AccordionContent>
+                  </AccordionItem>
+                )}
 
-                  {currentProduct.particulars && (
-                    <AccordionItem value="particulars">
-                      <AccordionTrigger className="text-left font-medium uppercase small-text">
-                        Particulars
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        <div>
-                          {currentProduct.particulars
-                            ?.split(",")
-                            .map((item: string, idx: number) => (
-                              <p
-                                key={idx}
-                                className="text-muted-foreground leading-relaxed font-[Marfa] flex"
-                              >
-                                <span className="font-bold mr-2">•</span>
-                                <span>{item.trim()}</span>
-                              </p>
-                            ))}
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  )}
-                </Accordion>
-              </div>
-            )}
+                {currentProduct.particulars && (
+                  <AccordionItem value="particulars">
+                    <AccordionTrigger className="text-left font-medium uppercase small-text">
+                      Particulars
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div>
+                        {currentProduct.particulars
+                          ?.split(",")
+                          .map((item: string, idx: number) => (
+                            <p
+                              key={idx}
+                              className="text-muted-foreground leading-relaxed font-[Marfa] flex"
+                            >
+                              <span className="font-bold mr-2">•</span>
+                              <span>{item.trim()}</span>
+                            </p>
+                          ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                )}
+              </Accordion>
+            </div>
+          )}
         </div>
       </div>
 
@@ -921,7 +924,7 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
         <span className="small-text pt-2">PABLO PICASSO</span>
       </div>
 
-          <ProductRecommendations currentProductId={currentProduct.id!} />
+      <ProductRecommendations currentProductId={currentProduct.id!} />
 
       <LoginRequiredModal
         isOpen={showLoginModal}
