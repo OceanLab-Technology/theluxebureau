@@ -662,6 +662,7 @@ type OrderItemRowDB = {
   | { id: string; name: string; image_1: string | null }
   | { id: string; name: string; image_1: string | null }[]
   | null;
+  custom_data: string | null;
 };
 
 /** Utility: event-level dedupe; returns true if this event was already processed */
@@ -702,8 +703,6 @@ export async function POST(request: Request) {
 
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
-
-      console.log("Checkout session completed:", session);
 
       // 1) Locate the order (we rely on stripe_session_id set during session creation)
       const { data: existingOrder, error: fetchOrderError } = await supabase
@@ -755,6 +754,7 @@ export async function POST(request: Request) {
             product_id,
             quantity,
             selected_variant_name,
+            custom_data,
             price_at_purchase,
             product:products (
               id, name, image_1
