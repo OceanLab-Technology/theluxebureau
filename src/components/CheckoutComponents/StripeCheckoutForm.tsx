@@ -101,7 +101,7 @@ export function StripeCheckoutForm({
               type="submit"
               variant={"box_yellow"}
               disabled={loading || !stripe || !elements}
-              className="w-full text-stone-700 font-[200] py-3 cursor-pointer "
+              className="w-full text-stone-700 font-[200] py-10 cursor-pointer"
             >
               {loading ? "Processing Payment..." : "Pay now"}
             </Button>

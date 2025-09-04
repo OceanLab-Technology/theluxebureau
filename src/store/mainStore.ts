@@ -18,6 +18,9 @@ interface MainStore {
   cartTotal: number;
   cartItemCount: number;
   isAuthenticated: boolean | null;
+  
+  isCartSheetOpen: boolean;
+  setCartSheetOpen: (open: boolean) => void;
 
   fetchProducts: (params?: {
     category?: string;
@@ -67,6 +70,10 @@ export const useMainStore = create<MainStore>()(
       cartItemCount: 0,
       isAuthenticated: null,
       cartInitialized: false, // <-- new
+      
+      // Cart sheet initial state
+      isCartSheetOpen: false,
+      setCartSheetOpen: (open: boolean) => set({ isCartSheetOpen: open }),
 
 
       fetchProducts: async (params = {}) => {
@@ -462,34 +469,45 @@ export const useMainStore = create<MainStore>()(
 
         if (guestItems.length > 0) {
           try {
-            // Migrate each guest cart item to user cart
-            for (const item of guestItems) {
-              await fetch('/api/cart', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  product_id: item.product_id,
-                  quantity: item.quantity,
-                  custom_data: item.custom_data,
-                  selected_variant_name: item.selected_variant_name
-                }),
-              });
+            // Use dedicated merge endpoint for better handling
+            const response = await fetch('/api/cart/merge-guest', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                guestItems: guestItems
+              }),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+              throw new Error(result.error || 'Failed to migrate cart items');
             }
 
             // Clear guest cart after successful migration
             guestStore.clearCart();
             guestStore.mergeWithUserCart([]);
 
-            // toast.success('Cart items migrated successfully!');
+            // Show success message with migration details
+            const { migratedCount, errors } = result;
+            if (errors && errors.length > 0) {
+              toast.warning(`Migrated ${migratedCount} items with some issues. Check console for details.`);
+              console.warn('Cart migration warnings:', errors);
+            } else {
+              toast.success(`Successfully migrated ${migratedCount} item${migratedCount > 1 ? 's' : ''} to your account!`);
+            }
           } catch (error) {
             console.error('Failed to migrate cart items:', error);
-            toast.error('Failed to migrate cart items');
+            toast.error('Failed to migrate cart items. Please add them again.');
+            
+            // On migration failure, keep guest items visible but log them
+            console.log('Guest items that failed to migrate:', guestItems);
           }
         }
 
-        // Fetch updated cart
+        // Fetch updated cart (this will show migrated items + any existing user cart items)
         await get().fetchCartItems();
       },
 
@@ -536,18 +554,14 @@ export const useMainStore = create<MainStore>()(
           const { data } = result;
 
           if (!data.all_available) {
-            const unavailableMessages = data.unavailable_items.map((item: any) => 
-              `${item.product_name} (${item.variant_name}): ${item.available_quantity} available, ${item.requested_quantity} requested`
-            );
-            
-            toast.error(`Some items are not available:\n${unavailableMessages.join('\n')}`, {
-              duration: 8000,
+            data.unavailable_items.forEach((item: any) => {
+              const variantText = item.variant_name && item.variant_name !== 'default' ? ` (${item.variant_name})` : '';
+              toast.error(`Out of stock: ${item.product_name}${variantText}`, {
+                duration: 5000,
+              });
             });
-
             return false;
-          }
-
-          if (data.warnings.length > 0) {
+          }          if (data.warnings.length > 0) {
             const warningMessages = data.warnings.map((item: any) => 
               `${item.product_name} (${item.variant_name}): Low stock (${item.available_quantity} remaining)`
             );
@@ -595,18 +609,15 @@ export const useMainStore = create<MainStore>()(
           const { data } = result;
 
           if (!data.success) {
-            const failedMessages = data.failed_items.map((item: any) => 
-              `${item.variant_name}: ${item.reason}`
-            );
-            
-            toast.error(`Failed to reserve inventory:\n${failedMessages.join('\n')}`, {
-              duration: 8000,
+            data.failed_items.forEach((item: any) => {
+              toast.error(`Failed to reserve: ${item.variant_name} - ${item.reason}`, {
+                duration: 5000,
+              });
             });
-
             return false;
           }
 
-          toast.success('Inventory reserved for checkout');
+          // toast.success('Inventory reserved for checkout');
           return true;
 
         } catch (error) {
@@ -695,6 +706,7 @@ export const useMainStore = create<MainStore>()(
           cartTotal: 0,
           cartItemCount: 0,
           isAuthenticated: null,
+          isCartSheetOpen: false,
         });
       },
     }),

@@ -21,7 +21,8 @@ export default function CheckoutPage() {
     fetchProducts,
     cartLoading,
     isAuthenticated,
-    checkAuthStatus
+    checkAuthStatus,
+    checkInventoryAvailability
   } = useMainStore();
   const { items: guestItems } = useGuestCartStore();
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -53,11 +54,22 @@ export default function CheckoutPage() {
   }, []); //only run once on mount
 
   useEffect(() => {
-
     if (isInitialized && isAuthenticated === false) {
       setShowLoginModal(true);
     }
   }, [isAuthenticated, isInitialized]);
+
+  useEffect(() => {
+    if (isInitialized && isAuthenticated && cartItems.length > 0) {
+      const checkInventoryOnLoad = async () => {
+        const inventoryAvailable = await checkInventoryAvailability();
+        if (!inventoryAvailable) {
+          router.push("/cart");
+        }
+      };
+      checkInventoryOnLoad();
+    }
+  }, [isInitialized, isAuthenticated, cartItems.length, checkInventoryAvailability, router]);
 
 
   useEffect(() => {
@@ -117,7 +129,7 @@ export default function CheckoutPage() {
   if (totalItems === 0) {
     return (
       <div className="w-full flex items-center justify-center min-h-[70vh] py-20 bg-transparent">
-        <div className="space-y-6 text-left">
+        <div className="space-y-6 text-center">
           <h2 className="text-[#50462D] text-[30px] leading-[40px] lg:text-[36px] lg:leading-[48px] font-[400] font-[Century-Old-Style]">
             Your cart is empty
           </h2>
@@ -228,7 +240,7 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              <div className="w-full">
+              <div className="w-full md:mb-0 mb-4">
                 {isAuthenticated ? (
                   // <CheckoutContainer items={checkoutItems} />
                   !isAgeConfirmed && hasAlcohol ? (
@@ -329,10 +341,10 @@ export default function CheckoutPage() {
       <Dialog open={showAgeModal} onOpenChange={setShowAgeModal}>
         <DialogContent className="sm:max-w-xl font-[Century-Old-Style] rounded-none">
           <DialogHeader className="text-center font-[Century-Old-Style]">
-            <DialogTitle className="text-[1.8rem] font-[400] text-secondary-foreground font-[Century-Old-Style] text-[#3f352c]">
+            <DialogTitle className="text-[1.8rem] font-[400] font-[Century-Old-Style] text-[#3f352c]">
               AGE VERIFICATION
             </DialogTitle>
-            <DialogDescription className="text-stone-600 mt-2 text-[1rem] font-[Century-Old-Style] text-[#3f352c]">
+            <DialogDescription className="mt-2 text-[1rem] font-[Century-Old-Style] text-[#3f352c]">
               Because your order includes alcohol, by continuing you confirm that you are at least 18 years old.
             </DialogDescription>
           </DialogHeader>

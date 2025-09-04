@@ -35,7 +35,7 @@ export function AddToCartButton({
   variant = "default",
   size = "default",
 }: AddToCartButtonProps) {
-  const { addToCart, checkAuthStatus } = useMainStore();
+  const { addToCart, checkAuthStatus, setCartSheetOpen } = useMainStore();
   const router = useRouter();
   const { navigateWithAuth, showLoginModal, handleCloseModal, featureName } = useAuthenticatedNavigation();
   const [isAdded, setIsAdded] = useState(false);
@@ -68,11 +68,20 @@ export function AddToCartButton({
 
   const handleViewCart = () => {
     setShowToast(false);
-    router.push("/cart");
+    setCartSheetOpen(true);
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     setShowToast(false);
+    
+    // Check inventory availability before navigation
+    const { checkInventoryAvailability } = useMainStore.getState();
+    const inventoryAvailable = await checkInventoryAvailability();
+    
+    if (!inventoryAvailable) {
+      return;
+    }
+
     navigateWithAuth("/checkout", "proceed to checkout");
   };
 

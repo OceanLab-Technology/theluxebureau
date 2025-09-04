@@ -11,7 +11,7 @@ import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Eye, EyeOff } from "lucide-react"; 
+import { Eye, EyeOff } from "lucide-react";
 
 const OrderSkeleton = () => (
   <div className="mb-8 space-y-10 animate-pulse">
@@ -88,7 +88,7 @@ export default function AccountPage({ user }: AccountPageProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isLoadingOrders, setIsLoadingOrders] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [activeTab, setActiveTab] = useState<'orders' | 'profile'>('orders');
+  const [activeTab, setActiveTab] = useState<"orders" | "profile">("orders");
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 3,
@@ -107,7 +107,7 @@ export default function AccountPage({ user }: AccountPageProps) {
     password: "••••••••••••••••••••",
   });
 
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false); 
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   // Fetch user's orders
   const fetchOrders = async (page: number = 1) => {
@@ -185,20 +185,24 @@ export default function AccountPage({ user }: AccountPageProps) {
             {userName}
           </h1>
           <div className="md:space-y-1 md:pt-22 md:text-[1rem] small-text uppercase tracking-wider md:block flex md:flex-col flex-row space-x-4 md:space-x-0">
-            <div 
+            <div
               className={`text-secondary-foreground hover:text-stone-500 transition-colors cursor-pointer font-medium ${
-                activeTab === 'orders' ? 'md:border-none border-b border-secondary-foreground md:border-b' : 'md:border-b-0'
+                activeTab === "orders"
+                  ? "md:border-none border-b border-secondary-foreground md:border-b"
+                  : "md:border-b-0"
               }`}
-              onClick={() => setActiveTab('orders')}
+              onClick={() => setActiveTab("orders")}
             >
               ORDER HISTORY
             </div>
             <div
               className={`text-secondary-foreground hover:text-stone-500 transition-colors cursor-pointer font-medium ${
-                activeTab === 'profile' ? 'border-b border-secondary-foreground md:border-b-0' : ''
+                activeTab === "profile"
+                  ? "border-b border-secondary-foreground md:border-b-0"
+                  : ""
               }`}
               onClick={() => {
-                setActiveTab('profile');
+                setActiveTab("profile");
                 if (window.innerWidth >= 768) {
                   document.getElementById("profile-settings")?.scrollIntoView({
                     behavior: "smooth",
@@ -232,13 +236,16 @@ export default function AccountPage({ user }: AccountPageProps) {
               ) : orders.length === 0 ? (
                 <div className="text-center py-8">
                   <div className="text-stone-500 mb-4">No orders found</div>
-                  <Link href="/products"></Link>
-                  <Button variant={"box_yellow"}>Start Shopping</Button>
+                  <Link href="/products">
+                    <Button variant={"box_yellow"}>Start Shopping</Button>
+                  </Link>
                 </div>
               ) : (
                 orders.map((order, index) => {
                   const orderNumber = String(
-                    pagination.total - (pagination.page - 1) * pagination.limit - index
+                    pagination.total -
+                      (pagination.page - 1) * pagination.limit -
+                      index
                   ).padStart(3, "0");
                   return (
                     <div key={order.id} className="mb-8 space-y-10">
@@ -255,7 +262,9 @@ export default function AccountPage({ user }: AccountPageProps) {
                               }
                             )}
                           </h3>
-                          <h3 className="">£{order.total_amount?.toFixed(2)}</h3>
+                          <h3 className="">
+                            £{order.total_amount?.toFixed(2)}
+                          </h3>
                         </div>
                         <Link href={`/orders/${order.id}`}>
                           <Button
@@ -277,7 +286,8 @@ export default function AccountPage({ user }: AccountPageProps) {
                                 >
                                   <Image
                                     src={
-                                      item.products?.image_1 || "/placeholder.jpg"
+                                      item.products?.image_1 ||
+                                      "/placeholder.jpg"
                                     }
                                     alt={item.products?.name || "Product"}
                                     fill
@@ -425,8 +435,8 @@ export default function AccountPage({ user }: AccountPageProps) {
                     </Label>
                     <div className="relative">
                       <Input
-                        type={isPasswordVisible ? "text" : "password"} 
-                        value={profile.password} 
+                        type={isPasswordVisible ? "text" : "password"}
+                        value={profile.password}
                         onChange={(e) =>
                           setProfile({ ...profile, password: e.target.value })
                         }
@@ -468,12 +478,12 @@ export default function AccountPage({ user }: AccountPageProps) {
           {/* Mobile tab view with animations */}
           <div className="md:hidden">
             <AnimatePresence mode="wait">
-              {activeTab === 'orders' && (
+              {activeTab === "orders" && (
                 <motion.div
                   key="orders"
-                  initial={{ opacity: 0, filter: 'blur(4px)', x: -20 }}
-                  animate={{ opacity: 1, filter: 'blur(0px)', x: 0 }}
-                  exit={{ opacity: 0, filter: 'blur(4px)', x: 20 }}
+                  initial={{ opacity: 0, filter: "blur(4px)", x: -20 }}
+                  animate={{ opacity: 1, filter: "blur(0px)", x: 0 }}
+                  exit={{ opacity: 0, filter: "blur(4px)", x: 20 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                   className="mb-16"
                 >
@@ -489,13 +499,16 @@ export default function AccountPage({ user }: AccountPageProps) {
                   ) : orders.length === 0 ? (
                     <div className="text-center py-8">
                       <div className="text-stone-500 mb-4">No orders found</div>
-                      <Link href="/products"></Link>
-                      <Button variant={"box_yellow"}>Start Shopping</Button>
+                      <Link href="/products">
+                        <Button variant={"box_yellow"}>Start Shopping</Button>
+                      </Link>
                     </div>
                   ) : (
                     orders.map((order, index) => {
                       const orderNumber = String(
-                        pagination.total - (pagination.page - 1) * pagination.limit - index
+                        pagination.total -
+                          (pagination.page - 1) * pagination.limit -
+                          index
                       ).padStart(3, "0");
                       return (
                         <div key={order.id} className="mb-8 space-y-10">
@@ -512,7 +525,9 @@ export default function AccountPage({ user }: AccountPageProps) {
                                   }
                                 )}
                               </h3>
-                              <h3 className="">£{order.total_amount?.toFixed(2)}</h3>
+                              <h3 className="">
+                                £{order.total_amount?.toFixed(2)}
+                              </h3>
                             </div>
                             <Link href={`/orders/${order.id}`}>
                               <Button
@@ -523,29 +538,35 @@ export default function AccountPage({ user }: AccountPageProps) {
                               </Button>
                             </Link>
                           </div>
-                          {order.order_items && order.order_items.length > 0 && (
-                            <div className="relative w-full">
-                              <div className="overflow-x-auto overflow-y-hidden hide-scrollbar">
-                                <div className="flex gap-4 pb-4 w-max">
-                                  {order.order_items.map((item, itemIndex) => (
-                                    <div
-                                      key={`${item.id}-${itemIndex}`}
-                                      className="flex-shrink-0 bg-stone-100 w-[22rem] h-[26rem] relative"
-                                    >
-                                      <Image
-                                        src={
-                                          item.products?.image_1 || "/placeholder.jpg"
-                                        }
-                                        alt={item.products?.name || "Product"}
-                                        fill
-                                        className="object-cover"
-                                      />
-                                    </div>
-                                  ))}
+                          {order.order_items &&
+                            order.order_items.length > 0 && (
+                              <div className="relative w-full">
+                                <div className="overflow-x-auto overflow-y-hidden hide-scrollbar">
+                                  <div className="flex gap-4 pb-4 w-max">
+                                    {order.order_items.map(
+                                      (item, itemIndex) => (
+                                        <div
+                                          key={`${item.id}-${itemIndex}`}
+                                          className="flex-shrink-0 bg-stone-100 w-[22rem] h-[26rem] relative"
+                                        >
+                                          <Image
+                                            src={
+                                              item.products?.image_1 ||
+                                              "/placeholder.jpg"
+                                            }
+                                            alt={
+                                              item.products?.name || "Product"
+                                            }
+                                            fill
+                                            className="object-cover"
+                                          />
+                                        </div>
+                                      )
+                                    )}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          )}
+                            )}
                         </div>
                       );
                     })
@@ -611,12 +632,12 @@ export default function AccountPage({ user }: AccountPageProps) {
                 </motion.div>
               )}
 
-              {activeTab === 'profile' && (
+              {activeTab === "profile" && (
                 <motion.div
                   key="profile"
-                  initial={{ opacity: 0, filter: 'blur(4px)', x: -20 }}
-                  animate={{ opacity: 1, filter: 'blur(0px)', x: 0 }}
-                  exit={{ opacity: 0, filter: 'blur(4px)', x: 20 }}
+                  initial={{ opacity: 0, filter: "blur(4px)", x: -20 }}
+                  animate={{ opacity: 1, filter: "blur(0px)", x: 0 }}
+                  exit={{ opacity: 0, filter: "blur(4px)", x: 20 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                   className="pr-4 md:pr0"
                 >
@@ -678,47 +699,54 @@ export default function AccountPage({ user }: AccountPageProps) {
                         <Input
                           value={profile.phoneNumber}
                           onChange={(e) =>
-                            setProfile({ ...profile, phoneNumber: e.target.value })
+                            setProfile({
+                              ...profile,
+                              phoneNumber: e.target.value,
+                            })
                           }
                           className="border-0 font-[Century-Old-Style] focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
                           placeholder=" +44 0777 888 999"
                         />
                       </div>
 
-                      
-                    <div className="border border-stone-300 p-4 md:p-6 md:col-span-1 relative">
-                      <Label className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500">
-                        PASSWORD
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          type={isPasswordVisible ? "text" : "password"} 
-                          value={profile.password} 
-                          onChange={(e) =>
-                            setProfile({ ...profile, password: e.target.value })
-                          }
-                          className="border-0 font-[Century-Old-Style] focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
-                          placeholder="••••••••••••••••••••"
-                        />
-                        <button
-                          type="button"
-                          onClick={togglePasswordVisibility} 
-                          className="absolute right-0 top-1/2 transform -translate-y-1/2 text-stone-500 hover:text-stone-700"
-                        >
-                          {isPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
-                        </button>
+                      <div className="border border-stone-300 p-4 md:p-6 md:col-span-1 relative">
+                        <Label className="block text-xs font-medium mb-2 tracking-wider uppercase text-stone-500">
+                          PASSWORD
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            type={isPasswordVisible ? "text" : "password"}
+                            value={profile.password}
+                            onChange={(e) =>
+                              setProfile({
+                                ...profile,
+                                password: e.target.value,
+                              })
+                            }
+                            className="border-0 font-[Century-Old-Style] focus:border-b border-stone-300 bg-transparent px-0 py-2 sm:py-3 text-secondary-foreground placeholder:text-stone-500 focus:border-stone-600 border-b focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none md:text-[1.5rem]"
+                            placeholder="••••••••••••••••••••"
+                          />
+                          <button
+                            type="button"
+                            onClick={togglePasswordVisibility}
+                            className="absolute right-0 top-1/2 transform -translate-y-1/2 text-stone-500 hover:text-stone-700"
+                          >
+                            {isPasswordVisible ? (
+                              <EyeOff size={20} />
+                            ) : (
+                              <Eye size={20} />
+                            )}
+                          </button>
+                        </div>
                       </div>
-                    </div>
-
-
-
                     </div>
 
                     <div className="flex justify-end">
                       {profile.name !== user?.user_metadata?.full_name ||
                       profile.shippingAddress !==
                         user?.user_metadata?.shipping_address ||
-                      profile.phoneNumber !== user?.user_metadata?.phone_number ||
+                      profile.phoneNumber !==
+                        user?.user_metadata?.phone_number ||
                       profile.password !== "••••••••••••••••••••" ? (
                         <div className="mt-6">
                           <Button

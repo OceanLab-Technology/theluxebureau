@@ -53,7 +53,7 @@ interface OrderDetailPageProps {
 }
 
 export default function OrderDetailPage({ order, user }: OrderDetailPageProps) {
-  const orderNumber = order.id.slice(-3).padStart(3, "0");
+  const orderNumber = order.id
 
   const formattedData: Product[] = order.order_items.map((item) => ({
     id: item.products.id,
@@ -109,7 +109,7 @@ export default function OrderDetailPage({ order, user }: OrderDetailPageProps) {
           <div className="mb-8">
             <div className="flex flex-col md:items-start justify-between mb-1 md:mb-2">
               <div className="mb-2 uppercase small-text md:mb-2">
-                <h3 className="mb-1">Order no.{orderNumber}</h3>
+                <h3 className="mb-1">Order Id. {orderNumber}</h3>
                 <h3 className="mb-1">
                   {new Date(order.created_at).toLocaleDateString("en-GB", {
                     weekday: "long",

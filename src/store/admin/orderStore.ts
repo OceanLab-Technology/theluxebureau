@@ -607,35 +607,20 @@
 
 
 
-// stores/orderAdminStore.ts
 import { create } from "zustand";
 import axios from "axios";
 
 /** ---------- Types ---------- **/
-type OrderItem = {
-  id: string;
-  products: {
-    id: string;
-    name: string;
-    image_1: string | null;
-    price: number;
-  };
-  quantity: number;
-  price_at_purchase: number;
-  custom_data: any;
-  selected_variant_name: string | null;
-};
 
 type Order = {
   id: string;
   customerName: string;
+  customerEmail: string;
   recipientName: string | null;
   deliveryDate: string | null;
   total: string;
   status: string;
   paymentStatus?: string | null;
-  orderItems?: OrderItem[];
-  personalisation?: any[];
   notes?: string | null;
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -661,22 +646,6 @@ type OrdersState = {
   updateOrderStatus: (orderId: string, newStatus: string) => Promise<boolean>;
 };
 
-/** ---------- Shared: normalize helper ---------- **/
-function normalizeItems(raw: any): OrderItem[] {
-  // Handles: array, single object, nested shapes, null/undefined
-  const candidate =
-    raw ??
-    raw?.order_items ??
-    raw?.items ??
-    raw?.data ??
-    raw?.results ??
-    [];
-
-  if (Array.isArray(candidate)) return candidate as OrderItem[];
-  if (candidate && typeof candidate === "object") return [candidate as OrderItem];
-  return [];
-}
-
 /** ---------- List Store ---------- **/
 export const useOrdersStore = create<OrdersState>((set, get) => ({
   orders: [],
@@ -700,6 +669,7 @@ export const useOrdersStore = create<OrdersState>((set, get) => ({
       const mappedOrders: Order[] = rows.map((row: any) => ({
         id: row.id,
         customerName: row.customer_name || "Unknown",
+        customerEmail: row.customer_email || "",
         recipientName: row.recipient_name ?? null,
         deliveryDate: row.delivery_date ?? null,
         total:
@@ -708,8 +678,6 @@ export const useOrdersStore = create<OrdersState>((set, get) => ({
             : "0.00",
         status: row.status,
         paymentStatus: row.payment_status ?? null,
-        orderItems: normalizeItems(row.order_items),
-        personalisation: row.personalisation ?? [],
         notes: row.notes ?? null,
         createdAt: row.created_at ?? null,
         updatedAt: row.updated_at ?? null,
@@ -755,6 +723,21 @@ export const useOrdersStore = create<OrdersState>((set, get) => ({
 }));
 
 /** ---------- Details Types ---------- **/
+function normalizeItems(raw: any): OrderDetailsItem[] {
+  // Handles: array, single object, nested shapes, null/undefined
+  const candidate =
+    raw ??
+    raw?.order_items ??
+    raw?.items ??
+    raw?.data ??
+    raw?.results ??
+    [];
+
+  if (Array.isArray(candidate)) return candidate as OrderDetailsItem[];
+  if (candidate && typeof candidate === "object") return [candidate as OrderDetailsItem];
+  return [];
+}
+
 interface OrderDetailsItem {
   id: string;
   products: {

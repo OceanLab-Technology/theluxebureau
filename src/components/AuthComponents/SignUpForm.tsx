@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useMainStore } from "@/store/mainStore";
+import { useCartMigration } from "@/hooks/use-cart-migration";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, ShoppingCart } from "lucide-react";
+import { toast } from "sonner";
 
 const baseInput =
   "border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base";
@@ -73,7 +75,12 @@ export function SignUpForm({
   const [repeatPasswordWarning, setRepeatPasswordWarning] = useState("");
 
   const { handleLoginSuccess } = useMainStore();
+  const { hasGuestCartItems, getGuestCartItemCount } = useCartMigration();
   const router = useRouter();
+
+  // Show cart migration info
+  const showCartMigrationInfo = hasGuestCartItems();
+  const guestItemCount = getGuestCartItemCount();
 
   // validators
   const validateEmail = (value: string) => {
@@ -155,6 +162,19 @@ export function SignUpForm({
   return (
     <div className={cn("w-full px-4 sm:px-10 md:pt-0 pt-10 font-[Century-Old-Style]", className)} {...props}>
       <h1 className="text-[1rem] font-light mb-4 tracking-wide md:py-20 small-text">SIGN UP</h1>
+
+      {/* Cart Migration Notice */}
+      {showCartMigrationInfo && (
+        <div className="mb-6 p-4 bg-[#FBD060]/10 border border-[#FBD060]/30 rounded-md">
+          <div className="flex items-center gap-2 text-sm text-stone-700">
+            <ShoppingCart className="h-4 w-4 text-[#FBD060]" />
+            <span className="font-medium">Cart items detected:</span>
+            <span>
+              You have {guestItemCount} item{guestItemCount > 1 ? 's' : ''} in your cart that will be saved to your new account.
+            </span>
+          </div>
+        </div>
+      )}
 
       <div className="mb-8">
         <form onSubmit={handleSignUp} noValidate>
