@@ -90,6 +90,26 @@ export async function POST(request: NextRequest) {
           custom_data: item.customData,
           selected_variant_name: item.selected_variant_name,
         });
+
+        const variantName = item.selected_variant_name ?? "default";
+
+        const { error: confirmError } = await supabase.rpc("confirm_inventory", {
+          p_quantity: item.quantity,
+          p_product_id: item.product_id,
+          p_variant_name: variantName,
+        });
+
+        if (confirmError) {
+          console.error(
+            `Inventory confirmation error for product ${item.product_id}, variant ${variantName}:`,
+            confirmError
+          );
+        } else {
+          console.log(
+            `Inventory confirmed for product ${item.product_id}, variant ${variantName} - decreased inventory by ${item.quantity}, increased qty_blocked by ${item.quantity}`
+          );
+        }
+
       }
     }
 

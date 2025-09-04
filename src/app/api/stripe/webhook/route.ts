@@ -829,17 +829,8 @@ export async function POST(request: Request) {
         }
       }
 
-
-      type CustomData = { recipientName?: string } | null;
-
-      const safeParse = <T,>(s: string | null): T | null => {
-        if (!s) return null;
-        try { return JSON.parse(s) as T; } catch { return null; }
-      };
-
       const mandrillItems = orderItems.map((item) => {
         const product = item.product;
-        const custom = safeParse<CustomData>(item.custom_data);
 
         const customData = typeof item.custom_data === "string"
           ? JSON.parse(item.custom_data)
@@ -847,8 +838,6 @@ export async function POST(request: Request) {
 
           
         console.log(customData.recipientName);
-        console.log(custom);
-        console.log(custom?.recipientName);
         return {
           title: product?.name ?? "Product",
           order_number: String(orderData?.id ?? ""),
@@ -999,6 +988,7 @@ export async function POST(request: Request) {
         }
       }
 
+      console.log("metadata:", session.metadata);
       // 10) Clear cart if metadata has userId
       if (session.metadata?.userId) {
         const { error: cartError } = await supabase
