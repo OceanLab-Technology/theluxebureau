@@ -99,6 +99,9 @@ export async function POST(request: NextRequest) {
           p_variant_name: variantName,
         });
 
+        console.log(item.product_id)
+        console.log(variantName)
+
         console.log("Updated variant:", data);
 
         if (error) {
