@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
 
         const variantName = item.selected_variant_name ?? "default";
 
-        const { data, error } = await supabase.rpc("confirm_inventory", {
+        const { data, error } = await supabase.rpc("confirm_inventory_debug", {
           p_quantity: item.quantity,
           p_product_id: item.product_id,
           p_variant_name: variantName,

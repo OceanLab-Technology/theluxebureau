@@ -32,6 +32,7 @@ export const useStatsStore = create<StatsStore>((set) => ({
       const res = await fetch('/api/stats');
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || 'Failed to fetch stats');
+      console.log('Fetched stats:', json);
 
       set({ stats: json.data, loading: false });
     } catch (err: any) {

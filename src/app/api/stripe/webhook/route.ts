@@ -836,7 +836,7 @@ export async function POST(request: Request) {
           ? JSON.parse(item.custom_data)
           : item.custom_data;
 
-          
+
         console.log(customData.recipientName);
         return {
           title: product?.name ?? "Product",
@@ -988,13 +988,20 @@ export async function POST(request: Request) {
         }
       }
 
-      console.log("metadata:", session.metadata);
-      // 10) Clear cart if metadata has userId
-      if (session.metadata?.userId) {
+      const metadata =
+        typeof session.metadata === "string"
+          ? JSON.parse(session.metadata)
+          : session.metadata;
+
+      // Get userId safely
+      const userId = metadata?.userId;
+
+      if (userId) {
+        console.log("im in clear cart");
         const { error: cartError } = await supabase
           .from("cart_items")
           .delete()
-          .eq("user_id", session.metadata.userId);
+          .eq("user_id", userId);
 
         if (cartError) {
           console.error("Cart Clear Error:", cartError);
