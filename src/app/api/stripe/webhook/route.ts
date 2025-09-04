@@ -703,6 +703,8 @@ export async function POST(request: Request) {
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
 
+      console.log("Checkout session completed:", session);
+
       // 1) Locate the order (we rely on stripe_session_id set during session creation)
       const { data: existingOrder, error: fetchOrderError } = await supabase
         .from("orders")
