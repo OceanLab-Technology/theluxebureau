@@ -93,11 +93,13 @@ export async function POST(request: NextRequest) {
 
         const variantName = item.selected_variant_name ?? "default";
 
-        const { error: confirmError } = await supabase.rpc("confirm_inventory", {
+        const { data, error: confirmError } = await supabase.rpc("confirm_inventory", {
           p_quantity: item.quantity,
           p_product_id: item.product_id,
           p_variant_name: variantName,
         });
+
+        console.log("Updated variant:", data);
 
         if (confirmError) {
           console.error(
