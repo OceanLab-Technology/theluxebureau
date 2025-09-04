@@ -47,7 +47,7 @@ export function PersonaliseSheet({
         <Button
           variant="box_yellow"
           size={"lg"}
-          className="text-[0.75rem] leading-[119.58%] w-[20.812rem] h-[2.5rem] tracking-[0.075rem]"
+          className="text-[0.75rem] leading-[119.58%] small-text w-[20.812rem] h-[2.5rem] tracking-[0.075rem]"
           onClick={handleButtonClick}
         >
           Personalise

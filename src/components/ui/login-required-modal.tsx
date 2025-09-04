@@ -22,7 +22,7 @@ export function LoginRequiredModal({
   isOpen,
   onClose,
   feature = "personalise products",
-  onCloseCartSheet
+  onCloseCartSheet,
 }: LoginRequiredModalProps) {
   const router = useRouter();
 
@@ -45,10 +45,10 @@ export function LoginRequiredModal({
       <DialogContent className="sm:max-w-xl font-[Century-Old-Style] rounded-none">
         <DialogHeader className="text-center font-[Century-Old-Style]">
           <DialogTitle className="text-[1.8rem] font-[400] text-secondary-foreground font-[Century-Old-Style]">
-            LOG IN REQUIRED
+            ACCESS PERSONALISATION
           </DialogTitle>
           <DialogDescription className="text-stone-600 mt-2 text-[1rem] font-[Century-Old-Style]">
-            Please log in or create an account with us to continue with your purchase.
+            Please log in or create an account to begin personalising your gift.
           </DialogDescription>
         </DialogHeader>
 

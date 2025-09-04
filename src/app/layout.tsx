@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
-import { Cormorant_Infant, Geist, Geist_Mono, PT_Serif } from "next/font/google";
+import {
+  Cormorant_Infant,
+  Geist,
+  Geist_Mono,
+  PT_Serif,
+} from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { GlobalKeyboardHandler } from "@/components/PersonaliseComponents/GlobalKeyboardHandler";
-import { CustomCursor } from "@/components/Tools/CustomCursor";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,13 +36,13 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: {
     default: "theluxebureau",
-    template: "theluxebureau"
+    template: "theluxebureau",
   },
   description: "the luxe bureau",
   icons: {
     icon: "/Profile_Favicon.png",
     apple: "/Profile_Favicon.png",
-  }
+  },
 };
 
 export default function RootLayout({
@@ -50,25 +54,29 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${ptSerif.variable} ${cormorantInfant.variable} antialiased`}
-      > <GlobalKeyboardHandler />
+      >
+        {" "}
+        <GlobalKeyboardHandler />
         <main className="">{children}</main>
-        <CustomCursor/>
-        <Toaster toastOptions={{
-          unstyled: true,
-          style:{
-            padding: "16px",
-            borderRadius: "8px",
-            fontSize: "14px",
-            // fontWeight: "100",
-            display: "flex",
-            gap: "8px",
-            fontFamily: "var(--font-pt-serif)",
-            background:"#40362c",
-            color:"#FBD060",
-            border:"1px solid #40362c",
-          },
-          // descriptionClassName: "text-sm text-stone-400",
-        }} duration={2000} />
+        <Toaster
+          toastOptions={{
+            unstyled: true,
+            style: {
+              padding: "16px",
+              borderRadius: "8px",
+              fontSize: "14px",
+              // fontWeight: "100",
+              display: "flex",
+              gap: "8px",
+              fontFamily: "var(--font-pt-serif)",
+              background: "#40362c",
+              color: "#FBD060",
+              border: "1px solid #40362c",
+            },
+            // descriptionClassName: "text-sm text-stone-400",
+          }}
+          duration={2000}
+        />
       </body>
     </html>
   );

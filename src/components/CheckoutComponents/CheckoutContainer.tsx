@@ -142,12 +142,12 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
   };
 
   return (
-    <Card className="shadow-none border-none bg-transparent">
+    <Card className="shadow-none border-none bg-transparent font-[Marfa] text-[13px]">
       <CardContent className="space-y-6 px-4 ">
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="firstName">First Name *</Label>
+              <Label className="font-[Marfa]" htmlFor="firstName">First Name *</Label>
               <input
                 id="firstName"
                 value={customerInfo.firstName}
@@ -158,7 +158,7 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name *</Label>
+              <Label className="font-[Marfa]" htmlFor="lastName">Last Name *</Label>
               <input
                 id="lastName"
                 value={customerInfo.lastName}
@@ -171,7 +171,7 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email">Email *</Label>
+            <Label className="font-[Marfa]" htmlFor="email">Email *</Label>
             <input
               id="email"
               type="email"
@@ -189,7 +189,7 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="phone">Phone (Optional)</Label>
+            <Label className="font-[Marfa]" htmlFor="phone">Phone (Optional)</Label>
             <input
               id="phone"
               type="tel"

@@ -55,7 +55,7 @@ export default function Header() {
 
   const links = [
     { href: "/products", label: "SHOP" },
-    { href: "/discover", label: "DISCOVER" },
+    { href: "#", label: "DISCOVER" },
     { href: "/account", label: "ACCOUNT" },
   ];
 
@@ -249,7 +249,7 @@ export default function Header() {
         >
           <div className="flex items-start">
             <div
-              className="flex-shrink-0 md:w-[365px] lg:w-[425px]"
+              className="flex-shrink-0 md:w-[365px] lg:w-[405px]"
               style={{ width: "" }}
             ></div>
 

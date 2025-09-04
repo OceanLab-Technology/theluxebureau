@@ -30,10 +30,9 @@ export default function RecipientDetailsStep() {
         Please enter the recipient's contact details
       </p>
 
-      <form className="font-[Marfa] transition-all duration-300">
-        {/* Desktop Grid Layout */}
+      <form className="font-[Marfa] text-[13px] transition-all duration-300">
         <div className="hidden md:grid md:grid-cols-[320px_1fr] gap-4 items-center">
-          <label htmlFor="your-name" className="text-stone-700 text-[0.8125rem] font-[300]">
+          <label htmlFor="your-name" className="text-stone-700 font-[300]">
             Your name*
           </label>
           <div className="flex flex-col">
@@ -44,13 +43,13 @@ export default function RecipientDetailsStep() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleInputChange("yourName", e.target.value)
               }
-              className="border-0 border-b border-stone-500 px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="border-0 border-b text-[13px] border-stone-500 px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
               placeholder=""
             />
           </div>
 
-          <label htmlFor="recipient-name" className="text-stone-700 text-[0.8125rem] font-[300]">
-            Recipient's Name*
+          <label htmlFor="recipient-name" className="text-stone-700 font-[300]">
+            Recipient's name*
           </label>
           <div className="flex flex-col">
             <Input
@@ -60,14 +59,14 @@ export default function RecipientDetailsStep() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleInputChange("recipientName", e.target.value)
               }
-              className="border-0 border-b border-stone-500 px-0 py-2 rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="border-0 border-b text-[13px] border-stone-500 px-0 py-2 rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
               placeholder=""
             />
           </div>
 
           <label
             htmlFor="phone"
-            className="text-stone-700 text-[0.8125rem] font-[300]"
+            className="text-stone-700 font-[300]"
           >
             Recipient&apos;s phone number*
           </label>
@@ -96,7 +95,7 @@ export default function RecipientDetailsStep() {
 
           <label
             htmlFor="email"
-            className="text-stone-700 text-[0.8125rem] font-[300]"
+            className="text-stone-700 font-[300]"
           >
             Recipient&apos;s e-mail
           </label>
@@ -124,7 +123,7 @@ export default function RecipientDetailsStep() {
           </div>
 
 
-          {/* <label className="text-stone-700 text-[0.8125rem] font-[300]">
+          {/* <label className="text-stone-700 font-[300]">
             Would you like shipping updates via SMS?
           </label>
           <div className="flex gap-16 justify-end mr-4 w-[95%]">
@@ -188,7 +187,7 @@ export default function RecipientDetailsStep() {
         {/* Mobile Stack Layout */}
         <div className="md:hidden space-y-6 transition-all duration-300">
           <div className="flex flex-col space-y-2">
-            <label htmlFor="your-name-mobile" className="text-stone-700 text-[0.8125rem] font-[300]">
+            <label htmlFor="your-name-mobile" className="text-stone-700 font-[300]">
               Your name*
             </label>
             <Input
@@ -198,13 +197,13 @@ export default function RecipientDetailsStep() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleInputChange("yourName", e.target.value)
               }
-              className="border-0 border-b border-stone-500 px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="border-0 border-b text-[13px] border-stone-500 px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
               placeholder=""
             />
           </div>
 
           <div className="flex flex-col space-y-2">
-            <label htmlFor="recipient-name-mobile" className="text-stone-700 text-[0.8125rem] font-[300]">
+            <label htmlFor="recipient-name-mobile" className="text-stone-700 font-[300]">
               Recipient's Name*
             </label>
             <Input
@@ -214,14 +213,14 @@ export default function RecipientDetailsStep() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleInputChange("recipientName", e.target.value)
               }
-              className="border-0 border-b border-stone-500 px-0 py-2 rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="border-0 border-b text-[13px] border-stone-500 px-0 py-2 rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
               placeholder=""
             />
           </div>
 
 
           <div className="flex flex-col space-y-1">
-            <label htmlFor="phone-mobile" className="text-stone-700 text-[0.8125rem] font-[300]">
+            <label htmlFor="phone-mobile" className="text-stone-700 font-[300]">
               Recipient's phone number*
             </label>
             <Input
@@ -231,7 +230,7 @@ export default function RecipientDetailsStep() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleInputChange("recipientPhone", e.target.value)
               }
-              className="border-0 border-b border-stone-500 bg-transparent px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="border-0 border-b text-[13px] border-stone-500 bg-transparent px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
               placeholder=""
             />
             {touched.phone && !isValidPhone(formData.recipientPhone) && (
@@ -241,7 +240,7 @@ export default function RecipientDetailsStep() {
 
 
           <div className="flex flex-col space-y-1">
-            <label htmlFor="email-mobile" className="text-stone-700 text-[0.8125rem] font-[300]">
+            <label htmlFor="email-mobile" className="text-stone-700 font-[300]">
               Recipient's e-mail*
             </label>
             <Input
@@ -251,7 +250,7 @@ export default function RecipientDetailsStep() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleInputChange("recipientEmail", e.target.value)
               }
-              className="border-0 border-b border-stone-500 bg-transparent px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="border-0 border-b text-[13px] border-stone-500 bg-transparent px-0 py-2 text-stone-800 placeholder:text-stone-500 outline-none rounded-none w-full focus:outline-none focus:ring-0 focus:border-b focus:border-stone-500 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
               placeholder=""
             />
             {touched.email && !isValidEmail(formData.recipientEmail) && (
@@ -260,7 +259,7 @@ export default function RecipientDetailsStep() {
           </div>
 
 
-          <label className="text-stone-700 text-[0.8125rem] font-[300]">
+          <label className="text-stone-700 font-[300]">
             Would you like shipping updates via SMS?
           </label>
           <div className="flex gap-8 mt-1 justify-start w-full">

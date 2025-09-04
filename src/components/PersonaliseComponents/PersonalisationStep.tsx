@@ -26,6 +26,34 @@ interface SiteSettings {
   api_key: string;
 }
 
+interface CenterOutwardTextProps {
+  text: string;
+  placeholder: string;
+}
+
+const CenterOutwardText: React.FC<CenterOutwardTextProps> = ({
+  text,
+  placeholder,
+}) => {
+  if (!text) {
+    return <span style={{ opacity: 0.9, color: "#000" }}>{placeholder}</span>;
+  }
+  const lines = text.split("\n");
+
+  return (
+    <div style={{ whiteSpace: "pre-line", textAlign: "center" }}>
+      {lines.map((line, index) => (
+        <div
+          key={index}
+          style={{ marginBottom: index < lines.length - 1 ? "0.1rem" : "0" }}
+        >
+          {line}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const DEFAULT_FONT_LABEL = "Garamond";
 
 export default function PersonalisationStep() {
@@ -60,28 +88,7 @@ export default function PersonalisationStep() {
     return { ...base, fontFamily: DEFAULT_FONT_LABEL };
   };
 
-  // Put near the top of your component/file
-  const MAX_CHARS = 300;
-  const MAX_LINES = 7; // tweak as you like
-  const MAX_CONSEC_NEWLINES = 1; // no more than one blank line in a row
-
-  const clampMessage = (raw: string) => {
-    // collapse > MAX_CONSEC_NEWLINES consecutive newlines
-    const collapsed = raw.replace(
-      new RegExp(`\\n{${MAX_CONSEC_NEWLINES + 1},}`, "g"),
-      "\n".repeat(MAX_CONSEC_NEWLINES)
-    );
-
-    // hard char cap first so split isn't huge
-    let s = collapsed.slice(0, MAX_CHARS);
-
-    // enforce max lines
-    const lines = s.split("\n");
-    if (lines.length > MAX_LINES) {
-      s = lines.slice(0, MAX_LINES).join("\n");
-    }
-    return s;
-  };
+  const MAX_LINES = 7;
 
   const countLines = (s: string) => s.split("\n").length;
 
@@ -110,7 +117,6 @@ export default function PersonalisationStep() {
       });
       setCustomDraft("");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -172,29 +178,30 @@ export default function PersonalisationStep() {
 
   return (
     <div className="font-[Century-Old-Style]">
-      <div className="w-full">
-        <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-1 break-words">
+      <div className="w-full text-[1rem]">
+        <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] font-[Century-Old-Style] mb-1 break-words">
           Our gifts arrive with custom stationery, letterpressed by hand at the
           Luxe Bureau atelier, in Noir ink on GF Smith Mohawk White card.
         </p>
 
-        <p className="text-secondary-foreground mt-4 font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-4 break-words">
+        <p className="text-secondary-foreground mt-4 font-extralight leading-[1.25rem] tracking-[0.01rem] font-[Century-Old-Style] mb-4 break-words">
           Please click on the card below to personalise your message. In the
           header, add your name, initials, or company to create your bespoke
           letterhead. You may choose from type styles below.
         </p>
 
-        <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] text-[15px] font-[Century-Old-Style] mb-1 break-words">
-          Your personal message will be typeset in our signature typewriter font. For inspiration, you can select a quote from the dropdown or compose your own.
+        <p className="text-secondary-foreground font-extralight leading-[1.25rem] tracking-[0.01rem] font-[Century-Old-Style] mb-1 break-words">
+          Your personal message will be typeset in our signature typewriter
+          font. For inspiration, you can select a quote from the dropdown or
+          compose your own.
         </p>
       </div>
 
       <br />
 
-      <div className="flex md:gap-12 gap-4 mb-8">
-        {/* Header Font Selector */}
+      <div className="flex md:gap-12 gap-4 mb-8 text-[13px]">
         <div className="w-40 font-[Marfa]">
-          <label className="text-[1rem] font-[300] tracking-[0.01875] text-secondary-foreground mb-1 block">
+          <label className="font-[300] tracking-[0.01875] text-secondary-foreground mb-1 block">
             Header type style*
           </label>
 
@@ -207,8 +214,20 @@ export default function PersonalisationStep() {
             onValueChange={(value) => updateFormData({ selectedFont: value })}
             disabled={loading}
           >
-            <SelectTrigger style={{ fontFamily: DEFAULT_FONT_LABEL }} className="w-[150px] h-6 md:w-[200px] text-[15px] border-stone-300 hover:bg-secondary bg-transparent rounded-[0.3rem] py-0 focus:ring-0 relative px-2">
-              <SelectValue  />
+            <SelectTrigger
+              style={{
+                fontFamily: isDefaultGaramond
+                  ? DEFAULT_FONT_LABEL
+                  : selectedFontFromApi
+                  ? fontLoaded
+                    ? `"${selectedFontFromApi.name}", serif`
+                    : selectedFontFromApi.name
+                  : undefined,
+                  fontSize:"13px"
+              }}
+              className="w-[150px] h-6 md:w-[200px] border-stone-300 hover:bg-secondary bg-transparent rounded-[0.3rem] py-0 focus:ring-0 relative px-2"
+            >
+              <SelectValue />
               <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 opacity-60 pointer-events-none" />
             </SelectTrigger>
 
@@ -237,9 +256,8 @@ export default function PersonalisationStep() {
           </Select>
         </div>
 
-        {/* Quote Selector */}
         <div className="w-40 font-[Marfa]">
-          <label className="text-[1rem] font-[300] tracking-[0.01875] text-secondary-foreground mb-1 block">
+          <label className="font-[300] tracking-[0.01875] text-secondary-foreground mb-1 block">
             Quotes
           </label>
 
@@ -249,7 +267,7 @@ export default function PersonalisationStep() {
               if (authorName === "custom") {
                 updateFormData({
                   selectedQuote: "custom",
-                  customMessage: customDraft, 
+                  customMessage: customDraft,
                 });
               } else if (authorName === "select") {
                 updateFormData({ selectedQuote: "select", customMessage: "" });
@@ -262,25 +280,23 @@ export default function PersonalisationStep() {
               }
             }}
           >
-            <SelectTrigger className="w-[150px] h-6 md:w-[200px] text-[15px] border-stone-300 hover:bg-secondary bg-transparent rounded-[0.3rem] py-0 focus:ring-0 relative px-2">
+            <SelectTrigger className="w-[150px] text-[13px] h-6 md:w-[200px] border-stone-300 hover:bg-secondary bg-transparent rounded-[0.3rem] font-[Marfa] py-0 focus:ring-0 relative px-2">
               <SelectValue placeholder="Select a quote" />
               <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 opacity-60 pointer-events-none" />
             </SelectTrigger>
 
             <SelectContent className="rounded-[0.3rem]">
-              <SelectItem value="select">Select a quote</SelectItem>
+              <SelectItem className="text-[13px]" value="select">Select a quote</SelectItem>
               {siteSettings?.quotes?.map((quote, idx) => (
                 <SelectItem
+                  className="font-[Marfa] text-[13px]"
                   key={idx}
                   value={quote.author}
-                  style={{ fontFamily: "monospace" }}
                 >
                   {quote.author}
                 </SelectItem>
               ))}
-              <SelectItem value="custom" style={{ fontFamily: "monospace" }}>
-                Write my own
-              </SelectItem>
+              <SelectItem className="text-[13px]" value="custom">Write my own</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -319,59 +335,87 @@ export default function PersonalisationStep() {
               />
             </div>
 
-            {/* Quote Textarea */}
-            <div className="text-center md:w-96 w-60 mx-auto absolute inset-0 flex items-center justify-center md:mt-2 mt-4 md:px-8">
-              <textarea
-                value={
-                  formData.selectedQuote === "custom"
-                    ? customDraft
-                    : formData.customMessage || ""
-                }
-                onChange={(e) => {
-                  const newValue = e.target.value;
-                  if (newValue.length <= 300) {
-                    handleQuoteInput(newValue);
-                  }
-                }}
-                onPaste={(e) => {
-                  const pasted = e.clipboardData.getData("text") || "";
-                  const current =
+            <div className="text-center md:w-96 w-60 mx-auto absolute md:top-10 left-1/2 transform -translate-x-1/2 flex items-center justify-center md:px-8">
+              <div className="relative w-full">
+                <textarea
+                  value={
                     formData.selectedQuote === "custom"
                       ? customDraft
-                      : formData.customMessage || "";
-                  const combined = current + pasted;
-
-                  if (combined.length <= 300) {
-                    e.preventDefault();
-                    handleQuoteInput(combined);
+                      : formData.customMessage || ""
                   }
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    if (newValue.length <= 300) {
+                      handleQuoteInput(newValue);
+                    }
+                  }}
+                  onPaste={(e) => {
+                    const pasted = e.clipboardData.getData("text") || "";
                     const current =
                       formData.selectedQuote === "custom"
                         ? customDraft
                         : formData.customMessage || "";
-                    if (countLines(current) >= MAX_LINES) {
-                      e.preventDefault(); // block extra newlines
+                    const combined = current + pasted;
+
+                    if (combined.length <= 300) {
+                      e.preventDefault();
+                      handleQuoteInput(combined);
                     }
-                  }
-                }}
-                placeholder="Select a quote or write your own"
-                maxLength={300}
-                className={`w-full text-center md:text-[0.8rem] text-[8px] h-full mt-4 bg-transparent border-none outline-none resize-none scrollbar-hide pointer-events-auto focus:outline-none overflow-hidden ${
-                  customDraft.length > 300
-                    ? "md:pt-[2rem] pt-[1rem]"
-                    : customDraft.length > 100
-                    ? "pt-[2rem]"
-                    : "pt-[3rem]"
-                }`}
-                style={{
-                  ...getQuoteStyle(),
-                  minHeight: "8rem",
-                }}
-                rows={6}
-              />
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      const current =
+                        formData.selectedQuote === "custom"
+                          ? customDraft
+                          : formData.customMessage || "";
+                      if (countLines(current) >= MAX_LINES) {
+                        e.preventDefault();
+                      }
+                    }
+                  }}
+                  placeholder="Select a quote or write your own"
+                  maxLength={300}
+                  className={`w-full text-center md:text-[0.8rem] text-[8px] h-full bg-transparent border-none outline-none resize-none scrollbar-hide pointer-events-auto focus:outline-none overflow-hidden opacity-0 absolute top-0 left-0 z-10 ${
+                    customDraft.length > 300
+                      ? "md:pt-[2rem] pt-[1rem]"
+                      : customDraft.length > 100
+                      ? "pt-[2rem]"
+                      : "pt-[3rem]"
+                  }`}
+                  style={{
+                    ...getQuoteStyle(),
+                    minHeight: "8rem",
+                  }}
+                  rows={6}
+                />
+
+                <div
+                  className={`w-full text-center md:text-[0.8rem] text-[8px] h-full pointer-events-none ${
+                    customDraft.length > 300
+                      ? "md:pt-[2rem] pt-[1rem]"
+                      : customDraft.length > 100
+                      ? "pt-[2rem]"
+                      : "pt-[3rem]"
+                  }`}
+                  style={{
+                    ...getQuoteStyle(),
+                    minHeight: "8rem",
+                    whiteSpace: "pre-wrap",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <CenterOutwardText
+                    text={
+                      formData.selectedQuote === "custom"
+                        ? customDraft
+                        : formData.customMessage || ""
+                    }
+                    placeholder="Select a quote or write your own"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
