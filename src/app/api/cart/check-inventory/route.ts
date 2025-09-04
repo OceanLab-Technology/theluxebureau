@@ -60,7 +60,6 @@ export async function POST(
         .single();
 
       console.log("variant found:", variant);
-      console.log("variant error:", variantError);
 
       if (variantError || !variant) {
         console.log(`Variant "${normalizedVariantName}" not found for product ${product_id}`);

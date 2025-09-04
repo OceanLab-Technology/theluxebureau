@@ -650,6 +650,7 @@ type OrderItemRow = {
   selected_variant_name: string | null;
   price_at_purchase: number | null;
   product: { id: string; name: string; image_1: string | null } | null;
+  custom_data: string | null;
 };
 
 /** Raw DB shape (Supabase might return product as object or array) */
@@ -828,21 +829,48 @@ export async function POST(request: Request) {
         }
       }
 
-      // 7) Build Mandrill items safely
-      const mandrillItems = orderItems.map((item, i) => {
+
+      type CustomData = { recipientName?: string } | null;
+
+      const safeParse = <T,>(s: string | null): T | null => {
+        if (!s) return null;
+        try { return JSON.parse(s) as T; } catch { return null; }
+      };
+
+      const mandrillItems = orderItems.map((item) => {
         const product = item.product;
+        const custom = safeParse<CustomData>(item.custom_data);
+
         return {
           title: product?.name ?? "Product",
-          order_number: orderData?.id ?? "",
-          recipient: session.customer_details?.name ?? "Customer",
+          order_number: String(orderData?.id ?? ""),
+          recipient: custom?.recipientName ?? "Customer",
           delivery_date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" }),
           delivery_time: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
           items: `${item.selected_variant_name ?? "Default"} x ${item.quantity}`,
-          total: Number(item.price_at_purchase ?? 0).toFixed(2),
+          total: (item.price_at_purchase ?? 0).toFixed(2),
           image_url: product?.image_1 ?? "https://placehold.co/600x400.png",
-          account_url: `https://theluxebureau.netlify.app/account`,
+          account_url: process.env.NEXT_PUBLIC_ACCOUNT_URL ?? "https://theluxebureau.netlify.app/account",
         };
       });
+
+
+      // 7) Build Mandrill items safely
+      // const mandrillItems = orderItems.map((item, i) => {
+      //   const product = item.product;
+      //   console.log(product);
+      //   return {
+      //     title: product?.name ?? "Product",
+      //     order_number: orderData?.id ?? "",
+      //     recipient: item?.customData?.recipientName ?? "Customer",
+      //     delivery_date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+      //     delivery_time: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+      //     items: `${item.selected_variant_name ?? "Default"} x ${item.quantity}`,
+      //     total: Number(item.price_at_purchase ?? 0).toFixed(2),
+      //     image_url: product?.image_1 ?? "https://placehold.co/600x400.png",
+      //     account_url: `https://theluxebureau.netlify.app/account`,
+      //   };
+      // });
 
       const orderTotal = session.amount_total ? session.amount_total / 100 : 0;
 
