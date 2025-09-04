@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useMainStore } from "@/store/mainStore";
+import { useCartStore } from "@/store/cartStore";
 import { useCartMigration } from "@/hooks/use-cart-migration";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -63,22 +63,18 @@ export function LoginForm({
   const [isLoading, setIsLoading] = useState(false);
   const [redirectTo, setRedirectTo] = useState("/products");
 
-  const { handleLoginSuccess } = useMainStore();
+  const { handleLoginSuccess } = useCartStore();
   const { hasGuestCartItems, getGuestCartItemCount } = useCartMigration();
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  // Show cart migration info
   const showCartMigrationInfo = hasGuestCartItems();
   const guestItemCount = getGuestCartItemCount();
 
-  // Pick redirect from query (?redirect=/path)
   useEffect(() => {
     const redirect = searchParams?.get("redirect");
     if (redirect) setRedirectTo(redirect);
   }, [searchParams]);
 
-  // Validators
   const validateEmail = (value: string) => {
     const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     setEmailWarning(ok ? "" : "Please enter a valid email address.");
@@ -88,14 +84,16 @@ export function LoginForm({
     e.preventDefault();
     setError(null);
 
-    // quick guard
     if (!email || !password || emailWarning) return;
 
     setIsLoading(true);
     const supabase = createClient();
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
       if (error) throw error;
 
       await handleLoginSuccess();
@@ -110,21 +108,24 @@ export function LoginForm({
 
   return (
     <div
-      className={cn("w-full px-4 sm:px-10 font-[Century-Old-Style] md:pt-0 pt-20", className)}
+      className={cn(
+        "w-full px-4 sm:px-10 font-[Century-Old-Style] md:pt-0 pt-20",
+        className
+      )}
       {...props}
     >
       <h1 className="text-[1rem] font-light mb-4 tracking-wide md:py-20 small-text">
         LOG IN
       </h1>
 
-      {/* Cart Migration Notice */}
       {showCartMigrationInfo && (
         <div className="mb-6 p-4 bg-[#FBD060]/10 border border-[#FBD060]/30 rounded-md">
           <div className="flex items-center gap-2 text-sm text-stone-700">
             <ShoppingCart className="h-4 w-4 text-[#FBD060]" />
             <span className="font-medium">Cart items detected:</span>
             <span>
-              You have {guestItemCount} item{guestItemCount > 1 ? 's' : ''} in your cart that will be saved to your account.
+              You have {guestItemCount} item{guestItemCount > 1 ? "s" : ""} in
+              your cart that will be saved to your account.
             </span>
           </div>
         </div>
@@ -133,7 +134,6 @@ export function LoginForm({
       <div className="mb-8">
         <form onSubmit={handleLogin} noValidate>
           <div className="flex flex-col w-full md:w-[600px] gap-3 mb-8">
-            {/* Email */}
             <Field id="email" label="EMAIL ADDRESS" warning={emailWarning}>
               <Input
                 id="email"
@@ -154,7 +154,6 @@ export function LoginForm({
               />
             </Field>
 
-            {/* Password */}
             <Field id="password" label="PASSWORD">
               <div className="relative">
                 <Input
@@ -173,14 +172,15 @@ export function LoginForm({
                   onClick={() => setIsPasswordVisible((v) => !v)}
                   className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-700"
                   tabIndex={-1}
-                  aria-label={isPasswordVisible ? "Hide password" : "Show password"}
+                  aria-label={
+                    isPasswordVisible ? "Hide password" : "Show password"
+                  }
                 >
                   {isPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
             </Field>
 
-            {/* Submit */}
             <div className="mb-8 w-full">
               <Button
                 type="submit"

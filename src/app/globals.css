@@ -178,16 +178,6 @@ body {
   }
 }
 
-/* Custom cursor styles */
-* {
-  cursor: none !important;
-}
-
-/* Ensure interactive elements still show pointer behavior */
-button, a, input, textarea, select, [onclick], [role="button"] {
-  cursor: none !important;
-}
-
 .font-schoolbook-cond {
   font-family: "SchoolBook-Cond", sans-serif;
 }
@@ -225,30 +215,5 @@ button, a, input, textarea, select, [onclick], [role="button"] {
     @apply bg-background text-foreground;
   }
   /* Base cursor everywhere */
-  html,
-  body {
-    cursor: var(--cursor-url) 10 10, auto;
-  }
-
-  /* Use pointer fallback on interactive elements */
-  a,
-  button,
-  label,
-  [role="button"],
-  input[type="submit"],
-  input[type="button"] {
-    cursor: var(--cursor-url) 10 10, pointer;
-  }
-
-  /* When the custom cursor is active, hide the native cursor everywhere so only the SVG follower is visible */
-  html.has-custom-cursor,
-  html.has-custom-cursor body,
-  html.has-custom-cursor a,
-  html.has-custom-cursor button,
-  html.has-custom-cursor label,
-  html.has-custom-cursor [role="button"],
-  html.has-custom-cursor input[type="submit"],
-  html.has-custom-cursor input[type="button"] {
-    cursor: none;
-  }
+ 
 }

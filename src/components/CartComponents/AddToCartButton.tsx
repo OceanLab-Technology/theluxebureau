@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useMainStore } from "@/store/mainStore";
+import { useCartStore } from "@/store/cartStore";
 import { Button } from "@/components/ui/button";
 import { CartToast } from "@/components/ui/cart-toast";
 import { Check } from "lucide-react";
@@ -35,22 +35,16 @@ export function AddToCartButton({
   variant = "default",
   size = "default",
 }: AddToCartButtonProps) {
-  const { addToCart, checkAuthStatus, setCartSheetOpen } = useMainStore();
+  const { addToCart, setCartSheetOpen, checkInventoryAvailability } = useCartStore();
   const router = useRouter();
   const { navigateWithAuth, showLoginModal, handleCloseModal, featureName } = useAuthenticatedNavigation();
   const [isAdded, setIsAdded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
-  // Check authentication status on component mount
-  useEffect(() => {
-    checkAuthStatus();
-  }, [checkAuthStatus]);
-
   const handleAddToCart = async () => {
     try {
       setIsLoading(true);
-      // addToCart now handles both authenticated and guest users
       await addToCart(productId, 1);
       setIsAdded(true);
       setShowToast(true);
@@ -74,8 +68,6 @@ export function AddToCartButton({
   const handleCheckout = async () => {
     setShowToast(false);
     
-    // Check inventory availability before navigation
-    const { checkInventoryAvailability } = useMainStore.getState();
     const inventoryAvailable = await checkInventoryAvailability();
     
     if (!inventoryAvailable) {
@@ -101,7 +93,6 @@ export function AddToCartButton({
         >
           {isLoading ? "Adding..." : isAdded ? (
             <>
-              {/* <Check className="mr-2 h-4 w-4" /> */}
               Added to Cart
             </>
           ) : "Add to Cart"}

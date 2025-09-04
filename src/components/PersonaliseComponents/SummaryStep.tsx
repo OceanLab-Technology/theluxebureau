@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { usePersonaliseStore } from "@/store/personaliseStore";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
-import { useMainStore } from "@/store/mainStore";
+import { useProductStore } from "@/store/productStore";
 
 interface FontSetting {
   name: string;
@@ -22,7 +22,7 @@ interface SiteSettings {
 export default function SummaryStep() {
   const { formData, selectedProduct, updateFormData } = usePersonaliseStore();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const { currentProduct } = useMainStore();
+  const { currentProduct } = useProductStore();
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const [fontLoaded, setFontLoaded] = useState(false);
   const [showBackArrow, setShowBackArrow] = useState(false);
@@ -136,40 +136,40 @@ export default function SummaryStep() {
 
   return (
     <div>
-      <p className="text-secondary-foreground mb-12 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-[Century]">
+      <p className="text-secondary-foreground mb-10 font-[400] leading-[1.25rem] tracking-[0.02rem] text-[1rem] font-[Century]">
         Please review your gift details below. Press back to make changes.
       </p>
 
-      <div className="flex flex-col gap-6 mt-8 font-[marfa]">
+      <div className="flex flex-col gap-6 mt-8 font-[marfa] text-[0.9375rem]">
         <div className="flex items-center gap-8">
-          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
+          <label className="text-[13px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
             Your name
           </label>
-          <p className="text-[15px] tracking-[0.04rem] text-[#3a2f1a] font-[120%] font-[marfa]">
+          <p className="text-[13px] tracking-[0.04rem] text-[#3a2f1a] font-[120%] font-[marfa]">
             {formData.yourName || "Not provided"}
           </p>
         </div>
         <div className="flex items-center gap-8">
-          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
+          <label className="text-[13px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
             Recipients name
           </label>
-          <p className="text-[15px] tracking-[0.04rem] text-[#3a2f1a] font-[120%] font-[marfa]">
+          <p className="text-[13px] tracking-[0.04rem] text-[#3a2f1a] font-[120%] font-[marfa]">
             {formData.recipientName || "Not provided"}
           </p>
         </div>
         <div className="flex items-center gap-8">
-          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
+          <label className="text-[13px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
             Recipients address
           </label>
-          <p className="text-[15px] tracking-[0.04rem] text-[#3a2f1a] font-[120%] font-[marfa]">
+          <p className="text-[13px] tracking-[0.04rem] text-[#3a2f1a] font-[120%] font-[marfa]">
             {formData.recipientAddress || "Not provided"}
           </p>
         </div>
         <div className="flex items-center gap-8">
-          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
+          <label className="text-[13px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
             Delivery Date
           </label>
-          <p className="text-[15px] text-[#3a2f1a] font-[120%] font-[marfa]">
+          <p className="text-[13px] text-[#3a2f1a] font-[120%] font-[marfa]">
             {formData.deliveryDate
               ? (() => {
                   const date = new Date(formData.deliveryDate);
@@ -207,10 +207,10 @@ export default function SummaryStep() {
           </p>
         </div>
         <div className="flex items-center gap-8">
-          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
+          <label className="text-[13px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
             Delivery Time
           </label>
-          <p className="text-[15px] text-[#3a2f1a] font-[120%] font-[marfa]">
+          <p className="text-[13px] text-[#3a2f1a] font-[120%] font-[marfa]">
             {formData.preferredDeliveryTime === "10am-1pm" && "10:00 – 13:00"}
             {formData.preferredDeliveryTime === "1pm-4pm" && "13:00 – 16:00"}
             {formData.preferredDeliveryTime === "4pm-6pm" && "16:00 – 18:00"}
@@ -224,10 +224,10 @@ export default function SummaryStep() {
           </p>
         </div>
         <div className="flex items-start gap-8">
-          <label className="text-[15px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
+          <label className="text-[13px] text-[#50462d]/60 font-light min-w-[160px] font-[marfa]">
             Personal Message
           </label>
-          <div className="tracking-[0.04rem] text-[15px] text-[#3a2f1a] font-[120%] whitespace-pre-line font-[marfa]">
+          <div className="tracking-[0.04rem] text-[13px] text-[#3a2f1a] font-[120%] whitespace-pre-line font-[marfa]">
             {formData.customMessage || "No personal message"}
           </div>
         </div>

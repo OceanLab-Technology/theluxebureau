@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ProductCard } from "./ProductCard";
 import { ProductGridSkeleton } from "./ProductGridSkeleton";
-import { useMainStore } from "@/store/mainStore";
+import { useProductStore } from "@/store/productStore";
 import { ChevronRight, Loader2 } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 
@@ -22,7 +22,7 @@ export function ProductGrid({
   selectedCategory = "",
   onCategoryChange,
 }: ProductGridProps) {
-  const { products, loading, error, fetchProducts } = useMainStore();
+  const { products, loading, error, fetchProducts } = useProductStore();
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const searchParams = useSearchParams();
@@ -108,20 +108,6 @@ export function ProductGrid({
     }
   };
 
-  const handleCategoryChange = (category: string) => {
-    if (category === selectedCategory) return;
-    if (onCategoryChange) {
-      onCategoryChange(category);
-    }
-    const params = new URLSearchParams(searchParams.toString());
-    if (category && category !== "") {
-      params.set("category", category);
-    } else {
-      params.delete("category");
-    }
-    router.push(`/products?${params.toString()}`, { scroll: false });
-  };
-
   useEffect(() => {
     const params: any = {};
 
@@ -140,7 +126,6 @@ export function ProductGrid({
 
   const filteredProducts = products.filter(product => {
     if (!selectedCategory) return true;
-
     const productCategory = product.category ? normalizeCategory(product.category) : '';
     const selectedCat = normalizeCategory(selectedCategory);
 
@@ -156,7 +141,6 @@ export function ProductGrid({
     return (
       <div className="w-full flex items-center justify-center min-h-[20vh] p-20 flex-col text-center">
         <div className="max-w-md w-full space-y-6 pb-20 text-left lg:pl-10 lg:pb-20">
-          {/* Header */}
           <div className="space-y-4">
             <h2 className="text-[#50462D] text-[30px] leading-[40px] lg:text-[36px] lg:leading-[48px] font-[400] font-[Century-Old-Style]">
               No products found
@@ -165,9 +149,7 @@ export function ProductGrid({
               Try adjusting your filters or search terms.
             </p>
           </div>
-
-          {/* Continue Shopping Button */}
-          <div className="">
+\          <div className="">
             <button
               onClick={() => router.push("/products")}
               className="bg-[#FBD060] text-[#1E1204] font-schoolbook-cond font-[400] text-[0.70rem] leading-[119.58%] w-[15.812rem] h-[2rem] uppercase rounded-[0.25rem] hover:opacity-90 transition-opacity lg:text-[0.75rem] lg:w-[20.812rem] lg:h-[2.5rem]"
@@ -256,7 +238,7 @@ export function ProductGrid({
         >
           <div className="text-foreground">
             <motion.h2
-              className={`text-[1rem] font-medium uppercase text-secondary-foreground transition-opacity duration-200 ${isTransitioning ? "animate-pulse" : ""
+              className={`small-text uppercase text-secondary-foreground transition-opacity duration-200 ${isTransitioning ? "animate-pulse" : ""
                 }`}
               animate={isTransitioning ? { opacity: [1, 0.5, 1] } : {}}
               transition={{
@@ -267,7 +249,7 @@ export function ProductGrid({
               Next Section
             </motion.h2>
             <motion.div
-              className={`flex items-center gap-2 text-[2rem] font-[100] cursor-pointer hover:text-[#FBD060] transition-all duration-200 transform hover:scale-105 ${isTransitioning ? "opacity-70" : "opacity-100"
+              className={`flex items-center gap-1 text-[2rem] font-[100] cursor-pointer hover:text-[#FBD060] transition-all duration-200 transform hover:scale-105 ${isTransitioning ? "opacity-70" : "opacity-100"
                 }`}
               onClick={handleNextCategory}
               whileHover={{ opacity: 0.8 }}
@@ -290,7 +272,7 @@ export function ProductGrid({
                   repeat: isTransitioning ? Infinity : 0,
                 }}
               >
-                <ChevronRight className="h-10 w-10" />
+                <ChevronRight className="size-8" />
               </motion.div>
             </motion.div>
           </div>

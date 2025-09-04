@@ -1,6 +1,6 @@
 "use client";
 
-import { useMainStore } from "@/store/mainStore";
+import { useCartStore } from "@/store/cartStore";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
@@ -12,7 +12,7 @@ interface CartSummaryProps {
 }
 
 export function CartSummary({ onClose }: CartSummaryProps) {
-  const { cartItems, cartTotal, cartLoading, checkInventoryAvailability } = useMainStore();
+  const { cartItems, cartTotal, cartLoading, checkInventoryAvailability } = useCartStore();
   const { user } = useAuth();
   const { navigateWithAuth, showLoginModal, handleCloseModal, featureName } = useAuthenticatedNavigation();
   
@@ -39,10 +39,6 @@ export function CartSummary({ onClose }: CartSummaryProps) {
       <div className="flex justify-between items-end">
         <div className="md:flex-grow">
           <span className="md:text-lg font-medium">SUBTOTAL</span>
-
-          {/* <p className="md:text-sm text-xs text-stone-600 mb-6">
-            TAXES AND DELIVERY  CALCULATED AT CHECKOUT
-          </p> */}
           <div className="flex justify-between items-center text-xl font-medium mb-8">
             <span>£{cartTotal.toFixed(2)}</span>
           </div>
@@ -62,7 +58,7 @@ export function CartSummary({ onClose }: CartSummaryProps) {
       <LoginRequiredModal
         isOpen={showLoginModal}
         onClose={handleCloseModal}
-        onCloseCartSheet={onClose} // this may be undefined in some contexts, that's ok
+        onCloseCartSheet={onClose}
         feature={featureName}
       />
     </>

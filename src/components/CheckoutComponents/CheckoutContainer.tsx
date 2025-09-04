@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Lock } from "lucide-react";
 import { Product } from "@/app/api/types";
-import { useMainStore } from "@/store/mainStore";
+import { useCartStore } from "@/store/cartStore";
 import { toast } from "sonner";
 
 interface CheckoutContainerProps {
@@ -17,7 +17,11 @@ interface CheckoutContainerProps {
 export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { checkInventoryAvailability, reserveCartInventory } = useMainStore();
+  const {
+    checkInventoryAvailability,
+    reserveCartInventory,
+    releaseCartInventory,
+  } = useCartStore();
   const [customerInfo, setCustomerInfo] = useState({
     firstName: "",
     lastName: "",
@@ -35,11 +39,17 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
 
     if (field === "email") {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      setEmailWarning(emailRegex.test(value) ? "" : "Please enter a valid email address.");
+      setEmailWarning(
+        emailRegex.test(value) ? "" : "Please enter a valid email address."
+      );
     }
     if (field === "phone") {
       const phoneRegex = /^\+?\d{10,15}$/;
-      setPhoneWarning(value && !phoneRegex.test(value) ? "Please enter a valid phone number." : "");
+      setPhoneWarning(
+        value && !phoneRegex.test(value)
+          ? "Please enter a valid phone number."
+          : ""
+      );
     }
   };
 
@@ -58,17 +68,15 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
     }
 
     try {
-      // First check inventory availability
       const inventoryAvailable = await checkInventoryAvailability();
-      
+
       if (!inventoryAvailable) {
         setLoading(false);
         return;
       }
 
-      // Reserve inventory before proceeding to payment
       const reservationSuccessful = await reserveCartInventory();
-      
+
       if (!reservationSuccessful) {
         setLoading(false);
         return;
@@ -121,10 +129,8 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
     } catch (error: any) {
       console.error("Checkout error:", error);
       setError(error.message || "Failed to proceed to checkout");
-      
-      // Release reserved inventory if checkout failed
+
       try {
-        const { releaseCartInventory } = useMainStore.getState();
         await releaseCartInventory();
         toast.error("Inventory reservation released due to checkout error");
       } catch (releaseError) {
@@ -136,12 +142,12 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
   };
 
   return (
-    <Card className="shadow-none border-none bg-transparent">
+    <Card className="shadow-none border-none bg-transparent font-[Marfa] text-[13px]">
       <CardContent className="space-y-6 px-4 ">
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="firstName">First Name *</Label>
+              <Label className="font-[Marfa]" htmlFor="firstName">First Name *</Label>
               <input
                 id="firstName"
                 value={customerInfo.firstName}
@@ -152,7 +158,7 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name *</Label>
+              <Label className="font-[Marfa]" htmlFor="lastName">Last Name *</Label>
               <input
                 id="lastName"
                 value={customerInfo.lastName}
@@ -165,7 +171,7 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email">Email *</Label>
+            <Label className="font-[Marfa]" htmlFor="email">Email *</Label>
             <input
               id="email"
               type="email"
@@ -176,12 +182,14 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
               disabled={loading}
             />
             {emailWarning && (
-              <p className="text-[#50462D] text-[12px] mt-0.5 font-[Marfa]">{emailWarning}</p>
+              <p className="text-[#50462D] text-[12px] mt-0.5 font-[Marfa]">
+                {emailWarning}
+              </p>
             )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="phone">Phone (Optional)</Label>
+            <Label className="font-[Marfa]" htmlFor="phone">Phone (Optional)</Label>
             <input
               id="phone"
               type="tel"
@@ -192,7 +200,9 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
               disabled={loading}
             />
             {phoneWarning && (
-              <p className="text-[#50462D] text-[12px] mt-0.5 font-[Marfa]">{phoneWarning}</p>
+              <p className="text-[#50462D] text-[12px] mt-0.5 font-[Marfa]">
+                {phoneWarning}
+              </p>
             )}
           </div>
         </div>
@@ -228,7 +238,10 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
             <Lock className="h-3 w-3 mr-1" />
             Secured by Stripe
           </Badge>
-          <p className="text-xs font-[ABC Marfa] !font-[ABC Marfa] text-stone-500 mt-2" style={{ fontFamily: "ABC Marfa, sans-serif" }}>
+          <p
+            className="text-xs font-[ABC Marfa] !font-[ABC Marfa] text-stone-500 mt-2"
+            style={{ fontFamily: "ABC Marfa, sans-serif" }}
+          >
             You will be redirected to Stripe's secure payment page
           </p>
         </div>

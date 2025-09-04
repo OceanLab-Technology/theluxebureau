@@ -2,19 +2,22 @@
 
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { useMainStore } from "@/store/mainStore";
+import { useCartStore } from "@/store/cartStore";
+import { useProductStore } from "@/store/productStore";
 import { usePersonaliseStore } from "@/store/personaliseStore";
 
 export function LogoutButton() {
   const router = useRouter();
-  const resetMainStore = useMainStore((state) => state.resetStore);
+  const resetCart = useCartStore((state) => state.resetCart);
+  const resetProducts = useProductStore((state) => state.resetProducts);
   const resetPersonaliseStore = usePersonaliseStore((state) => state.resetCheckout);
 
   const logout = async () => {
     try {
       const supabase = createClient();
       
-      resetMainStore();
+      resetCart();
+      resetProducts();
       resetPersonaliseStore();
       
       await supabase.auth.signOut();
