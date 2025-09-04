@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { usePersonaliseStore } from "@/store/personaliseStore";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
-import { useMainStore } from "@/store/mainStore";
+import { useProductStore } from "@/store/productStore";
 
 interface FontSetting {
   name: string;
@@ -22,7 +22,7 @@ interface SiteSettings {
 export default function SummaryStep() {
   const { formData, selectedProduct, updateFormData } = usePersonaliseStore();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const { currentProduct } = useMainStore();
+  const { currentProduct } = useProductStore();
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const [fontLoaded, setFontLoaded] = useState(false);
   const [showBackArrow, setShowBackArrow] = useState(false);

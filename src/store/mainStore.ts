@@ -10,47 +10,34 @@ interface MainStore {
   currentProduct: Product | null;
   loading: boolean;
   error: string | null;
-
-  // Cart state
+  detailedProductLoading: boolean;
+  
   cartItems: CartItem[];
   cartLoading: boolean;
   cartError: string | null;
   cartTotal: number;
   cartItemCount: number;
+  cartInitialized: boolean;
   isAuthenticated: boolean | null;
-  
   isCartSheetOpen: boolean;
+
   setCartSheetOpen: (open: boolean) => void;
-
-  fetchProducts: (params?: {
-    category?: string;
-    name?: string;
-  }) => Promise<void>;
-  detailedProductLoading: boolean;
+  fetchProducts: (params?: { category?: string; name?: string }) => Promise<void>;
   fetchProductById: (id: string) => Promise<void>;
-
-  // Cart actions - now handles both authenticated and guest carts
   fetchCartItems: () => Promise<void>;
   addToCart: (productId: string, quantity: number, customData?: Record<string, any>, selectedVariantName?: string) => Promise<void>;
   updateCartItem: (itemId: string, quantity: number, customData?: Record<string, any>) => Promise<void>;
   removeFromCart: (itemId: string) => Promise<void>;
   clearCart: () => Promise<void>;
   calculateCartTotal: () => void;
-
-  // Authentication helpers
   checkAuthStatus: () => Promise<boolean>;
   handleLoginSuccess: () => Promise<void>;
   handleLogout: () => void;
-
-  // Inventory management
   checkInventoryAvailability: () => Promise<boolean>;
   reserveCartInventory: () => Promise<boolean>;
   releaseCartInventory: (items?: Array<{product_id: string; quantity: number; selected_variant_name?: string}>) => Promise<void>;
   confirmCartInventory: (items?: Array<{product_id: string; quantity: number; selected_variant_name?: string}>) => Promise<void>;
-
-  // Global reset method
   resetStore: () => void;
-  cartInitialized: boolean;
 }
 
 export const useMainStore = create<MainStore>()(
@@ -61,18 +48,15 @@ export const useMainStore = create<MainStore>()(
       loading: false,
       error: null,
       detailedProductLoading: false,
-
-      // Cart initial state
       cartItems: [],
       cartLoading: false,
       cartError: null,
       cartTotal: 0,
       cartItemCount: 0,
       isAuthenticated: null,
-      cartInitialized: false, // <-- new
-      
-      // Cart sheet initial state
+      cartInitialized: false,
       isCartSheetOpen: false,
+
       setCartSheetOpen: (open: boolean) => set({ isCartSheetOpen: open }),
 
 

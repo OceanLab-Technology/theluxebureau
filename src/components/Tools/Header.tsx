@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 import { LoginRequiredModal } from "@/components/ui/login-required-modal";
 import { useRouter } from "next/navigation";
 import { CartSheet } from "../CartComponents";
+import { useStoreAuth } from "@/hooks/use-store-auth";
 
 export default function Header() {
   const [extended, setExtended] = React.useState<boolean>(false);
@@ -17,6 +18,8 @@ export default function Header() {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const router = useRouter();
   const supabase = createClient();
+
+  useStoreAuth();
 
   useEffect(() => {
     const getUser = async () => {

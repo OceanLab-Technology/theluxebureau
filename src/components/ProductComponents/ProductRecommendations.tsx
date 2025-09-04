@@ -1,6 +1,6 @@
 "use client";
 
-import { useMainStore } from "@/store/mainStore";
+import { useProductStore } from "@/store/productStore";
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 import { ProductCard } from "./ProductCard";
@@ -12,7 +12,7 @@ interface ProductRecommendationsProps {
 export function ProductRecommendations({
   currentProductId,
 }: ProductRecommendationsProps) {
-  const { products, loading, fetchProducts } = useMainStore();
+  const { products, loading, fetchProducts } = useProductStore();
   React.useEffect(() => {
     if (products.length === 0) {
       fetchProducts();

@@ -1,26 +1,19 @@
 "use client";
 
-import { useMainStore } from "@/store/mainStore";
+import { useCartStore } from "@/store/cartStore";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 export function CartIcon({ className }: { className?: string }) {
-  const { cartItemCount, fetchCartItems, checkAuthStatus } = useMainStore();
+  const { cartItemCount, fetchCartItems } = useCartStore();
   const router = useRouter();
 
   useEffect(() => {
-    // Initialize cart - check auth status and fetch cart items
-    const initializeCart = async () => {
-      await checkAuthStatus();
-      await fetchCartItems();
-    };
-    
-    initializeCart();
-  }, [checkAuthStatus, fetchCartItems]);
+    fetchCartItems();
+  }, [fetchCartItems]);
 
   const handleCartClick = () => {
-    // No longer requires authentication to view cart
     router.push("/cart");
   };
 

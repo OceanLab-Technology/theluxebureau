@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useMainStore } from "@/store/mainStore";
+import { useCartStore } from "@/store/cartStore";
 import { useCartMigration } from "@/hooks/use-cart-migration";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -74,7 +74,7 @@ export function SignUpForm({
   const [passwordWarning, setPasswordWarning] = useState("");
   const [repeatPasswordWarning, setRepeatPasswordWarning] = useState("");
 
-  const { handleLoginSuccess } = useMainStore();
+  const { handleLoginSuccess } = useCartStore();
   const { hasGuestCartItems, getGuestCartItemCount } = useCartMigration();
   const router = useRouter();
 

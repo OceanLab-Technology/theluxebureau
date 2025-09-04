@@ -4,7 +4,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { CheckoutContainer } from "@/components/CheckoutComponents/CheckoutContainer";
 import { CheckoutPageSkeleton } from "@/components/CheckoutComponents/CheckoutSkeleton";
 import { DetailProductCard } from "@/components/CheckoutComponents/DetailProductCard";
-import { useMainStore } from "@/store/mainStore";
+import { useCartStore } from "@/store/cartStore";
+import { useProductStore } from "@/store/productStore";
 import { useGuestCartStore } from "@/store/guestCartStore";
 import { Product } from "@/app/api/types";
 import { Button } from "@/components/ui/button";
@@ -16,14 +17,12 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 export default function CheckoutPage() {
   const {
     cartItems,
-    products,
     fetchCartItems,
-    fetchProducts,
     cartLoading,
     isAuthenticated,
-    checkAuthStatus,
     checkInventoryAvailability
-  } = useMainStore();
+  } = useCartStore();
+  const { products, fetchProducts } = useProductStore();
   const { items: guestItems } = useGuestCartStore();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -37,7 +36,6 @@ export default function CheckoutPage() {
 
     const initCheckout = async () => {
       try {
-        await checkAuthStatus();
         await fetchCartItems();
 
         if (products.length === 0) {
@@ -46,7 +44,7 @@ export default function CheckoutPage() {
         setIsInitialized(true);
       } catch (error) {
         console.error('Failed to initialize checkout:', error);
-        setIsInitialized(true); // Still set to true to prevent infinite loading
+        setIsInitialized(true);
       }
     };
 

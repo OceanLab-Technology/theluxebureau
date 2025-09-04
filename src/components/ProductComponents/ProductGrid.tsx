@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ProductCard } from "./ProductCard";
 import { ProductGridSkeleton } from "./ProductGridSkeleton";
-import { useMainStore } from "@/store/mainStore";
+import { useProductStore } from "@/store/productStore";
 import { ChevronRight, Loader2 } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 
@@ -22,7 +22,7 @@ export function ProductGrid({
   selectedCategory = "",
   onCategoryChange,
 }: ProductGridProps) {
-  const { products, loading, error, fetchProducts } = useMainStore();
+  const { products, loading, error, fetchProducts } = useProductStore();
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const searchParams = useSearchParams();
@@ -108,20 +108,6 @@ export function ProductGrid({
     }
   };
 
-  const handleCategoryChange = (category: string) => {
-    if (category === selectedCategory) return;
-    if (onCategoryChange) {
-      onCategoryChange(category);
-    }
-    const params = new URLSearchParams(searchParams.toString());
-    if (category && category !== "") {
-      params.set("category", category);
-    } else {
-      params.delete("category");
-    }
-    router.push(`/products?${params.toString()}`, { scroll: false });
-  };
-
   useEffect(() => {
     const params: any = {};
 
@@ -140,7 +126,6 @@ export function ProductGrid({
 
   const filteredProducts = products.filter(product => {
     if (!selectedCategory) return true;
-
     const productCategory = product.category ? normalizeCategory(product.category) : '';
     const selectedCat = normalizeCategory(selectedCategory);
 

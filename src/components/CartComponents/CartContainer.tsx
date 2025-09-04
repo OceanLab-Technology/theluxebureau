@@ -2,7 +2,8 @@
 
 import React, { useEffect, useMemo } from "react";
 
-import { useMainStore } from "@/store/mainStore";
+import { useCartStore } from "@/store/cartStore";
+import { useProductStore } from "@/store/productStore";
 import { CartItem } from "./CartItem";
 import { CartSummary } from "./CartSummary";
 import { EmptyCart } from "./EmptyCart";
@@ -15,7 +16,8 @@ interface CartContainerProps {
 }
 
 export function CartContainer({ onClose }: CartContainerProps) {
-  const { cartItems, cartLoading, products, fetchProducts } = useMainStore();
+  const { cartItems, cartLoading } = useCartStore();
+  const { products, fetchProducts } = useProductStore();
 
   useEffect(() => {
     if (products.length === 0) {

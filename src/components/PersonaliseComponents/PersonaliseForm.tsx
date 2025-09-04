@@ -3,7 +3,7 @@
 import React from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { usePersonaliseStore } from "@/store/personaliseStore";
-import { useMainStore } from "@/store/mainStore";
+import { useCartStore } from "@/store/cartStore";
 import RecipientDetailsStep from "./RecipientDetailsStep";
 import PersonalisationStep from "./PersonalisationStep";
 import DeliveryDetailsStep from "./DeliveryDetailsStep";
@@ -44,7 +44,7 @@ export default function PersonaliseForm({
     selectedProduct,
     isStepValid,
   } = usePersonaliseStore();
-  const { addToCart } = useMainStore();
+  const { addToCart, checkInventoryAvailability } = useCartStore();
   const [isLoading, setIsLoading] = React.useState(false);
   const [isAdded, setIsAdded] = React.useState(false);
   const router = useRouter();
@@ -196,7 +196,6 @@ export default function PersonaliseForm({
 
       await addToCart(selectedProduct.id!, 1, personalisationData, selectedProduct.selectedVariant);
       
-      const { checkInventoryAvailability } = useMainStore.getState();
       const inventoryAvailable = await checkInventoryAvailability();
       
       if (!inventoryAvailable) {
