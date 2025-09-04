@@ -832,16 +832,15 @@ export async function POST(request: Request) {
       const mandrillItems = orderItems.map((item, i) => {
         const product = item.product;
         return {
-          gift_label: `GIFT ${String(i + 1).padStart(2, "0")}`,
           title: product?.name ?? "Product",
-          variant: item.selected_variant_name ?? "Default",
-          qty: item.quantity,
-          price: Number(item.price_at_purchase ?? 0).toFixed(2),
+          order_number: orderData?.id ?? "",
+          recipient: session.customer_details?.name ?? "Customer",
+          delivery_date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+          delivery_time: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+          items: `${item.selected_variant_name ?? "Default"} x ${item.quantity}`,
+          total: Number(item.price_at_purchase ?? 0).toFixed(2),
           image_url: product?.image_1 ?? "https://placehold.co/600x400.png",
-          url: `https://yourstore.com/products/${item.product_id}`,
-          date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-          time: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
-          right_image: false,
+          account_url: `https://theluxebureau.netlify.app/account`,
         };
       });
 
@@ -875,13 +874,13 @@ export async function POST(request: Request) {
                     content: session.customer_details?.name?.split(" ")?.[0] ?? "",
                   },
                   {
-                    name: "preheader_text",
+                    name: "subject",
                     content: "Your order is confirmed and being prepared with care.",
                   },
-                  { name: "order_number", content: existingOrder.id },
-                  { name: "Recipient", content: session.customer_details?.name ?? "" },
-                  { name: "order_total", content: orderTotal.toFixed(2) },
-                  { name: "items", content: mandrillItems },
+                  // { name: "order_number", content: existingOrder.id },
+                  // { name: "Recipient", content: session.customer_details?.name ?? "" },
+                  // { name: "order_total", content: orderTotal.toFixed(2) },
+                  { name: "gifts", content: mandrillItems },
                 ],
               },
             }
