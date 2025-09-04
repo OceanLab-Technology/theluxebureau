@@ -841,6 +841,7 @@ export async function POST(request: Request) {
         const product = item.product;
         const custom = safeParse<CustomData>(item.custom_data);
 
+        console.log(item.custom_data);
         console.log(custom);
         console.log(custom?.recipientName);
         return {
