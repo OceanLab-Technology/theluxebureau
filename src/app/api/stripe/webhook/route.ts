@@ -841,15 +841,20 @@ export async function POST(request: Request) {
         const product = item.product;
         const custom = safeParse<CustomData>(item.custom_data);
 
-        console.log(item.custom_data);
+        const customData = typeof item.custom_data === "string"
+          ? JSON.parse(item.custom_data)
+          : item.custom_data;
+
+          
+        console.log(customData.recipientName);
         console.log(custom);
         console.log(custom?.recipientName);
         return {
           title: product?.name ?? "Product",
           order_number: String(orderData?.id ?? ""),
-          recipient: custom?.recipientName ?? "Customer",
-          delivery_date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-          delivery_time: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+          recipient: customData.recipientName ?? "Customer",
+          delivery_date: customData.deliveryDate,
+          delivery_time: customData.preferredDeliveryTime,
           items: `${item.selected_variant_name ?? "Default"} x ${item.quantity}`,
           total: (item.price_at_purchase ?? 0).toFixed(2),
           image_url: product?.image_1 ?? "https://placehold.co/600x400.png",
