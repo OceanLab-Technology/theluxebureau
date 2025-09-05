@@ -253,8 +253,8 @@ export default function Header() {
               style={{ width: "" }}
             ></div>
 
-            <div className="flex items-start space-x-16 lg:space-x-10">
-              <div className="flex flex-col items-start space-y-3 pl-1">
+            <div className="flex items-start space-x-16 lg:space-x-5">
+              <div className="flex flex-col items-start space-y-3 pl-6.5">
                 {shopCategories.map((category) => (
                   <Link
                     key={category.href}
