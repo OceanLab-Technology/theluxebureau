@@ -932,7 +932,7 @@ export async function POST(request: Request) {
         return {
           title: product?.name ?? "Product",
           order_number: String(orderData?.id ?? ""),
-          sender_name: customData.yourName ?? "Customer",
+          sender_name: "CustomerX",
           variant: item.selected_variant_name,
           qty: item.quantity,
           price: (item.price_at_purchase ?? 0).toFixed(2),
