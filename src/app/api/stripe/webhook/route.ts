@@ -918,6 +918,30 @@ export async function POST(request: Request) {
         console.error("Mandrill axios error:", e?.response?.data || e?.message);
       }
 
+
+      const mandrillItemsForInternal = orderItems.map((item) => {
+        const product = item.product;
+
+        const customData = typeof item.custom_data === "string"
+          ? JSON.parse(item.custom_data)
+          : item.custom_data;
+
+
+        console.log(customData.recipientName);
+        return {
+          title: product?.name ?? "Product",
+          order_number: String(orderData?.id ?? ""),
+          sender_name: customData.yourName ?? "Customer",
+          variant: item.selected_variant_name,
+          qty: item.quantity,
+          price: (item.price_at_purchase ?? 0).toFixed(2),
+          image_url: product?.image_1 ?? "https://placehold.co/600x400.png",
+          gift_label: product?.name ?? "Product",
+          date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+          order_total: orderTotal.toFixed(2),
+          url: "https://theluxebureau.netlify.app/account",
+        };
+      });
       const TodayDate = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" }) ?? "theluxebureau";
       // Send mail to internal team    
       try {
@@ -946,13 +970,7 @@ export async function POST(request: Request) {
                     name: "preheader_text",
                     content: "You have a new order",
                   },
-                  { name: "order_number", content: existingOrder.id },
-                  { name: "senders_name", content: session.customer_details?.name ?? "" },
-                  {
-                    name: "order_date",
-                    content: TodayDate
-                  },
-                  { name: "order_total", content: orderTotal.toFixed(2) }
+                  { name: "items", content: mandrillItemsForInternal },
                 ],
               },
             }
