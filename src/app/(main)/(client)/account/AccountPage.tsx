@@ -242,16 +242,16 @@ export default function AccountPage({ user }: AccountPageProps) {
                 </div>
               ) : (
                 orders.map((order, index) => {
-                  const orderNumber = String(
-                    pagination.total -
-                      (pagination.page - 1) * pagination.limit -
-                      index
-                  ).padStart(3, "0");
+                  // const orderNumber = String(
+                  //   pagination.total -
+                  //     (pagination.page - 1) * pagination.limit -
+                  //     index
+                  // ).padStart(3, "0");
                   return (
                     <div key={order.id} className="mb-8 space-y-10">
                       <div className="flex flex-col md:flex-row small-text md:items-start justify-between mb-4 md:mb-6">
                         <div className="mb-4 uppercase md:mb-0 text-[#50462D] text-[0.93rem]">
-                          <h3 className="">Order no.{orderNumber}</h3>
+                          <h3 className="">Order no.{order.id}</h3>
                           <h3 className="">
                             {new Date(order.created_at).toLocaleDateString(
                               "en-GB",
