@@ -214,6 +214,24 @@ body {
   body {
     @apply bg-background text-foreground;
   }
-  /* Base cursor everywhere */
- 
+  /* Hide default cursor only on desktop devices */
+  @media (hover: hover) and (pointer: fine) {
+    body {
+      cursor: none !important;
+    }
+    * {
+      cursor: none !important;
+    }
+  }
+  
+  /* Performance optimizations for image hover effects */
+  .group:hover img[class*="group-hover"] {
+    transform: translateZ(0);
+  }
+  
+  /* Improve performance for frequently changing elements */
+  [class*="will-change-transform"] {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
 }
