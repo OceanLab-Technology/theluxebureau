@@ -300,7 +300,7 @@ export default function SummaryStep() {
               </div>
               <div className="h-[34vh] md:w-[50%] w-full rounded-none flex items-center justify-center flex-shrink-0">
                 <img
-                  src={currentProduct?.packaging!}
+                  src={selectedProduct?.packaging!}
                   alt=""
                   className="h-full w-full object-cover"
                 />
