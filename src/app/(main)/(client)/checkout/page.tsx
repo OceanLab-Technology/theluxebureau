@@ -413,11 +413,11 @@ export default function CheckoutPage() {
 
 
 
-      <LoginRequiredModal
+      {/* <LoginRequiredModal
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
         feature="complete your purchase"
-      />
+      /> */}
     </>
   );
 }

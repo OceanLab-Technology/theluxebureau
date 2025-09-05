@@ -12,6 +12,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff, ShoppingCart } from "lucide-react";
 import { toast } from "sonner";
+import { useMainStore } from "@/store/mainStore";
 
 const baseInput =
   "border-none bg-transparent px-0 py-2 sm:py-3 text-stone-800 placeholder:text-stone-500 focus:ring-0 outline-none rounded-none focus-visible:ring-0 shadow-none text-sm sm:text-base";
@@ -74,7 +75,7 @@ export function SignUpForm({
   const [passwordWarning, setPasswordWarning] = useState("");
   const [repeatPasswordWarning, setRepeatPasswordWarning] = useState("");
 
-  const { handleLoginSuccess } = useCartStore();
+  const { handleLoginSuccess } = useMainStore();
   const { hasGuestCartItems, getGuestCartItemCount } = useCartMigration();
   const router = useRouter();
 
