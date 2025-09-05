@@ -49,10 +49,8 @@ export function CartSheet({ className, children, fill }: CartSheetProps) {
       >
         <div className="hidden md:flex relative items-center justify-center">
           {cartItemCount > 0 ? (
-            console.log('Rendering empty Full icon'),
             <img src="/cart_full.svg" alt="Cart Icon" className="h-6 w-6" />
           ) : (
-            console.log("cartItemCount:", cartItemCount),
             <img
               src="/cart_empty.svg"
               alt="Empty Cart Icon"

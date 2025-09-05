@@ -25,6 +25,12 @@ export function CartContainer({ onClose }: CartContainerProps) {
     }
   }, [products.length, fetchProducts]);
 
+  useEffect(() => {
+    if (products.length > 0 && cartItems.length > 0) {
+      useMainStore.getState().calculateCartTotal();
+    }
+  }, [products, cartItems]);
+
   const enrichedCartItems = useMemo(() => {
     return cartItems
       .map((cartItem) => {
@@ -40,6 +46,25 @@ export function CartContainer({ onClose }: CartContainerProps) {
       })
       .filter((item) => item.product);
   }, [cartItems, products]);
+
+  // Recalculate total once cart items are enriched with product data
+  useEffect(() => {
+     console.log(enrichedCartItems.length);
+    if (enrichedCartItems.length > 0) {
+      // use the store directly to avoid stale selector closures
+      useMainStore.getState().calculateCartTotal();
+    }
+  }, [enrichedCartItems]);
+
+    useEffect(() => {
+    if (products.length > 0) {
+      // copy loaded products into main store so calculateCartTotal() can find prices
+      useMainStore.setState({ products });
+      // trigger calc again just in case
+      useMainStore.getState().calculateCartTotal();
+    }
+  }, [products]);
+
 
   if (cartLoading && cartItems.length === 0) {
     return <CartContainerSkeleton />;

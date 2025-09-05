@@ -31,7 +31,6 @@ export async function GET(request: NextRequest) {
 
     if (error) throw error;
 
-    console.log("data", data);
     return NextResponse.json({
       success: true,
       data: data,

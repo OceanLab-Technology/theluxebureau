@@ -11,7 +11,7 @@ interface MainStore {
   loading: boolean;
   error: string | null;
   detailedProductLoading: boolean;
-  
+
   cartItems: CartItem[];
   cartLoading: boolean;
   cartError: string | null;
@@ -35,9 +35,10 @@ interface MainStore {
   handleLogout: () => void;
   checkInventoryAvailability: () => Promise<boolean>;
   reserveCartInventory: () => Promise<boolean>;
-  releaseCartInventory: (items?: Array<{product_id: string; quantity: number; selected_variant_name?: string}>) => Promise<void>;
-  confirmCartInventory: (items?: Array<{product_id: string; quantity: number; selected_variant_name?: string}>) => Promise<void>;
+  releaseCartInventory: (items?: Array<{ product_id: string; quantity: number; selected_variant_name?: string }>) => Promise<void>;
+  confirmCartInventory: (items?: Array<{ product_id: string; quantity: number; selected_variant_name?: string }>) => Promise<void>;
   resetStore: () => void;
+  getCartTotal: () => number;
 }
 
 export const useMainStore = create<MainStore>()(
@@ -58,6 +59,14 @@ export const useMainStore = create<MainStore>()(
       isCartSheetOpen: false,
 
       setCartSheetOpen: (open: boolean) => set({ isCartSheetOpen: open }),
+
+      getCartTotal: () => {
+        const { cartItems, products } = get();
+        return cartItems.reduce((total, item) => {
+          const product = products.find(p => p.id === item.product_id);
+          return product?.price ? total + product.price * item.quantity : total;
+        }, 0);
+      },
 
 
       fetchProducts: async (params = {}) => {
@@ -81,6 +90,11 @@ export const useMainStore = create<MainStore>()(
             loading: false,
             products: apiResponse.data || [],
           });
+
+          if (get().cartItems.length > 0) {
+            get().calculateCartTotal();
+          }
+
         } catch (error) {
           set({
             error: error instanceof Error ? error.message : "An error occurred",
@@ -107,6 +121,7 @@ export const useMainStore = create<MainStore>()(
             detailedProductLoading: false,
             error: null,
           });
+          get().calculateCartTotal();
         } catch (error) {
           set({
             error: error instanceof Error ? error.message : "An error occurred",
@@ -267,7 +282,7 @@ export const useMainStore = create<MainStore>()(
             cartError: error instanceof Error ? error.message : "Failed to add to cart",
             cartLoading: false,
           });
-          throw error; 
+          throw error;
         }
       },
 
@@ -416,14 +431,59 @@ export const useMainStore = create<MainStore>()(
         }
       },
 
+      // calculateCartTotal: () => {
+      //   const { cartItems, products } = get();
+      //   let total = 0;
+      //   let itemCount = 0;
+
+      //   cartItems.forEach(item => {
+      //     const product = products.find(p => p.id === item.product_id);
+      //     if (product && product.price) {
+      //       total += product.price * item.quantity;
+      //     }
+      //     itemCount += item.quantity;
+      //   });
+
+      //   set({ cartTotal: total, cartItemCount: itemCount });
+      // },
+
+      // calculateCartTotal: () => {
+      //   const { cartItems, products } = get();
+      //   let total = 0;
+      //   let itemCount = 0;
+
+      //   console.log("DEBUG CART CALCULATION");
+      //   console.log("cartItems:", cartItems);
+      //   console.log("products:", products);
+
+      //   cartItems.forEach(item => {
+      //     const product = products.find(p => p.id === item.product_id);
+      //     console.log("item:", item, "product:", product);
+      //     if (product && product.price) {
+      //       total += product.price * item.quantity;
+      //     }
+      //     itemCount += item.quantity;
+      //   });
+
+      //   console.log("Calculated total:", total, "itemCount:", itemCount);
+
+      //   set({ cartTotal: total, cartItemCount: itemCount });
+      // },
+
       calculateCartTotal: () => {
         const { cartItems, products } = get();
+
+        if (products.length === 0) {
+          console.log("Products not loaded yet, skipping cart calculation");
+          // return; // do not calculate until products are loaded
+        }
+
         let total = 0;
         let itemCount = 0;
 
         cartItems.forEach(item => {
           const product = products.find(p => p.id === item.product_id);
-          if (product && product.price) {
+          if (product?.price) {
             total += product.price * item.quantity;
           }
           itemCount += item.quantity;
@@ -431,6 +491,7 @@ export const useMainStore = create<MainStore>()(
 
         set({ cartTotal: total, cartItemCount: itemCount });
       },
+
 
       checkAuthStatus: async () => {
         try {
@@ -485,7 +546,7 @@ export const useMainStore = create<MainStore>()(
           } catch (error) {
             console.error('Failed to migrate cart items:', error);
             toast.error('Failed to migrate cart items. Please add them again.');
-            
+
             // On migration failure, keep guest items visible but log them
             console.log('Guest items that failed to migrate:', guestItems);
           }
@@ -513,7 +574,7 @@ export const useMainStore = create<MainStore>()(
       checkInventoryAvailability: async () => {
         try {
           const { cartItems } = get();
-          
+
           if (cartItems.length === 0) {
             return true;
           }
@@ -545,11 +606,11 @@ export const useMainStore = create<MainStore>()(
               });
             });
             return false;
-          }          if (data.warnings.length > 0) {
-            const warningMessages = data.warnings.map((item: any) => 
+          } if (data.warnings.length > 0) {
+            const warningMessages = data.warnings.map((item: any) =>
               `${item.product_name} (${item.variant_name}): Low stock (${item.available_quantity} remaining)`
             );
-            
+
             toast.warning(`Low stock warning:\n${warningMessages.join('\n')}`, {
               duration: 5000,
             });
@@ -567,7 +628,7 @@ export const useMainStore = create<MainStore>()(
       reserveCartInventory: async () => {
         try {
           const { cartItems } = get();
-          
+
           if (cartItems.length === 0) {
             return true;
           }
@@ -698,7 +759,6 @@ export const useMainStore = create<MainStore>()(
       name: 'main-store',
       partialize: (state) => ({
         cartItems: state.cartItems,
-        cartTotal: state.cartTotal,
         cartItemCount: state.cartItemCount,
         isAuthenticated: state.isAuthenticated,
         cartInitialized: state.cartInitialized, // persist it

@@ -205,7 +205,7 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
                     REMOVE
                   </button>
                 </AlertDialogTrigger>
-                <AlertDialogContent className="bg-[#F5F1E8] rounded-none">
+                <AlertDialogContent className="bg-[#ffffff] rounded-none">
                   <AlertDialogHeader className="mb-12">
                     <AlertDialogTitle className="text-[#50462D] text-[32px] font-normal leading-[40px] tracking-[0.02em] font-['Century_Old_Style_Std']">
                       Remove Item
@@ -287,7 +287,7 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
           {isDesktop ? (
 
             // Desktop dialog
-            <AlertDialogContent className="bg-[#F5F1E8] border-none">
+            <AlertDialogContent className="bg-[#fbf7e5] border-none">
               <AlertDialogHeader>
                 <AlertDialogTitle className="text-[#50462D] text-[32px] font-normal leading-[40px] tracking-[0.02em] font-['Century_Old_Style_Std']">
                   Remove Item
@@ -310,7 +310,7 @@ export function CartItem({ item, loading, index, lastIndex }: CartItemProps) {
             </AlertDialogContent>
           ) : (
             // Mobile dialog
-            <AlertDialogContent className="bg-[#F5F1E8] border-none">
+            <AlertDialogContent className="bg-[#fbf7e5] border-none">
               <AlertDialogHeader>
                 <AlertDialogTitle className="text-[#50462D] text-[32px] font-normal leading-[40px] tracking-[0.02em] font-['Century_Old_Style_Std']">
                   Remove Item
