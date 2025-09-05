@@ -2,7 +2,6 @@
 
 import React, { useEffect, useMemo } from "react";
 
-import { useCartStore } from "@/store/cartStore";
 import { useProductStore } from "@/store/productStore";
 import { CartItem } from "./CartItem";
 import { CartSummary } from "./CartSummary";
@@ -10,13 +9,14 @@ import { EmptyCart } from "./EmptyCart";
 import { CartContainerSkeleton } from "./CartSkeleton";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useMainStore } from "@/store/mainStore";
 
 interface CartContainerProps {
   onClose?: () => void;
 }
 
 export function CartContainer({ onClose }: CartContainerProps) {
-  const { cartItems, cartLoading } = useCartStore();
+  const { cartItems, cartLoading } = useMainStore();
   const { products, fetchProducts } = useProductStore();
 
   useEffect(() => {

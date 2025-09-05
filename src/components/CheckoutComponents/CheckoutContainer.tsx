@@ -9,6 +9,7 @@ import { Loader2, Lock } from "lucide-react";
 import { Product } from "@/app/api/types";
 import { useCartStore } from "@/store/cartStore";
 import { toast } from "sonner";
+import { useMainStore } from "@/store/mainStore";
 
 interface CheckoutContainerProps {
   items: Product[];
@@ -21,7 +22,7 @@ export function CheckoutContainer({ items = [] }: CheckoutContainerProps) {
     checkInventoryAvailability,
     reserveCartInventory,
     releaseCartInventory,
-  } = useCartStore();
+  } = useMainStore();
   const [customerInfo, setCustomerInfo] = useState({
     firstName: "",
     lastName: "",

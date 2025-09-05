@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useCartStore } from "@/store/cartStore";
 import { Button } from "@/components/ui/button";
 import { CartToast } from "@/components/ui/cart-toast";
 import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAuthenticatedNavigation } from "@/hooks/use-authenticated-navigation";
 import { LoginRequiredModal } from "@/components/ui/login-required-modal";
+import { useMainStore } from "@/store/mainStore";
 
 interface AddToCartButtonProps {
   productId: string;
@@ -35,7 +35,7 @@ export function AddToCartButton({
   variant = "default",
   size = "default",
 }: AddToCartButtonProps) {
-  const { addToCart, setCartSheetOpen, checkInventoryAvailability } = useCartStore();
+  const { addToCart, setCartSheetOpen, checkInventoryAvailability } = useMainStore();
   const router = useRouter();
   const { navigateWithAuth, showLoginModal, handleCloseModal, featureName } = useAuthenticatedNavigation();
   const [isAdded, setIsAdded] = useState(false);

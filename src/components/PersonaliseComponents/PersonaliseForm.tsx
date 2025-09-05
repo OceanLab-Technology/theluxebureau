@@ -11,6 +11,7 @@ import SummaryStep from "./SummaryStep";
 import { useRouter } from "next/navigation";
 import { PersonalisedAddToCartButton } from "./PersonalisedAddToCartButton";
 import { toast } from "sonner";
+import { useMainStore } from "@/store/mainStore";
 
 const steps = [
   { id: 1, label: "Step 1" },
@@ -44,7 +45,7 @@ export default function PersonaliseForm({
     selectedProduct,
     isStepValid,
   } = usePersonaliseStore();
-  const { addToCart, checkInventoryAvailability } = useCartStore();
+  const { addToCart, checkInventoryAvailability } = useMainStore();
   const [isLoading, setIsLoading] = React.useState(false);
   const [isAdded, setIsAdded] = React.useState(false);
   const router = useRouter();

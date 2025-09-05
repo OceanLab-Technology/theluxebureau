@@ -13,6 +13,7 @@ import { LoginRequiredModal } from "@/components/ui/login-required-modal";
 import Script from "next/script";
 import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useMainStore } from "@/store/mainStore";
 
 export default function CheckoutPage() {
   const {
@@ -21,7 +22,7 @@ export default function CheckoutPage() {
     cartLoading,
     isAuthenticated,
     checkInventoryAvailability
-  } = useCartStore();
+  } = useMainStore();
   const { products, fetchProducts } = useProductStore();
   const { items: guestItems } = useGuestCartStore();
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -76,45 +77,83 @@ export default function CheckoutPage() {
     }
   }, [isInitialized, products.length, fetchProducts]);
 
+  // const checkoutItems: Product[] = useMemo(() => {
+  //   if (!isInitialized) return [];
+
+  //   if (isAuthenticated) {
+
+  //     return cartItems
+  //       .map((cartItem) => {
+  //         const product = products.find((p) => p.id === cartItem.product_id);
+  //         if (!product) return null;
+
+  //         return {
+  //           product_id: product.id,
+  //           ...product,
+  //           quantity: cartItem.quantity,
+  //           cartItemId: cartItem.id,
+  //           customData: cartItem.custom_data,
+  //           selected_variant_name: (cartItem as any).selected_variant_name,
+  //         };
+  //       })
+  //       .filter(Boolean) as Product[];
+  //   } else {
+
+  //     return guestItems
+  //       .map((guestItem) => {
+  //         const product = products.find((p) => p.id === guestItem.product_id);
+  //         if (!product) return null;
+
+  //         return {
+  //           product_id: product.id,
+  //           ...product,
+  //           quantity: guestItem.quantity,
+  //           cartItemId: guestItem.id,
+  //           customData: guestItem.custom_data,
+  //           selected_variant_name: guestItem.selected_variant_name
+  //         };
+  //       })
+  //       .filter(Boolean) as Product[];
+  //   }
+  // }, [cartItems, guestItems, products, isAuthenticated, isInitialized]);
+
   const checkoutItems: Product[] = useMemo(() => {
-    if (!isInitialized) return [];
+  if (!isInitialized) return [];
 
-    if (isAuthenticated) {
+  if (isAuthenticated) {
+    return cartItems
+      .map((cartItem) => {
+        const product = products.find((p) => p.id === cartItem.product_id);
+        if (!product) return null;
 
-      return cartItems
-        .map((cartItem) => {
-          const product = products.find((p) => p.id === cartItem.product_id);
-          if (!product) return null;
+        return {
+          product_id: product.id,
+          ...product,
+          quantity: cartItem.quantity,
+          cartItemId: cartItem.id,
+          customData: cartItem.custom_data,
+          selected_variant_name: (cartItem as any).selected_variant_name,
+        };
+      })
+      .filter(Boolean) as Product[];
+  } else {
+    return guestItems
+      .map((guestItem) => {
+        const product = products.find((p) => p.id === guestItem.product_id);
+        if (!product) return null;
 
-          return {
-            product_id: product.id,
-            ...product,
-            quantity: cartItem.quantity,
-            cartItemId: cartItem.id,
-            customData: cartItem.custom_data,
-            selected_variant_name: (cartItem as any).selected_variant_name,
-          };
-        })
-        .filter(Boolean) as Product[];
-    } else {
-
-      return guestItems
-        .map((guestItem) => {
-          const product = products.find((p) => p.id === guestItem.product_id);
-          if (!product) return null;
-
-          return {
-            product_id: product.id,
-            ...product,
-            quantity: guestItem.quantity,
-            cartItemId: guestItem.id,
-            customData: guestItem.custom_data,
-            selected_variant_name: guestItem.selected_variant_name
-          };
-        })
-        .filter(Boolean) as Product[];
-    }
-  }, [cartItems, guestItems, products, isAuthenticated, isInitialized]);
+        return {
+          product_id: product.id,
+          ...product,
+          quantity: guestItem.quantity,
+          cartItemId: guestItem.id,
+          customData: guestItem.custom_data,
+          selected_variant_name: guestItem.selected_variant_name,
+        };
+      })
+      .filter(Boolean) as Product[];
+  }
+}, [cartItems, guestItems, products, isAuthenticated, isInitialized]);
 
 
   if (cartLoading || !isInitialized) {

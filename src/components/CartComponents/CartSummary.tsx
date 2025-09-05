@@ -6,13 +6,14 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { useAuthenticatedNavigation } from "@/hooks/use-authenticated-navigation";
 import { LoginRequiredModal } from "@/components/ui/login-required-modal";
+import { useMainStore } from "@/store/mainStore";
 
 interface CartSummaryProps {
   onClose?: () => void;
 }
 
 export function CartSummary({ onClose }: CartSummaryProps) {
-  const { cartItems, cartTotal, cartLoading, checkInventoryAvailability } = useCartStore();
+  const { cartItems, cartTotal, cartLoading, checkInventoryAvailability } = useMainStore();
   const { user } = useAuth();
   const { navigateWithAuth, showLoginModal, handleCloseModal, featureName } = useAuthenticatedNavigation();
   
