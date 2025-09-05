@@ -55,6 +55,7 @@ export function ProductCard({ product }: ProductCardProps) {
       <Link href={`/products/${product.id}`} className="block">
         {/* Image wrapper locked to 4:5 */}
         <div className="relative aspect-[4/5] w-full overflow-hidden group">
+        {/* <div className="relative aspect-[4/5] w-full overflow-hidden group"> */}
           {/* First image */}
           <img
             src={product.image_1 || fallbackImage!}

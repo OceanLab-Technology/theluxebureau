@@ -512,7 +512,7 @@ export function ProductGrid({
               return (
                 <motion.div
                   key={product.id}
-                  className={`flex ${idx === 0 ? "md:ml-3" : ""} ${idx === filteredProducts.length - 1 ? "md:mr-3" : ""}`}
+                  // className={`flex ${idx === 0 ? "md:ml-3" : ""} ${idx === filteredProducts.length - 1 ? "md:mr-3" : ""}`}
                 >
                   <div ref={isLast ? lastItemRef : undefined} className="w-full">
                     <ProductCard product={product} />
