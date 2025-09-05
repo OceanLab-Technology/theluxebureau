@@ -198,7 +198,7 @@ export function ProductGrid({
             {selectedCategory === ""
               ? "Refined pieces that bring comfort, character, and an everyday reminder of your quiet generosity."
               : selectedCategory === "Literature"
-                ? "The Luxe offers a curated selection of literature, from timeless classics to contemporary masterpieces, each chosen for its enduring impact and literary significance."
+                ? "The Luxe Bureau offers a curated selection of literature, from timeless classics to contemporary masterpieces, each chosen for its enduring impact and literary significance."
                 : selectedCategory === "Drinks & Spirits"
                   ? "Thoughtfully curated and artfully presented, our selection of wines and spirits transforms exceptional bottles into extraordinary gestures"
                   : selectedCategory === "Floral"
