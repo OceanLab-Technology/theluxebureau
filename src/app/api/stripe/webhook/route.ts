@@ -886,7 +886,7 @@ export async function POST(request: Request) {
                 to: [
                   {
                     email: session.customer_details.email,
-                    name: session.customer_details?.name ?? "",
+                    name: session.metadata?.customerName,
                     type: "to",
                   },
                 ],
@@ -896,7 +896,7 @@ export async function POST(request: Request) {
                 global_merge_vars: [
                   {
                     name: "first_name",
-                    content: session.customer_details?.name?.split(" ")?.[0] ?? "",
+                    content: session.metadata?.customerName,
                   },
                   {
                     name: "subject",
@@ -941,7 +941,7 @@ export async function POST(request: Request) {
                 merge: true,
                 merge_language: "handlebars",
                 global_merge_vars: [
-                  { name: "first_name", content: session.customer_details?.name ?? "" },
+                  { name: "first_name", content: session.metadata?.customerName },
                   {
                     name: "preheader_text",
                     content: "You have a new order",
@@ -1134,7 +1134,7 @@ export async function POST(request: Request) {
                     content:
                       "We're sorry to let you know that your Luxe Bureau order has been cancelled due to payment failure.",
                   },
-                  { name: "first_name", content: orderData.customer_name?.split(" ")?.[0] ?? "" },
+                  { name: "first_name", content: intent.metadata?.customerName},
                   { name: "order_number", content: orderData.id },
                   { name: "Recipient", content: orderData.recipient_name },
                   { name: "account_url", content: "https://theluxebureau.com/account" },

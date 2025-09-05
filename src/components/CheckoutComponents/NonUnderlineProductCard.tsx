@@ -49,10 +49,7 @@ export const NonUnderlineProductCard: React.FC<CheckoutItemProps> = ({
                   Recipients address
                 </label>
                 <p className="text-stone-600 font-[ABC Marfa]">
-                  {product.customData.recipientAddress &&
-                  product.customData.recipientCity
-                    ? `${product.customData.recipientAddress}, ${product.customData.recipientCity}`
-                    : "Not provided"}
+                  {product.customData.recipientAddress}
                 </p>
               </div>
 

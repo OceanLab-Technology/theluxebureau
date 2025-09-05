@@ -137,6 +137,7 @@ export interface Product {
   female_founded: boolean;
   variants: string;
   selectedVariant: string;
+  recipient_address?: string
 }
 
 export interface Profile {
