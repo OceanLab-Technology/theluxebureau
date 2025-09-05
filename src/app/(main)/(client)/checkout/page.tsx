@@ -49,6 +49,13 @@ export default function CheckoutPage() {
       }
     };
 
+      if (isAuthenticated) {
+    setShowLoginModal(false);
+  } else {
+    setShowLoginModal(true);
+  }
+
+
     initCheckout();
   }, []); //only run once on mount
 
@@ -56,6 +63,13 @@ export default function CheckoutPage() {
     if (isInitialized && isAuthenticated === false) {
       setShowLoginModal(true);
     }
+
+      if (isAuthenticated) {
+    setShowLoginModal(false);
+  } else {
+    setShowLoginModal(true);
+  }
+
   }, [isAuthenticated, isInitialized]);
 
   useEffect(() => {
@@ -68,6 +82,13 @@ export default function CheckoutPage() {
       };
       checkInventoryOnLoad();
     }
+
+      if (isAuthenticated) {
+    setShowLoginModal(false);
+  } else {
+    setShowLoginModal(true);
+  }
+
   }, [isInitialized, isAuthenticated, cartItems.length, checkInventoryAvailability, router]);
 
 
@@ -75,6 +96,13 @@ export default function CheckoutPage() {
     if (isInitialized && products.length === 0) {
       fetchProducts();
     }
+
+      if (isAuthenticated) {
+    setShowLoginModal(false);
+  } else {
+    setShowLoginModal(true);
+  }
+
   }, [isInitialized, products.length, fetchProducts]);
 
   const checkoutItems: Product[] = useMemo(() => {

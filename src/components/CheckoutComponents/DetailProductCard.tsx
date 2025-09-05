@@ -44,19 +44,19 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
                 <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Your Name
                 </label>
-                <p className="text-stone-600">{product.customData.yourName}</p>
+                <p className="text-stone-600 text-sm">{product.customData.yourName}</p>
               </div>
               <div className="flex flex-row items-center gap-4 md:gap-8">
                 <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Recipients Name
                 </label>
-                <p className="text-stone-600">{product.customData.recipientName}</p>
+                <p className="text-stone-600 text-sm">{product.customData.recipientName}</p>
               </div>
               <div className="flex flex-row items-center gap-4 md:gap-8">
                 <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Recipients Address
                 </label>
-                <p className="text-stone-600">
+                <p className="text-stone-600 text-sm">
                   {product.customData.recipientAddress}
                 </p>
               </div>
@@ -64,7 +64,7 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
                 <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Delivery Date
                 </label>
-                <p className="text-stone-600">
+                <p className="text-stone-600 text-sm">
                   {product.customData.deliveryDate
                     ? (() => {
                       const date = new Date(product.customData.deliveryDate);
@@ -105,7 +105,7 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
                 <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Delivery Time
                 </label>
-                <p className="text-stone-600">
+                <p className="text-stone-600 text-sm">
                   {product.customData.preferredDeliveryTime === "10am-1pm" && "10:00 – 13:00"}
                   {product.customData.preferredDeliveryTime === "1pm-4pm" && "13:00 – 16:00"}
                   {product.customData.preferredDeliveryTime === "4pm-6pm" && "16:00 – 18:00"}
@@ -116,7 +116,7 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
                 <span className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Delivery Updates
                 </span>
-                <span className="text-stone-600">
+                <span className="text-stone-600 text-sm">
                   {product.customData.smsUpdates === "send-to-me"
                     ? `You`
                     : product.customData.smsUpdates === "send-to-recipient"
@@ -128,7 +128,7 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
                 <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Custom Letterhead
                 </label>
-                <p className="text-stone-600">
+                <p className="text-stone-600 text-sm">
                   {product.customData.headerText}
                 </p>
               </div>
@@ -136,7 +136,7 @@ export const DetailProductCard: React.FC<CheckoutItemProps> = ({
                 <label className="text-muted-foreground font-[Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Personal Message
                 </label>
-                <p className="text-stone-600">
+                <p className="text-stone-600 text-sm">
                   {product.customData.customMessage}
                 </p>
               </div>
