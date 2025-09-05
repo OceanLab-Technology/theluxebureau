@@ -1073,7 +1073,6 @@ export async function POST(request: Request) {
               await supabase
                 .from("product_variants")
                 .update({
-                  inventory: currentVariant.inventory + item.quantity,
                   qty_blocked: Math.max(0, currentVariant.qty_blocked - item.quantity),
                   updated_at: new Date().toISOString(),
                 })

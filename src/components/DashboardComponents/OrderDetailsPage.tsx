@@ -540,7 +540,7 @@
 //               <span className="font-medium text-sm">£{item.price_at_purchase?.toFixed(2)}</span>
 //             </div>
 //           </div>
-          
+
 //         </div>
 //         {item.custom_data && Object.keys(item.custom_data).length > 0 && (
 //           <div>
@@ -885,7 +885,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
         preferredDeliveryTime:
           order.orderInfo.preferredDeliveryTime ||
           (Array.isArray(order.personalisation) &&
-          order.personalisation.length > 0
+            order.personalisation.length > 0
             ? order.personalisation[0].preferredDeliveryTime || ""
             : ""),
       });
@@ -967,29 +967,29 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
               <h4 className="font-medium text-sm whitespace-normal break-words">
                 {item?.products?.name ?? "Unnamed product"}
               </h4>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-lg text-muted-foreground">
                 {item?.products?.category ?? "-"}
               </p>
-              <h4 className="font-medium text-sm whitespace-normal break-words">
+              <h4 className="font-medium text-lg whitespace-normal break-words">
                 Varient: {item?.selected_variant_name ?? "-"}
               </h4>
               <div className="flex justify-between items-center mt-2">
-                <span className="text-xs">Qty: {item?.quantity ?? 0}</span>
-                <span className="font-medium text-sm">£{price.toFixed(2)}</span>
+                <span className="text-lg">Qty: {item?.quantity ?? 0}</span>
+                <span className="font-medium text-lg">£{price.toFixed(2)}</span>
               </div>
             </div>
           </div>
 
           {item?.custom_data && Object.keys(item.custom_data).length > 0 && (
             <div>
-              <Label className="text-xs font-medium">Personalisation</Label>
+              <Label className="text-lg font-medium">Personalisation</Label>
               <div className="mt-1 space-y-1">
                 {Object.entries(item.custom_data).map(([key, value]) => (
-                  <div key={key} className="flex justify-between text-xs">
-                    <span className="text-muted-foreground capitalize">
+                  <div key={key} className="flex gap-5 text-xs">
+                    <span className="text-muted-foreground capitalize text-lg">
                       {key.replace(/([A-Z])/g, " $1").trim()}:
                     </span>
-                    <span className="font-medium max-w-32 whitespace-normal break-words">
+                    <span className="text-lg max-w-100 whitespace-normal break-words">
                       {String(value)}
                     </span>
                   </div>
@@ -1081,23 +1081,11 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
                 <Label className="text-sm">Email</Label>
                 <p className="text-sm text-muted-foreground">{order.customerInfo.email}</p>
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Recipient Info */}
-          <Card>
-            <CardHeader className="flex items-center gap-2">
-              <MapPin className="h-5 w-5" />
-              <CardTitle>Recipient Information</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
               <div>
-                <Label className="text-sm">Name</Label>
-                <p className="text-sm text-muted-foreground">{order.recipientInfo.name}</p>
-              </div>
-              <div>
-                <Label className="text-sm">Address</Label>
-                <p className="text-sm text-muted-foreground">{order.recipientInfo.address}</p>
+                <Label className="text-sm">Order Placed</Label>
+                <p className="text-sm text-muted-foreground">
+                  {formatTimestamp(order.orderInfo.placedAt)}
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -1109,7 +1097,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
               <CardTitle>Payment & Status</CardTitle>
             </CardHeader>
 
-          <CardContent className="space-y-3">
+            <CardContent className="space-y-3">
               <div>
                 <Label className="text-sm">Payment Status</Label>
                 <Badge variant="outline">{order.orderInfo.paymentStatus}</Badge>
@@ -1122,28 +1110,6 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
                 <Label className="text-sm">Total Amount</Label>
                 <p className="text-lg font-semibold">
                   £{Number(order.orderInfo.total).toFixed(2)}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Timeline */}
-          <Card>
-            <CardHeader className="flex items-center gap-2">
-              <Calendar className="h-5 w-5" />
-              <CardTitle>Timeline</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div>
-                <Label className="text-sm">Delivery Date</Label>
-                <p className="text-sm text-muted-foreground">
-                  {new Date(order.orderInfo.deliveryDate || "1-1-1970").toDateString()}
-                </p>
-              </div>
-              <div>
-                <Label className="text-sm"> Order Placed </Label>
-                <p className="text-sm text-muted-foreground">
-                  {formatTimestamp(order.orderInfo.placedAt)}
                 </p>
               </div>
             </CardContent>
@@ -1240,7 +1206,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
           </CardHeader>
           <CardContent>
             {items.length > 0 ? (
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
                 {items.map((item, index) => renderOrderItemCard(item, index))}
               </div>
             ) : (
@@ -1257,7 +1223,7 @@ export function OrderDetailsPage({ orderId }: OrderDetailsPageProps) {
             Delete Order
           </Button>
         </div>
-      </main>
-    </div>
+      </main >
+    </div >
   );
 }

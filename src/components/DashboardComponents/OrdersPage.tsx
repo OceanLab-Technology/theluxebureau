@@ -168,7 +168,6 @@ export function OrdersPage() {
                       <TableHead>Order Date</TableHead>
                       <TableHead>Order ID</TableHead>
                       <TableHead>Customer Name</TableHead>
-                      <TableHead>Recipient Name</TableHead>
                       <TableHead>Delivery Date</TableHead>
                       <TableHead>Total</TableHead>
                       <TableHead>Status</TableHead>
@@ -218,7 +217,6 @@ export function OrdersPage() {
                           #{order.id}
                         </TableCell>
                         <TableCell>{order.customerName || "-"}</TableCell>
-                        <TableCell>{order.recipientName || "-"}</TableCell>
                         <TableCell>
                           {order.deliveryDate ? (() => {
                             const date = new Date(order.deliveryDate);

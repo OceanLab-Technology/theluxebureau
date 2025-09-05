@@ -232,7 +232,7 @@ function formatTimestamp(timestamp: string) {
 function ActivitySkeleton() {
   return (
     <div className="space-y-8">
-      {Array.from({ length: 5 }).map((_, i) => (
+      {Array.from({ length: 10 }).map((_, i) => (
         <div
           key={i}
           className="flex items-start justify-between pb-4 animate-pulse"
