@@ -61,9 +61,9 @@ function ImageItem({
           <GripVertical className="h-4 w-4 text-gray-600" />
         </div>
         
-        <div className="absolute top-2 right-2 bg-secondary-foreground text-white text-xs px-2 py-1 rounded">
+        {/* <div className="absolute top-2 right-2 bg-secondary-foreground text-white text-xs px-2 py-1 rounded">
           {index + 1}
-        </div>
+        </div> */}
         
         <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded">
           image_{index + 1}
@@ -73,7 +73,7 @@ function ImageItem({
           type="button"
           size="sm"
           variant="destructive"
-          className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute top-1 right-1 h-6 w-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
           onClick={(e) => {
             e.stopPropagation();
             onRemove(index);
