@@ -59,13 +59,15 @@ export function ProductCard({ product }: ProductCardProps) {
           <img
             src={product.image_1 || fallbackImage!}
             alt={product.name}
-            className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 group-hover:opacity-0"
+            className="absolute inset-0 h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-0 will-change-transform"
+            loading="lazy"
           />
           {product.image_2 && (
             <img
               src={product.image_2 ? product.image_2 : fallbackImage!}
               alt={product.name}
-              className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 opacity-0 group-hover:opacity-100"
+              className="absolute inset-0 h-full w-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 will-change-transform"
+              loading="lazy"
             />
           )}
         </div>
