@@ -41,14 +41,14 @@ export const NonUnderlineProductCard: React.FC<CheckoutItemProps> = ({
                 <label className="text-muted-foreground font-[ABC Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Recipients name
                 </label>
-                <p className="text-stone-600 font-[ABC Marfa]">{product.customData.recipientName}</p>
+                <p className="text-stone-600 font-[ABC Marfa] text-sm">{product.customData.recipientName}</p>
               </div>
 
               <div className="flex items-center gap-16">
                 <label className="text-muted-foreground font-[ABC Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Recipients address
                 </label>
-                <p className="text-stone-600 font-[ABC Marfa]">
+                <p className="text-stone-600 font-[ABC Marfa] text-sm">
                   {product.customData.recipientAddress}
                 </p>
               </div>
@@ -57,7 +57,7 @@ export const NonUnderlineProductCard: React.FC<CheckoutItemProps> = ({
                 <label className="text-muted-foreground font-[ABC Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Delivery Date
                 </label>
-                <p className="text-stone-600 font-[ABC Marfa]">
+                <p className="text-stone-600 font-[ABC Marfa] text-sm">
                   {product.customData.deliveryDate
                     ? (() => {
                         const date = new Date(product.customData.deliveryDate);
@@ -101,7 +101,7 @@ export const NonUnderlineProductCard: React.FC<CheckoutItemProps> = ({
                   {/* SMS Updates */}
                    Delivery Updates
                 </span>
-                <span className="text-stone-600 font-[ABC Marfa]">
+                <span className="text-stone-600 font-[ABC Marfa] text-sm">
                   {product.customData.smsUpdates === "send-to-me"
                     ? `Just you`
                     : product.customData.smsUpdates === "send-to-recipient"
@@ -113,13 +113,13 @@ export const NonUnderlineProductCard: React.FC<CheckoutItemProps> = ({
                 <label className="text-muted-foreground font-[ABC Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Custom Letterhead
                 </label>
-                <p className="text-stone-600 font-[ABC Marfa]">{product.customData.headerText}</p>
+                <p className="text-stone-600 font-[ABC Marfa] text-sm">{product.customData.headerText}</p>
               </div>
               <div className="flex items-center gap-16">
                 <label className="text-muted-foreground font-[ABC Marfa] font-medium text-sm tracking-wider min-w-[140px]">
                   Personal Message
                 </label>
-                <p className="text-stone-600 max-w-[500px] font-[ABC Marfa]">
+                <p className="text-stone-600 max-w-[500px] font-[ABC Marfa] text-sm">
                   {product.customData.customMessage}
                 </p>
               </div>
