@@ -928,6 +928,7 @@ export async function POST(request: Request) {
 
 
         console.log(customData.recipientName);
+        console.log(customData.yourName);
         return {
           title: product?.name ?? "Product",
           order_number: String(orderData?.id ?? ""),
