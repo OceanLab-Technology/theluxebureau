@@ -1,6 +1,8 @@
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createClientX } from "@supabase/supabase-js";
+
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -10,6 +12,12 @@ export async function POST(request: NextRequest) {
     data: { user },
     error: authError,
   } = await supabase.auth.getUser();
+
+  const supabaseX = createClientX(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+  
 
   if (authError || !user) {
     return NextResponse.json(
@@ -93,16 +101,26 @@ export async function POST(request: NextRequest) {
 
         const variantName = item.selected_variant_name ?? "default";
 
-        const { data, error } = await supabase.rpc("confirm_inventory_debug", {
-          p_quantity: item.quantity,
+        // const { data, error } = await supabase.rpc("confirm_inventory_debug", {
+        //   p_quantity: item.quantity,
+        //   p_product_id: item.product_id,
+        //   p_variant_name: variantName,
+        // });
+
+        // console.log(item.product_id)
+        // console.log(variantName)
+
+        // console.log("Updated variant:", data);
+
+
+        console.log("rpc params:", { product_id: item.product_id, variantName, quantity: item.quantity });
+        const { data, error } = await supabaseX.rpc("confirm_inventory", {
           p_product_id: item.product_id,
           p_variant_name: variantName,
+          p_quantity: item.quantity,
         });
+        console.log("rpc result:", { data, error });
 
-        console.log(item.product_id)
-        console.log(variantName)
-
-        console.log("Updated variant:", data);
 
         if (error) {
           console.error(
