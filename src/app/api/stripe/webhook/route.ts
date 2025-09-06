@@ -958,7 +958,7 @@ export async function POST(request: Request) {
                 from_name: "the Luxe Bureau",
                 to: [
                   {
-                    email: "orders@theluxebureau.com",
+                    email: "noreply@theluxebureau.com",
                     type: "to",
                   },
                 ],
